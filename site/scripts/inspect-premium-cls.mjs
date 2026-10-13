@@ -1,0 +1,5 @@
+import {chromium} from '@playwright/test';
+const b=await chromium.launch({channel:'msedge',headless:true});
+const p=await b.newPage({viewport:{width:1440,height:900}});
+await p.addInitScript(()=>{window.shifts=[];new PerformanceObserver(list=>{for(const e of list.getEntries())if(!e.hadRecentInput)window.shifts.push({value:e.value,sources:e.sources.map(s=>({node:s.node?.className,prev:s.previousRect,next:s.currentRect}))})}).observe({type:'layout-shift',buffered:true})});
+await p.goto('http://127.0.0.1:4181');await p.waitForTimeout(500);await p.locator('#formas-de-viajar').scrollIntoViewIfNeeded();await p.waitForTimeout(1500);for(const f of [0,.3,.55,.9,0]){await p.evaluate(f=>{const el=document.querySelector('.explorer-track'),top=el.getBoundingClientRect().top+scrollY;scrollTo({top:top-108+(el.offsetHeight-innerHeight+108)*f,behavior:'instant'})},f);await p.waitForTimeout(900)}for(let i=0;i<10;i++){await p.locator('[role=tab]').nth(i).click();await p.waitForTimeout(250)}console.log(JSON.stringify(await p.evaluate(()=>({cls:window.shifts.reduce((a,e)=>a+e.value,0),shifts:window.shifts})),null,2));await b.close();

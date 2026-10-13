@@ -1,0 +1,7 @@
+ARCHIVADO:
+  display_name: "Identidad visual T&T"
+  short_description: "Custodia la marca visual de T&T Medellín"
+  brand_color: "#FF7F09"
+  default_prompt: "Usa $tt-identidad-visual para definir una dirección visual coherente con la marca T&T Medellín."
+policy:
+  allow_implicit_invocation: true

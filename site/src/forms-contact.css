@@ -1,0 +1,59 @@
+/* Formulario y contacto (ronda oficial 2026-10-12; Spec 03 §I, Spec 05: etiquetas visibles, 44 px, foco visible). */
+.form-group{grid-column:1/-1;margin:0;padding:24px 0 0;border:0;border-top:1px solid var(--line);min-width:0}
+.form-group>legend{padding:0;font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text);float:left;width:100%;margin:0 0 20px}
+.form-group>legend+*{clear:both}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.hint{font-size:13px;color:var(--text-muted);line-height:1.4}
+.field-label{font-size:15px;font-weight:600}
+.field .hint-label{font-size:13px;font-weight:600;color:var(--text)}
+.phone-row{display:grid;grid-template-columns:7.5rem minmax(0,1fr);gap:12px}
+.phone-row input[name=indicativo]{text-align:center;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;display:inline-flex}
+.chip input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.chip span{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border:1.5px solid var(--line-strong);border-radius:999px;background:var(--surface);font-size:15px;font-weight:600;transition:background-color 200ms ease,border-color 200ms ease}
+.chip.is-on span{border-color:var(--text-strong);background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--text-strong)}
+.chip input:focus-visible+span{outline:3px solid var(--focus);outline-offset:3px}
+.form-errors{padding:16px 20px;border:1.5px solid var(--danger);border-radius:12px;background:var(--surface);color:var(--danger);font-size:15px;line-height:1.5}
+.form-errors a{color:var(--danger);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.summary-steps{margin:0 0 20px;padding-left:20px;font-size:15px;color:var(--text)}
+.summary-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.summary-actions .button{margin-top:0!important}
+.summary .text-link{margin-top:8px}
+.contact-number{display:inline-flex;align-items:center;min-height:44px}
+.contact-grid>a{display:block}
+.contact-place{display:grid;grid-template-columns:5fr 7fr;gap:48px;align-items:start;padding-block:32px 96px}
+.contact-address h2{font-size:var(--fs-h2);max-width:14ch;margin-bottom:24px;overflow-wrap:anywhere}
+.contact-address p:not(.eyebrow){max-width:44ch;margin-bottom:32px}
+.contact-socials{margin-left:-10px}
+.map-card{margin:0;display:grid;gap:16px}
+.map-frame{position:relative;aspect-ratio:16/10;min-height:320px;overflow:hidden;border-radius:20px;border:1px solid var(--line);background:var(--surface-2);box-shadow:var(--shadow-1)}
+.map-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.map-facade{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;color:var(--text-strong)}
+.map-facade p{margin:0;max-width:28ch;font-size:17px}
+.map-facade small{font-size:13px;color:var(--text-muted)}
+.map-card figcaption{display:flex;flex-wrap:wrap;gap:8px 24px}
+.quote-bar{position:fixed;inset:auto 0 0 0;z-index:90;display:none;align-items:center;gap:12px;padding:12px max(16px,env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));background:rgba(255,255,255,.96);border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(30,32,29,.08);transform:translateY(100%);visibility:hidden;transition:transform 200ms var(--ease-out-strong),visibility 0s linear 200ms}
+.quote-bar.is-visible{transform:none;visibility:visible;transition-delay:0s}
+.quote-bar-name{flex:1;min-width:0;margin:0;font:700 15px/1.2 var(--heading);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.quote-bar-cta{flex:0 0 auto;min-height:44px;padding:10px 20px}
+.quote-bar-wa{flex:0 0 44px;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border:1.5px solid var(--text-strong);border-radius:50%;color:#128C7E}
+@media(max-width:899px){.quote-bar{display:flex}.contact-place{grid-template-columns:1fr;gap:32px;padding-bottom:64px}.contact-address h2{max-width:none}}
+@media(max-width:699px){.form-grid{grid-template-columns:1fr}.phone-row{grid-template-columns:6.5rem minmax(0,1fr)}.summary-actions .button{width:100%}.map-frame{aspect-ratio:4/5;min-height:360px}}
+@media(prefers-reduced-motion:reduce){.quote-bar{transition:none}}
+.footer-brand{display:inline-flex;align-items:center;min-height:44px}
+/* Logo (aportado por el usuario, tal cual): cuadrado naranja completo; solo se enmascara con esquinas redondeadas ~20 %. */
+.logo-mark{display:block;width:56px;height:56px;border-radius:20%;object-fit:contain}
+@media(max-width:899px){.brand .logo-mark{width:44px;height:44px}}
+.logo-footer{width:112px;height:112px;margin-bottom:8px}
+/* Ronda de cierre (2026-10-12). Contacto: el correo no se parte a mitad de palabra (tamaño por contenedor + salto solo en «@»); Vehículos: el medio de la
+   imagen tiene alto fijo para que los títulos de las columnas queden alineados. */
+.contact-grid>a{container-type:inline-size}
+.contact-grid .contact-email{font-size:clamp(15px,5.6cqi,28px);overflow-wrap:anywhere}
+.vehicle-media{height:clamp(190px,24vw,260px);margin:24px 0}
+.vehicle-media img{display:block;width:100%;height:100%;margin:0;object-fit:contain;border-radius:12px}
+/* Marco del formulario mientras llega el chunk (lazy, solo cliente): mismo cajón que el formulario real; alto medido (cotizar: 1438 px escritorio, 1422 tablet,
+   1726 móvil) para que al montarse no se desplace lo que hay debajo. */
+.quote-form-frame{min-height:1440px}
+@media(max-width:899px){.quote-form-frame{min-height:1420px}}
+@media(max-width:699px){.quote-form-frame{min-height:1720px}}

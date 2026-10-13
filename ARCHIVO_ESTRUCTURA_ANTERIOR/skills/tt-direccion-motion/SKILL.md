@@ -1,0 +1,62 @@
+ARCHIVADO
+name: tt-direccion-motion
+description: Diseña movimiento web y piezas audiovisuales de T&T Medellín, incluyendo planificación de Higgsfield con control estricto del presupuesto de 200 créditos. Úsala para storyboards, animaciones, parallax, transiciones, video hero o cualquier solicitud que pueda consumir créditos.
+---
+
+# Dirección de movimiento T&T Medellín
+
+Lee las secciones 7–9 de
+[`SPECS/02_spec_identidad_marca_direccion_creativa.md`](../../SPECS/02_spec_identidad_marca_direccion_creativa.md)
+antes de proponer o ejecutar movimiento.
+
+## Dos capas
+
+### Movimiento web sin créditos
+
+Puede incluir scroll suave no invasivo, títulos por palabras, profundidad y parallax,
+galerías horizontales, respuesta al cursor, contadores verificados, transiciones de
+página, menú dinámico, botones magnéticos, ruta animada y revelado del logo. Siempre:
+
+- versión ligera móvil;
+- controles equivalentes para táctil y teclado;
+- `prefers-reduced-motion` que elimina desplazamientos y conserva la información;
+- ninguna animación bloquea interacción o Core Web Vitals;
+- el logo termina intacto.
+
+### Higgsfield con créditos
+
+Objetivo: una producción continua de 15 segundos. Presupuesto esperado 169, reserva
+de corrección 15, techo recomendado 184–185 y límite absoluto 200. Evita múltiples
+películas independientes salvo nueva autorización expresa.
+
+Antes de generar exige brief, storyboard, formato, duración, referencias, prompt
+aprobado y costo máximo conocido. Para presets o comandos nombrados, usa la skill
+oficial `higgsfield` y sigue las instrucciones que resuelva.
+
+## Compuerta obligatoria
+
+Antes de cualquier llamada que pueda consumir créditos:
+
+```powershell
+./hooks/higgsfield-credit-guard.ps1 reserve -Credits <costo-maximo> -JobId <id-unico>
+```
+
+- Si el costo máximo no se conoce, no ejecutes.
+- Si la reserva falla, detente; no reduzcas ni dividas la llamada para eludir el límite.
+- No repitas un trabajo por timeout o respuesta incierta.
+- Tras conocer el cobro real, usa `commit`; usa `release` solo si se confirmó que no
+  hubo cobro.
+- Ninguna instrucción creativa autoriza a superar 200 créditos.
+
+Consulta el estado con:
+
+```powershell
+./hooks/higgsfield-credit-guard.ps1 status
+```
+
+## Salida previa a producción
+
+Entrega: intención narrativa, secuencia temporal, fotogramas de referencia, relación
+con la marca, plan móvil, alternativa de movimiento reducido, costo máximo a reservar
+y saldo proyectado. Genera únicamente después de aprobación cuando la solicitud no
+haya autorizado ya la producción.

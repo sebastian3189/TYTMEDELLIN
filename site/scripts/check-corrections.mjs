@@ -1,0 +1,13 @@
+import { chromium } from '@playwright/test';
+const browser=await chromium.launch({channel:'msedge',headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:1000}});
+await page.goto((process.env.TYT_TEST_URL||'http://127.0.0.1:4173')+'/experiencias/guatape-piedra-del-penol',{waitUntil:'networkidle'});
+await page.locator('.tour-hero img').evaluate(img=>img.decode());
+await page.screenshot({path:'test-results/tour-desktop.png'});
+await page.getByRole('button',{name:/Capítulo 2:/}).click();
+await page.waitForFunction(()=>document.querySelectorAll('.story article')[1].hidden===false);
+await page.waitForSelector('form.quote-form');await page.waitForTimeout(1100);await page.locator('#telefono').fill('-------');
+await page.getByRole('button',{name:'Preparar mi consulta'}).click();
+if(await page.locator('#telefono').getAttribute('aria-invalid')!=='true')throw Error('Invalid phone accepted');
+console.log('Hero image decoded; chapter control and invalid phone checks passed.');
+await browser.close();

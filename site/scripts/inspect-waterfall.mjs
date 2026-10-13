@@ -1,0 +1,21 @@
+// Cascada de red en Slow 4G + CPU×4 (diagnóstico de LCP). Uso: TYT_TEST_URL=... node scripts/inspect-waterfall.mjs /ruta [--w=390]
+import { chromium } from '@playwright/test';
+const base = process.env.TYT_TEST_URL || 'http://127.0.0.1:4402';
+const route = process.argv[2] || '/';
+const width = Number((process.argv.find((a) => a.startsWith('--w=')) || '--w=390').split('=')[1]);
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
+const context = await browser.newContext({ viewport: { width, height: width < 800 ? 844 : 900 }, deviceScaleFactor: width < 800 ? 2 : 1, isMobile: width < 800 });
+const page = await context.newPage();
+const cdp = await context.newCDPSession(page);
+await cdp.send('Network.enable');
+await cdp.send('Network.emulateNetworkConditions', { offline: false, latency: 562.5, downloadThroughput: Math.round(1.6 * 1024 * 1024 / 8), uploadThroughput: Math.round(750 * 1024 / 8) });
+await cdp.send("Emulation.setCPUThrottlingRate", { rate: Number(process.env.CPU || 4) });
+const t0 = Date.now(), rows = new Map();
+cdp.on('Network.requestWillBeSent', (e) => rows.set(e.requestId, { url: e.request.url.replace(base, ''), start: Date.now() - t0, prio: e.request.initialPriority }));
+cdp.on('Network.loadingFinished', (e) => { const r = rows.get(e.requestId); if (r) { r.end = Date.now() - t0; r.kb = Math.round(e.encodedDataLength / 1024); } });
+await page.addInitScript(() => { window.__e = []; new PerformanceObserver((l) => l.getEntries().forEach((e) => window.__e.push([e.entryType === 'paint' ? e.name : 'LCP', Math.round(e.startTime), e.url || ''])) ).observe({ type: 'paint', buffered: true }); new PerformanceObserver((l) => l.getEntries().forEach((e) => window.__e.push(['LCP', Math.round(e.startTime), e.url || '']))).observe({ type: 'largest-contentful-paint', buffered: true }); });
+await page.goto(base + route, { waitUntil: 'load', timeout: 120000 });
+await page.waitForTimeout(5000);
+for (const r of [...rows.values()].sort((a, b) => a.start - b.start)) console.log(String(r.start).padStart(6), String(r.end ?? '').padStart(6), String(r.kb ?? '').padStart(5) + 'kB', (r.prio || '').padEnd(9), r.url.slice(0, 90));
+console.log(JSON.stringify(await page.evaluate(() => window.__e)));
+await browser.close();

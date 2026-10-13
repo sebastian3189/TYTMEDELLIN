@@ -1,0 +1,7 @@
+ARCHIVADO:
+  display_name: "Motion T&T"
+  short_description: "Movimiento web y presupuesto Higgsfield"
+  brand_color: "#FF7F09"
+  default_prompt: "Usa $tt-direccion-motion para plantear una experiencia de movimiento de T&T Medellín sin superar el presupuesto autorizado."
+policy:
+  allow_implicit_invocation: true

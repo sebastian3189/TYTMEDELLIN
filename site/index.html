@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Medellín, a otro nivel. Transporte privado y experiencias desde Medellín con un equipo local." />
+  <meta name="theme-color" content="#FAF8F5" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <!-- CLS (Spec 05): Montserrat (titulares, primer pintado) precargada en todas las rutas con crossorigin; Inter (cuerpo) solo fuera del inicio, donde
+       no compite con el póster del LCP. El respaldo métrico de website.css (Montserrat/Inter Fallback) evita saltos mientras llega cada fuente. -->
+  <link rel="preload" href="/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin />
+  <!--inter:start-->
+  <script>if(!/^\/(site)?\/?$/.test(location.pathname)){var l=document.createElement('link');l.rel='preload';l.as='font';l.type='font/woff2';l.href='/fonts/inter.woff2';l.crossOrigin='anonymous';document.head.appendChild(l)}</script>
+  <!--inter:end-->
+  <!-- LCP: el póster de la apertura se descarga en paralelo al JS (mismo recurso que elige <picture> en ScrubHero.jsx). -->
+  <!--home-preload:start-->
+  <link rel="preload" as="image" type="image/avif" href="/media/inicio/poster-m.avif" media="(max-width: 799px)" fetchpriority="high" />
+  <link rel="preload" as="image" type="image/avif" imagesrcset="/media/inicio/poster-1280.avif 1280w, /media/inicio/poster-1600.avif 1600w" imagesizes="100vw" media="(min-width: 800px)" fetchpriority="high" />
+  <!--home-preload:end-->
+  <style>
+    /* Póster de arranque (candidato LCP): réplica de la primera carta de la baraja (mismo marco, transform y clip-path que calcula
+       ScrubHero para u=0; la geometría se calcula en el script de abajo con las mismas fórmulas de baraja-geometria.js). Vive FUERA de #root
+       y ScrubHero lo retira tras pintar la misma carta, así el LCP no cambia de elemento y no hay salto visual. */
+    html,body{margin:0;background:#FAF8F5}
+    #boot{position:fixed;inset:0;z-index:1000;overflow:hidden;background:#FAF8F5;pointer-events:none}
+    .boot-logo{position:absolute;left:clamp(20px,5vw,88px);top:16px;width:44px;height:44px;border-radius:20%;z-index:1}@media(min-width:1100px){.boot-logo{top:18px;width:56px;height:56px}}
+    #boot-layer{position:absolute;overflow:visible;background:#F4F4F4;transform-origin:50% 50%}
+    #boot-layer picture,#boot-layer img{position:absolute;inset:0;display:block;width:100%;height:100%}
+    #boot-layer img{object-fit:cover;max-width:none}
+    /* Prerender: el HTML del servidor (modo estático) queda oculto bajo el póster hasta que ScrubHero monta el modo animado; así su cambio de diseño no cuenta como CLS. */
+    html.boot-scrub #root{visibility:hidden}
+  </style>
+  <title>T&amp;T Medellín | Medellín, a otro nivel</title>
+</head>
+<body>
+  <!--boot:start-->
+  <div id="boot" aria-hidden="true"><img class="boot-logo" src="/media/marca/logo/logo-168.webp" srcset="/media/marca/logo/logo-88.webp 88w, /media/marca/logo/logo-132.webp 132w, /media/marca/logo/logo-168.webp 168w" sizes="(max-width: 1099px) 44px, 56px" width="56" height="56" alt="" /><div id="boot-layer"><picture>
+    <source media="(max-width: 799px)" type="image/avif" srcset="/media/inicio/poster-m.avif" />
+    <source media="(max-width: 799px)" type="image/webp" srcset="/media/inicio/poster-m.webp" />
+    <source type="image/avif" srcset="/media/inicio/poster-1280.avif 1280w, /media/inicio/poster-1600.avif 1600w" sizes="100vw" />
+    <img src="/media/inicio/poster-1600.webp" srcset="/media/inicio/poster-1280.webp 1280w, /media/inicio/poster-1600.webp 1600w" sizes="100vw" width="1600" height="900" alt="" fetchpriority="high" decoding="async" />
+  </picture></div></div>
+  <!--boot:end-->
+  <!--bootjs:start-->
+  <script>(function(){var d=document,b=d.getElementById('boot'),L=b&&d.getElementById('boot-layer');
+  if(!/^\/(site)?\/?$/.test(location.pathname)){b.remove();return}
+  /* Fuentes: en el inicio compiten con el póster por el ancho de banda (LCP); en el resto de rutas se precargan (CLS). Ver Spec 05. */
+  var W=d.documentElement.clientWidth,V=innerHeight,m=W<=799,hd=W<=1099?76:92,H=V-hd,c=function(v,a,z){return Math.min(z,Math.max(a,v))};
+  /* Mismas condiciones que prefersStatic() de ScrubHero: en modo estático (movimiento reducido, ahorro de datos, 2g/3g, altura baja) el póster es un bloque
+     arriba (m: 4:3; escritorio: min(54svh,520px)) y la réplica de arriba pasa a ser ese bloque, para que el LCP no cambie de elemento. */
+  var cn=navigator.connection,rd=0;try{rd=localStorage.getItem('tyt-reducir-movimiento')==='1'}catch(e){}
+  if(rd||matchMedia('(prefers-reduced-motion: reduce)').matches||matchMedia('(max-height: 560px)').matches||(cn&&(cn.saveData||/^(slow-2g|2g|3g)$/.test(cn.effectiveType)))){
+    L.style.cssText='left:0;top:'+hd+'px;width:'+W+'px;height:'+((m?W*.75:Math.min(.54*V,520))+2)+'px';
+    setTimeout(function(){if(b.parentNode)b.remove()},8000);return}
+  var F={w:W,h:H-(m?200:c(.24*V,150,230))},Hd,cy;
+  if(m){var A=H-200,fs=c(Math.min(W*.13,(W-44)/7.8),38,64),ln=fs*.95,sh=A<480,t1=sh?12:40,ra=function(h){return h*.4*Math.sin(6.5*Math.PI/180)+8};
+    Hd=c(A-(t1+ln+16+14+ln+(sh?0:54)+12)-2*ra(300),150,300);cy=t1+ln+16+ra(Hd)+Hd/2}
+  else{Hd=c(H*.31,220,360);cy=H*.49}
+  var Wd=Hd*.8,s=Math.max(Hd/F.h,Wd/F.w),ix=Math.max(0,(F.w-Wd/s)/2),iy=Math.max(0,(F.h-Hd/s)/2);
+  L.style.cssText='left:0;top:'+hd+'px;width:'+F.w+'px;height:'+F.h+'px;transform:translate3d('+(W/2-F.w/2)+'px,'+(cy-F.h/2)+'px,0) rotate(-2.4deg) scale('+s+');clip-path:inset('+iy+'px '+ix+'px round '+18/s+'px)';
+  d.documentElement.classList.add('boot-scrub');
+  setTimeout(function(){if(b.parentNode)b.remove();d.documentElement.classList.remove('boot-scrub')},8000)})()</script>
+  <!--bootjs:end-->
+  <div id="root"></div>
+  <!--noscript:start-->
+  <noscript>
+    <style>#root,#boot{display:none}.no-js{max-width:72ch;margin:48px auto;padding:24px;color:#1E201D;background:#FFFFFF;font:17px/1.65 Arial,sans-serif}.no-js a{display:inline-block;min-height:44px;color:#3C3F3B;text-underline-offset:4px}.no-js h1{font-size:36px;line-height:1.15}.no-js ul{padding-left:24px}</style>
+    <main class="no-js"><h1>Un lugar para cada forma de viajar.</h1><p>Explora los recorridos desde Medellín y conversa con nuestro equipo para planear tu experiencia.</p>
+      <ul>
+        <li><a href="/experiencias/city-tour-comuna-13">City Tour &amp; Comuna 13</a></li>
+        <li><a href="/experiencias/guatape-piedra-del-penol">Guatapé &amp; Piedra del Peñol</a></li>
+        <li><a href="/experiencias/vuelta-a-oriente">Vuelta a Oriente</a></li>
+        <li><a href="/experiencias/santa-fe-de-antioquia">Santa Fe de Antioquia</a></li>
+        <li><a href="/experiencias/jardin-antioquia">Jardín</a></li>
+        <li><a href="/experiencias/tour-del-cafe-medellin">Tour del Café</a></li>
+        <li><a href="/experiencias/salto-del-buey">Salto del Buey</a></li>
+        <li><a href="/experiencias/tour-nocturno-medellin">Noche en Medellín</a></li>
+        <li><a href="/experiencias/tour-miradores">Tour Miradores</a></li>
+        <li><a href="/experiencias/hacienda-napoles">Hacienda Nápoles</a></li>
+      </ul><p><a href="tel:+573044961698">Llamar al +57 304 496 1698</a><br/><a href="https://wa.me/573044961698">Consultar por WhatsApp</a><br/><a href="mailto:transporteturismocolombia@gmail.com">transporteturismocolombia@gmail.com</a></p>
+    </main>
+  </noscript>
+  <!--noscript:end-->
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
