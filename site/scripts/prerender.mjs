@@ -17,6 +17,7 @@ const esc = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 const strip = (html, name) => html.replace(new RegExp(`[ \\t]*<!--${name}:start-->[\\s\\S]*?<!--${name}:end-->\\n?`), '');
 const attr = (tag, name) => tag.match(new RegExp(`\\s${name}="([^"]*)"`, 'i'))?.[1];
 const chunkFor = (path) => {
+  path=path.replace(/^\/en(?=\/|$)/,'')||'/';
   if (path === '/') return 'Home';
   if (path === '/experiencias') return 'Catalog';
   if (path.startsWith('/experiencias/')) return 'Tour';
@@ -52,10 +53,13 @@ if(d.readyState==='loading')d.addEventListener('DOMContentLoaded',arm);else arm(
 // Compone el HTML de una ruta a partir de la cáscara. `mark` marca el root: 404 → el cliente lo renderiza con createRoot (no se hidrata: el mismo HTML
 // sirve para cualquier URL desconocida, p. ej. /experiencias/inexistente, donde el menú activo difiere).
 function compose({ path, body, title, description, chunk, mark }) {
+  const en=/^\/en(?:\/|$)/.test(path),localPath=path.replace(/^\/en(?=\/|$)/,'')||'/';
   // renderToString no falla ante un error de render: cae a render de cliente y deja una plantilla. Aquí sí debe fallar el build.
   if (/Switched to client rendering|<template data-msg/.test(body)) throw new Error(`prerender ${path}: el servidor cayó a render de cliente: ${body.match(/data-msg="([^"]*)"/)?.[1]}`);
   if ((body.match(/<h1[\s>]/g) || []).length !== 1) throw new Error(`prerender ${path}: se esperaba exactamente un h1`);
   let html = shell;
+  html=html.replace('lang="es-CO"',en?'lang="en"':'lang="es-CO"');
+  if(!mark) html=html.replace('</head>',`<link rel="alternate" hreflang="es" href="${localPath}"/><link rel="alternate" hreflang="en" href="/en${localPath}"/><link rel="alternate" hreflang="x-default" href="${localPath}"/></head>`);
   html = html.replace(/<title>[\s\S]*?<\/title>/, () => `<title>${esc(`${title} | T&T Medellín`)}</title>`);
   html = html.replace(/(<meta name="description" content=")[^"]*(")/, (_, a, b) => `${a}${esc(description)}${b}`);
   html = strip(html, 'inter');
@@ -64,7 +68,7 @@ function compose({ path, body, title, description, chunk, mark }) {
   for (const link of shellPreloads) html = html.replace(link[0], '');
   html = html.replace(/<!--noscript:start-->[\s\S]*?<!--noscript:end-->/, '<noscript><style>#boot{display:none}</style></noscript>');
   const preloads = [], fonts = [];
-  if (path !== '/') {
+  if (localPath !== '/') {
     // Rutas interiores: sin póster de arranque; la imagen LCP del HTML se precarga desde <head> e Inter llega junto con el JS.
     html = strip(strip(strip(html, 'boot'), 'bootjs'), 'home-preload');
     fonts.push('/fonts/inter.woff2');
