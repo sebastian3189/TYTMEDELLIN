@@ -66,7 +66,7 @@ export default function BlogBook() {
             <p className="ft-count" role="status" aria-live="polite">{two(sel + 1)} / {cards.length}</p>
             <p className="eyebrow book-tag">{card.tag}</p><h3 className="ft-name">{card.title}</h3>
             <p className="ft-line">{card.intro}</p>
-            <Link className="ft-plan" to={`/blog/${card.slug}`} aria-label={`Planea esta experiencia: ${card.title}`}>Leer la nota <span aria-hidden="true">↗</span></Link>
+            <Link className="ft-plan" to={`/blog/${card.slug}`} aria-label={`Leer la nota: ${card.title}`}>Leer la nota <span aria-hidden="true">↗</span></Link>
             <div className="ft-nav">
               <button type="button" aria-label="Nota anterior" disabled={sel === 0} onClick={() => choose(selected.current - 1)}>←</button>
               <button type="button" aria-label="Nota siguiente" disabled={sel === cards.length - 1} onClick={() => choose(selected.current + 1)}>→</button>

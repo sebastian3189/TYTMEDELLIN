@@ -94,7 +94,7 @@ export function buildDims(W, H, mobile, frame) {
     deck = { x: W / 2, y: deckTop + Hd / 2 };
     // Las cartas enfocadas llenan el ancho útil; la altura se adapta al teléfono.
     // Reservar 280 px para nombre, frase y controles, incluso en 360×640.
-    Bh = Math.min((W - 56) * 1.25, H - 320);
+    Bh = Math.min(Math.min(W - 56, 340) * 1.25, H - 320);
     focus = { x: W / 2, y: (H - 280) / 2 };
     const bottomEdge = deck.y + Hd / 2 + al, t2Top = bottomEdge + gapB;
     m = { t1Top, t2Top, microTop: t2Top + line + 10, short, A };

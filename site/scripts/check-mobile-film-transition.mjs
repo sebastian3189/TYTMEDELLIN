@@ -12,10 +12,11 @@ await mkdir(out, { recursive: true });
 const browser = await chromium.launch({ channel: 'msedge', headless: true });
 try {
   for (const [width, height] of [[390, 844], [360, 640], [320, 568], [768, 1024], [1440, 900]]) {
+    if(process.argv.length>2 && !process.argv.slice(2).includes(String(width))) continue;
     const mobile = width < 800, T = timeline(mobile);
     const context = await browser.newContext({ viewport: { width, height }, hasTouch: mobile, isMobile: mobile, deviceScaleFactor: mobile ? 3 : 1 });
     const page = await context.newPage(), errors = [], requests = [];
-    page.on('pageerror', e => errors.push(e.message));
+    page.on('pageerror', e => errors.push(e.stack || e.message));
     page.on('request', r => { if (r.url().includes('/media/inicio/')) requests.push(r.url()); });
     await page.goto(process.env.TYT_TEST_URL || 'http://127.0.0.1:4173');
     await page.waitForFunction(() => Number(document.querySelector('.scrub-hero')?.dataset.loaded) >= 121, null, { timeout: 90000 });
@@ -24,7 +25,11 @@ try {
         const track = document.querySelector('.scrub-track'), stage = document.querySelector('.scrub-stage');
         scrollTo({ top: track.getBoundingClientRect().top + scrollY - parseFloat(getComputedStyle(stage).top) + u / total * (track.offsetHeight - stage.offsetHeight), behavior: 'instant' });
       }, { u, total: T.total });
-      await page.waitForTimeout(700);
+      await page.waitForFunction(p => {
+        const d=document.querySelector('.scrub-hero')?.dataset;
+        return d?.settled==='true' && Math.abs(Number(d.progress)-p)<.001;
+      },u/T.total);
+      await page.waitForTimeout(450);
       if (name) await page.screenshot({ path: `${out}/${width}-${name}.png` });
     };
     const film = () => page.evaluate(() => {
@@ -79,6 +84,8 @@ try {
           text: cap.querySelector('.scrub-cap-sub').textContent, href: plan.getAttribute('href'),
           card: box(card), cap:box(cap), plan:box(plan),
           photoReady:card.querySelector('.bd-full').classList.contains('ready'),
+          sharp:card.querySelector('.bd-full').currentSrc.endsWith('-h.webp'),
+          planTouchable:(()=>{const r=plan.getBoundingClientRect();return plan.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));})(),
           titleOpacity:Number(getComputedStyle(document.querySelector('.scrub-t1')).opacity),
           overflow:document.documentElement.scrollWidth > innerWidth + 1 };
       }, i);
@@ -86,7 +93,7 @@ try {
       const copy = inicioTextos.cartas[slugs[i]];
       assert.equal(s.text, `${copy.emocion}: ${copy.frase}`);
       assert.equal(s.href, `/experiencias/${slugs[i]}#consulta`);
-      assert(s.photoReady && !s.overflow, JSON.stringify(s));
+      assert(s.photoReady && s.sharp && s.planTouchable && !s.overflow, JSON.stringify(s));
       assert(s.card.top >= 0 && s.card.bottom < height && s.card.left >= 0 && s.card.right <= width + 1, JSON.stringify(s));
       assert(s.plan.height >= 44);
       if (mobile) {
@@ -104,7 +111,16 @@ try {
     await page.getByRole('button', { name:'Carta anterior', exact:true }).click();
     await page.waitForTimeout(1200);
     assert.equal(await page.locator('.bd-cap.is-on').getAttribute('data-i'), '4');
-    await go((T.t2 + T.t3) / 2, 'reverse'); assert.deepEqual(await film(), hold);
+    await go((T.t2 + T.t3) / 2, 'reverse');
+    const reversed=await film();
+    for(const k of ['phase','frame','opacity']) assert.equal(reversed[k],hold[k]);
+    // El motor evita reescribir estilos iguales redondeados: tolerancia subpíxel <0.05 px.
+    assert(Math.abs(reversed.ratio-hold.ratio)<.001);
+    for(const k of ['transform','clip']){
+      const a=reversed[k].match(/-?[\d.]+/g)?.map(Number)||[];
+      const b=hold[k].match(/-?[\d.]+/g)?.map(Number)||[];
+      assert.equal(a.length,b.length);assert(a.every((n,i)=>Math.abs(n-b[i])<.05));
+    }
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.waitForTimeout(500); assert.equal(await page.locator('.scrub-media canvas').count(), 0);
     await page.emulateMedia({ reducedMotion: 'no-preference' });
@@ -112,6 +128,7 @@ try {
     await go(uForCard(T, 8));
     await page.locator('.bd-card').nth(8).click();
     await page.waitForURL('**/experiencias/jardin-antioquia');
+    await page.waitForSelector('.tour-page');
     assert.equal(await page.locator('.scrub-media canvas').count(), 0);
     assert.deepEqual(errors, []);
     checks.push({ width, height, tours:names.size, continuousFrames:true, reverse:true, navigation:true, errors });

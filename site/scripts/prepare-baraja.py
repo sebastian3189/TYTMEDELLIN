@@ -78,4 +78,6 @@ def sharp_cards():
 
 if __name__ == '__main__':
     import sys
-    sharp_cards() if '--sharp' in sys.argv else main()
+    if '--sharp' not in sys.argv:
+        main()
+    sharp_cards()

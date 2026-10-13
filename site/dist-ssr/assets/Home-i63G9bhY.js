@@ -173,7 +173,7 @@ function buildDims(W, H, mobile, frame) {
 			x: W / 2,
 			y: deckTop + Hd / 2
 		};
-		Bh = Math.min((W - 56) * 1.25, H - 320);
+		Bh = Math.min(Math.min(W - 56, 340) * 1.25, H - 320);
 		focus = {
 			x: W / 2,
 			y: (H - 280) / 2
@@ -1289,7 +1289,7 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 							className: "bd-deck",
 							children: animated && cards.map((c, i) => {
 								const tx = copy(c.slug);
-								return deckLinks ? /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(Link, {
+								return deckLinks ? /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsx(Link, {
 									className: "bd-card",
 									to: `/experiencias/${c.slug}`,
 									"aria-label": `${c.name}. ${tx.emocion}: ${tx.frase}`,
@@ -1317,15 +1317,7 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 											onLoad: (e) => e.currentTarget.classList.add("ready")
 										})]
 									})
-								}), /* @__PURE__ */ jsxs(Link, {
-									className: "bd-plan scrub-btn-plan",
-									to: `/experiencias/${c.slug}#consulta`,
-									"aria-label": `Planea esta experiencia: ${c.name}`,
-									children: ["Planea esta experiencia ", /* @__PURE__ */ jsx("span", {
-										"aria-hidden": "true",
-										children: "↗"
-									})]
-								})] }, c.slug) : /* @__PURE__ */ jsx("div", {
+								}) }, c.slug) : /* @__PURE__ */ jsx("div", {
 									className: "bd-card",
 									"aria-hidden": "true",
 									children: /* @__PURE__ */ jsx("span", {
@@ -1343,6 +1335,15 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 								}, c.slug);
 							})
 						}),
+						animated && cards.map((c) => /* @__PURE__ */ jsxs(Link, {
+							className: "bd-plan scrub-btn-plan",
+							to: `/experiencias/${c.slug}#consulta`,
+							"aria-label": `Planea esta experiencia: ${c.name}`,
+							children: ["Planea esta experiencia ", /* @__PURE__ */ jsx("span", {
+								"aria-hidden": "true",
+								children: "↗"
+							})]
+						}, c.slug)),
 						animated && /* @__PURE__ */ jsxs("div", {
 							className: "bd-nav",
 							children: [/* @__PURE__ */ jsx("button", {
@@ -1442,6 +1443,7 @@ function ExperienceExplorer() {
 	}, []);
 	useLayoutEffect(() => {
 		const check = () => {
+			if (!stage.current) return;
 			const index = stage.current.querySelector(".explorer-index"), visual = stage.current.querySelector(".explorer-visual");
 			setPin(!light && (innerWidth < 900 ? stage.current.scrollHeight <= innerHeight - 88 : innerWidth >= 1100 && Math.max(index.scrollHeight, visual.scrollHeight) <= innerHeight - 108));
 		};
@@ -1460,6 +1462,7 @@ function ExperienceExplorer() {
 		const update = () => {
 			cancelAnimationFrame(frame);
 			frame = requestAnimationFrame(() => {
+				if (!root.current || !stage.current) return;
 				const r = root.current.getBoundingClientRect();
 				if (r.bottom < 0 || r.top > innerHeight || document.hidden) return;
 				if (manual.current !== null && Math.abs(scrollY - manual.current) < 24) return;
@@ -1866,7 +1869,7 @@ function BlogBook() {
 							/* @__PURE__ */ jsxs(Link, {
 								className: "ft-plan",
 								to: `/blog/${card.slug}`,
-								"aria-label": `Planea esta experiencia: ${card.title}`,
+								"aria-label": `Leer la nota: ${card.title}`,
 								children: ["Leer la nota ", /* @__PURE__ */ jsx("span", {
 									"aria-hidden": "true",
 									children: "↗"

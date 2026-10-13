@@ -17,8 +17,8 @@ try {
     const book = page.locator('.ft-book');
     await book.scrollIntoViewIfNeeded();
     const thumbs = book.locator('.ft-thumb');
-    assert.equal(await thumbs.count(), 12);
-    assert(await book.getByRole('button', { name: 'Experiencia anterior', exact: true }).isDisabled());
+    assert.equal(await thumbs.count(), 3);
+    assert(await book.getByRole('button', { name: 'Nota anterior', exact: true }).isDisabled());
     if (!reduced && !saveData) {
       await book.evaluate(async (el) => {
         el.querySelectorAll('.ft-thumb')[1].click();
@@ -38,15 +38,15 @@ try {
       await book.locator('.ft-leaf').evaluate((el) => el.getAnimations()[0].finish());
       await page.waitForTimeout(30);
     } else { await thumbs.nth(1).dispatchEvent('click'); assert.equal(await book.locator('.ft-leaf').count(), 0); }
-    await thumbs.nth(11).dispatchEvent('click');
-    await thumbs.nth(3).dispatchEvent('click');
-    await thumbs.nth(10).dispatchEvent('click');
+    await thumbs.nth(2).dispatchEvent('click');
+    await thumbs.nth(0).dispatchEvent('click');
+    await thumbs.nth(2).dispatchEvent('click');
     await page.waitForTimeout(700);
-    assert.equal(await thumbs.nth(10).getAttribute('aria-pressed'), 'true');
-    assert.equal(await book.locator('.ft-name').textContent(), await thumbs.nth(10).getAttribute('aria-label'));
-    await thumbs.nth(10).focus();
+    assert.equal(await thumbs.nth(2).getAttribute('aria-pressed'), 'true');
+    assert.equal(await book.locator('.ft-name').textContent(), await thumbs.nth(2).getAttribute('aria-label'));
+    await thumbs.nth(2).focus();
     await page.keyboard.press('End');
-    assert(await book.getByRole('button', { name: 'Experiencia siguiente', exact: true }).isDisabled());
+    assert(await book.getByRole('button', { name: 'Nota siguiente', exact: true }).isDisabled());
     await page.keyboard.press('Home');
     await page.keyboard.press('ArrowRight');
     await page.waitForTimeout(700);

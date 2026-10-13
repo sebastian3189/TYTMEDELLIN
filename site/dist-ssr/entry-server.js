@@ -800,7 +800,7 @@ function lazyRoute(loader) {
 var pick = (loader, name) => () => loader().then((m) => m[name]);
 var company_ = () => import("./assets/Company-n6I4HdkR.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-CF0RL7K_.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-i63G9bhY.js").then((m) => m.default)),
 	catalog: lazyRoute(() => import("./assets/Catalog-CiSqxbZB.js").then((m) => m.default)),
 	tour: lazyRoute(() => import("./assets/Tour-Dcod6lXc.js").then((m) => m.default)),
 	fleet: lazyRoute(() => import("./assets/Fleet-DSJl0g1j.js").then((m) => m.default)),

@@ -188,6 +188,20 @@ necesarios. Los errores no exponen internals ni secretos.
 - Mapas, video y terceros: diferidos y con alternativa cuando fallen.
 - Higgsfield: ningún llamado directo; siempre mediante la compuerta del Spec 03.
 
+### CONSTRUIR — móvil y libro de blogs, 2026-10-13
+
+Aplicación del pedido más reciente (Spec 03 «Ajuste móvil y cuaderno editorial»):
+geometría vertical en baraja-geometria.js; imágenes h diferidas en ScrubHero;
+BlogBook separado al final de Home; mobile-motion.css recompone Story y el
+abanico del explorador; FeaturedGallery anima cambios sin miniatura de origen.
+prepare-baraja.py --sharp añade derivados sin borrar los anteriores ni ampliar
+fuentes. El modo estático mantiene enlaces a las doce experiencias.
+
+Pruebas reproducibles: npm run build, check-mobile-film-transition.mjs y
+check-mobile-editorial.mjs (320, 360, 390, 768 y 1440 px). Capturas bajo
+site/test-results/mobile-film-transition y mobile-editorial. Las pruebas son
+verificación de construcción, no aprobación independiente ni prueba en teléfono real.
+
 ## Definition of Done por historia
 
 - [ ] Cumple el spec y no inventa información.

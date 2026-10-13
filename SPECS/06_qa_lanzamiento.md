@@ -101,6 +101,29 @@ Las compuertas siguientes corresponden al lanzamiento, no al prototipo local.
   Sin consumo Kie/Higgsfield ni publicación. Teléfono físico, Safari, lector de
   pantalla y métricas de campo siguen pendientes; no se certifican con estas pruebas.
 
+### Verificación de construcción — móvil y blog, 13 de octubre de 2026
+
+Trabajo directo, sin subagentes, conforme a la petición del usuario. No constituye
+auditoría independiente ni cierre de las compuertas de lanzamiento.
+
+- Build y prerender: correctos, 26 rutas y 404.
+- check-mobile-frame-composition.py: 121 fotogramas completos; sin bandas planas
+  en los últimos 26 y sin capa de foto fija que sustituya el final.
+- check-mobile-editorial.mjs: pasa a 320/360/390/768/1440; libro al final con
+  tres blogs, navegación, abanico, capítulos y movimiento reducido.
+- check-mobile-interactions.mjs: gesto táctil nativo vertical en la baraja;
+  doce fichas a 360×640 sin desbordar la escena y con controles de capítulo
+  alcanzables; sin errores de página al navegar.
+- check-experience-book.mjs: cinco variantes aprobadas por la prueba (PC,
+  móviles, reducido y saveData), teclado, giros interrumpibles y reducción
+  dinámica; cero errores. Ahora comprueba tres notas, no doce experiencias.
+- Se corrigieron en revisión visual el recorte accidental del CTA de la baraja
+  y la superposición de la barra de cotización sobre botones de capítulos.
+- Evidencia: site/test-results/mobile-editorial, mobile-film-transition y
+  experience-book. Se mantienen pendientes Safari y teléfono físico,
+  aprobación visual del usuario, auditoría independiente y métricas de campo.
+- Sin publicación ni consumo de créditos. Se conservaron las fotografías fuente.
+
 - [ ] Specs 01–05 con compuertas cerradas.
 - [ ] Cero P0/P1 y P2 aceptados documentados.
 - [ ] Negocio, diseño, contenido y técnico aprueban.

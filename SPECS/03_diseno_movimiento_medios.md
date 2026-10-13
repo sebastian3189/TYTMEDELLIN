@@ -757,6 +757,37 @@ controles sin 3D. Sin activos, dependencias ni créditos nuevos. Compuertas afec
 Inicio móvil/escritorio y movimiento ligero/reducido. Evidencia de construcción:
 `site/scripts/check-experience-book.mjs` y `site/test-results/experience-book/`.
 
+### Ajuste móvil y cuaderno editorial — pedido del usuario, 2026-10-13
+
+ENCUADRAR / DISEÑAR / CONSTRUIR, ejecutados directamente sin subagentes por
+instrucción expresa. Este pedido sustituye las variantes anteriores que desactivaban
+el despliegue de tours y las escenas por el solo hecho de usar celular.
+
+- Baraja: las doce experiencias también se recorren en móvil, en vertical,
+  reversibles con scroll nativo. Una foto protagonista y texto fuera de la imagen;
+  las vecinas se recortan en la zona fotográfica, nunca los enlaces de consulta.
+- Película: los 121 fotogramas completos continúan hasta el último. Se abre el
+  encuadre progresivamente desde el 60 % hasta una postal 16:9, sin bandas de
+  relleno ni sustitución anticipada por una foto congelada.
+- Nitidez: variantes de las mismas fotos de la baraja, hasta 960×1200, WebP q86,
+  sin ampliar fuentes pequeñas. Se solicitan cerca de la carta activa. Las doce
+  suman 2.67 MB; esta decisión de calidad sustituye el presupuesto anterior de
+  0.6 MB para esta parte, no representa una medición de Core Web Vitals.
+- El libro sale de ScrubHero y cierra el inicio, después del equipo. Contiene
+  únicamente las tres notas existentes de content.js, con foto, categoría,
+  título, introducción y enlace al blog. Dos páginas en PC; página y texto en
+  móvil; lomo, cantos y giro de hoja. Índice textual, sin repetir miniaturas de tours.
+- Explorador: abanico y cambio de fotos también en móvil. Pin solo cuando todo
+  el escenario cabe; en pantallas pequeñas se conservan las animaciones mediante
+  botones, sin forzar un pin que esconda información.
+- Fichas: capítulos con cambio de imagen/revelado y controles en móvil, reservando
+  espacio para navegación superior y barra de cotización. Altura ≤600 px y
+  movimiento reducido conservan lectura completa sin pin. Galería anima también
+  los cambios por botones y gesto, sin depender de seleccionar una miniatura.
+
+Sin nuevos artículos, generación de medios ni créditos. Aprobación visual del
+usuario y auditoría independiente pendientes; no se simula revisión independiente.
+
 ## Compuerta
 
 - [ ] Brand board y un concepto aprobados.

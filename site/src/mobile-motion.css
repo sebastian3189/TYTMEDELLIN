@@ -3,15 +3,15 @@
  .editorial-photo{transform:translateY(var(--photo-shift,0px))}
  .page-title h1{transform:translateX(calc(var(--editorial-shift,0vw) * -.25))}
  .story:not(.story-static){height:280svh}
- .story:not(.story-static) .story-inner{height:calc(100svh - 76px);min-height:0;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(140px,1fr) auto;gap:20px;padding:20px var(--pad) 24px}
+ .story:not(.story-static) .story-inner{top:144px;height:calc(100svh - 224px);min-height:0;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(80px,1fr) auto;gap:12px;padding:12px var(--pad)}
  .story:not(.story-static) .story-images{height:100%;min-height:0}
  .story:not(.story-static) .story-content .eyebrow{display:none}
- .story:not(.story-static) .chapter{font-size:13px}
+ .story:not(.story-static) .chapter{font-size:13px;margin-bottom:6px}
  .story:not(.story-static) .story-content h2{font-size:clamp(24px,6vw,32px);line-height:1.1;margin-top:6px}
  .story:not(.story-static) .story-content article>p{font-size:16px;line-height:1.45;margin-top:12px}
  .story:not(.story-static) .chapter-controls{margin-top:12px}
  .story:not(.story-static) .story-meter{margin-top:12px}
- .story:not(.story-static) .story-hint{margin-top:8px}
+ .story:not(.story-static) .story-hint{display:none}
  .explorer-track.is-pinned{height:250svh}
  .is-pinned .explorer-stage{top:76px}
  .explorer-index>div[role=tablist]{padding-bottom:8px}

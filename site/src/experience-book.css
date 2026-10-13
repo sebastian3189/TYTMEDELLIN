@@ -44,7 +44,7 @@
 .blog-book .book-tag{margin-bottom:16px;font-size:12px}
 .blog-book .ft-name{font-size:clamp(28px,3vw,44px);min-height:3.2em}
 .blog-book .ft-line{font-size:16px;min-height:6.6em;margin-top:20px}
-.blog-book .ft-plan{display:inline-flex;align-items:center;gap:24px;min-height:44px;margin-top:24px;border-bottom:1px solid var(--line-strong);border-radius:0;padding:4px 0;background:none;font-weight:600}
+.blog-book .ft-plan{display:inline-flex;align-items:center;gap:24px;min-height:44px;margin-top:24px;border:0;border-bottom:1px solid var(--line-strong);border-radius:0;padding:4px 0;background:none;font-weight:600}
 .blog-book .ft-nav{display:flex;gap:12px;background:none}
 .blog-book .ft-nav button{width:44px;height:44px;border:1px solid var(--line-strong);background:none}
 .blog-book .ft-strip{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;overflow:visible}

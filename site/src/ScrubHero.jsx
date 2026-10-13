@@ -580,13 +580,13 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
                     </span>
                     
                   </Link>
-                  <Link className="bd-plan scrub-btn-plan" to={`/experiencias/${c.slug}#consulta`} aria-label={`Planea esta experiencia: ${c.name}`}>Planea esta experiencia <span aria-hidden="true">↗</span></Link>
                 </Fragment>
               ) : (
                 <div key={c.slug} className="bd-card" aria-hidden="true"><span className="bd-tilt"><img className="bd-thumb" src={cardImg(c.slug, 't')} width="320" height="400" alt="" decoding="async" fetchPriority="low" /></span></div>
               );
             })}
           </div>
+          {animated && cards.map(c => <Link key={c.slug} className="bd-plan scrub-btn-plan" to={`/experiencias/${c.slug}#consulta`} aria-label={`Planea esta experiencia: ${c.name}`}>Planea esta experiencia <span aria-hidden="true">↗</span></Link>)}
           {animated && (
             <div className="bd-nav">
               <button type="button" className="bd-arrow" aria-label="Carta anterior" onClick={() => api.current.step(-1)}>{mobile ? '↑' : '←'}</button>
