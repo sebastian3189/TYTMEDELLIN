@@ -1,4 +1,4 @@
-import english from './locales/en.json';
+import english from './locales/en.json' with {type:'json'};
 
 // Presentation-only translation. IDs, routes, submitted values and user input stay intact.
 let locale = typeof window !== 'undefined' && /^\/en(?:\/|$)/.test(window.location.pathname) ? 'en' : 'es';
@@ -13,6 +13,9 @@ export function t(value) {
   if (Object.hasOwn(english, key)) return value.replace(value.trim(), english[key]);
   // Repeated accessible labels and counters, with translated tour names.
   const patterns = [
+    [/^estos (\d+) campos$/, n=>`these ${n} fields`],
+    [/^Foto (\d+) de (\d+), (.+)$/, (n,total,name)=>`Photo ${n} of ${total}, ${t(name)}`],
+    [/^(.+)\. (Descubre|Explora|Siente|Conecta|Vive|Disfruta|Sorpréndete|Recuerda|Enamórate|Inspírate): (.+)$/, (name,verb,text)=>`${t(name)}. ${t(verb)}: ${t(text)}`],
     [/^Ampliar fotografía (\d+) de (.+)$/, (n,name)=>`Enlarge photo ${n} of ${t(name)}`],
     [/^Fotografía (\d+) de (.+)$/, (n,name)=>`Photo ${n} of ${t(name)}`],
     [/^Mostrar fotografía (\d+) de (.+)$/, (n,name)=>`Show photo ${n} of ${t(name)}`],

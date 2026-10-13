@@ -1,5 +1,5 @@
 // Datos de contacto de la sede Medellín. Sin dependencias pesadas: lo usan el pie, la cabecera y los enlaces de WhatsApp en todas las rutas.
-import { language, t } from './i18n';
+import { language, t } from './i18n.js';
 export const company = {
   phone: '+57 304 496 1698', whatsapp: '573044961698',
   email: 'transporteturismocolombia@gmail.com',
