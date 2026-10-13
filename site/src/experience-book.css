@@ -32,4 +32,35 @@
  .ft-book .ft-leaf-front,.ft-book .ft-leaf-back{padding:14px}
  .ft-book .ft-strip{margin-inline:0;padding-inline:2px;scroll-padding-inline:2px}
 }
+/* Spec 03 — cuaderno editorial al final; índice de notas, no miniaturas de tours. */
+.blog-book{padding-top:80px}
+.blog-book .ft{margin-top:40px}
+.blog-book .ft-main{padding:14px;background:var(--ink,#3C3F3B);border-color:var(--ink,#3C3F3B);border-radius:6px 18px 18px 6px}
+.blog-book .ft-card{padding:20px 24px 20px 20px;background:#fffefa}
+.blog-book .ft-side{padding:clamp(24px,4vw,60px)}
+.blog-book .ft-media{height:clamp(380px,38vw,520px)}
+.blog-book .ft-media img{object-fit:cover;border-radius:2px}
+.blog-book .ft-count{font:600 12px var(--font);letter-spacing:.16em}
+.blog-book .book-tag{margin-bottom:16px;font-size:12px}
+.blog-book .ft-name{font-size:clamp(28px,3vw,44px);min-height:3.2em}
+.blog-book .ft-line{font-size:16px;min-height:6.6em;margin-top:20px}
+.blog-book .ft-plan{display:inline-flex;align-items:center;gap:24px;min-height:44px;margin-top:24px;border-bottom:1px solid var(--line-strong);border-radius:0;padding:4px 0;background:none;font-weight:600}
+.blog-book .ft-nav{display:flex;gap:12px;background:none}
+.blog-book .ft-nav button{width:44px;height:44px;border:1px solid var(--line-strong);background:none}
+.blog-book .ft-strip{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;overflow:visible}
+.blog-book .ft-thumb{display:flex;flex:0 1 auto;align-items:center;gap:12px;aspect-ratio:auto;padding:10px 16px;min-height:44px;border-radius:999px;font-size:14px;opacity:1;background:var(--bg)}
+.blog-book .book-index{font-size:12px;font-variant-numeric:tabular-nums;color:var(--text-muted)}
+@media(max-width:799px){
+ .blog-book .ft-main{padding:8px}
+ .blog-book .ft-card{padding:14px 14px 0;aspect-ratio:auto}
+ .blog-book .ft-media{height:auto;aspect-ratio:3/2}
+ .blog-book .ft-main::after{height:100%;width:10px}
+ .blog-book .ft-side{padding:24px 20px 28px;border:0}
+ .blog-book .ft-count{margin-bottom:16px}
+ .blog-book .ft-name{font-size:clamp(26px,6.6vw,36px);min-height:3.3em}
+ .blog-book .ft-line{min-height:6.6em}
+ .blog-book .ft-turn-window{inset:22px 22px auto;aspect-ratio:3/2}
+ .blog-book .ft-leaf-front,.blog-book .ft-leaf-back{padding:0}
+ .blog-book .ft-leaf-front img{object-fit:cover}
+}
 @media(prefers-reduced-motion:reduce){.ft-book .ft-turn-window{display:none}}

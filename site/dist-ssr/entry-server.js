@@ -798,11 +798,11 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-BF9z_Jvp.js");
+var company_ = () => import("./assets/Company-n6I4HdkR.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home--qmx-fsU.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-CF0RL7K_.js").then((m) => m.default)),
 	catalog: lazyRoute(() => import("./assets/Catalog-CiSqxbZB.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour--ilRnmiN.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-Dcod6lXc.js").then((m) => m.default)),
 	fleet: lazyRoute(() => import("./assets/Fleet-DSJl0g1j.js").then((m) => m.default)),
 	blog: lazyRoute(pick(() => import("./assets/Blog-CIThthQV.js"), "Blog")),
 	article: lazyRoute(() => import("./assets/Blog-CIThthQV.js").then((m) => m.default)),

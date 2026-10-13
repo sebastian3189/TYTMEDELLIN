@@ -1,5 +1,5 @@
 import { M as company, N as whatsapp, d as PageTitle, f as Picture, i as values, j as Socials, l as Button, n as photos, p as QuoteSection, u as Eyebrow, y as Manifesto } from "../entry-server.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-CVQ60VOv.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-f8KzqcvA.js";
 import { t as Reviews } from "./Reviews-D7kLyAOr.js";
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";

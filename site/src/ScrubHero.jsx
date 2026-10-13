@@ -4,7 +4,6 @@ import manifest from './inicio-frames.json';
 import { inicioTextos, CHAPTERS, textoFase } from './inicio-textos';
 import { N, timeline, stateAt, buildDims, frameWindow, filmOpening, cardPlace, uForCard, smooth } from './baraja-geometria';
 import './scrub-hero.css';
-import './experience-book.css';
 
 /*
  * Apertura del inicio: «La baraja de recuerdos» (Spec 03 §H1) sobre la película controlada por scroll (§E, §G) — Spec 04.
@@ -65,106 +64,6 @@ function CartaLista({ card }) {
       <h3 className="sc-name">{card.name}</h3>
       <p className="sc-line"><b>{c.emocion}:</b> {c.frase}</p>
     </Link>
-  );
-}
-
-/* Cierre (estático y móvil): lema de cierre + «Planeemos tu viaje» (única acción naranja) y «Explorar experiencias». */
-function Cierre({ actions }) {
-  const f = textoFase('final');
-  return (
-    <div className="sc-close">
-      <p className="sc-close-title">{f.titular}</p>
-      <p className="sc-close-sub">{f.subtitulo}</p>
-      <div className="scrub-actions sc-close-actions">{actions}</div>
-    </div>
-  );
-}
-
-/* Cierre del inicio: carta destacada grande (16:10 en escritorio, 4:5 a todo el ancho en móvil) con nombre, línea y CTA debajo,
-   y debajo la tira de las 12 miniaturas que cambian la destacada (clic, hover con puntero fino o teclado) con Flip desde la miniatura. */
-function Destacada({ cards, actions, reduce }) {
-  const [sel, setSel] = useState(0);
-  const [turn, setTurn] = useState(null);
-  const leafRef = useRef(null), selected = useRef(0), serial = useRef(0);
-  const card = cards[sel], c = copy(card.slug);
-  useEffect(() => {
-    const query = window.matchMedia(REDUCE_QUERY);
-    const cancelReducedTurn = () => { if (query.matches) setTurn(null); };
-    query.addEventListener('change', cancelReducedTurn);
-    return () => query.removeEventListener('change', cancelReducedTurn);
-  }, []);
-  useEffect(() => { if (reduce) setTurn(null); }, [reduce]); // movimiento reducido (sistema o botón) a mitad de giro: la hoja desaparece
-  const choose = (i) => {
-    i = Math.min(cards.length - 1, Math.max(0, i));
-    const previous = selected.current;
-    if (i === previous) return;
-    selected.current = i;
-    setSel(i);
-    setTurn(prefersStatic(reduce) ? null : { from: previous, to: i, forward: i > previous, id: ++serial.current });
-  };
-  useLayoutEffect(() => {
-    if (!turn) return;
-    const el = leafRef.current;
-    if (!el?.animate || prefersStatic(reduce)) { setTurn(null); return; }
-    const animation = el.animate([
-      { transform: `rotateY(${turn.forward ? 0 : 180}deg)` },
-      { transform: `rotateY(${turn.forward ? 180 : 0}deg)` },
-    ], { duration: 600, easing: 'cubic-bezier(.32,.72,0,1)', fill: 'both' });
-    animation.onfinish = () => setTurn((current) => current?.id === turn.id ? null : current);
-    return () => { animation.onfinish = null; animation.cancel(); };
-  }, [turn, reduce]);
-  const onKey = (e, i) => {
-    const n = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : e.key === 'Home' ? 0 : e.key === 'End' ? cards.length - 1 : null;
-    if (n === null || n < 0 || n >= cards.length) return;
-    e.preventDefault();
-    choose(n);
-    const strip = e.currentTarget.parentElement, target = strip.children[n];
-    target?.focus({ preventScroll: true });
-    if (target) {
-      const viewport = strip.getBoundingClientRect(), item = target.getBoundingClientRect();
-      if (item.left < viewport.left + 4) strip.scrollLeft += item.left - viewport.left - 4;
-      else if (item.right > viewport.right - 4) strip.scrollLeft += item.right - viewport.right + 4;
-    }
-  };
-  const pageImage = (item) => <picture><source media={MOBILE_QUERY} srcSet={cardImg(item.slug, 'm')} /><img src={cardImg(item.slug, 'w')} width="900" height="600" alt="" loading="lazy" decoding="async" /></picture>;
-  const t = inicioTextos;
-  return (
-    <div className="scrub-after is-featured">
-      <div className="scrub-after-head"><p className="eyebrow">{t.eleccion}</p></div>
-      <div className="ft ft-book" data-turning={Boolean(turn) && !prefersStatic(reduce)}>
-        <div className="ft-main">
-          <div className="ft-card">
-            <Link className="ft-media" to={`/experiencias/${card.slug}`} aria-label={`${card.name}. ${c.emocion}: ${c.frase}`}>
-              {pageImage(card)}
-            </Link>
-          </div>
-          <div className="ft-side">
-            <p className="ft-count" role="status" aria-live="polite">{two(sel + 1)} / {cards.length}</p>
-            <h2 className="ft-name">{card.name}</h2>
-            <p className="ft-line"><b>{c.emocion}:</b> {c.frase}</p>
-            <Link className="ft-plan" to={`/experiencias/${card.slug}#consulta`} aria-label={`Planea esta experiencia: ${card.name}`}>Planea esta experiencia <span aria-hidden="true">↗</span></Link>
-            <div className="ft-nav">
-              <button type="button" aria-label="Experiencia anterior" disabled={sel === 0} onClick={() => choose(selected.current - 1)}>←</button>
-              <button type="button" aria-label="Experiencia siguiente" disabled={sel === cards.length - 1} onClick={() => choose(selected.current + 1)}>→</button>
-            </div>
-          </div>
-          {turn && !prefersStatic(reduce) && <div className="ft-turn-window" aria-hidden="true" inert>
-            <div ref={leafRef} key={turn.id} className="ft-leaf" data-direction={turn.forward ? 'next' : 'previous'}>
-              <div className="ft-leaf-front">{pageImage(cards[turn.forward ? turn.from : turn.to])}</div>
-              <div className="ft-leaf-back"><span>{two(turn.forward ? turn.to + 1 : turn.from + 1)}</span></div>
-            </div>
-          </div>}
-        </div>
-        <div className="ft-strip" role="group" aria-label="Elegir experiencia">
-          {cards.map((x, i) => (
-            <button key={x.slug} type="button" className="ft-thumb" aria-pressed={i === sel} aria-label={x.name} onClick={() => choose(i)} onKeyDown={(e) => onKey(e, i)}>
-              <img src={cardImg(x.slug, 't')} width="320" height="400" alt="" loading="lazy" decoding="async" />
-            </button>
-          ))}
-        </div>
-      </div>
-      <Cierre actions={actions} />
-    </div>
   );
 }
 
@@ -677,7 +576,7 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
                   <Link className="bd-card" to={`/experiencias/${c.slug}`} aria-label={`${c.name}. ${tx.emocion}: ${tx.frase}`} onFocus={() => api.current.card(i)} onKeyDown={(e) => onCardKey(e, i)} onPointerMove={tilt} onPointerLeave={untilt}>
                     <span className="bd-tilt">
                       <img className="bd-thumb" src={cardImg(c.slug, 't')} width="320" height="400" alt="" decoding="async" fetchPriority="low" />
-                      <img className="bd-full" data-src={cardImg(c.slug, mobile ? 'm' : 'd')} width="640" height="800" alt="" decoding="async" onLoad={(e) => e.currentTarget.classList.add('ready')} />
+                      <img className="bd-full" data-src={cardImg(c.slug, 'h')} width="960" height="1200" alt="" decoding="async" onLoad={(e) => e.currentTarget.classList.add('ready')} />
                     </span>
                     
                   </Link>
@@ -690,14 +589,14 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
           </div>
           {animated && (
             <div className="bd-nav">
-              <button type="button" className="bd-arrow" aria-label="Carta anterior" onClick={() => api.current.step(-1)}>←</button>
-              <button type="button" className="bd-arrow" aria-label="Carta siguiente" onClick={() => api.current.step(1)}>→</button>
+              <button type="button" className="bd-arrow" aria-label="Carta anterior" onClick={() => api.current.step(-1)}>{mobile ? '↑' : '←'}</button>
+              <button type="button" className="bd-arrow" aria-label="Carta siguiente" onClick={() => api.current.step(1)}>{mobile ? '↓' : '→'}</button>
             </div>
           )}
         </div>
       </div>
       {summary && <p className="scrub-summary">{summary}</p>}
-      <Destacada cards={cards} actions={actions} reduce={reduce || staticMode} />
+      {staticMode && <div className="wrap sc-list">{cards.map(card => <CartaLista key={card.slug} card={card}/>)}</div>}
     </section>
   );
 }

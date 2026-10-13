@@ -1,0 +1,40 @@
+/* CONSTRUIR — Spec 03/04: las mismas escenas, recompuestas para gesto vertical. */
+@media(max-width:899px){
+ .editorial-photo{transform:translateY(var(--photo-shift,0px))}
+ .page-title h1{transform:translateX(calc(var(--editorial-shift,0vw) * -.25))}
+ .story:not(.story-static){height:280svh}
+ .story:not(.story-static) .story-inner{height:calc(100svh - 76px);min-height:0;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(140px,1fr) auto;gap:20px;padding:20px var(--pad) 24px}
+ .story:not(.story-static) .story-images{height:100%;min-height:0}
+ .story:not(.story-static) .story-content .eyebrow{display:none}
+ .story:not(.story-static) .chapter{font-size:13px}
+ .story:not(.story-static) .story-content h2{font-size:clamp(24px,6vw,32px);line-height:1.1;margin-top:6px}
+ .story:not(.story-static) .story-content article>p{font-size:16px;line-height:1.45;margin-top:12px}
+ .story:not(.story-static) .chapter-controls{margin-top:12px}
+ .story:not(.story-static) .story-meter{margin-top:12px}
+ .story:not(.story-static) .story-hint{margin-top:8px}
+ .explorer-track.is-pinned{height:250svh}
+ .is-pinned .explorer-stage{top:76px}
+ .explorer-index>div[role=tablist]{padding-bottom:8px}
+ .explorer-group{display:none}
+ .explorer-fan{display:block;height:clamp(160px,32svh,350px);min-height:0;overflow:hidden;margin-top:16px}
+ .explorer-mobile{display:none}
+ .fan-photo{left:50%;top:50%;width:min(76%,calc(32svh * .95));max-height:90%;--dx:0%;--dy:-50%;--s:1;--r:0deg;transform:translate(calc(-50% + var(--dx)),var(--dy)) rotate(var(--r)) scale(var(--s));transition:transform 520ms var(--ease-out-strong);transform-origin:50% 50%}
+ .fan-slot-0{z-index:4}
+ .fan-slot-1{--dx:-44%;--dy:-60%;--s:.66;--r:-5deg;z-index:1}
+ .fan-slot-2{--dx:44%;--dy:-62%;--s:.66;--r:5deg;z-index:2}
+ .fan-slot-3{--dx:34%;--dy:-32%;--s:.7;--r:3deg;z-index:3}
+ .fan-photo[data-role=in]{z-index:6}
+ .fan-photo[data-role=out]{z-index:5}
+ .explorer-caption{margin-top:12px;font-size:13px}
+ .explorer-visual>.gallery-controls{margin-top:8px}
+ .explorer-copy{margin-top:12px}
+ .explorer-copy h3{font-size:22px;margin-bottom:6px}
+ .explorer-copy p{min-height:0;font-size:16px;line-height:1.4}
+ .explorer-copy .button{min-height:44px;padding-block:10px}
+ .explorer-light .explorer-fan{height:auto;overflow:visible}
+ .explorer-light .fan-photo{left:auto;top:auto;width:100%;max-height:none}
+}
+@media(prefers-reduced-motion:reduce){
+ .editorial-photo,.page-title h1{transform:none}
+ .fan-photo{transition:none}
+}

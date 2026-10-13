@@ -14,11 +14,14 @@ function FeaturedGallery({ tour }) {
 	useLayoutEffect(() => {
 		const node = image.current, from = origin.current;
 		origin.current = null;
-		if (!node || !from || light || !node.animate) return;
+		if (!node || light || !node.animate) return;
 		const to = node.getBoundingClientRect();
-		const animation = node.animate([{
+		const animation = node.animate([from ? {
 			transform: `translate(${from.left - to.left}px,${from.top - to.top}px) scale(${from.width / to.width})`,
 			opacity: .4
+		} : {
+			transform: "translateY(18px) scale(.98)",
+			opacity: .35
 		}, {
 			transform: "none",
 			opacity: 1

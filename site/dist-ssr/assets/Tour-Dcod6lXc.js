@@ -1,7 +1,8 @@
 import { A as usePageMeta, C as useLightMotion, D as inicioTextos, N as whatsapp, T as useMounted, b as Marquee, c as Arrow, f as Picture, g as TourCard, m as Rail, p as QuoteSection, r as tours, u as Eyebrow, v as EditorialMotion, w as useMedia, x as Trust } from "../entry-server.js";
 import NotFound from "./NotFound-ADShijO8.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-CVQ60VOv.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-f8KzqcvA.js";
 import { t as Reviews } from "./Reviews-D7kLyAOr.js";
+/* empty css                       */
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { jsx, jsxs } from "react/jsx-runtime";
@@ -414,7 +415,7 @@ function QuoteBar({ name, ctaId = "cta-principal", formId = "consulta" }) {
 function Story({ tour }) {
 	const ref = useRef(null);
 	const [active, setActive] = useState(0);
-	const narrow = useMedia("(prefers-reduced-motion: reduce), (max-width: 899px)", true), light = useLightMotion(), staticMode = narrow || light;
+	const short = useMedia("(max-height: 600px)", true), light = useLightMotion(), staticMode = short || light;
 	useEffect(() => {
 		if (staticMode) return;
 		let frame = 0;
@@ -424,15 +425,18 @@ function Story({ tour }) {
 				const el = ref.current;
 				if (!el) return;
 				const r = el.getBoundingClientRect();
-				const p = Math.max(0, Math.min(.999, -r.top / (el.offsetHeight - window.innerHeight)));
+				const top = parseFloat(getComputedStyle(el.querySelector(".story-inner")).top) || 0;
+				const p = Math.max(0, Math.min(.999, (top - r.top) / (el.offsetHeight - el.querySelector(".story-inner").offsetHeight)));
 				setActive(Math.floor(p * 3));
 				el.style.setProperty("--story-progress", p);
 			});
 		};
 		window.addEventListener("scroll", update, { passive: true });
+		window.addEventListener("resize", update);
 		update();
 		return () => {
 			window.removeEventListener("scroll", update);
+			window.removeEventListener("resize", update);
 			cancelAnimationFrame(frame);
 		};
 	}, [staticMode]);
@@ -483,7 +487,7 @@ function Story({ tour }) {
 								const el = ref.current;
 								const top = window.scrollY + el.getBoundingClientRect().top;
 								window.scrollTo({
-									top: top + (el.offsetHeight - window.innerHeight) * (i / 3 + .02),
+									top: top - (parseFloat(getComputedStyle(el.querySelector(".story-inner")).top) || 0) + (el.offsetHeight - el.querySelector(".story-inner").offsetHeight) * (i / 3 + .02),
 									behavior: "instant"
 								});
 								setActive(i);

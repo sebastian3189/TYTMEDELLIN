@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { tours, photos } from '../content';
 import ScrubHero from '../ScrubHero';
 import ExperienceExplorer from '../ExperienceExplorer';
+import BlogBook from '../BlogBook';
+import '../mobile-motion.css';
 import Reviews from '../Reviews';
 import { Picture, Arrow, Eyebrow, Button, Reveal } from '../shared';
 
@@ -13,4 +15,5 @@ export default function Home(){return <>
  <ExperienceExplorer/>
  <section className="service-band wrap"><Eyebrow>Nos encargamos del camino</Eyebrow><h2>Del primer traslado<br/>al último <em>recuerdo.</em></h2><div className="service-links">{[['01','Traslados de aeropuerto','/experiencias/traslados-aeropuerto-jmc'],['02','Recorridos privados','/experiencias'],['03','Empresas, agencias y grupos','/servicios']].map(([n,name,url])=><Link to={url} key={n}><span>{n}</span><h3>{name}</h3><Arrow/></Link>)}</div></section>
  <Reviews/><section className="about-preview wrap section"><Picture photo={photos('equipo')[0]} alt="Personas del equipo de T&T Medellín"/><div><Eyebrow>Una historia que nace aquí</Eyebrow><h2>Personas que<br/>mueven <em>personas.</em></h2><p>Desde los primeros traslados, aprendimos a escuchar. Esa cercanía sigue guiando nuestra forma de recibir y acompañar.</p><Button to="/nosotros">Conoce al equipo</Button></div></section>
+ <BlogBook/>
  </>}

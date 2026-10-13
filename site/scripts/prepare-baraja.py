@@ -61,4 +61,21 @@ def main():
     sheet.save(ROOT / 'site/test-results/baraja-contact.jpg', quality=85)
     print('totales', totals, 'escritorio t+d+w =', totals['t'] + totals['d'] + totals['w'], 'móvil t+m =', totals['t'] + totals['m'])
 
-main()
+def sharp_cards():
+    """Spec 03: derivados nítidos desde el original, sin ampliar ni borrar variantes."""
+    media = json.loads((SITE / 'fuentes/baraja/media.json').read_text(encoding='utf-8'))
+    total = 0
+    for slug in SLUGS:
+        src = SITE / 'fuentes/baraja' / cover(slug, media).lstrip('/')
+        with Image.open(src) as source:
+            base = crop45(ImageOps.exif_transpose(source).convert('RGB'), *FOCAL.get(slug, (.5, .5)))
+            base.thumbnail((960, 1200), Image.Resampling.LANCZOS)
+            target = OUT / f'{slug}-h.webp'
+            base.save(target, 'WEBP', quality=86, method=6)
+            total += target.stat().st_size
+            print(slug, base.size, target.stat().st_size)
+    print('sharp cards bytes:', total)
+
+if __name__ == '__main__':
+    import sys
+    sharp_cards() if '--sharp' in sys.argv else main()

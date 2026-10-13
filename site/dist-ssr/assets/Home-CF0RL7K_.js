@@ -1,5 +1,6 @@
-import { C as useLightMotion, D as inicioTextos, E as CHAPTERS, O as textoFase, c as Arrow, f as Picture, h as Reveal, l as Button, n as photos, o as rawTours, r as tours, u as Eyebrow } from "../entry-server.js";
+import { C as useLightMotion, D as inicioTextos, E as CHAPTERS, O as textoFase, c as Arrow, f as Picture, h as Reveal, l as Button, n as photos, o as rawTours, r as tours, t as articles, u as Eyebrow } from "../entry-server.js";
 import { t as Reviews } from "./Reviews-D7kLyAOr.js";
+/* empty css                       */
 import { Link } from "react-router-dom";
 import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Fragment as Fragment$1, jsx, jsxs } from "react/jsx-runtime";
@@ -46,20 +47,17 @@ var smooth = (t) => {
 };
 /** Límites del recorrido en svh. Fase del clip: 165 svh escritorio / 140 svh móvil (ajuste aprobado, se conserva). */
 function timeline(mobile) {
-	if (mobile) {
-		const t0 = 24, t1 = 64, t2 = 204, t3 = 228, t4 = 276, t5 = 300;
-		return {
-			t0,
-			t1,
-			t2,
-			t3,
-			t4,
-			t5,
-			t6: t5,
-			total: 312,
-			clip: 140
-		};
-	}
+	if (mobile) return {
+		t0: 24,
+		t1: 64,
+		t2: 204,
+		t3: 228,
+		t4: 276,
+		t5: 300,
+		t6: 708,
+		total: 732,
+		clip: 140
+	};
 	return {
 		t0: 30,
 		t1: 80,
@@ -124,10 +122,9 @@ function stateAt(u, T, mobile) {
 	if (u >= T.t1) ui = "clip";
 	if (u >= T.t3) ui = "shrink";
 	if (mobile && u >= T.t4) ui = "reveal";
-	if (mobile && u >= T.t5) ui = "deck";
 	if (!mobile && u >= T.t3 + .5 * (T.t4 - T.t3)) ui = "deck";
 	if (!mobile && u >= T.t4) ui = "fan";
-	if (!mobile && u >= T.t5) ui = "cards";
+	if (u >= T.t5) ui = "cards";
 	let w = 0;
 	if (u >= T.t0 && u < T.t1) w = smooth((u - T.t0) / (T.t1 - T.t0));
 	else if (u >= T.t1 && u < T.t3) w = 1;
@@ -140,7 +137,7 @@ function stateAt(u, T, mobile) {
 	const clipT = clamp$1((u - T.t1) / (T.t2 - T.t1));
 	const fanT = smooth((u - T.t4) / (T.t5 - T.t4));
 	let f = 0;
-	if (!mobile && u >= T.t5) {
+	if (u >= T.t5) {
 		const raw = clamp$1((u - T.t5) / 34, 0, 12);
 		const i = Math.min(11, Math.floor(raw));
 		f = i + (i < 11 ? smooth((raw - i - .4) / .6) : 0);
@@ -176,8 +173,11 @@ function buildDims(W, H, mobile, frame) {
 			x: W / 2,
 			y: deckTop + Hd / 2
 		};
-		focus = deck;
-		Bh = Hd;
+		Bh = Math.min((W - 56) * 1.25, H - 320);
+		focus = {
+			x: W / 2,
+			y: (H - 280) / 2
+		};
 		const t2Top = deck.y + Hd / 2 + al + gapB;
 		m = {
 			t1Top,
@@ -203,7 +203,7 @@ function buildDims(W, H, mobile, frame) {
 		H,
 		mobile,
 		pad,
-		Bw: Bh * .8,
+		Bw: mobile ? Math.min(W - 56, 340) : Bh * .8,
 		Bh,
 		sD: Hd / Bh,
 		Hd,
@@ -218,16 +218,23 @@ function buildDims(W, H, mobile, frame) {
 * Ventana (marco) del clip. Devuelve la transformación y el clip-path de la capa de tamaño natural `frame`
 * para que se vea como una carta 4:5 (w=0) o a su tamaño completo (w=1).
 */
-function frameWindow(d, w, out) {
+var filmOpening = (clipT) => smooth((clipT - .6) / .4);
+function frameWindow(d, w, out, clipT = 0) {
 	const { frame: F } = d;
+	const tail = d.mobile ? filmOpening(clipT) : 0;
+	const insetScale = 1 - tail * 32 / F.w;
+	const fullW = F.w * insetScale;
+	const fullH = lerp(F.h, F.w * 9 / 16, tail) * insetScale;
+	const cardW = lerp(d.Wd, Math.min(d.W - 56, 320), tail);
+	const cardH = lerp(d.Hd, Math.min(d.W - 56, 320) * 9 / 16, tail);
 	const cx0 = d.deck.x, cy0 = d.deck.y;
-	const wx = lerp(d.Wd, F.w, w), wh = lerp(d.Hd, F.h, w);
+	const wx = lerp(cardW, fullW, w), wh = lerp(cardH, fullH, w);
 	const cx = lerp(cx0, F.x + F.w / 2, w), cy = lerp(cy0, F.y + F.h / 2, w);
 	const rot = lerp(FRAME_ROT, 0, w);
 	const s = Math.max(wh / F.h, wx / F.w);
 	const ix = Math.max(0, (F.w - wx / s) / 2);
 	const iy = Math.max(0, (F.h - wh / s) / 2);
-	const radius = lerp(18, 0, w) / s;
+	const radius = lerp(18, 18 * tail, w) / s;
 	out.tx = cx - (F.x + F.w / 2);
 	out.ty = cy - (F.y + F.h / 2);
 	out.rot = rot;
@@ -250,10 +257,26 @@ function cardPlace(d, st, i, out) {
 		o: mobile && i >= 5 && st.sh < .01 ? 0 : mobile && i >= 5 ? bump : 1,
 		z: 22 - rank
 	};
-	if (mobile) return Object.assign(out, dk, {
-		o: dk.o * (1 - smooth(st.w / .2)) * (st.clipT === 1 ? st.fanT : 1),
-		z: st.clipT === 1 ? 22 - i : dk.z
-	});
+	if (mobile) {
+		const dd = i - st.f, ad = Math.abs(dd), a = st.fanT;
+		const col = {
+			x: focus.x,
+			y: focus.y + dd * Bh * .92,
+			s: 1 - .1 * Math.min(ad, 1),
+			r: 0,
+			o: 1 - smooth(clamp$1((ad - .55) / .65)),
+			z: Math.round(200 - ad * 20)
+		};
+		for (const k of [
+			"x",
+			"y",
+			"s",
+			"r"
+		]) out[k] = lerp(dk[k], col[k], a);
+		out.o = st.clipT === 1 ? col.o * a : dk.o * (1 - smooth(st.w / .2));
+		out.z = a > 0 ? col.z : dk.z;
+		return out;
+	}
 	const dd = i - st.f, ad = Math.abs(dd), sg = Math.sign(dd);
 	const near = Math.min(ad, 1), far = Math.max(0, ad - 1);
 	const sc = (1 - .6 * smooth(near)) * (1 - .06 * far);
@@ -290,8 +313,8 @@ var WINDOW = {
 		behind: 4
 	},
 	mobile: {
-		ahead: 18,
-		behind: 5
+		ahead: 10,
+		behind: 3
 	}
 };
 var ANCHOR = 8;
@@ -381,216 +404,46 @@ function frameOrder(count, mobile) {
 }
 var cardImg = (slug, k) => `${CARDS}/${slug}-${k}.webp`;
 var copy = (slug) => inicioTextos.cartas[slug];
-var two = (n) => String(n).padStart(2, "0");
-function Cierre({ actions }) {
-	const f = textoFase("final");
-	return /* @__PURE__ */ jsxs("div", {
-		className: "sc-close",
+var two$1 = (n) => String(n).padStart(2, "0");
+function CartaLista({ card }) {
+	const c = copy(card.slug);
+	return /* @__PURE__ */ jsxs(Link, {
+		className: "sc-card",
+		to: `/experiencias/${card.slug}`,
 		children: [
-			/* @__PURE__ */ jsx("p", {
-				className: "sc-close-title",
-				children: f.titular
-			}),
-			/* @__PURE__ */ jsx("p", {
-				className: "sc-close-sub",
-				children: f.subtitulo
-			}),
-			/* @__PURE__ */ jsx("div", {
-				className: "scrub-actions sc-close-actions",
-				children: actions
-			})
-		]
-	});
-}
-function Destacada({ cards, actions, reduce }) {
-	const [sel, setSel] = useState(0);
-	const [turn, setTurn] = useState(null);
-	const leafRef = useRef(null), selected = useRef(0), serial = useRef(0);
-	const card = cards[sel], c = copy(card.slug);
-	useEffect(() => {
-		const query = window.matchMedia(REDUCE_QUERY);
-		const cancelReducedTurn = () => {
-			if (query.matches) setTurn(null);
-		};
-		query.addEventListener("change", cancelReducedTurn);
-		return () => query.removeEventListener("change", cancelReducedTurn);
-	}, []);
-	useEffect(() => {
-		if (reduce) setTurn(null);
-	}, [reduce]);
-	const choose = (i) => {
-		i = Math.min(cards.length - 1, Math.max(0, i));
-		const previous = selected.current;
-		if (i === previous) return;
-		selected.current = i;
-		setSel(i);
-		setTurn(prefersStatic(reduce) ? null : {
-			from: previous,
-			to: i,
-			forward: i > previous,
-			id: ++serial.current
-		});
-	};
-	useLayoutEffect(() => {
-		if (!turn) return;
-		const el = leafRef.current;
-		if (!el?.animate || prefersStatic(reduce)) {
-			setTurn(null);
-			return;
-		}
-		const animation = el.animate([{ transform: `rotateY(${turn.forward ? 0 : 180}deg)` }, { transform: `rotateY(${turn.forward ? 180 : 0}deg)` }], {
-			duration: 600,
-			easing: "cubic-bezier(.32,.72,0,1)",
-			fill: "both"
-		});
-		animation.onfinish = () => setTurn((current) => current?.id === turn.id ? null : current);
-		return () => {
-			animation.onfinish = null;
-			animation.cancel();
-		};
-	}, [turn, reduce]);
-	const onKey = (e, i) => {
-		const n = e.key === "ArrowRight" ? i + 1 : e.key === "ArrowLeft" ? i - 1 : e.key === "Home" ? 0 : e.key === "End" ? cards.length - 1 : null;
-		if (n === null || n < 0 || n >= cards.length) return;
-		e.preventDefault();
-		choose(n);
-		const strip = e.currentTarget.parentElement, target = strip.children[n];
-		target?.focus({ preventScroll: true });
-		if (target) {
-			const viewport = strip.getBoundingClientRect(), item = target.getBoundingClientRect();
-			if (item.left < viewport.left + 4) strip.scrollLeft += item.left - viewport.left - 4;
-			else if (item.right > viewport.right - 4) strip.scrollLeft += item.right - viewport.right + 4;
-		}
-	};
-	const pageImage = (item) => /* @__PURE__ */ jsxs("picture", { children: [/* @__PURE__ */ jsx("source", {
-		media: MOBILE_QUERY,
-		srcSet: cardImg(item.slug, "m")
-	}), /* @__PURE__ */ jsx("img", {
-		src: cardImg(item.slug, "w"),
-		width: "900",
-		height: "600",
-		alt: "",
-		loading: "lazy",
-		decoding: "async"
-	})] });
-	return /* @__PURE__ */ jsxs("div", {
-		className: "scrub-after is-featured",
-		children: [
-			/* @__PURE__ */ jsx("div", {
-				className: "scrub-after-head",
-				children: /* @__PURE__ */ jsx("p", {
-					className: "eyebrow",
-					children: inicioTextos.eleccion
+			/* @__PURE__ */ jsx("span", {
+				className: "sc-img",
+				children: /* @__PURE__ */ jsx("img", {
+					src: cardImg(card.slug, "t"),
+					srcSet: `${cardImg(card.slug, "t")} 320w, ${cardImg(card.slug, "m")} 400w, ${cardImg(card.slug, "d")} 640w`,
+					sizes: "(max-width: 600px) 46vw, (max-width: 1000px) 30vw, 22vw",
+					width: "320",
+					height: "400",
+					alt: "",
+					loading: "lazy",
+					decoding: "async"
 				})
 			}),
-			/* @__PURE__ */ jsxs("div", {
-				className: "ft ft-book",
-				"data-turning": Boolean(turn) && !prefersStatic(reduce),
-				children: [/* @__PURE__ */ jsxs("div", {
-					className: "ft-main",
-					children: [
-						/* @__PURE__ */ jsx("div", {
-							className: "ft-card",
-							children: /* @__PURE__ */ jsx(Link, {
-								className: "ft-media",
-								to: `/experiencias/${card.slug}`,
-								"aria-label": `${card.name}. ${c.emocion}: ${c.frase}`,
-								children: pageImage(card)
-							})
-						}),
-						/* @__PURE__ */ jsxs("div", {
-							className: "ft-side",
-							children: [
-								/* @__PURE__ */ jsxs("p", {
-									className: "ft-count",
-									role: "status",
-									"aria-live": "polite",
-									children: [
-										two(sel + 1),
-										" / ",
-										cards.length
-									]
-								}),
-								/* @__PURE__ */ jsx("h2", {
-									className: "ft-name",
-									children: card.name
-								}),
-								/* @__PURE__ */ jsxs("p", {
-									className: "ft-line",
-									children: [
-										/* @__PURE__ */ jsxs("b", { children: [c.emocion, ":"] }),
-										" ",
-										c.frase
-									]
-								}),
-								/* @__PURE__ */ jsxs(Link, {
-									className: "ft-plan",
-									to: `/experiencias/${card.slug}#consulta`,
-									"aria-label": `Planea esta experiencia: ${card.name}`,
-									children: ["Planea esta experiencia ", /* @__PURE__ */ jsx("span", {
-										"aria-hidden": "true",
-										children: "↗"
-									})]
-								}),
-								/* @__PURE__ */ jsxs("div", {
-									className: "ft-nav",
-									children: [/* @__PURE__ */ jsx("button", {
-										type: "button",
-										"aria-label": "Experiencia anterior",
-										disabled: sel === 0,
-										onClick: () => choose(selected.current - 1),
-										children: "←"
-									}), /* @__PURE__ */ jsx("button", {
-										type: "button",
-										"aria-label": "Experiencia siguiente",
-										disabled: sel === cards.length - 1,
-										onClick: () => choose(selected.current + 1),
-										children: "→"
-									})]
-								})
-							]
-						}),
-						turn && !prefersStatic(reduce) && /* @__PURE__ */ jsx("div", {
-							className: "ft-turn-window",
-							"aria-hidden": "true",
-							inert: true,
-							children: /* @__PURE__ */ jsxs("div", {
-								ref: leafRef,
-								className: "ft-leaf",
-								"data-direction": turn.forward ? "next" : "previous",
-								children: [/* @__PURE__ */ jsx("div", {
-									className: "ft-leaf-front",
-									children: pageImage(cards[turn.forward ? turn.from : turn.to])
-								}), /* @__PURE__ */ jsx("div", {
-									className: "ft-leaf-back",
-									children: /* @__PURE__ */ jsx("span", { children: two(turn.forward ? turn.to + 1 : turn.from + 1) })
-								})]
-							}, turn.id)
-						})
-					]
-				}), /* @__PURE__ */ jsx("div", {
-					className: "ft-strip",
-					role: "group",
-					"aria-label": "Elegir experiencia",
-					children: cards.map((x, i) => /* @__PURE__ */ jsx("button", {
-						type: "button",
-						className: "ft-thumb",
-						"aria-pressed": i === sel,
-						"aria-label": x.name,
-						onClick: () => choose(i),
-						onKeyDown: (e) => onKey(e, i),
-						children: /* @__PURE__ */ jsx("img", {
-							src: cardImg(x.slug, "t"),
-							width: "320",
-							height: "400",
-							alt: "",
-							loading: "lazy",
-							decoding: "async"
-						})
-					}, x.slug))
-				})]
+			/* @__PURE__ */ jsxs("span", {
+				className: "sc-count",
+				children: [
+					two$1(card.n),
+					" / ",
+					12
+				]
 			}),
-			/* @__PURE__ */ jsx(Cierre, { actions })
+			/* @__PURE__ */ jsx("h3", {
+				className: "sc-name",
+				children: card.name
+			}),
+			/* @__PURE__ */ jsxs("p", {
+				className: "sc-line",
+				children: [
+					/* @__PURE__ */ jsxs("b", { children: [c.emocion, ":"] }),
+					" ",
+					c.frase
+				]
+			})
 		]
 	});
 }
@@ -665,8 +518,8 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 		ctx.imageSmoothingQuality = "high";
 		const T = timeline(mobile);
 		const wide = !mobile && innerWidth > 1600;
-		const set = mobile ? inicio_frames_default.mobile : wide ? inicio_frames_default.desktop : inicio_frames_default.desktop1600;
-		const suffix = mobile ? "m" : wide ? "d" : "d16";
+		const set = wide ? inicio_frames_default.desktop : inicio_frames_default.desktop1600;
+		const suffix = wide ? "d" : "d16";
 		const tau = mobile ? TAU.mobile : TAU.desktop;
 		const win = mobile ? WINDOW.mobile : WINDOW.desktop;
 		let dir = 1, prevCenter = 0;
@@ -764,9 +617,12 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 			}
 			return null;
 		};
-		const cover = (img) => {
-			const iw = img.width, ih = img.height, sc = Math.max(W / iw, H / ih), w = iw * sc, h = ih * sc;
-			ctx.drawImage(img, -(w - W) * .5, -(h - H) * .5, w, h);
+		const cover = (img, clipT) => {
+			const tail = mobile ? filmOpening(clipT) : 0;
+			const visibleH = H + (W * 9 / 16 - H) * tail;
+			const iw = img.width, ih = img.height, sc = Math.max(W / iw, visibleH / ih), w = iw * sc, h = ih * sc;
+			const focusX = mobile ? .465 + .035 * tail : .5;
+			ctx.drawImage(img, -(w - W) * focusX, (H - h) / 2, w, h);
 		};
 		const decode = (key, blob, options, apply) => {
 			if (pending.has(key) || !blob) return;
@@ -819,24 +675,14 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 			}
 		};
 		const place = (u, st) => {
-			frameWindow(dims, st.w, fw);
-			if (mobile && st.clipT === 1 && u >= T.t3) {
-				const F = dims.frame, a = smooth(clamp((u - T.t3) / (T.t4 - T.t3)));
-				const photoH = F.w * 9 / 16, targetScale = Math.min(dims.W - 44, 340) / F.w;
-				fw.tx = (dims.deck.x - (F.x + F.w / 2)) * a;
-				fw.ty = (dims.deck.y - (F.y + F.h / 2)) * a;
-				fw.rot = -2.4 * a;
-				fw.s = 1 + (targetScale - 1) * a;
-				fw.ix = 0;
-				fw.iy = Math.max(0, (F.h - photoH) / 2) * a;
-				fw.r = 18 / Math.max(targetScale, fw.s) * a;
-			}
-			const fkey = st.w >= .999 ? "full" : `${fw.tx.toFixed(1)}|${fw.ty.toFixed(1)}|${fw.rot.toFixed(2)}|${fw.s.toFixed(4)}|${fw.ix.toFixed(1)}|${fw.iy.toFixed(1)}|${fw.r.toFixed(2)}`;
-			const fo = mobile ? 1 - st.fanT : 1 - smooth(clamp(st.fanT * 2));
+			frameWindow(dims, st.w, fw, st.clipT);
+			const fullFrame = st.w >= .999 && (!mobile || st.clipT <= .6);
+			const fkey = fullFrame ? "full" : `${fw.tx.toFixed(1)}|${fw.ty.toFixed(1)}|${fw.rot.toFixed(2)}|${fw.s.toFixed(4)}|${fw.ix.toFixed(1)}|${fw.iy.toFixed(1)}|${fw.r.toFixed(2)}`;
+			const fo = 1 - smooth(clamp(st.fanT * 2));
 			const mkey = `${fkey}|${fo.toFixed(3)}`;
 			if (lastFx.media !== mkey) {
 				lastFx.media = mkey;
-				if (st.w >= .999) {
+				if (fullFrame) {
 					mediaEl.style.transform = "none";
 					mediaEl.style.clipPath = "none";
 				} else {
@@ -848,6 +694,12 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 			}
 			for (let i = 0; i < cardEls.length; i++) {
 				cardPlace(dims, st, i, cp);
+				if (mobile) {
+					const interactive = st.ui === "cards" && i === st.active;
+					cardEls[i].tabIndex = interactive ? 0 : -1;
+					cardEls[i].setAttribute("aria-hidden", String(!interactive));
+					cardEls[i].style.pointerEvents = interactive ? "auto" : "none";
+				}
 				const key = `${cp.x.toFixed(1)}|${cp.y.toFixed(1)}|${cp.r.toFixed(2)}|${cp.s.toFixed(4)}|${cp.o.toFixed(3)}|${cp.z}`;
 				if (key === lastCard[i]) continue;
 				lastCard[i] = key;
@@ -916,10 +768,7 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 			}
 			const u = q * T.total;
 			const st = stateAt(u, T, mobile);
-			if (mobile) {
-				stageEl.dataset.phase = u < T.t2 ? "film" : u < T.t3 ? "hold" : u < T.t4 ? "shrink" : u < T.t5 ? "reveal" : "deck";
-				stageEl.dataset.tail = st.clipT >= .92 ? "1" : "0";
-			}
+			if (mobile) stageEl.dataset.phase = u < T.t2 ? "film" : u < T.t3 ? "hold" : u < T.t4 ? "shrink" : u < T.t5 ? "reveal" : "cards";
 			if (st.ui !== ui) {
 				ui = st.ui;
 				stageEl.dataset.ui = ui;
@@ -947,17 +796,17 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 				stripBtns.forEach((el, i) => el.toggleAttribute("data-on", i === act));
 				if (act >= 0) wantFull(act - 1, act + 2);
 			}
-			if (!mobile && u >= T.t2 && u < T.t5 && !fullImgs[0]?.getAttribute("src")) wantFull(0, 2);
+			if (u >= T.t2 && u < T.t5 && !fullImgs[0]?.getAttribute("src")) wantFull(0, 2);
 			center = Math.round(st.clipT * (count - 1));
 			manage();
 			const baseIdx = Math.round(st.clipT * (count - 1));
 			const baseImg = nearest(baseIdx);
-			const key = `${W}x${H}|${baseIdx}|${version}`;
+			const key = `${W}x${H}|${baseIdx}|${version}|${mobile ? st.clipT.toFixed(5) : ""}`;
 			if (key !== lastKey && baseImg) {
 				lastKey = key;
 				ctx.fillStyle = "#3C3F3B";
 				ctx.fillRect(0, 0, W, H);
-				cover(baseImg);
+				cover(baseImg, st.clipT);
 				section.dataset.frame = String(baseIdx);
 				section.dataset.ready = "true";
 			}
@@ -982,7 +831,7 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 		};
 		api.current.step = (dir) => api.current.jump(uForCard(T, clamp(Math.max(api.current.active, 0) + dir, 0, 11)));
 		api.current.card = (i) => {
-			if (!mobile && Math.abs((q === null ? 0 : q * T.total) - uForCard(T, i)) > 6) api.current.jump(uForCard(T, i));
+			if (Math.abs((q === null ? 0 : q * T.total) - uForCard(T, i)) > 6) api.current.jump(uForCard(T, i));
 		};
 		api.current.T = T;
 		const fetchBlob = async (url) => {
@@ -1126,8 +975,6 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 			]) stageEl.style.removeProperty(k);
 			delete stageEl.dataset.short;
 			delete stageEl.dataset.phase;
-			delete stageEl.dataset.tail;
-			delete stageEl.dataset.phase;
 			api.current.jump = () => {};
 			api.current.step = () => {};
 			api.current.card = () => {};
@@ -1168,7 +1015,7 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 	};
 	const staticMode = mode !== "scrub";
 	const animated = !staticMode;
-	const deckLinks = animated && !mobile;
+	const deckLinks = animated;
 	const t = inicioTextos;
 	const bar = /* @__PURE__ */ jsx("button", {
 		type: "button",
@@ -1212,53 +1059,41 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 						/* @__PURE__ */ jsxs("div", {
 							ref: media,
 							className: "scrub-media",
-							children: [
-								/* @__PURE__ */ jsxs("picture", {
-									className: "scrub-poster",
-									children: [
-										/* @__PURE__ */ jsx("source", {
-											media: MOBILE_QUERY,
-											type: "image/avif",
-											srcSet: `${BASE}/poster-m.avif`
-										}),
-										/* @__PURE__ */ jsx("source", {
-											media: MOBILE_QUERY,
-											type: "image/webp",
-											srcSet: `${BASE}/poster-m.webp`
-										}),
-										/* @__PURE__ */ jsx("source", {
-											type: "image/avif",
-											srcSet: `${BASE}/poster-1280.avif 1280w, ${BASE}/poster-1600.avif 1600w`,
-											sizes: "100vw"
-										}),
-										/* @__PURE__ */ jsx("img", {
-											src: `${BASE}/poster-1600.webp`,
-											srcSet: `${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`,
-											sizes: "100vw",
-											width: "1600",
-											height: "900",
-											alt: "Vista de Medellín desde la ladera de la Comuna 13",
-											loading: "eager",
-											fetchPriority: "high",
-											decoding: "async"
-										})
-									]
-								}),
-								animated && /* @__PURE__ */ jsx("canvas", {
-									ref: canvas,
-									className: "scrub-canvas",
-									"aria-hidden": "true"
-								}),
-								animated && mobile && /* @__PURE__ */ jsx("img", {
-									className: "scrub-final-frame",
-									src: `${BASE}/d16/121.webp`,
-									width: "1600",
-									height: "900",
-									alt: "",
-									"aria-hidden": "true",
-									decoding: "async"
-								})
-							]
+							children: [/* @__PURE__ */ jsxs("picture", {
+								className: "scrub-poster",
+								children: [
+									/* @__PURE__ */ jsx("source", {
+										media: MOBILE_QUERY,
+										type: "image/avif",
+										srcSet: `${BASE}/poster-m.avif`
+									}),
+									/* @__PURE__ */ jsx("source", {
+										media: MOBILE_QUERY,
+										type: "image/webp",
+										srcSet: `${BASE}/poster-m.webp`
+									}),
+									/* @__PURE__ */ jsx("source", {
+										type: "image/avif",
+										srcSet: `${BASE}/poster-1280.avif 1280w, ${BASE}/poster-1600.avif 1600w`,
+										sizes: "100vw"
+									}),
+									/* @__PURE__ */ jsx("img", {
+										src: `${BASE}/poster-1600.webp`,
+										srcSet: `${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`,
+										sizes: "100vw",
+										width: "1600",
+										height: "900",
+										alt: "Vista de Medellín desde la ladera de la Comuna 13",
+										loading: "eager",
+										fetchPriority: "high",
+										decoding: "async"
+									})
+								]
+							}), animated && /* @__PURE__ */ jsx("canvas", {
+								ref: canvas,
+								className: "scrub-canvas",
+								"aria-hidden": "true"
+							})]
 						}),
 						/* @__PURE__ */ jsxs("div", {
 							ref: titleRef,
@@ -1308,9 +1143,9 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 										children: [/* @__PURE__ */ jsxs("span", {
 											className: "scrub-count",
 											children: [
-												two(i + 1),
+												two$1(i + 1),
 												" / ",
-												two(CHAPTERS.length)
+												two$1(CHAPTERS.length)
 											]
 										}), /* @__PURE__ */ jsx("span", {
 											className: "scrub-place",
@@ -1352,35 +1187,6 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 												})]
 											}, id);
 										}),
-										animated && mobile && (() => {
-											const c = cards[0], tx = copy(c.slug);
-											return /* @__PURE__ */ jsxs("div", {
-												className: "mobile-deck-info",
-												children: [
-													/* @__PURE__ */ jsxs("p", {
-														className: "scrub-count",
-														children: ["01 / ", 12]
-													}),
-													/* @__PURE__ */ jsx("p", {
-														className: "mobile-deck-kicker",
-														children: "Elige tu próximo recuerdo"
-													}),
-													/* @__PURE__ */ jsx("h2", { children: c.name }),
-													/* @__PURE__ */ jsxs("p", { children: [
-														/* @__PURE__ */ jsxs("b", { children: [tx.emocion, ":"] }),
-														" ",
-														tx.frase
-													] }),
-													/* @__PURE__ */ jsxs(Link, {
-														to: `/experiencias/${c.slug}`,
-														children: ["Ver experiencia ", /* @__PURE__ */ jsx("span", {
-															"aria-hidden": "true",
-															children: "↗"
-														})]
-													})
-												]
-											});
-										})(),
 										deckLinks && cards.map((c, i) => {
 											const tx = copy(c.slug);
 											return /* @__PURE__ */ jsxs("div", {
@@ -1391,7 +1197,7 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 													/* @__PURE__ */ jsxs("p", {
 														className: "scrub-count bd-count",
 														children: [
-															two(i + 1),
+															two$1(i + 1),
 															" / ",
 															12
 														]
@@ -1503,9 +1309,9 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 											fetchPriority: "low"
 										}), /* @__PURE__ */ jsx("img", {
 											className: "bd-full",
-											"data-src": cardImg(c.slug, "d"),
-											width: "640",
-											height: "800",
+											"data-src": cardImg(c.slug, "h"),
+											width: "960",
+											height: "1200",
 											alt: "",
 											decoding: "async",
 											onLoad: (e) => e.currentTarget.classList.add("ready")
@@ -1537,20 +1343,20 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 								}, c.slug);
 							})
 						}),
-						animated && !mobile && /* @__PURE__ */ jsxs("div", {
+						animated && /* @__PURE__ */ jsxs("div", {
 							className: "bd-nav",
 							children: [/* @__PURE__ */ jsx("button", {
 								type: "button",
 								className: "bd-arrow",
 								"aria-label": "Carta anterior",
 								onClick: () => api.current.step(-1),
-								children: "←"
+								children: mobile ? "↑" : "←"
 							}), /* @__PURE__ */ jsx("button", {
 								type: "button",
 								className: "bd-arrow",
 								"aria-label": "Carta siguiente",
 								onClick: () => api.current.step(1),
-								children: "→"
+								children: mobile ? "↓" : "→"
 							})]
 						})
 					]
@@ -1560,10 +1366,9 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 				className: "scrub-summary",
 				children: summary
 			}),
-			/* @__PURE__ */ jsx(Destacada, {
-				cards,
-				actions,
-				reduce: reduce || staticMode
+			staticMode && /* @__PURE__ */ jsx("div", {
+				className: "wrap sc-list",
+				children: cards.map((card) => /* @__PURE__ */ jsx(CartaLista, { card }, card.slug))
 			})
 		]
 	});
@@ -1638,7 +1443,7 @@ function ExperienceExplorer() {
 	useLayoutEffect(() => {
 		const check = () => {
 			const index = stage.current.querySelector(".explorer-index"), visual = stage.current.querySelector(".explorer-visual");
-			setPin(!light && innerWidth >= 1100 && Math.max(index.scrollHeight, visual.scrollHeight) <= innerHeight - 108);
+			setPin(!light && (innerWidth < 900 ? stage.current.scrollHeight <= innerHeight - 88 : innerWidth >= 1100 && Math.max(index.scrollHeight, visual.scrollHeight) <= innerHeight - 108));
 		};
 		const observer = new ResizeObserver(check);
 		observer.observe(stage.current);
@@ -1650,7 +1455,7 @@ function ExperienceExplorer() {
 		};
 	}, [light]);
 	useEffect(() => {
-		if (light || innerWidth < 1100 || pictures.length < 2) return;
+		if (light || !pin && innerWidth < 1100 || pictures.length < 2) return;
 		let frame = 0;
 		const update = () => {
 			cancelAnimationFrame(frame);
@@ -1659,8 +1464,9 @@ function ExperienceExplorer() {
 				if (r.bottom < 0 || r.top > innerHeight || document.hidden) return;
 				if (manual.current !== null && Math.abs(scrollY - manual.current) < 24) return;
 				manual.current = null;
-				const span = Math.max(1, root.current.offsetHeight - (innerHeight - 108));
-				const progress = Math.min(.999, Math.max(0, (108 - r.top) / span));
+				const top = innerWidth < 900 ? 76 : 108;
+				const span = Math.max(1, root.current.offsetHeight - stage.current.offsetHeight);
+				const progress = Math.min(.999, Math.max(0, (top - r.top) / span));
 				setPhoto(Math.floor(progress * pictures.length));
 			});
 		};
@@ -1719,11 +1525,6 @@ function ExperienceExplorer() {
 		const n = (i + pictures.length) % pictures.length;
 		manual.current = scrollY;
 		setPhoto(n);
-		if (innerWidth < 900 && !light) mobile.current?.children[n]?.scrollIntoView({
-			behavior: "smooth",
-			block: "nearest",
-			inline: "start"
-		});
 	};
 	const onTabKey = (e, i) => {
 		const next = e.key === "ArrowDown" || e.key === "ArrowRight" ? (i + 1) % entries.length : e.key === "ArrowUp" || e.key === "ArrowLeft" ? (i + entries.length - 1) % entries.length : e.key === "Home" ? 0 : e.key === "End" ? entries.length - 1 : null;
@@ -1741,7 +1542,8 @@ function ExperienceExplorer() {
 	};
 	const picture = (p, i, small = false) => /* @__PURE__ */ jsxs("picture", { children: [/* @__PURE__ */ jsx("source", {
 		media: "(max-width:899px)",
-		srcSet: p.mobile
+		srcSet: `${p.mobile} 600w, ${p.main} 720w`,
+		sizes: "(max-width:899px) 80vw, 42vw"
 	}), /* @__PURE__ */ jsx("img", {
 		src: small ? p.satellite : p.main,
 		width: p.width,
@@ -1771,7 +1573,7 @@ function ExperienceExplorer() {
 				children: "Planea esta experiencia ↗"
 			})
 		]
-	});
+	}, tour.slug);
 	return /* @__PURE__ */ jsxs("section", {
 		className: `experience-explorer wrap section ${light ? "explorer-light" : ""}`,
 		id: "formas-de-viajar",
@@ -1932,6 +1734,201 @@ function ExperienceExplorer() {
 	});
 }
 //#endregion
+//#region src/BlogBook.jsx
+var two = (n) => String(n).padStart(2, "0");
+function BlogBook() {
+	const cards = articles, reduce = useLightMotion();
+	const [sel, setSel] = useState(0);
+	const [turn, setTurn] = useState(null);
+	const leafRef = useRef(null), selected = useRef(0), serial = useRef(0);
+	const card = cards[sel];
+	useEffect(() => {
+		const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+		const cancelReducedTurn = () => {
+			if (query.matches) setTurn(null);
+		};
+		query.addEventListener("change", cancelReducedTurn);
+		return () => query.removeEventListener("change", cancelReducedTurn);
+	}, []);
+	useEffect(() => {
+		if (reduce) setTurn(null);
+	}, [reduce]);
+	const choose = (i) => {
+		i = Math.min(cards.length - 1, Math.max(0, i));
+		const previous = selected.current;
+		if (i === previous) return;
+		selected.current = i;
+		setSel(i);
+		setTurn(reduce ? null : {
+			from: previous,
+			to: i,
+			forward: i > previous,
+			id: ++serial.current
+		});
+	};
+	useLayoutEffect(() => {
+		if (!turn) return;
+		const el = leafRef.current;
+		if (!el?.animate || reduce) {
+			setTurn(null);
+			return;
+		}
+		const animation = el.animate([{ transform: `rotateY(${turn.forward ? 0 : 180}deg)` }, { transform: `rotateY(${turn.forward ? 180 : 0}deg)` }], {
+			duration: 600,
+			easing: "cubic-bezier(.32,.72,0,1)",
+			fill: "both"
+		});
+		animation.onfinish = () => setTurn((current) => current?.id === turn.id ? null : current);
+		return () => {
+			animation.onfinish = null;
+			animation.cancel();
+		};
+	}, [turn, reduce]);
+	const onKey = (e, i) => {
+		const n = e.key === "ArrowRight" ? i + 1 : e.key === "ArrowLeft" ? i - 1 : e.key === "Home" ? 0 : e.key === "End" ? cards.length - 1 : null;
+		if (n === null || n < 0 || n >= cards.length) return;
+		e.preventDefault();
+		choose(n);
+		const strip = e.currentTarget.parentElement, target = strip.children[n];
+		target?.focus({ preventScroll: true });
+		if (target) {
+			const viewport = strip.getBoundingClientRect(), item = target.getBoundingClientRect();
+			if (item.left < viewport.left + 4) strip.scrollLeft += item.left - viewport.left - 4;
+			else if (item.right > viewport.right - 4) strip.scrollLeft += item.right - viewport.right + 4;
+		}
+	};
+	const pageImage = (item) => /* @__PURE__ */ jsx(Picture, {
+		photo: item.image,
+		alt: "",
+		sizes: "(max-width:799px) 90vw, 42vw"
+	});
+	return /* @__PURE__ */ jsxs("section", {
+		className: "blog-book wrap section",
+		"aria-labelledby": "blog-book-title",
+		children: [/* @__PURE__ */ jsxs("div", {
+			className: "section-title",
+			children: [/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("p", {
+				className: "eyebrow",
+				children: "Cuaderno de viaje"
+			}), /* @__PURE__ */ jsxs("h2", {
+				id: "blog-book-title",
+				children: [
+					"Ideas para viajar",
+					/* @__PURE__ */ jsx("br", {}),
+					"con más ",
+					/* @__PURE__ */ jsx("em", { children: "sentido." })
+				]
+			})] }), /* @__PURE__ */ jsx(Link, {
+				className: "text-link",
+				to: "/blog",
+				children: "Todas las notas ↗"
+			})]
+		}), /* @__PURE__ */ jsxs("div", {
+			className: "ft ft-book",
+			"data-turning": Boolean(turn) && !reduce,
+			children: [/* @__PURE__ */ jsxs("div", {
+				className: "ft-main",
+				children: [
+					/* @__PURE__ */ jsx("div", {
+						className: "ft-card",
+						children: /* @__PURE__ */ jsx(Link, {
+							className: "ft-media",
+							to: `/blog/${card.slug}`,
+							"aria-label": card.title,
+							children: pageImage(card)
+						})
+					}),
+					/* @__PURE__ */ jsxs("div", {
+						className: "ft-side",
+						children: [
+							/* @__PURE__ */ jsxs("p", {
+								className: "ft-count",
+								role: "status",
+								"aria-live": "polite",
+								children: [
+									two(sel + 1),
+									" / ",
+									cards.length
+								]
+							}),
+							/* @__PURE__ */ jsx("p", {
+								className: "eyebrow book-tag",
+								children: card.tag
+							}),
+							/* @__PURE__ */ jsx("h3", {
+								className: "ft-name",
+								children: card.title
+							}),
+							/* @__PURE__ */ jsx("p", {
+								className: "ft-line",
+								children: card.intro
+							}),
+							/* @__PURE__ */ jsxs(Link, {
+								className: "ft-plan",
+								to: `/blog/${card.slug}`,
+								"aria-label": `Planea esta experiencia: ${card.title}`,
+								children: ["Leer la nota ", /* @__PURE__ */ jsx("span", {
+									"aria-hidden": "true",
+									children: "↗"
+								})]
+							}),
+							/* @__PURE__ */ jsxs("div", {
+								className: "ft-nav",
+								children: [/* @__PURE__ */ jsx("button", {
+									type: "button",
+									"aria-label": "Nota anterior",
+									disabled: sel === 0,
+									onClick: () => choose(selected.current - 1),
+									children: "←"
+								}), /* @__PURE__ */ jsx("button", {
+									type: "button",
+									"aria-label": "Nota siguiente",
+									disabled: sel === cards.length - 1,
+									onClick: () => choose(selected.current + 1),
+									children: "→"
+								})]
+							})
+						]
+					}),
+					turn && !reduce && /* @__PURE__ */ jsx("div", {
+						className: "ft-turn-window",
+						"aria-hidden": "true",
+						inert: true,
+						children: /* @__PURE__ */ jsxs("div", {
+							ref: leafRef,
+							className: "ft-leaf",
+							"data-direction": turn.forward ? "next" : "previous",
+							children: [/* @__PURE__ */ jsx("div", {
+								className: "ft-leaf-front",
+								children: pageImage(cards[turn.forward ? turn.from : turn.to])
+							}), /* @__PURE__ */ jsx("div", {
+								className: "ft-leaf-back",
+								children: /* @__PURE__ */ jsx("span", { children: two(turn.forward ? turn.to + 1 : turn.from + 1) })
+							})]
+						}, turn.id)
+					})
+				]
+			}), /* @__PURE__ */ jsx("div", {
+				className: "ft-strip",
+				role: "group",
+				"aria-label": "Elegir nota",
+				children: cards.map((x, i) => /* @__PURE__ */ jsxs("button", {
+					type: "button",
+					className: "ft-thumb",
+					"aria-pressed": i === sel,
+					"aria-label": x.title,
+					onClick: () => choose(i),
+					onKeyDown: (e) => onKey(e, i),
+					children: [/* @__PURE__ */ jsx("span", {
+						className: "book-index",
+						children: two(i + 1)
+					}), /* @__PURE__ */ jsx("span", { children: x.tag })]
+				}, x.slug))
+			})]
+		})]
+	});
+}
+//#endregion
 //#region src/pages/Home.jsx
 function Home() {
 	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
@@ -2024,7 +2021,8 @@ function Home() {
 					children: "Conoce al equipo"
 				})
 			] })]
-		})
+		}),
+		/* @__PURE__ */ jsx(BlogBook, {})
 	] });
 }
 //#endregion
