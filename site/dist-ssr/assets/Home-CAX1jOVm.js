@@ -21,7 +21,8 @@ var inicio_frames_default = {
 		"quality": 82,
 		"tail": {
 			"from": 96,
-			"window": [778, 1300]
+			"window": [778, 1300],
+			"background": "#F4F4F4"
 		}
 	},
 	poster: {
@@ -46,16 +47,16 @@ var smooth = (t) => {
 /** Límites del recorrido en svh. Fase del clip: 165 svh escritorio / 140 svh móvil (ajuste aprobado, se conserva). */
 function timeline(mobile) {
 	if (mobile) {
-		const t0 = 24, t1 = 64, t2 = 204, t3 = 216, t4 = 252;
+		const t0 = 24, t1 = 64, t2 = 204, t3 = 228, t4 = 276, t5 = 300;
 		return {
 			t0,
 			t1,
 			t2,
 			t3,
 			t4,
-			t5: t4,
-			t6: t4,
-			total: 264,
+			t5,
+			t6: t5,
+			total: 312,
 			clip: 140
 		};
 	}
@@ -132,10 +133,10 @@ function stateAt(u, T, mobile) {
 	let D;
 	if (u < T.t1) D = 1 - smooth((u - T.t0) / (.45 * (T.t1 - T.t0)));
 	else if (u < T.t3) D = 0;
-	else if (u < T.t4) D = smooth((u - T.t3 - .3 * (T.t4 - T.t3)) / (.7 * (T.t4 - T.t3)));
-	else D = mobile ? 1 : 1 - smooth((u - T.t4) / (.35 * (T.t5 - T.t4)));
+	else if (u < T.t4) D = mobile ? 0 : smooth((u - T.t3 - .3 * (T.t4 - T.t3)) / (.7 * (T.t4 - T.t3)));
+	else D = mobile ? smooth((u - T.t4) / (T.t5 - T.t4)) : 1 - smooth((u - T.t4) / (.35 * (T.t5 - T.t4)));
 	const clipT = clamp$1((u - T.t1) / (T.t2 - T.t1));
-	const fanT = mobile ? 0 : smooth((u - T.t4) / (T.t5 - T.t4));
+	const fanT = smooth((u - T.t4) / (T.t5 - T.t4));
 	let f = 0;
 	if (!mobile && u >= T.t5) {
 		const raw = clamp$1((u - T.t5) / 34, 0, 12);
@@ -247,7 +248,7 @@ function cardPlace(d, st, i, out) {
 		o: mobile && i >= 5 && st.sh < .01 ? 0 : mobile && i >= 5 ? bump : 1,
 		z: 22 - rank
 	};
-	if (mobile) return Object.assign(out, dk, { o: dk.o * (1 - smooth(st.w / .2)) });
+	if (mobile) return Object.assign(out, dk, { o: dk.o * (1 - smooth(st.w / .2)) * (st.clipT === 1 ? st.fanT : 1) });
 	const dd = i - st.f, ad = Math.abs(dd), sg = Math.sign(dd);
 	const near = Math.min(ad, 1), far = Math.max(0, ad - 1);
 	const sc = (1 - .6 * smooth(near)) * (1 - .06 * far);
@@ -815,7 +816,7 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 		const place = (u, st) => {
 			frameWindow(dims, st.w, fw);
 			const fkey = st.w >= .999 ? "full" : `${fw.tx.toFixed(1)}|${fw.ty.toFixed(1)}|${fw.rot.toFixed(2)}|${fw.s.toFixed(4)}|${fw.ix.toFixed(1)}|${fw.iy.toFixed(1)}|${fw.r.toFixed(2)}`;
-			const fo = mobile ? 1 : 1 - smooth(clamp(st.fanT * 2));
+			const fo = mobile ? 1 - st.fanT : 1 - smooth(clamp(st.fanT * 2));
 			const mkey = `${fkey}|${fo.toFixed(3)}`;
 			if (lastFx.media !== mkey) {
 				lastFx.media = mkey;
@@ -899,6 +900,7 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 			}
 			const u = q * T.total;
 			const st = stateAt(u, T, mobile);
+			if (mobile) stageEl.dataset.phase = u < T.t2 ? "film" : u < T.t3 ? "hold" : u < T.t4 ? "shrink" : u < T.t5 ? "reveal" : "deck";
 			if (st.ui !== ui) {
 				ui = st.ui;
 				stageEl.dataset.ui = ui;
@@ -1104,6 +1106,7 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 				"--deck-bottom"
 			]) stageEl.style.removeProperty(k);
 			delete stageEl.dataset.short;
+			delete stageEl.dataset.phase;
 			api.current.jump = () => {};
 			api.current.step = () => {};
 			api.current.card = () => {};
