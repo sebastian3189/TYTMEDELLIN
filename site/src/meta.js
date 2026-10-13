@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { t } from './i18n';
 
 // Metadatos por ruta (Spec 05 SEO): una sola fuente para el cliente (PageEffects / usePageMeta) y el prerender (scripts/prerender.mjs).
 export const staticMeta = {
@@ -16,8 +17,8 @@ export const staticMeta = {
 export const NOT_FOUND = ['Página no encontrada', 'Regresa a las experiencias de T&T Medellín para encontrar tu recorrido.'];
 export const fullTitle = (title) => `${title} | T&T Medellín`;
 export function applyMeta(title, description) {
-  document.title = fullTitle(title);
-  document.querySelector('meta[name="description"]')?.setAttribute('content', description);
+  document.title = fullTitle(t(title));
+  document.querySelector('meta[name="description"]')?.setAttribute('content', t(description));
 }
 // Fichas y notas: título y descripción de la propia página (el 404 de un slug desconocido lo fija NotFound).
 export function usePageMeta(title, description) {

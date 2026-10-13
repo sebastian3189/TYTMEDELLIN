@@ -53,7 +53,8 @@ function routeStatus() {
 // Build en tres pasos (npm run build): 1) cliente (con manifiesto), 2) servidor (entry-server.jsx) y 3) scripts/prerender.mjs, que escribe el HTML de
 // cada ruta en dist/. Un solo CSS (sin partirlo por chunk) para que el HTML prerenderizado traiga ya sus estilos en <head>.
 export default defineConfig(({ isSsrBuild }) => ({
-  plugins: [react(), routeStatus()],
+  plugins: [react({jsxImportSource:'@tt-i18n'}), routeStatus()],
+  resolve: {alias:{'@tt-i18n':resolve(import.meta.dirname,'src/i18n-runtime')}},
   server: { host: '127.0.0.1' },
   preview: { host: '127.0.0.1' },
   build: { manifest: !isSsrBuild, cssCodeSplit: false, copyPublicDir: !isSsrBuild },

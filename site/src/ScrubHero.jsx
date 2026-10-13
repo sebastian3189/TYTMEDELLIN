@@ -339,6 +339,8 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
       if (newChapter !== chapter) { chapter = newChapter; stageEl.dataset.ch = String(chapter); }
       const act = st.ui === 'cards' ? st.active : -1;
       if (act !== activeCard) {
+        stageEl.style.setProperty('--card-enter', act >= activeCard ? '22px' : '-22px');
+        cardEls.forEach((el, i) => el.classList.toggle('is-current', i === act));
         activeCard = act; stageEl.dataset.card = String(act); api.current.active = act;
         capEls.forEach((el, i) => el.classList.toggle('is-on', i === act));
         planEls.forEach((el, i) => el.classList.toggle('is-on', i === act));

@@ -151,9 +151,9 @@ export function cardPlace(d, st, i, out) {
   if (mobile) {
     const dd = i - st.f, ad = Math.abs(dd), a = st.fanT;
     // Una sola dirección, la del gesto: las cartas entran por abajo y salen por arriba.
-    const col = { x: focus.x, y: focus.y + dd * Bh * .92,
-      s: 1 - .1 * Math.min(ad, 1), r: 0,
-      o: 1 - smooth(clamp((ad - .55) / .65)), z: Math.round(200 - ad * 20) };
+    const col = { x: focus.x, y: focus.y,
+      s: 1, r: 0,
+      o: i === st.active ? 1 : 0, z: i === st.active ? 200 : 1 };
     for (const k of ['x', 'y', 's', 'r']) out[k] = lerp(dk[k], col[k], a);
     out.o = st.clipT === 1 ? col.o * a : dk.o * (1 - smooth(st.w / .2));
     out.z = a > 0 ? col.z : dk.z;

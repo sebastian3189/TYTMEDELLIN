@@ -109,6 +109,11 @@ auditoría independiente ni cierre de las compuertas de lanzamiento.
 - Build y prerender: correctos, 26 rutas y 404.
 - check-mobile-frame-composition.py: 121 fotogramas completos; sin bandas planas
   en los últimos 26 y sin capa de foto fija que sustituya el final.
+- check-mobile-film-transition.mjs: pasa en 390/360 y, en la repetición final,
+  320/768/1440. Verifica los fotogramas finales, proporción 16:9, doce cartas
+  con sus textos/enlaces, fuentes h, CTA alcanzables, reversibilidad, reducido
+  y navegación sin errores. La comparación de geometría usa tolerancia menor
+  de 0.05 px porque el motor evita escrituras repetidas mediante claves redondeadas.
 - check-mobile-editorial.mjs: pasa a 320/360/390/768/1440; libro al final con
   tres blogs, navegación, abanico, capítulos y movimiento reducido.
 - check-mobile-interactions.mjs: gesto táctil nativo vertical en la baraja;

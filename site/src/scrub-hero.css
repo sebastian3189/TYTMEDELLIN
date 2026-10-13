@@ -232,6 +232,7 @@
  .scrub-stage[data-ui="cards"] .scrub-index{display:none}
  .scrub-stage[data-ui="cards"] .bd-deck,.scrub-stage[data-ui="reveal"] .bd-deck{clip-path:inset(0 0 280px)}
  .scrub-stage[data-cap="cards"] .bd-cap{transition:opacity 180ms ease;transform:none}
+ .scrub-stage[data-ui="cards"] .bd-card.is-current .bd-tilt{animation:mobile-card-enter 240ms var(--ease-out-strong)}
  .bd-cap,.scrub-stage[data-cap="cards"] .bd-cap.is-on{transform:none}
  .bd-cap .bd-count{margin:0 0 8px}
  .bd-cap .bd-name{max-width:none;font-size:clamp(22px,6.3vw,26px);line-height:1.08}
@@ -265,6 +266,7 @@
  .ft-strip{margin-inline:calc(var(--pad) * -1);padding-inline:var(--pad);scroll-padding-inline:var(--pad)}
  .scrub-after .scrub-actions{justify-content:flex-start}
 }
+@keyframes mobile-card-enter{from{opacity:.4;transform:translateY(var(--card-enter,22px))}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){
  .ln{animation:none}
  .scrub-intro,.scrub-cap,.scrub-ch,.scrub-index,.scrub-segs i::before,.scrub-segs i::after{transition-duration:150ms!important;transition-delay:0s!important;transform:none!important}
