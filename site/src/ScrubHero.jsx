@@ -342,6 +342,19 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
     const place = (u, st) => {
       // Marco del clip (Flip): transform + clip-path de la capa de tamaño natural; la carta superior y el lienzo son la misma capa.
       frameWindow(dims, st.w, fw);
+      // Móvil: el cierre se contrae a una postal panorámica 16:9 para conservar completa la foto del grupo.
+      // Solo afecta la salida; el Flip de entrada continúa naciendo de la carta 4:5 de la baraja.
+      if (mobile && st.clipT === 1 && u >= T.t3) {
+        const F = dims.frame, a = smooth(clamp((u - T.t3) / (T.t4 - T.t3)));
+        const photoH = F.w * 9 / 16, targetW = Math.min(dims.W - 44, 340), targetScale = targetW / F.w;
+        fw.tx = (dims.deck.x - (F.x + F.w / 2)) * a;
+        fw.ty = (dims.deck.y - (F.y + F.h / 2)) * a;
+        fw.rot = -2.4 * a;
+        fw.s = 1 + (targetScale - 1) * a;
+        fw.ix = 0;
+        fw.iy = Math.max(0, (F.h - photoH) / 2) * a;
+        fw.r = (18 / Math.max(targetScale, fw.s)) * a;
+      }
       const fkey = st.w >= 0.999 ? 'full' : `${fw.tx.toFixed(1)}|${fw.ty.toFixed(1)}|${fw.rot.toFixed(2)}|${fw.s.toFixed(4)}|${fw.ix.toFixed(1)}|${fw.iy.toFixed(1)}|${fw.r.toFixed(2)}`;
       const fo = mobile ? 1 - st.fanT : 1 - smooth(clamp(st.fanT * 2));
       const mkey = `${fkey}|${fo.toFixed(3)}`;

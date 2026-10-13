@@ -58,7 +58,7 @@ export function stateAt(u, T, mobile) {
   if (u < T.t1) D = 1 - smooth((u - T.t0) / (0.45 * (T.t1 - T.t0)));
   else if (u < T.t3) D = 0;
   else if (u < T.t4) D = mobile ? 0 : smooth((u - T.t3 - 0.3 * (T.t4 - T.t3)) / (0.7 * (T.t4 - T.t3)));
-  else D = mobile ? smooth((u - T.t4) / (T.t5 - T.t4)) : 1 - smooth((u - T.t4) / (0.35 * (T.t5 - T.t4)));
+  else D = mobile ? 0 : 1 - smooth((u - T.t4) / (0.35 * (T.t5 - T.t4)));
 
   const clipT = clamp((u - T.t1) / (T.t2 - T.t1));
   const fanT = smooth((u - T.t4) / (T.t5 - T.t4));

@@ -136,7 +136,7 @@ function stateAt(u, T, mobile) {
 	if (u < T.t1) D = 1 - smooth((u - T.t0) / (.45 * (T.t1 - T.t0)));
 	else if (u < T.t3) D = 0;
 	else if (u < T.t4) D = mobile ? 0 : smooth((u - T.t3 - .3 * (T.t4 - T.t3)) / (.7 * (T.t4 - T.t3)));
-	else D = mobile ? smooth((u - T.t4) / (T.t5 - T.t4)) : 1 - smooth((u - T.t4) / (.35 * (T.t5 - T.t4)));
+	else D = mobile ? 0 : 1 - smooth((u - T.t4) / (.35 * (T.t5 - T.t4)));
 	const clipT = clamp$1((u - T.t1) / (T.t2 - T.t1));
 	const fanT = smooth((u - T.t4) / (T.t5 - T.t4));
 	let f = 0;
@@ -820,6 +820,17 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 		};
 		const place = (u, st) => {
 			frameWindow(dims, st.w, fw);
+			if (mobile && st.clipT === 1 && u >= T.t3) {
+				const F = dims.frame, a = smooth(clamp((u - T.t3) / (T.t4 - T.t3)));
+				const photoH = F.w * 9 / 16, targetScale = Math.min(dims.W - 44, 340) / F.w;
+				fw.tx = (dims.deck.x - (F.x + F.w / 2)) * a;
+				fw.ty = (dims.deck.y - (F.y + F.h / 2)) * a;
+				fw.rot = -2.4 * a;
+				fw.s = 1 + (targetScale - 1) * a;
+				fw.ix = 0;
+				fw.iy = Math.max(0, (F.h - photoH) / 2) * a;
+				fw.r = 18 / Math.max(targetScale, fw.s) * a;
+			}
 			const fkey = st.w >= .999 ? "full" : `${fw.tx.toFixed(1)}|${fw.ty.toFixed(1)}|${fw.rot.toFixed(2)}|${fw.s.toFixed(4)}|${fw.ix.toFixed(1)}|${fw.iy.toFixed(1)}|${fw.r.toFixed(2)}`;
 			const fo = mobile ? 1 - st.fanT : 1 - smooth(clamp(st.fanT * 2));
 			const mkey = `${fkey}|${fo.toFixed(3)}`;

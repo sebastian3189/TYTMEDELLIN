@@ -33,10 +33,13 @@ try {
         frame: Number(document.querySelector('.scrub-hero').dataset.frame),
         mediaOpacity: Number(getComputedStyle(document.querySelector('.scrub-media')).opacity),
         mediaWidth: document.querySelector('.scrub-media').getBoundingClientRect().width,
+        mediaClip: getComputedStyle(document.querySelector('.scrub-media')).clipPath,
         cardOpacity: Number(document.querySelector('.bd-card').style.opacity),
         finalOpacity: Number(getComputedStyle(document.querySelector('.scrub-final-frame')).opacity),
         infoOpacity: Number(getComputedStyle(document.querySelector('.mobile-deck-info')).opacity),
         infoName: document.querySelector('.mobile-deck-info h2').textContent,
+        titleOpacity: Number(getComputedStyle(document.querySelector('.scrub-t1')).opacity),
+        stripVisibility: getComputedStyle(document.querySelector('.scrub-strip--m')).visibility,
         overflow: document.documentElement.scrollWidth > innerWidth + 1,
       }));
       assert(!s.overflow);
@@ -45,10 +48,10 @@ try {
     };
     const hold = await go((T.t2 + T.t3) / 2, 'hold');
     assert.equal(hold.phase, 'hold'); assert.equal(hold.frame, 120); assert.equal(hold.mediaOpacity, 1); assert.equal(hold.cardOpacity, 0); assert.equal(hold.finalOpacity, 1);
-    const shrink = await go((T.t3 + T.t4) / 2, 'shrink');
-    assert.equal(shrink.phase, 'shrink'); assert.equal(shrink.frame, 120); assert.equal(shrink.cardOpacity, 0); assert(shrink.mediaWidth < hold.mediaWidth);
+    const shrink = await go(T.t3 + .85 * (T.t4 - T.t3), 'shrink');
+    assert.equal(shrink.phase, 'shrink'); assert.equal(shrink.frame, 120); assert.equal(shrink.cardOpacity, 0); assert(shrink.mediaWidth < hold.mediaWidth); assert.notEqual(shrink.mediaClip, 'none');
     const reveal = await go((T.t4 + T.t5) / 2, 'reveal');
-    assert.equal(reveal.phase, 'reveal'); assert(reveal.mediaOpacity > .3 && reveal.mediaOpacity < .7); assert(reveal.cardOpacity > .3 && reveal.cardOpacity < .7); assert(reveal.infoOpacity > .9); assert.equal(reveal.infoName, 'City Tour & Comuna 13');
+    assert.equal(reveal.phase, 'reveal'); assert(reveal.mediaOpacity > .3 && reveal.mediaOpacity < .7); assert(reveal.cardOpacity > .3 && reveal.cardOpacity < .7); assert(reveal.infoOpacity > .9); assert.equal(reveal.infoName, 'City Tour & Comuna 13'); assert.equal(reveal.titleOpacity, 0); assert.equal(reveal.stripVisibility, 'hidden');
     const deck = await go(T.t5 + 5, 'cards');
     assert.equal(deck.phase, 'deck'); assert.equal(deck.mediaOpacity, 0); assert.equal(deck.cardOpacity, 1); assert.equal(deck.infoOpacity, 1);
     assert.deepEqual(await go((T.t2 + T.t3) / 2, 'reverse'), hold);
