@@ -1,7 +1,6 @@
-import { M as company } from "../entry-server.js";
+import { F as company, N as jsx, P as jsxs } from "../entry-server.js";
 import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
-import { jsx, jsxs } from "react/jsx-runtime";
 //#region src/reviews.json
 var reviews_default = [
 	{

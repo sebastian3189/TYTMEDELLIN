@@ -1,11 +1,10 @@
-import { A as usePageMeta, C as useLightMotion, D as inicioTextos, N as whatsapp, T as useMounted, b as Marquee, c as Arrow, f as Picture, g as TourCard, m as Rail, p as QuoteSection, r as tours, u as Eyebrow, v as EditorialMotion, w as useMedia, x as Trust } from "../entry-server.js";
-import NotFound from "./NotFound-ADShijO8.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-f8KzqcvA.js";
-import { t as Reviews } from "./Reviews-D7kLyAOr.js";
+import { A as usePageMeta, C as useLightMotion, D as inicioTextos, I as whatsapp, N as jsx, P as jsxs, T as useMounted, b as Marquee, c as Arrow, f as Picture, g as TourCard, m as Rail, p as QuoteSection, r as tours, u as Eyebrow, v as EditorialMotion, w as useMedia, x as Trust } from "../entry-server.js";
+import NotFound from "./NotFound-DHo54wv4.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-3UgMS-5V.js";
+import { t as Reviews } from "./Reviews-CZkkVS5X.js";
 /* empty css                       */
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { jsx, jsxs } from "react/jsx-runtime";
 import { createPortal } from "react-dom";
 //#region src/tour-info.json
 var tour_info_default = {

@@ -1,9 +1,8 @@
-import { C as useLightMotion, D as inicioTextos, E as CHAPTERS, O as textoFase, c as Arrow, f as Picture, h as Reveal, l as Button, n as photos, o as rawTours, r as tours, t as articles, u as Eyebrow } from "../entry-server.js";
-import { t as Reviews } from "./Reviews-D7kLyAOr.js";
+import { C as useLightMotion, D as inicioTextos, E as CHAPTERS, M as Fragment$1, N as jsx, O as textoFase, P as jsxs, c as Arrow, f as Picture, h as Reveal, l as Button, n as photos, o as rawTours, r as tours, t as articles, u as Eyebrow } from "../entry-server.js";
+import { t as Reviews } from "./Reviews-CZkkVS5X.js";
 /* empty css                       */
 import { Link } from "react-router-dom";
 import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Fragment as Fragment$1, jsx, jsxs } from "react/jsx-runtime";
 var inicio_frames_default = {
 	source: "clip1d-1080p.mp4",
 	fps: 24,
@@ -258,14 +257,15 @@ function cardPlace(d, st, i, out) {
 		z: 22 - rank
 	};
 	if (mobile) {
-		const dd = i - st.f, ad = Math.abs(dd), a = st.fanT;
+		i - st.f;
+		const a = st.fanT;
 		const col = {
 			x: focus.x,
-			y: focus.y + dd * Bh * .92,
-			s: 1 - .1 * Math.min(ad, 1),
+			y: focus.y,
+			s: 1,
 			r: 0,
-			o: 1 - smooth(clamp$1((ad - .55) / .65)),
-			z: Math.round(200 - ad * 20)
+			o: i === st.active ? 1 : 0,
+			z: i === st.active ? 200 : 1
 		};
 		for (const k of [
 			"x",
@@ -788,6 +788,8 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 			}
 			const act = st.ui === "cards" ? st.active : -1;
 			if (act !== activeCard) {
+				stageEl.style.setProperty("--card-enter", act >= activeCard ? "22px" : "-22px");
+				cardEls.forEach((el, i) => el.classList.toggle("is-current", i === act));
 				activeCard = act;
 				stageEl.dataset.card = String(act);
 				api.current.active = act;

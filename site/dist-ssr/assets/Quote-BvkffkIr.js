@@ -1,7 +1,6 @@
-import { M as company, N as whatsapp, _ as QuoteCopy, o as rawTours } from "../entry-server.js";
+import { F as company, I as whatsapp, L as language, N as jsx, P as jsxs, R as t, _ as QuoteCopy, o as rawTours } from "../entry-server.js";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { jsx, jsxs } from "react/jsx-runtime";
 //#region src/indicativos.json
 var indicativos_default = [
 	[
@@ -977,6 +976,7 @@ var indicativos_default = [
 ];
 //#endregion
 //#region src/Quote.jsx
+var countryLabel = (row) => language() === "en" ? new Intl.DisplayNames(["en"], { type: "region" }).of(row[1]) : row[2];
 var TIPOS = [
 	["turismo", "Turismo y traslados"],
 	["peticion", "Petición"],
@@ -1117,9 +1117,9 @@ function Quote({ context = "Un recorrido a mi medida", mode = "cotizar" }) {
 			requestAnimationFrame(() => form.current?.querySelector(`#${first}`)?.focus());
 			return;
 		}
-		const phone = `${v.indicativo} ${v.telefono.trim()}${pais ? ` (${pais[2]})` : ""}`;
+		const phone = `${v.indicativo} ${v.telefono.trim()}${pais ? ` (${countryLabel(pais)})` : ""}`;
 		const tipo = TIPOS.find(([id]) => id === v.tipo)[1];
-		const text = [
+		const lines = [
 			`Hola, T&T Medellín. ${plan ? `Quiero cotizar: ${v.experiencia}.` : `${tipo}.`}`,
 			withType ? `Tipo de solicitud: ${tipo}` : "",
 			`Nombre: ${v.nombre.trim()}`,
@@ -1130,7 +1130,20 @@ function Quote({ context = "Un recorrido a mi medida", mode = "cotizar" }) {
 			plan && `Personas: ${Number(v.personas)}`,
 			plan && `Punto de salida: ${v.salida.trim() || "Por acordar"}`,
 			`${plan ? "Detalles" : "Mensaje"}: ${v.mensaje.trim() || "Me gustaría conocer las opciones disponibles."}`
-		].filter(Boolean).join("\n");
+		].filter(Boolean);
+		const englishLines = [
+			`Hello, T&T Medellín. ${plan ? `I'd like a quote for: ${t(v.experiencia)}.` : `${t(tipo)}.`}`,
+			withType && `Inquiry type: ${t(tipo)}`,
+			`Name: ${v.nombre.trim()}`,
+			v.empresa.trim() && `Company: ${v.empresa.trim()}`,
+			`Phone: ${phone}`,
+			v.correo.trim() && `Email: ${v.correo.trim()}`,
+			plan && `Date: ${v.fecha}`,
+			plan && `People: ${Number(v.personas)}`,
+			plan && `Departure point: ${v.salida.trim() || "To be arranged"}`,
+			`${plan ? "Details" : "Message"}: ${v.mensaje.trim() || "I'd like to know what options are available."}`
+		].filter(Boolean);
+		const text = (language() === "en" ? englishLines : lines).join("\n");
 		setSummary(text);
 		try {
 			await navigator.clipboard.writeText(text);
@@ -1381,14 +1394,18 @@ function Quote({ context = "Un recorrido a mi medida", mode = "cotizar" }) {
 										id: "indicativos-lista",
 										children: indicativos_default.map(([code, iso, name]) => /* @__PURE__ */ jsx("option", {
 											value: code,
-											children: `${iso} · ${name}`
+											children: `${iso} · ${countryLabel([
+												code,
+												iso,
+												name
+											])}`
 										}, code))
 									}),
 									/* @__PURE__ */ jsx("small", {
 										id: "indicativo-pais",
 										"aria-live": "polite",
 										className: pais ? "hint" : "error",
-										children: pais ? `${pais[1]} · ${pais[2]}` : "Indicativo no reconocido: escribe el de tu país, por ejemplo +57."
+										children: pais ? `${pais[1]} · ${countryLabel(pais)}` : "Indicativo no reconocido: escribe el de tu país, por ejemplo +57."
 									}),
 									error("telefono")
 								]

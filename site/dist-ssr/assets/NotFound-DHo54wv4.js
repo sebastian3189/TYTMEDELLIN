@@ -1,6 +1,5 @@
-import { A as usePageMeta, d as PageTitle, g as TourCard, k as NOT_FOUND, r as tours } from "../entry-server.js";
+import { A as usePageMeta, M as Fragment, N as jsx, P as jsxs, d as PageTitle, g as TourCard, k as NOT_FOUND, r as tours } from "../entry-server.js";
 import { Link } from "react-router-dom";
-import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 //#region src/pages/NotFound.jsx
 function NotFound() {
 	usePageMeta(NOT_FOUND[0], NOT_FOUND[1]);

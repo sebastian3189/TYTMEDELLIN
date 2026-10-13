@@ -35,7 +35,7 @@ export function t(value) {
   return value;
 }
 export function localizedProps(type, props) {
-  if (locale !== 'en' || !props || typeof type !== 'string' || props.translate === 'no') return props;
+  if (locale !== 'en' || !props || props.translate === 'no') return props;
   const next = {...props};
   const children = value => Array.isArray(value) ? value.map(children) : typeof value === 'string' ? t(value) : value;
   if(type !== 'script' && type !== 'style' && type !== 'textarea') next.children=children(props.children);

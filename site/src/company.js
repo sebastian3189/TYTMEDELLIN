@@ -1,4 +1,5 @@
 // Datos de contacto de la sede Medellín. Sin dependencias pesadas: lo usan el pie, la cabecera y los enlaces de WhatsApp en todas las rutas.
+import { language, t } from './i18n';
 export const company = {
   phone: '+57 304 496 1698', whatsapp: '573044961698',
   email: 'transporteturismocolombia@gmail.com',
@@ -8,4 +9,4 @@ export const company = {
   instagram: 'https://www.instagram.com/transporteenmedellin',
   tiktok: 'https://www.tiktok.com/@tytmedellin',
 };
-export const whatsapp = (context = 'mi recorrido') => `https://wa.me/${company.whatsapp}?text=${encodeURIComponent(`Hola, quiero consultar con T&T Medellín sobre ${context}.`)}`;
+export const whatsapp = (context = 'mi recorrido') => `https://wa.me/${company.whatsapp}?text=${encodeURIComponent(language()==='en'?`Hello, I'd like to ask T&T Medellín about ${t(context)}.`:`Hola, quiero consultar con T&T Medellín sobre ${context}.`)}`;

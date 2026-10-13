@@ -1,5 +1,4 @@
-import { a as vehicles, d as PageTitle, f as Picture, l as Button, u as Eyebrow } from "../entry-server.js";
-import { Fragment, jsx, jsxs } from "react/jsx-runtime";
+import { M as Fragment, N as jsx, P as jsxs, a as vehicles, d as PageTitle, f as Picture, l as Button, u as Eyebrow } from "../entry-server.js";
 //#region src/pages/Fleet.jsx
 function Fleet() {
 	return /* @__PURE__ */ jsxs(Fragment, { children: [

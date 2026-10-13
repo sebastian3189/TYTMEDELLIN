@@ -1,6 +1,5 @@
-import { S as useFlipGrid, b as Marquee, d as PageTitle, g as TourCard, r as tours, x as Trust } from "../entry-server.js";
+import { M as Fragment$1, N as jsx, P as jsxs, S as useFlipGrid, b as Marquee, d as PageTitle, g as TourCard, r as tours, x as Trust } from "../entry-server.js";
 import { useRef, useState } from "react";
-import { Fragment as Fragment$1, jsx, jsxs } from "react/jsx-runtime";
 //#region src/pages/Catalog.jsx
 function Catalog() {
 	const [filter, setFilter] = useState("Todos");

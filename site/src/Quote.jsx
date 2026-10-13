@@ -4,6 +4,8 @@ import { rawTours } from './tours-text';
 import { company, whatsapp } from './company';
 import indicativos from './indicativos.json';
 import QuoteCopy from './QuoteCopy';
+import { language, t } from './i18n';
+const countryLabel = row => language()==='en' ? new Intl.DisplayNames(['en'],{type:'region'}).of(row[1]) : row[2];
 
 /*
  * Formulario de cotización (Spec 02 «Conversión», Spec 04 «Formularios», Spec 03 §I).
@@ -65,10 +67,11 @@ export default function Quote({ context = 'Un recorrido a mi medida', mode = 'co
     setErrors(next); setCopied('idle');
     const first = ORDER.find((name) => next[name]);
     if (first) { setSummary(''); requestAnimationFrame(() => form.current?.querySelector(`#${first}`)?.focus()); return; }
-    const phone = `${v.indicativo} ${v.telefono.trim()}${pais ? ` (${pais[2]})` : ''}`;
+    const phone = `${v.indicativo} ${v.telefono.trim()}${pais ? ` (${countryLabel(pais)})` : ''}`;
     const tipo = TIPOS.find(([id]) => id === v.tipo)[1];
     const lines = [`Hola, T&T Medellín. ${plan ? `Quiero cotizar: ${v.experiencia}.` : `${tipo}.`}`, withType ? `Tipo de solicitud: ${tipo}` : '', `Nombre: ${v.nombre.trim()}`, v.empresa.trim() && `Empresa: ${v.empresa.trim()}`, `Teléfono: ${phone}`, v.correo.trim() && `Correo: ${v.correo.trim()}`, plan && `Fecha: ${v.fecha}`, plan && `Personas: ${Number(v.personas)}`, plan && `Punto de salida: ${v.salida.trim() || 'Por acordar'}`, `${plan ? 'Detalles' : 'Mensaje'}: ${v.mensaje.trim() || 'Me gustaría conocer las opciones disponibles.'}`].filter(Boolean);
-    const text = lines.join('\n');
+    const englishLines=[`Hello, T&T Medellín. ${plan?`I'd like a quote for: ${t(v.experiencia)}.`:`${t(tipo)}.`}`,withType&&`Inquiry type: ${t(tipo)}`,`Name: ${v.nombre.trim()}`,v.empresa.trim()&&`Company: ${v.empresa.trim()}`,`Phone: ${phone}`,v.correo.trim()&&`Email: ${v.correo.trim()}`,plan&&`Date: ${v.fecha}`,plan&&`People: ${Number(v.personas)}`,plan&&`Departure point: ${v.salida.trim()||'To be arranged'}`,`${plan?'Details':'Message'}: ${v.mensaje.trim()||"I'd like to know what options are available."}`].filter(Boolean);
+    const text = (language()==='en'?englishLines:lines).join('\n');
     setSummary(text);
     try { await navigator.clipboard.writeText(text); setCopied('ok'); } catch { setCopied('manual'); }
     requestAnimationFrame(() => document.querySelector('#resumen-solicitud')?.focus());
@@ -94,8 +97,8 @@ export default function Quote({ context = 'Un recorrido a mi medida', mode = 'co
         <div className="field full"><span className="field-label" id="telefono-label">Teléfono / WhatsApp *</span><div className="phone-row" role="group" aria-labelledby="telefono-label">
           <div className="field"><label htmlFor="indicativo" className="hint-label">Indicativo</label><input {...attrs('indicativo', 'indicativo-pais', false)} type="text" inputMode="tel" autoComplete="tel-country-code" list="indicativos-lista" maxLength={5} value={v.indicativo} onChange={(e) => { e.target.value = normalizeCode(e.target.value); set('indicativo')(e); }} onBlur={() => v.indicativo === '+' && setV((p) => ({ ...p, indicativo: '+57' }))}/></div>
           <div className="field"><label htmlFor="telefono" className="hint-label">Número</label><input {...attrs('telefono')} type="tel" inputMode="tel" autoComplete="tel-national" maxLength={30} value={v.telefono} onChange={set('telefono')} required/></div></div>
-          <datalist id="indicativos-lista">{indicativos.map(([code, iso, name]) => <option key={code} value={code}>{`${iso} · ${name}`}</option>)}</datalist>
-          <small id="indicativo-pais" aria-live="polite" className={pais ? 'hint' : 'error'}>{pais ? `${pais[1]} · ${pais[2]}` : 'Indicativo no reconocido: escribe el de tu país, por ejemplo +57.'}</small>{error('telefono')}</div>
+          <datalist id="indicativos-lista">{indicativos.map(([code, iso, name]) => <option key={code} value={code}>{`${iso} · ${countryLabel([code,iso,name])}`}</option>)}</datalist>
+          <small id="indicativo-pais" aria-live="polite" className={pais ? 'hint' : 'error'}>{pais ? `${pais[1]} · ${countryLabel(pais)}` : 'Indicativo no reconocido: escribe el de tu país, por ejemplo +57.'}</small>{error('telefono')}</div>
         <div className="field full"><label htmlFor="correo">Correo electrónico (opcional)</label><input {...attrs('correo')} type="email" autoComplete="email" maxLength={120} value={v.correo} onChange={set('correo')}/>{error('correo')}</div>
         <div className="field full"><label htmlFor="mensaje">{plan ? '¿Qué haría especial este viaje?' : 'Cuéntanos tu consulta *'}</label><textarea {...attrs('mensaje', 'mensaje-ayuda')} rows={4} maxLength={800} value={v.mensaje} onChange={set('mensaje')}/><small id="mensaje-ayuda" className="hint">{plan ? 'Opcional: intereses, equipaje o necesidades del grupo. ' : ''}{v.mensaje.length}/800</small>{error('mensaje')}</div>
       </div></fieldset>

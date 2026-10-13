@@ -1,6 +1,5 @@
-import { C as useLightMotion } from "../entry-server.js";
+import { C as useLightMotion, N as jsx, P as jsxs } from "../entry-server.js";
 import { useLayoutEffect, useRef, useState } from "react";
-import { jsx, jsxs } from "react/jsx-runtime";
 //#region src/FeaturedGallery.jsx
 function FeaturedGallery({ tour }) {
 	const [index, setIndex] = useState(0), dialog = useRef(null), image = useRef(null), origin = useRef(null), swipe = useRef(null), swiped = useRef(false), returnFocus = useRef(null), light = useLightMotion();
