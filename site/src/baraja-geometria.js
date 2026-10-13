@@ -20,7 +20,8 @@ export function timeline(mobile) {
   if (mobile) {
     // CONSTRUIR, Spec 03 §H1/§I: pausa final → postal → revelado separados; cierre en flujo normal.
     const t0 = 24, t1 = t0 + 40, t2 = t1 + 140, t3 = t2 + 24, t4 = t3 + 48, t5 = t4 + 24;
-    return { t0, t1, t2, t3, t4, t5, t6: t5, total: t5 + 12, clip: 140 };
+    const t6 = t5 + CARD_VH * N;
+    return { t0, t1, t2, t3, t4, t5, t6, total: t6 + 24, clip: 140 };
   }
   const t0 = 30, t1 = t0 + 50, t2 = t1 + 165, t3 = t2 + 15, t4 = t3 + 45, t5 = t4 + 30, t6 = t5 + CARD_VH * N;
   return { t0, t1, t2, t3, t4, t5, t6, total: t6 + 24, clip: 165 };
@@ -42,10 +43,9 @@ export function stateAt(u, T, mobile) {
   if (u >= T.t1) ui = 'clip';
   if (u >= T.t3) ui = 'shrink';
   if (mobile && u >= T.t4) ui = 'reveal';
-  if (mobile && u >= T.t5) ui = 'deck';
   if (!mobile && u >= T.t3 + 0.5 * (T.t4 - T.t3)) ui = 'deck'; // escritorio: las acciones vuelven a media contracción
   if (!mobile && u >= T.t4) ui = 'fan';
-  if (!mobile && u >= T.t5) ui = 'cards';
+  if (u >= T.t5) ui = 'cards';
 
   // w: 0 = carta de la baraja, 1 = pantalla completa.
   let w = 0;
@@ -64,7 +64,7 @@ export function stateAt(u, T, mobile) {
   const fanT = smooth((u - T.t4) / (T.t5 - T.t4));
   // Foco: cada carta tiene una meseta (40 %) y luego pasa a la siguiente.
   let f = 0;
-  if (!mobile && u >= T.t5) {
+  if (u >= T.t5) {
     const raw = clamp((u - T.t5) / CARD_VH, 0, N);
     const i = Math.min(N - 1, Math.floor(raw));
     f = i + (i < N - 1 ? smooth(((raw - i) - 0.4) / 0.6) : 0);
@@ -92,8 +92,10 @@ export function buildDims(W, H, mobile, frame) {
     const al = rotAllow(Hd);
     const deckTop = t1Top + line + gapT + al;
     deck = { x: W / 2, y: deckTop + Hd / 2 };
-    focus = deck;
-    Bh = Hd;
+    // Las cartas enfocadas llenan el ancho útil; la altura se adapta al teléfono.
+    // Reservar 280 px para nombre, frase y controles, incluso en 360×640.
+    Bh = Math.min((W - 56) * 1.25, H - 320);
+    focus = { x: W / 2, y: (H - 280) / 2 };
     const bottomEdge = deck.y + Hd / 2 + al, t2Top = bottomEdge + gapB;
     m = { t1Top, t2Top, microTop: t2Top + line + 10, short, A };
   } else {
@@ -102,7 +104,7 @@ export function buildDims(W, H, mobile, frame) {
     deck = { x: W / 2, y: H * 0.49 };
     focus = { x: W * 0.6, y: H * 0.5 };
   }
-  const Bw = Bh * 0.8;
+  const Bw = mobile ? Math.min(W - 56, 340) : Bh * 0.8;
   return { W, H, mobile, pad, Bw, Bh, sD: Hd / Bh, Hd, Wd: Hd * 0.8, deck, focus, frame, m };
 }
 
@@ -110,17 +112,25 @@ export function buildDims(W, H, mobile, frame) {
  * Ventana (marco) del clip. Devuelve la transformación y el clip-path de la capa de tamaño natural `frame`
  * para que se vea como una carta 4:5 (w=0) o a su tamaño completo (w=1).
  */
-export function frameWindow(d, w, out) {
+export const filmOpening = (clipT) => smooth((clipT - 0.6) / 0.4);
+
+export function frameWindow(d, w, out, clipT = 0) {
   const { frame: F } = d;
+  const tail = d.mobile ? filmOpening(clipT) : 0;
+  const insetScale = 1 - tail * 32 / F.w;
+  const fullW = F.w * insetScale;
+  const fullH = lerp(F.h, F.w * 9 / 16, tail) * insetScale;
+  const cardW = lerp(d.Wd, Math.min(d.W - 56, 320), tail);
+  const cardH = lerp(d.Hd, Math.min(d.W - 56, 320) * 9 / 16, tail);
   const cx0 = d.deck.x, cy0 = d.deck.y;
-  const wx = lerp(d.Wd, F.w, w), wh = lerp(d.Hd, F.h, w);
+  const wx = lerp(cardW, fullW, w), wh = lerp(cardH, fullH, w);
   const cx = lerp(cx0, F.x + F.w / 2, w), cy = lerp(cy0, F.y + F.h / 2, w);
   const rot = lerp(FRAME_ROT, 0, w);
   // La capa cubre la ventana (cover): escala mínima que llena ancho y alto; el sobrante se recorta con clip-path.
   const s = Math.max(wh / F.h, wx / F.w);
   const ix = Math.max(0, (F.w - wx / s) / 2); // recorte lateral en coordenadas de la capa
   const iy = Math.max(0, (F.h - wh / s) / 2); // recorte vertical (marco móvil más estrecho que 4:5)
-  const radius = lerp(18, 0, w) / s;
+  const radius = lerp(18, 18 * tail, w) / s;
   out.tx = cx - (F.x + F.w / 2); out.ty = cy - (F.y + F.h / 2); out.rot = rot; out.s = s; out.ix = ix; out.iy = iy; out.r = radius;
   return out;
 }
@@ -138,11 +148,16 @@ export function cardPlace(d, st, i, out) {
   };
   // Fan en columna (solo escritorio)
   // Móvil: solo la carta superior (el marco) hace el Flip; las demás se desvanecen al empezar y no asoman bajo él.
-  if (mobile) return Object.assign(out, dk, {
-    o: dk.o * (1 - smooth(st.w / 0.2)) * (st.clipT === 1 ? st.fanT : 1),
-    // Al terminar la película la primera experiencia queda arriba y coincide con la información visible.
-    z: st.clipT === 1 ? 10 + N - i : dk.z,
-  });
+  if (mobile) {
+    const dd = i - st.f, ad = Math.abs(dd), a = st.fanT;
+    const col = { x: focus.x + dd * Bw * .98, y: focus.y + Math.min(ad, 1) * 12,
+      s: 1 - .15 * Math.min(ad, 1), r: clamp(dd, -2, 2) * 5,
+      o: clamp(2 - ad), z: Math.round(200 - ad * 20) };
+    for (const k of ['x', 'y', 's', 'r']) out[k] = lerp(dk[k], col[k], a);
+    out.o = st.clipT === 1 ? col.o * a : dk.o * (1 - smooth(st.w / .2));
+    out.z = a > 0 ? col.z : dk.z;
+    return out;
+  }
   const dd = i - st.f, ad = Math.abs(dd), sg = Math.sign(dd);
   const near = Math.min(ad, 1), far = Math.max(0, ad - 1);
   const sc = (1 - 0.6 * smooth(near)) * (1 - 0.06 * far);

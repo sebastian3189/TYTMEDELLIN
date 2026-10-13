@@ -23,7 +23,6 @@
 .scrub-poster img{object-fit:cover;max-width:none}
 .scrub-canvas{opacity:0}
 .scrub-hero[data-ready=true] .scrub-canvas{opacity:1}
-.scrub-final-frame{display:none}
 
 /* ---------- Titular partido, lema y confianza (P1) ---------- */
 .scrub-title{position:absolute;inset:0;z-index:5;pointer-events:none}
@@ -228,17 +227,17 @@
  .scrub-cap[data-for=c1] .scrub-cap-title,.scrub-cap[data-for=c2] .scrub-cap-title{max-width:none;font-size:26px}
  .scrub-cap[data-for=c1] .scrub-cap-sub,.scrub-cap[data-for=c2] .scrub-cap-sub{max-width:none;margin-top:6px;font-size:15px;line-height:1.4}
  .scrub-stack>*{align-self:start}
- .scrub-final-frame{position:absolute;inset:0;z-index:2;display:block;width:100%;height:100%;object-fit:contain;background:#1E201D;opacity:0;transition:opacity 180ms var(--ease-out-strong)}
- .scrub-stage[data-tail="1"] .scrub-final-frame{opacity:1}
- .mobile-deck-info{visibility:hidden;opacity:0;transform:translateY(10px);transition:opacity var(--dur-caption) var(--ease-out-strong),transform var(--dur-caption) var(--ease-out-strong),visibility 0s linear var(--dur-caption-out);pointer-events:none}
- .scrub-stage[data-phase="reveal"] .mobile-deck-info,.scrub-stage[data-phase="deck"] .mobile-deck-info{visibility:visible;opacity:1;transform:none;transition-delay:80ms,80ms,0s;pointer-events:auto}
- .mobile-deck-info .scrub-count{margin:0 0 5px}
- .mobile-deck-kicker{margin:0 0 3px;color:var(--text);font:600 13px/1.2 var(--font,Inter,Arial,sans-serif);letter-spacing:.08em;text-transform:uppercase}
- .mobile-deck-info h2{margin:0;color:var(--text-strong);font:700 clamp(20px,6vw,25px)/1.05 var(--heading,Montserrat,Arial,sans-serif);letter-spacing:-.025em}
- .mobile-deck-info>p:last-of-type{margin:5px 0 0;color:var(--text);font:500 14px/1.25 var(--font,Inter,Arial,sans-serif);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
- .mobile-deck-info a{display:inline-flex;margin-top:5px;color:var(--text-strong);font:600 13px/1.2 var(--font,Inter,Arial,sans-serif);text-underline-offset:4px;pointer-events:auto}
- .scrub-stage[data-phase="reveal"] .scrub-actions,.scrub-stage[data-phase="deck"] .scrub-actions{visibility:hidden;opacity:0;pointer-events:none}
- .scrub-stage[data-phase="reveal"] .scrub-strip--m,.scrub-stage[data-phase="deck"] .scrub-strip--m{visibility:hidden!important;opacity:0!important}
+ /* Spec 03: una carta grande con información por tour; recorrido completo compartido con PC. */
+ .scrub-stage[data-ui="cards"] .scrub-panel{height:268px;padding-bottom:112px}
+ .scrub-stage[data-ui="cards"] .scrub-index{display:none}
+ .bd-cap,.scrub-stage[data-cap="cards"] .bd-cap.is-on{transform:none}
+ .bd-cap .bd-count{margin:0 0 8px}
+ .bd-cap .bd-name{max-width:none;font-size:clamp(22px,6.3vw,26px);line-height:1.08}
+ .bd-cap .scrub-cap-sub{max-width:none;margin-top:8px;font-size:16px;line-height:1.35}
+ .bd-plan{left:var(--m-pad);bottom:60px;min-height:44px;padding:0 10px;font-size:13px;width:calc(100% - 2 * var(--m-pad) - 104px);justify-content:center}
+ .bd-nav{left:auto;right:var(--m-pad);bottom:60px;gap:8px}
+ .bd-arrow{width:44px;height:44px}
+ .scrub-stage[data-phase="reveal"] .scrub-strip--m,.scrub-stage[data-phase="cards"] .scrub-strip--m{display:none}
  .scrub-strip--m{left:0;right:0;bottom:calc(118px + env(safe-area-inset-bottom));justify-content:center;gap:3px;pointer-events:none;background:none;padding:0;margin:0}
  .scrub-strip--m i{display:block;width:24px;height:30px;border-radius:6px;background-size:cover;background-position:center;border:1px solid var(--line)}
  .scrub-ctl{left:var(--m-pad);right:var(--m-pad);top:auto;bottom:calc(8px + env(safe-area-inset-bottom));gap:8px}

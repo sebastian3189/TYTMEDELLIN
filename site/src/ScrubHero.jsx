@@ -2,7 +2,7 @@ import { Fragment, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import manifest from './inicio-frames.json';
 import { inicioTextos, CHAPTERS, textoFase } from './inicio-textos';
-import { N, timeline, stateAt, buildDims, frameWindow, cardPlace, uForCard, smooth } from './baraja-geometria';
+import { N, timeline, stateAt, buildDims, frameWindow, filmOpening, cardPlace, uForCard, smooth } from './baraja-geometria';
 import './scrub-hero.css';
 import './experience-book.css';
 
@@ -22,7 +22,7 @@ const LOW_HEIGHT_QUERY = '(max-height: 560px)';
 const REDUCE_KEY = 'tyt-reducir-movimiento';
 // Memoria: solo una ventana de fotogramas queda decodificada (ImageBitmap); el resto se conserva comprimido (Blob).
 // Ventana direccional: más fotogramas por delante del sentido de desplazamiento que por detrás (121 fotogramas completos, 24 fps).
-const WINDOW = { desktop: { ahead: 14, behind: 4 }, mobile: { ahead: 18, behind: 5 } };
+const WINDOW = { desktop: { ahead: 14, behind: 4 }, mobile: { ahead: 10, behind: 3 } };
 const ANCHOR = 8; // cada 8.º fotograma se conserva además a media resolución (respaldo mientras se decodifica la ventana)
 const TAU = { desktop: 60, mobile: 50 }; // suavizado corto, sin inercia que se quede atrás
 const JUMP = 0.12, SETTLE = 0.0003;
@@ -218,10 +218,10 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
     if (!ctx || typeof createImageBitmap !== 'function') { setMode('failed'); return undefined; }
     ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
     const T = timeline(mobile);
-    // Escritorio: ventanas ≤1600 px usan d16/ (1600×900 q74); >1600 conservan d/ (1920×1080 q82). Móvil: m/ (encuadre por fotograma en el tramo final).
+    // Spec 03: móvil comparte los 121 originales completos de d16; ningún relleno ni foto fija interrumpe el clip.
     const wide = !mobile && innerWidth > 1600;
-    const set = mobile ? manifest.mobile : wide ? manifest.desktop : manifest.desktop1600;
-    const suffix = mobile ? 'm' : wide ? 'd' : 'd16';
+    const set = wide ? manifest.desktop : manifest.desktop1600;
+    const suffix = wide ? 'd' : 'd16';
     const tau = mobile ? TAU.mobile : TAU.desktop;
     const win = mobile ? WINDOW.mobile : WINDOW.desktop;
     let dir = 1, prevCenter = 0;
@@ -296,9 +296,13 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
       }
       return null;
     };
-    const cover = (img) => {
-      const iw = img.width, ih = img.height, sc = Math.max(W / iw, H / ih), w = iw * sc, h = ih * sc;
-      ctx.drawImage(img, -(w - W) * 0.5, -(h - H) * 0.5, w, h);
+    const cover = (img, clipT) => {
+      const tail = mobile ? filmOpening(clipT) : 0;
+      const visibleH = H + (W * 9 / 16 - H) * tail;
+      const iw = img.width, ih = img.height, sc = Math.max(W / iw, visibleH / ih), w = iw * sc, h = ih * sc;
+      // El recorte inicial coincide con el póster; se abre hasta mostrar toda la fuente 16:9.
+      const focusX = mobile ? .465 + .035 * tail : .5;
+      ctx.drawImage(img, -(w - W) * focusX, (H - h) / 2, w, h);
     };
 
     // Decodificación en ventana: se pide lo cercano al fotograma actual y se cierra lo que sale de ella.
@@ -341,32 +345,26 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
 
     const place = (u, st) => {
       // Marco del clip (Flip): transform + clip-path de la capa de tamaño natural; la carta superior y el lienzo son la misma capa.
-      frameWindow(dims, st.w, fw);
-      // Móvil: el cierre se contrae a una postal panorámica 16:9 para conservar completa la foto del grupo.
-      // Solo afecta la salida; el Flip de entrada continúa naciendo de la carta 4:5 de la baraja.
-      if (mobile && st.clipT === 1 && u >= T.t3) {
-        const F = dims.frame, a = smooth(clamp((u - T.t3) / (T.t4 - T.t3)));
-        const photoH = F.w * 9 / 16, targetW = Math.min(dims.W - 44, 340), targetScale = targetW / F.w;
-        fw.tx = (dims.deck.x - (F.x + F.w / 2)) * a;
-        fw.ty = (dims.deck.y - (F.y + F.h / 2)) * a;
-        fw.rot = -2.4 * a;
-        fw.s = 1 + (targetScale - 1) * a;
-        fw.ix = 0;
-        fw.iy = Math.max(0, (F.h - photoH) / 2) * a;
-        fw.r = (18 / Math.max(targetScale, fw.s)) * a;
-      }
-      const fkey = st.w >= 0.999 ? 'full' : `${fw.tx.toFixed(1)}|${fw.ty.toFixed(1)}|${fw.rot.toFixed(2)}|${fw.s.toFixed(4)}|${fw.ix.toFixed(1)}|${fw.iy.toFixed(1)}|${fw.r.toFixed(2)}`;
-      const fo = mobile ? 1 - st.fanT : 1 - smooth(clamp(st.fanT * 2));
+      frameWindow(dims, st.w, fw, st.clipT);
+      const fullFrame = st.w >= .999 && (!mobile || st.clipT <= .6);
+      const fkey = fullFrame ? 'full' : `${fw.tx.toFixed(1)}|${fw.ty.toFixed(1)}|${fw.rot.toFixed(2)}|${fw.s.toFixed(4)}|${fw.ix.toFixed(1)}|${fw.iy.toFixed(1)}|${fw.r.toFixed(2)}`;
+      const fo = 1 - smooth(clamp(st.fanT * 2));
       const mkey = `${fkey}|${fo.toFixed(3)}`;
       if (lastFx.media !== mkey) {
         lastFx.media = mkey;
-        if (st.w >= 0.999) { mediaEl.style.transform = 'none'; mediaEl.style.clipPath = 'none'; }
+        if (fullFrame) { mediaEl.style.transform = 'none'; mediaEl.style.clipPath = 'none'; }
         else { mediaEl.style.transform = `translate3d(${fw.tx}px,${fw.ty}px,0) rotate(${fw.rot}deg) scale(${fw.s})`; mediaEl.style.clipPath = `inset(${fw.iy}px ${fw.ix}px round ${fw.r}px)`; }
         mediaEl.style.opacity = String(fo); mediaEl.style.visibility = fo < 0.01 ? 'hidden' : 'visible';
       }
       // Baraja de cartas.
       for (let i = 0; i < cardEls.length; i++) {
         cardPlace(dims, st, i, cp);
+        if (mobile) {
+          const interactive = st.ui === 'cards' && i === st.active;
+          cardEls[i].tabIndex = interactive ? 0 : -1;
+          cardEls[i].setAttribute('aria-hidden', String(!interactive));
+          cardEls[i].style.pointerEvents = interactive ? 'auto' : 'none';
+        }
         const key = `${cp.x.toFixed(1)}|${cp.y.toFixed(1)}|${cp.r.toFixed(2)}|${cp.s.toFixed(4)}|${cp.o.toFixed(3)}|${cp.z}`;
         if (key === lastCard[i]) continue;
         lastCard[i] = key;
@@ -430,8 +428,7 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
       const u = q * T.total;
       const st = stateAt(u, T, mobile);
       if (mobile) {
-        stageEl.dataset.phase = u < T.t2 ? 'film' : u < T.t3 ? 'hold' : u < T.t4 ? 'shrink' : u < T.t5 ? 'reveal' : 'deck';
-        stageEl.dataset.tail = st.clipT >= 0.92 ? '1' : '0';
+        stageEl.dataset.phase = u < T.t2 ? 'film' : u < T.t3 ? 'hold' : u < T.t4 ? 'shrink' : u < T.t5 ? 'reveal' : 'cards';
       }
       if (st.ui !== ui) { ui = st.ui; stageEl.dataset.ui = ui; }
       let newCap = '';
@@ -449,18 +446,18 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
         stripBtns.forEach((el, i) => el.toggleAttribute('data-on', i === act));
         if (act >= 0) wantFull(act - 1, act + 2);
       }
-      if (!mobile && u >= T.t2 && u < T.t5 && !fullImgs[0]?.getAttribute('src')) wantFull(0, 2);
+      if (u >= T.t2 && u < T.t5 && !fullImgs[0]?.getAttribute('src')) wantFull(0, 2);
 
       center = Math.round(st.clipT * (count - 1));
       manage();
       // Un fotograma real por posición (24 fps completos): sin mezcla entre fotogramas, para evitar fantasmas y desenfoque.
       const baseIdx = Math.round(st.clipT * (count - 1));
       const baseImg = nearest(baseIdx);
-      const key = `${W}x${H}|${baseIdx}|${version}`;
+      const key = `${W}x${H}|${baseIdx}|${version}|${mobile ? st.clipT.toFixed(5) : ''}`;
       if (key !== lastKey && baseImg) {
         lastKey = key;
         ctx.fillStyle = '#3C3F3B'; ctx.fillRect(0, 0, W, H);
-        cover(baseImg);
+        cover(baseImg, st.clipT);
         section.dataset.frame = String(baseIdx);
         section.dataset.ready = 'true';
       }
@@ -480,7 +477,7 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
       schedule();
     };
     api.current.step = (dir) => api.current.jump(uForCard(T, clamp(Math.max(api.current.active, 0) + dir, 0, N - 1)));
-    api.current.card = (i) => { if (!mobile && Math.abs((q === null ? 0 : q * T.total) - uForCard(T, i)) > 6) api.current.jump(uForCard(T, i)); };
+    api.current.card = (i) => { if (Math.abs((q === null ? 0 : q * T.total) - uForCard(T, i)) > 6) api.current.jump(uForCard(T, i)); };
     api.current.T = T;
 
     const fetchBlob = async (url) => {
@@ -549,8 +546,6 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
       for (const k of ['--bw', '--bh', '--stage-h', '--m-t1', '--m-t2', '--m-micro', '--deck-top', '--deck-bottom']) stageEl.style.removeProperty(k);
       delete stageEl.dataset.short;
       delete stageEl.dataset.phase;
-      delete stageEl.dataset.tail;
-      delete stageEl.dataset.phase;
       api.current.jump = () => {}; api.current.step = () => {}; api.current.card = () => {};
     };
   }, [ready, mode, mobile]);
@@ -577,7 +572,7 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
 
   const staticMode = mode !== 'scrub';
   const animated = !staticMode;
-  const deckLinks = animated && !mobile; // escritorio: las cartas de la baraja son los enlaces
+  const deckLinks = animated; // El mismo recorrido de 12 experiencias también existe en móvil.
   const t = inicioTextos;
   const bar = (
     <button type="button" className="scrub-motion" aria-pressed={reduce || osNow} disabled={osNow} onClick={toggleReduce}>
@@ -605,7 +600,6 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
               <img src={`${BASE}/poster-1600.webp`} srcSet={`${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`} sizes="100vw" width="1600" height="900" alt="Vista de Medellín desde la ladera de la Comuna 13" loading="eager" fetchPriority="high" decoding="async" />
             </picture>
             {animated && <canvas ref={canvas} className="scrub-canvas" aria-hidden="true" />}
-            {animated && mobile && <img className="scrub-final-frame" src={`${BASE}/d16/121.webp`} width="1600" height="900" alt="" aria-hidden="true" decoding="async" />}
           </div>
           <div ref={titleRef} className="scrub-title">
             <p className="eyebrow scrub-lema" data-fx="0">{t.lema}</p>
@@ -638,18 +632,6 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
                     </div>
                   );
                 })}
-                {animated && mobile && (() => {
-                  const c = cards[0], tx = copy(c.slug);
-                  return (
-                    <div className="mobile-deck-info">
-                      <p className="scrub-count">01 / {N}</p>
-                      <p className="mobile-deck-kicker">Elige tu próximo recuerdo</p>
-                      <h2>{c.name}</h2>
-                      <p><b>{tx.emocion}:</b> {tx.frase}</p>
-                      <Link to={`/experiencias/${c.slug}`}>Ver experiencia <span aria-hidden="true">↗</span></Link>
-                    </div>
-                  );
-                })()}
                 {deckLinks && cards.map((c, i) => {
                   const tx = copy(c.slug);
                   return (
@@ -695,7 +677,7 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
                   <Link className="bd-card" to={`/experiencias/${c.slug}`} aria-label={`${c.name}. ${tx.emocion}: ${tx.frase}`} onFocus={() => api.current.card(i)} onKeyDown={(e) => onCardKey(e, i)} onPointerMove={tilt} onPointerLeave={untilt}>
                     <span className="bd-tilt">
                       <img className="bd-thumb" src={cardImg(c.slug, 't')} width="320" height="400" alt="" decoding="async" fetchPriority="low" />
-                      <img className="bd-full" data-src={cardImg(c.slug, 'd')} width="640" height="800" alt="" decoding="async" onLoad={(e) => e.currentTarget.classList.add('ready')} />
+                      <img className="bd-full" data-src={cardImg(c.slug, mobile ? 'm' : 'd')} width="640" height="800" alt="" decoding="async" onLoad={(e) => e.currentTarget.classList.add('ready')} />
                     </span>
                     
                   </Link>
@@ -706,7 +688,7 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
               );
             })}
           </div>
-          {animated && !mobile && (
+          {animated && (
             <div className="bd-nav">
               <button type="button" className="bd-arrow" aria-label="Carta anterior" onClick={() => api.current.step(-1)}>←</button>
               <button type="button" className="bd-arrow" aria-label="Carta siguiente" onClick={() => api.current.step(1)}>→</button>
