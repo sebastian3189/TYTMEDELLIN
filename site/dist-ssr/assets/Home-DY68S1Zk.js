@@ -123,8 +123,10 @@ function stateAt(u, T, mobile) {
 	if (u >= T.t0) ui = "flip";
 	if (u >= T.t1) ui = "clip";
 	if (u >= T.t3) ui = "shrink";
-	if (u >= T.t3 + .5 * (T.t4 - T.t3)) ui = "deck";
-	if (u >= T.t4) ui = mobile ? "deck" : "fan";
+	if (mobile && u >= T.t4) ui = "reveal";
+	if (mobile && u >= T.t5) ui = "deck";
+	if (!mobile && u >= T.t3 + .5 * (T.t4 - T.t3)) ui = "deck";
+	if (!mobile && u >= T.t4) ui = "fan";
 	if (!mobile && u >= T.t5) ui = "cards";
 	let w = 0;
 	if (u >= T.t0 && u < T.t1) w = smooth((u - T.t0) / (T.t1 - T.t0));
@@ -248,7 +250,10 @@ function cardPlace(d, st, i, out) {
 		o: mobile && i >= 5 && st.sh < .01 ? 0 : mobile && i >= 5 ? bump : 1,
 		z: 22 - rank
 	};
-	if (mobile) return Object.assign(out, dk, { o: dk.o * (1 - smooth(st.w / .2)) * (st.clipT === 1 ? st.fanT : 1) });
+	if (mobile) return Object.assign(out, dk, {
+		o: dk.o * (1 - smooth(st.w / .2)) * (st.clipT === 1 ? st.fanT : 1),
+		z: st.clipT === 1 ? 22 - i : dk.z
+	});
 	const dd = i - st.f, ad = Math.abs(dd), sg = Math.sign(dd);
 	const near = Math.min(ad, 1), far = Math.max(0, ad - 1);
 	const sc = (1 - .6 * smooth(near)) * (1 - .06 * far);
@@ -900,7 +905,10 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 			}
 			const u = q * T.total;
 			const st = stateAt(u, T, mobile);
-			if (mobile) stageEl.dataset.phase = u < T.t2 ? "film" : u < T.t3 ? "hold" : u < T.t4 ? "shrink" : u < T.t5 ? "reveal" : "deck";
+			if (mobile) {
+				stageEl.dataset.phase = u < T.t2 ? "film" : u < T.t3 ? "hold" : u < T.t4 ? "shrink" : u < T.t5 ? "reveal" : "deck";
+				stageEl.dataset.tail = st.clipT >= .92 ? "1" : "0";
+			}
 			if (st.ui !== ui) {
 				ui = st.ui;
 				stageEl.dataset.ui = ui;
@@ -1107,6 +1115,8 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 			]) stageEl.style.removeProperty(k);
 			delete stageEl.dataset.short;
 			delete stageEl.dataset.phase;
+			delete stageEl.dataset.tail;
+			delete stageEl.dataset.phase;
 			api.current.jump = () => {};
 			api.current.step = () => {};
 			api.current.card = () => {};
@@ -1191,41 +1201,53 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 						/* @__PURE__ */ jsxs("div", {
 							ref: media,
 							className: "scrub-media",
-							children: [/* @__PURE__ */ jsxs("picture", {
-								className: "scrub-poster",
-								children: [
-									/* @__PURE__ */ jsx("source", {
-										media: MOBILE_QUERY,
-										type: "image/avif",
-										srcSet: `${BASE}/poster-m.avif`
-									}),
-									/* @__PURE__ */ jsx("source", {
-										media: MOBILE_QUERY,
-										type: "image/webp",
-										srcSet: `${BASE}/poster-m.webp`
-									}),
-									/* @__PURE__ */ jsx("source", {
-										type: "image/avif",
-										srcSet: `${BASE}/poster-1280.avif 1280w, ${BASE}/poster-1600.avif 1600w`,
-										sizes: "100vw"
-									}),
-									/* @__PURE__ */ jsx("img", {
-										src: `${BASE}/poster-1600.webp`,
-										srcSet: `${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`,
-										sizes: "100vw",
-										width: "1600",
-										height: "900",
-										alt: "Vista de Medellín desde la ladera de la Comuna 13",
-										loading: "eager",
-										fetchPriority: "high",
-										decoding: "async"
-									})
-								]
-							}), animated && /* @__PURE__ */ jsx("canvas", {
-								ref: canvas,
-								className: "scrub-canvas",
-								"aria-hidden": "true"
-							})]
+							children: [
+								/* @__PURE__ */ jsxs("picture", {
+									className: "scrub-poster",
+									children: [
+										/* @__PURE__ */ jsx("source", {
+											media: MOBILE_QUERY,
+											type: "image/avif",
+											srcSet: `${BASE}/poster-m.avif`
+										}),
+										/* @__PURE__ */ jsx("source", {
+											media: MOBILE_QUERY,
+											type: "image/webp",
+											srcSet: `${BASE}/poster-m.webp`
+										}),
+										/* @__PURE__ */ jsx("source", {
+											type: "image/avif",
+											srcSet: `${BASE}/poster-1280.avif 1280w, ${BASE}/poster-1600.avif 1600w`,
+											sizes: "100vw"
+										}),
+										/* @__PURE__ */ jsx("img", {
+											src: `${BASE}/poster-1600.webp`,
+											srcSet: `${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`,
+											sizes: "100vw",
+											width: "1600",
+											height: "900",
+											alt: "Vista de Medellín desde la ladera de la Comuna 13",
+											loading: "eager",
+											fetchPriority: "high",
+											decoding: "async"
+										})
+									]
+								}),
+								animated && /* @__PURE__ */ jsx("canvas", {
+									ref: canvas,
+									className: "scrub-canvas",
+									"aria-hidden": "true"
+								}),
+								animated && mobile && /* @__PURE__ */ jsx("img", {
+									className: "scrub-final-frame",
+									src: `${BASE}/d16/121.webp`,
+									width: "1600",
+									height: "900",
+									alt: "",
+									"aria-hidden": "true",
+									decoding: "async"
+								})
+							]
 						}),
 						/* @__PURE__ */ jsxs("div", {
 							ref: titleRef,
@@ -1319,6 +1341,35 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 												})]
 											}, id);
 										}),
+										animated && mobile && (() => {
+											const c = cards[0], tx = copy(c.slug);
+											return /* @__PURE__ */ jsxs("div", {
+												className: "mobile-deck-info",
+												children: [
+													/* @__PURE__ */ jsxs("p", {
+														className: "scrub-count",
+														children: ["01 / ", 12]
+													}),
+													/* @__PURE__ */ jsx("p", {
+														className: "mobile-deck-kicker",
+														children: "Elige tu próximo recuerdo"
+													}),
+													/* @__PURE__ */ jsx("h2", { children: c.name }),
+													/* @__PURE__ */ jsxs("p", { children: [
+														/* @__PURE__ */ jsxs("b", { children: [tx.emocion, ":"] }),
+														" ",
+														tx.frase
+													] }),
+													/* @__PURE__ */ jsxs(Link, {
+														to: `/experiencias/${c.slug}`,
+														children: ["Ver experiencia ", /* @__PURE__ */ jsx("span", {
+															"aria-hidden": "true",
+															children: "↗"
+														})]
+													})
+												]
+											});
+										})(),
 										deckLinks && cards.map((c, i) => {
 											const tx = copy(c.slug);
 											return /* @__PURE__ */ jsxs("div", {

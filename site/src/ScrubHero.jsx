@@ -416,7 +416,10 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
       if (Math.abs(target - q) < SETTLE) { q = target; moving = false; }
       const u = q * T.total;
       const st = stateAt(u, T, mobile);
-      if (mobile) stageEl.dataset.phase = u < T.t2 ? 'film' : u < T.t3 ? 'hold' : u < T.t4 ? 'shrink' : u < T.t5 ? 'reveal' : 'deck';
+      if (mobile) {
+        stageEl.dataset.phase = u < T.t2 ? 'film' : u < T.t3 ? 'hold' : u < T.t4 ? 'shrink' : u < T.t5 ? 'reveal' : 'deck';
+        stageEl.dataset.tail = st.clipT >= 0.92 ? '1' : '0';
+      }
       if (st.ui !== ui) { ui = st.ui; stageEl.dataset.ui = ui; }
       let newCap = '';
       if (st.ui === 'cards') newCap = 'cards';
@@ -533,6 +536,8 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
       for (const k of ['--bw', '--bh', '--stage-h', '--m-t1', '--m-t2', '--m-micro', '--deck-top', '--deck-bottom']) stageEl.style.removeProperty(k);
       delete stageEl.dataset.short;
       delete stageEl.dataset.phase;
+      delete stageEl.dataset.tail;
+      delete stageEl.dataset.phase;
       api.current.jump = () => {}; api.current.step = () => {}; api.current.card = () => {};
     };
   }, [ready, mode, mobile]);
@@ -587,6 +592,7 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
               <img src={`${BASE}/poster-1600.webp`} srcSet={`${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`} sizes="100vw" width="1600" height="900" alt="Vista de Medellín desde la ladera de la Comuna 13" loading="eager" fetchPriority="high" decoding="async" />
             </picture>
             {animated && <canvas ref={canvas} className="scrub-canvas" aria-hidden="true" />}
+            {animated && mobile && <img className="scrub-final-frame" src={`${BASE}/d16/121.webp`} width="1600" height="900" alt="" aria-hidden="true" decoding="async" />}
           </div>
           <div ref={titleRef} className="scrub-title">
             <p className="eyebrow scrub-lema" data-fx="0">{t.lema}</p>
@@ -619,6 +625,18 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
                     </div>
                   );
                 })}
+                {animated && mobile && (() => {
+                  const c = cards[0], tx = copy(c.slug);
+                  return (
+                    <div className="mobile-deck-info">
+                      <p className="scrub-count">01 / {N}</p>
+                      <p className="mobile-deck-kicker">Elige tu próximo recuerdo</p>
+                      <h2>{c.name}</h2>
+                      <p><b>{tx.emocion}:</b> {tx.frase}</p>
+                      <Link to={`/experiencias/${c.slug}`}>Ver experiencia <span aria-hidden="true">↗</span></Link>
+                    </div>
+                  );
+                })()}
                 {deckLinks && cards.map((c, i) => {
                   const tx = copy(c.slug);
                   return (

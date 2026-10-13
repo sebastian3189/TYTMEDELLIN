@@ -41,8 +41,10 @@ export function stateAt(u, T, mobile) {
   if (u >= T.t0) ui = 'flip';
   if (u >= T.t1) ui = 'clip';
   if (u >= T.t3) ui = 'shrink';
-  if (u >= T.t3 + 0.5 * (T.t4 - T.t3)) ui = 'deck'; // las acciones vuelven a media contracción (sin hueco en la banda)
-  if (u >= T.t4) ui = mobile ? 'deck' : 'fan';
+  if (mobile && u >= T.t4) ui = 'reveal';
+  if (mobile && u >= T.t5) ui = 'deck';
+  if (!mobile && u >= T.t3 + 0.5 * (T.t4 - T.t3)) ui = 'deck'; // escritorio: las acciones vuelven a media contracción
+  if (!mobile && u >= T.t4) ui = 'fan';
   if (!mobile && u >= T.t5) ui = 'cards';
 
   // w: 0 = carta de la baraja, 1 = pantalla completa.
@@ -136,7 +138,11 @@ export function cardPlace(d, st, i, out) {
   };
   // Fan en columna (solo escritorio)
   // Móvil: solo la carta superior (el marco) hace el Flip; las demás se desvanecen al empezar y no asoman bajo él.
-  if (mobile) return Object.assign(out, dk, { o: dk.o * (1 - smooth(st.w / 0.2)) * (st.clipT === 1 ? st.fanT : 1) });
+  if (mobile) return Object.assign(out, dk, {
+    o: dk.o * (1 - smooth(st.w / 0.2)) * (st.clipT === 1 ? st.fanT : 1),
+    // Al terminar la película la primera experiencia queda arriba y coincide con la información visible.
+    z: st.clipT === 1 ? 10 + N - i : dk.z,
+  });
   const dd = i - st.f, ad = Math.abs(dd), sg = Math.sign(dd);
   const near = Math.min(ad, 1), far = Math.max(0, ad - 1);
   const sc = (1 - 0.6 * smooth(near)) * (1 - 0.06 * far);
