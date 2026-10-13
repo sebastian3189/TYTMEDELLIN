@@ -6,6 +6,7 @@ const findings = [];
 const soft = (fn) => (...a) => { try { return fn(...a); } catch (e) { findings.push(String(e.message).split(String.fromCharCode(10))[0].slice(0, 260) + ' @' + ((String(e.stack).match(/check-scrub-hero\.mjs:(\d+)/g) || []).map((m) => m.split(':')[1]).find((n) => Number(n) > 10) || '?')); } };
 const assert = Object.assign(soft(strict), Object.fromEntries(['ok', 'equal', 'match', 'notEqual', 'deepEqual'].map((k) => [k, soft(strict[k])])));
 import path from 'node:path';
+import { timeline } from '../src/baraja-geometria.js';
 
 // Requiere `npm run build` + `npx vite preview --port <libre>` y TYT_TEST_URL (p. ej. http://127.0.0.1:4190).
 // Contrato: Spec 03 §H1 (baraja), §E y §G (clip), Spec 04. Sustituye a la prueba de la revisión 2.
@@ -26,7 +27,7 @@ const hero = (page) => page.locator('.scrub-hero');
 const attr = (page, name) => hero(page).getAttribute(`data-${name}`);
 // Límites del recorrido (svh), idénticos a timeline() de baraja-geometria.js.
 const TD = { t0: 30, t1: 80, t2: 245, t3: 260, t4: 305, t5: 335, t6: 743, total: 767 };
-const TM = { t0: 24, t1: 64, t2: 204, t3: 216, t4: 252, total: 264 };
+const TM = timeline(true);
 const cardU = (i) => TD.t5 + 34 * i + 34 * 0.2;
 const SLUGS = ['city-tour-comuna-13', 'guatape-piedra-del-penol', 'tour-nocturno-medellin', 'vuelta-a-oriente', 'tour-del-cafe-medellin', 'hacienda-napoles', 'salto-del-buey', 'santa-fe-de-antioquia', 'jardin-antioquia', 'tour-de-compras', 'tour-miradores', 'traslados-aeropuerto-jmc'];
 const NAMES = ['City Tour & Comuna 13', 'Guatapé & Piedra del Peñol', 'Noche en Medellín', 'Vuelta a Oriente', 'Tour del Café', 'Hacienda Nápoles', 'Salto del Buey', 'Santa Fe de Antioquia', 'Jardín', 'Tour de Compras', 'Tour Miradores', 'Traslados Aeropuerto JMC'];

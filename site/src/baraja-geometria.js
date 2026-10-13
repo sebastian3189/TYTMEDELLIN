@@ -18,8 +18,9 @@ export const smooth = (t) => { t = clamp(t); return t * t * (3 - 2 * t); };
 /** Límites del recorrido en svh. Fase del clip: 165 svh escritorio / 140 svh móvil (ajuste aprobado, se conserva). */
 export function timeline(mobile) {
   if (mobile) {
-    const t0 = 24, t1 = t0 + 40, t2 = t1 + 140, t3 = t2 + 12, t4 = t3 + 36;
-    return { t0, t1, t2, t3, t4, t5: t4, t6: t4, total: t4 + 12, clip: 140 };
+    // CONSTRUIR, Spec 03 §H1/§I: pausa final → postal → revelado separados; cierre en flujo normal.
+    const t0 = 24, t1 = t0 + 40, t2 = t1 + 140, t3 = t2 + 24, t4 = t3 + 48, t5 = t4 + 24;
+    return { t0, t1, t2, t3, t4, t5, t6: t5, total: t5 + 12, clip: 140 };
   }
   const t0 = 30, t1 = t0 + 50, t2 = t1 + 165, t3 = t2 + 15, t4 = t3 + 45, t5 = t4 + 30, t6 = t5 + CARD_VH * N;
   return { t0, t1, t2, t3, t4, t5, t6, total: t6 + 24, clip: 165 };
@@ -54,11 +55,11 @@ export function stateAt(u, T, mobile) {
   let D;
   if (u < T.t1) D = 1 - smooth((u - T.t0) / (0.45 * (T.t1 - T.t0)));
   else if (u < T.t3) D = 0;
-  else if (u < T.t4) D = smooth((u - T.t3 - 0.3 * (T.t4 - T.t3)) / (0.7 * (T.t4 - T.t3)));
-  else D = mobile ? 1 : 1 - smooth((u - T.t4) / (0.35 * (T.t5 - T.t4)));
+  else if (u < T.t4) D = mobile ? 0 : smooth((u - T.t3 - 0.3 * (T.t4 - T.t3)) / (0.7 * (T.t4 - T.t3)));
+  else D = mobile ? smooth((u - T.t4) / (T.t5 - T.t4)) : 1 - smooth((u - T.t4) / (0.35 * (T.t5 - T.t4)));
 
   const clipT = clamp((u - T.t1) / (T.t2 - T.t1));
-  const fanT = mobile ? 0 : smooth((u - T.t4) / (T.t5 - T.t4));
+  const fanT = smooth((u - T.t4) / (T.t5 - T.t4));
   // Foco: cada carta tiene una meseta (40 %) y luego pasa a la siguiente.
   let f = 0;
   if (!mobile && u >= T.t5) {
@@ -135,7 +136,7 @@ export function cardPlace(d, st, i, out) {
   };
   // Fan en columna (solo escritorio)
   // Móvil: solo la carta superior (el marco) hace el Flip; las demás se desvanecen al empezar y no asoman bajo él.
-  if (mobile) return Object.assign(out, dk, { o: dk.o * (1 - smooth(st.w / 0.2)) });
+  if (mobile) return Object.assign(out, dk, { o: dk.o * (1 - smooth(st.w / 0.2)) * (st.clipT === 1 ? st.fanT : 1) });
   const dd = i - st.f, ad = Math.abs(dd), sg = Math.sign(dd);
   const near = Math.min(ad, 1), far = Math.max(0, ad - 1);
   const sc = (1 - 0.6 * smooth(near)) * (1 - 0.06 * far);

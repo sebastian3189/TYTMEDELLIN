@@ -18,11 +18,13 @@ rellena con el propio fotograma reflejado y desenfocado con transición suave, s
 variante 1600x900 q74 en d16/ para ventanas <=1600 px (>1600 conserva d/ 1920x1080). Con TYT_FRAMES_ONLY=m,d16 solo se regeneran esas
 carpetas (no se tocan póster, d/ ni el resto) y se actualiza inicio-frames.json.
 Budgets: desktop <= 11 MB, mobile <= 5.5 MB; per frame <=170 KB / <=80 KB.
+Correction 2026-10-13 (Spec 03 H1/I, CONSTRUIR): mobile tail padding uses solid
+#F4F4F4 paper instead of the reflected/blurred fill described above. Source pixels
+and the existing portrait camera window are preserved; desktop is unchanged.
 """
 import base64, io, json, os, shutil, subprocess, sys, tempfile
-import numpy as np
 from pathlib import Path
-from PIL import Image, ImageFilter, ImageOps
+from PIL import Image, ImageOps
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = Path(os.environ['TYT_FRAMES_OUT']) if os.environ.get('TYT_FRAMES_OUT') else ROOT / 'site/public/media/inicio'
@@ -48,8 +50,7 @@ FRAME_D16 = (1600, 900)
 POSTER_M = (648, 900)
 # Encuadre móvil por fotograma (tramo final): el grupo ocupa ~x 320..1480 del fotograma 1920x1080; la ventana 18:25 pasa de 778 a 1300 px.
 TAIL_START, WIN_START, WIN_END, CX_START, CX_END = 96, 778.0, 1300.0, 893.0, 900.0
-BLUR_RADIUS, FEATHER = 34, 28
-TOP_STRIP = 120  # filas superiores (edificio/cipreses, sin personas) que se reflejan en mosaico para rellenar arriba
+MOBILE_PAPER = (244, 244, 244)  # Spec 03 §I1: --surface-2; fondo sólido, sin reflejos ni desenfoque
 FOOT_MARGIN = 60  # px de suelo que se conservan bajo los pies del grupo en el último fotograma (el relleno se carga arriba, no bajo los pies)
 PHOTO_D, PHOTO_M = (1920, 2560), (1080, 1440)
 AMBIENT = (64, 48)
@@ -104,33 +105,16 @@ def mobile_window(n, total):
     return cx - width / 2, cy - height / 2, width, height
 
 def mobile_frame(img, n, total):
-    """Recorte móvil 18:25 por fotograma. Fuera del fotograma: reflejo desenfocado con fundido suave (sin deformar)."""
+    """Recorte móvil 18:25: imagen nítida sobre papel sólido fuera de la fuente (Spec 03 §H1/§I)."""
     x0, y0, w, h = mobile_window(n, total)
     x0, y0 = round(x0), round(y0); w, h = round(w), round(h)
     sw, sh = img.size
     pl, pr, pt, pb = max(0, -x0), max(0, x0 + w - sw), max(0, -y0), max(0, y0 + h - sh)
     if not (pl or pr or pt or pb):
         return img.crop((x0, y0, x0 + w, y0 + h)).resize(FRAME_M, Image.Resampling.LANCZOS)
-    arr = np.asarray(img)
-    if pt:  # arriba: mosaico reflejado de la franja superior (un reflejo completo duplicaría las cabezas del grupo)
-        strip, tiles, got, flip = arr[:TOP_STRIP], [], 0, True
-        while got < pt:
-            tiles.append(strip[::-1] if flip else strip); got += TOP_STRIP; flip = not flip
-        arr = np.concatenate([*tiles[::-1], arr], axis=0)[got - pt:]
-    if pb: arr = np.concatenate([arr, np.repeat(arr[-1:], pb, axis=0)], axis=0)  # abajo: suelo, sin reflejar los zapatos
-    if pl or pr: arr = np.pad(arr, ((0, 0), (pl, pr), (0, 0)), mode='edge')
-    padded = Image.fromarray(arr)
-    blurred = padded.filter(ImageFilter.GaussianBlur(BLUR_RADIUS))
-    mask = Image.new('L', padded.size, 0)
-    mask.paste(255, (max(0, pl - FEATHER), max(0, pt - FEATHER), padded.width - max(0, pr - FEATHER), padded.height - max(0, pb - FEATHER)))
-    mask = mask.filter(ImageFilter.GaussianBlur(FEATHER / 2))
-    mixed = Image.composite(padded, blurred, mask)
-    if pt:  # el relleno superior se funde a papel claro (#F4F4F4, --surface-2) hacia arriba: sin bandas de cipreses repetidos ni cabezas duplicadas
-        k = np.clip((pt - np.arange(padded.height, dtype=float)) / pt, 0, 1)[:, None, None]
-        k = (k * k * (3 - 2 * k)) ** 1.0
-        arr2 = np.asarray(mixed).astype(float)
-        mixed = Image.fromarray(np.clip((1 - k) * arr2 + k * np.array([244.0, 244.0, 244.0]), 0, 255).astype(np.uint8))
-    return mixed.crop((x0 + pl, y0 + pt, x0 + pl + w, y0 + pt + h)).resize(FRAME_M, Image.Resampling.LANCZOS)
+    padded = Image.new('RGB', (sw + pl + pr, sh + pt + pb), MOBILE_PAPER)
+    padded.paste(img, (pl, pt))
+    return padded.crop((x0 + pl, y0 + pt, x0 + pl + w, y0 + pt + h)).resize(FRAME_M, Image.Resampling.LANCZOS)
 
 def encode_mobile(frames, folder, quality, limit):
     folder.mkdir(parents=True, exist_ok=True)
@@ -188,7 +172,7 @@ def main_only(only):
             if (OUT / 'm').exists(): shutil.rmtree(OUT / 'm')
             encode_mobile(frames, OUT / 'm', 82, FRAME_MAX_M)
             manifest['mobile'].update({'count': len(frames), 'width': FRAME_M[0], 'height': FRAME_M[1], 'quality': 82,
-                                       'tail': {'from': TAIL_START, 'window': [WIN_START, WIN_END]}})
+                                       'tail': {'from': TAIL_START, 'window': [WIN_START, WIN_END], 'background': '#F4F4F4'}})
             print('móvil total', size_of(OUT / 'm'), 'B')
         if 'd16' in only:
             if (OUT / 'd16').exists(): shutil.rmtree(OUT / 'd16')

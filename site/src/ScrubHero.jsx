@@ -343,7 +343,7 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
       // Marco del clip (Flip): transform + clip-path de la capa de tamaño natural; la carta superior y el lienzo son la misma capa.
       frameWindow(dims, st.w, fw);
       const fkey = st.w >= 0.999 ? 'full' : `${fw.tx.toFixed(1)}|${fw.ty.toFixed(1)}|${fw.rot.toFixed(2)}|${fw.s.toFixed(4)}|${fw.ix.toFixed(1)}|${fw.iy.toFixed(1)}|${fw.r.toFixed(2)}`;
-      const fo = mobile ? 1 : 1 - smooth(clamp(st.fanT * 2));
+      const fo = mobile ? 1 - st.fanT : 1 - smooth(clamp(st.fanT * 2));
       const mkey = `${fkey}|${fo.toFixed(3)}`;
       if (lastFx.media !== mkey) {
         lastFx.media = mkey;
@@ -416,6 +416,7 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
       if (Math.abs(target - q) < SETTLE) { q = target; moving = false; }
       const u = q * T.total;
       const st = stateAt(u, T, mobile);
+      if (mobile) stageEl.dataset.phase = u < T.t2 ? 'film' : u < T.t3 ? 'hold' : u < T.t4 ? 'shrink' : u < T.t5 ? 'reveal' : 'deck';
       if (st.ui !== ui) { ui = st.ui; stageEl.dataset.ui = ui; }
       let newCap = '';
       if (st.ui === 'cards') newCap = 'cards';
@@ -531,6 +532,7 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
       stageEl.dataset.ui = 'deck'; stageEl.dataset.cap = ''; stageEl.dataset.ch = '1'; stageEl.dataset.card = '-1';
       for (const k of ['--bw', '--bh', '--stage-h', '--m-t1', '--m-t2', '--m-micro', '--deck-top', '--deck-bottom']) stageEl.style.removeProperty(k);
       delete stageEl.dataset.short;
+      delete stageEl.dataset.phase;
       api.current.jump = () => {}; api.current.step = () => {}; api.current.card = () => {};
     };
   }, [ready, mode, mobile]);
