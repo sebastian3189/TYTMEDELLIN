@@ -39,13 +39,13 @@ html[data-theme="dark"] .th-mq{color:rgba(245,245,240,.06)}
 /* La mano: región grande (≥60 % del ancho y ≥70 % del alto útil) con las fotos oficiales */
 .th-hand{grid-area:2/2;position:relative;z-index:1;min-height:0;outline-offset:6px;touch-action:pan-y;clip-path:inset(0)}
 .th-group{position:absolute;inset:0}
-.th-photo{position:absolute;left:0;top:0;display:block;max-width:none;border-radius:20px;object-fit:cover;background:var(--surface-2);box-shadow:var(--shadow-3);opacity:0;will-change:transform,opacity;cursor:pointer;user-select:none;-webkit-user-drag:none}
+.th-photo{position:absolute;left:0;top:0;display:block;max-width:none;border-radius:20px;object-fit:cover;background:var(--surface-1);box-shadow:var(--shadow-3);opacity:0;will-change:transform,opacity;cursor:pointer;user-select:none;-webkit-user-drag:none}
 .th-hand[data-flip=true] .th-photo{transition:transform 600ms var(--ease-in-out-strong),opacity 200ms ease}
 @media(hover:hover) and (pointer:fine){.th-photo:hover{box-shadow:var(--shadow-2)}}
 .th-foot{grid-area:3/2;position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:44px}
 .th-cap{margin:0;font:600 13px/1.3 var(--font);letter-spacing:.06em;text-transform:uppercase;color:var(--text)}
 .th-arrows{display:flex;gap:12px}
-.th-arrows button{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1.5px solid var(--text-strong);border-radius:50%;background:var(--surface);color:var(--text-strong)}
+.th-arrows button{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1.5px solid var(--text-strong);border-radius:50%;background:var(--surface-2);color:var(--text-strong)}
 .th-arrows button:active{transform:scale(.97)}
 
 /* Panel */
@@ -76,9 +76,9 @@ html[data-theme="dark"] .th-mq{color:rgba(245,245,240,.06)}
  .th-group-tabs{display:flex;flex-direction:row;align-items:center;gap:10px;flex:none}
  .th-group-label{display:none}
  .th-index [role=tablist]{flex-direction:row}
- .th-index [role=tab]{width:auto;min-height:44px;padding:6px 14px;border:1.5px solid var(--line-strong);border-radius:999px;background:var(--surface-2);white-space:nowrap;font:600 15px/1 var(--font);scroll-snap-align:center;flex:none}
+ .th-index [role=tab]{width:auto;min-height:44px;padding:6px 14px;border:1.5px solid var(--line-strong);border-radius:999px;background:var(--surface-1);white-space:nowrap;font:600 15px/1 var(--font);scroll-snap-align:center;flex:none}
  .th-index [role=tab] span{display:none}
- .th-index [role=tab][aria-selected=true]{border-color:var(--text-strong);box-shadow:inset 0 0 0 1px var(--text-strong);background:var(--surface)}
+ .th-index [role=tab][aria-selected=true]{border-color:var(--text-strong);box-shadow:inset 0 0 0 1px var(--text-strong);background:var(--surface-2)}
  .th-title-host{grid-area:3/1;min-height:0;align-items:center}
  .th-hand{grid-area:4/1}
  .th-foot{grid-area:5/1;min-height:40px}
@@ -98,8 +98,8 @@ html[data-theme="dark"] .th-mq{color:rgba(245,245,240,.06)}
 .th-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,2.4vw,32px);margin:32px 0 0;padding:0;list-style:none}
 @media(max-width:1099px){.th-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:699px){.th-list{grid-template-columns:minmax(0,1fr)}}
-.th-card{display:block;overflow:hidden;border:1px solid var(--line);border-radius:20px;background:var(--surface);box-shadow:var(--shadow-1);color:var(--text-strong)}
-.th-card-img{display:block;aspect-ratio:4/5;overflow:hidden;background:var(--surface-2)}
+.th-card{display:block;overflow:hidden;border:1px solid var(--line);border-radius:20px;background:var(--surface-2);box-shadow:var(--shadow-1);color:var(--text-strong)}
+.th-card-img{display:block;aspect-ratio:4/5;overflow:hidden;background:var(--surface-1)}
 .th-card-img img{display:block;width:100%;height:100%;object-fit:cover}
 .th-card-count{display:block;margin:18px 22px 0;font:600 13px/1.3 var(--font);letter-spacing:.06em;text-transform:uppercase;color:var(--text)}
 .th-card h3{margin:10px 22px 8px}
@@ -125,3 +125,8 @@ html[data-theme="dark"] .th-photo{box-shadow:0 18px 40px rgba(0,0,0,.45)}
  .th-dots button[aria-current=true] i{background:var(--text-strong);transform:scale(1.5)}
 }
 @media(prefers-reduced-motion:reduce){.th-dots i{transition:none}}
+
+/* Lista estática: insignia de Google (decorativa, la tarjeta ya es un enlace) sobre la parte baja de la foto */
+.th-card-img{position:relative}
+.th-card-badge{left:12px;bottom:12px;top:auto}
+@media(max-width:699px){.th-card-badge{min-height:26px;padding:3px 10px;font-size:12px}}

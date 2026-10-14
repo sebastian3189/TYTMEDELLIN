@@ -1,6 +1,6 @@
-import { A as Socials, F as whatsapp, M as jsx, N as jsxs, P as company, c as Eyebrow, d as QuoteSection, h as Arrow, i as values, j as Fragment, l as PageTitle, n as photos, s as Button, u as Picture, v as Manifesto } from "../entry-server.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-DFRdWTRZ.js";
-import { t as Reviews } from "./Reviews-D2E3dROS.js";
+import { F as company, I as whatsapp, M as Fragment, N as jsx, P as jsxs, c as Eyebrow, d as QuoteSection, h as Arrow, i as values, j as Socials, l as PageTitle, n as photos, s as Button, u as Picture, v as Manifesto } from "../entry-server.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-DAxK9jB-.js";
+import { t as Reviews } from "./Reviews-B2hlDlCm.js";
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 //#region src/Contact.jsx

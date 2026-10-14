@@ -29,10 +29,10 @@ html[data-theme="dark"] .ft-book{--bk-cover:#101311;--bk-page:#1F2421;--bk-back:
 .bk-ctl{display:flex;align-items:center;gap:20px;margin-left:auto}
 .ft-book .ft-count{margin:0;font:600 13px/1 var(--font,Inter,Arial,sans-serif);letter-spacing:.12em;font-variant-numeric:tabular-nums;color:var(--text)}
 .ft-book .ft-nav{display:flex;gap:12px;margin:0}
-.ft-book .ft-nav button{width:44px;height:44px;padding:0;border:1.5px solid var(--text-strong);border-radius:50%;background:var(--surface);color:var(--text-strong);font:600 18px/1 var(--font,Inter,Arial,sans-serif)}
+.ft-book .ft-nav button{width:44px;height:44px;padding:0;border:1.5px solid var(--text-strong);border-radius:50%;background:var(--surface-2);color:var(--text-strong);font:600 18px/1 var(--font,Inter,Arial,sans-serif)}
 .ft-book .ft-nav button:disabled{opacity:1;color:var(--text-muted);border-color:var(--line-strong);cursor:default}
 html[data-theme="dark"] .ft-book .ft-nav button:disabled{border-color:rgba(245,245,240,.24)}
-@media(hover:hover) and (pointer:fine){.ft-book .ft-nav button:not(:disabled):hover,.ft-book .ft-thumb:hover{background:var(--surface-2)}}
+@media(hover:hover) and (pointer:fine){.ft-book .ft-nav button:not(:disabled):hover,.ft-book .ft-thumb:hover{background:var(--surface-1)}}
 
 /* Hoja que gira (decorativa) */
 .ft-turn-window{position:absolute;inset:0;z-index:3;perspective:var(--bk-persp);perspective-origin:50% 50%;overflow:hidden;pointer-events:none}

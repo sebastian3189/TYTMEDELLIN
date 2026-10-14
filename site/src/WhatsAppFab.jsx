@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { whatsapp } from './company';
+import { language } from './i18n';
 import { SocialIcon } from './Socials';
 import './fab.css';
 
@@ -19,7 +20,7 @@ export default function WhatsAppFab() {
     const check = (now) => {
       raf = 0;
       if (now < until) raf = requestAnimationFrame(check); // tras cada scroll se sigue midiendo 500 ms (contenido que se maqueta o anima al llegar)
-      if (now - lastRun < 120) return; // como mucho 8 muestreos por segundo: el scroll del resto de la página no paga este coste
+      if (now - lastRun < 50) return; // como mucho 20 muestreos por segundo: el scroll del resto de la página no paga este coste
       lastRun = now;
       let blocked = Boolean(document.querySelector('.menu-open, dialog[open]'));
       if (!blocked) {
@@ -37,9 +38,10 @@ export default function WhatsAppFab() {
     measureBox();
     window.addEventListener('scroll', schedule, { passive: true }); window.addEventListener('resize', onResize);
     const mo = new MutationObserver(schedule); mo.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class', 'open'] });
+    const pulse = setInterval(() => { if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; el.classList.add('wa-pulse'); setTimeout(() => el.classList.remove('wa-pulse'), 1900); }, 12000); // un pulso suave cada ~12 s (los dos primeros los hace el CSS al cargar)
     const timer = setInterval(schedule, 800); // contenido que se mueve solo (baraja, carruseles)
     schedule();
-    return () => { window.removeEventListener('scroll', schedule); window.removeEventListener('resize', onResize); mo.disconnect(); clearInterval(timer); cancelAnimationFrame(raf); };
+    return () => { window.removeEventListener('scroll', schedule); window.removeEventListener('resize', onResize); mo.disconnect(); clearInterval(timer); clearInterval(pulse); cancelAnimationFrame(raf); };
   }, []);
-  return <a ref={ref} className="wa-fab" data-hidden="false" href={whatsapp()} target="_blank" rel="noopener noreferrer" aria-label="Escribir por WhatsApp"><SocialIcon id="whatsapp" size={28} /></a>;
+  return <a ref={ref} className="wa-fab" data-hidden="false" href={whatsapp()} target="_blank" rel="noopener noreferrer" aria-label="Escribir por WhatsApp"><SocialIcon id="whatsapp" size={32} /><span className="wa-label" aria-hidden="true">{language() === 'en' ? "Let's talk?" : '¿Hablamos?'}</span></a>;
 }

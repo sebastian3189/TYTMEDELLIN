@@ -1,6 +1,6 @@
-import { C as useMedia, E as textoFase, F as whatsapp, I as language, L as t, M as jsx, N as jsxs, P as company, S as useLightMotion, T as inicioTextos, c as Eyebrow, h as Arrow, j as Fragment, k as SocialIcon, n as photos, r as tours, s as Button, t as articles, u as Picture, w as CHAPTERS } from "../entry-server.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-BCE90JCs.js";
-import { t as Reviews } from "./Reviews-D2E3dROS.js";
+import { A as SocialIcon, C as useMedia, E as textoFase, F as company, I as whatsapp, L as language, M as Fragment, N as jsx, P as jsxs, R as t, S as useLightMotion, T as inicioTextos, c as Eyebrow, h as Arrow, m as GoogleBadgeStatic, n as photos, r as tours, s as Button, t as articles, u as Picture, w as CHAPTERS } from "../entry-server.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-CyzLLjUo.js";
+import { t as Reviews } from "./Reviews-B2hlDlCm.js";
 /* empty css                       */
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -1381,7 +1381,7 @@ function TravelHand() {
 	useLayoutEffect(() => {
 		if (!ready || !animated) return void 0;
 		const trackEl = track.current, stageEl = stage.current, hand = handEl.current, mq = mqEl.current, deck = deckEl.current;
-		const small = window.matchMedia(SMALL).matches, wide = layout === "wide", seg = wide ? SEG.wide : SEG.compact, shrink = wide ? 1 : .82;
+		const small = window.matchMedia(SMALL).matches, wide = layout === "wide", seg = wide ? SEG.wide : SEG.compact, shrink = wide ? 1 : innerWidth < 768 ? .62 : .82;
 		const total = RELAY + N * seg + EXIT;
 		let raf = 0, visible = true, destroyed = false, q = null, lastT = 0, stageTop = 92, span = 1, RW = 0, RH = 0, sw = 0, sh = 0;
 		let groupCache = null, trackTop = 0;
@@ -1623,9 +1623,9 @@ function TravelHand() {
 				className: "th-card",
 				to: `/experiencias/${e.slug}`,
 				children: [
-					/* @__PURE__ */ jsx("span", {
+					/* @__PURE__ */ jsxs("span", {
 						className: "th-card-img",
-						children: /* @__PURE__ */ jsx("img", {
+						children: [/* @__PURE__ */ jsx(GoogleBadgeStatic, { className: "th-card-badge" }), /* @__PURE__ */ jsx("img", {
 							src: e.photos[0].small,
 							srcSet: e.photos[0].srcSet,
 							sizes: "(max-width: 699px) 92vw, (max-width: 1099px) 46vw, 30vw",
@@ -1634,7 +1634,7 @@ function TravelHand() {
 							alt: "",
 							loading: "lazy",
 							decoding: "async"
-						})
+						})]
 					}),
 					/* @__PURE__ */ jsxs("span", {
 						className: "th-card-count",

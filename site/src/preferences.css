@@ -1,17 +1,17 @@
 .site-preferences{display:flex;align-items:center;gap:6px;margin-left:auto}
-.site-preferences button,.site-preferences a{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 10px;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface);color:var(--text-strong);font:600 13px var(--font)}
+.site-preferences button,.site-preferences a{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 10px;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface-2);color:var(--text-strong);font:600 13px var(--font)}
 @media(min-width:1100px){.site-preferences{order:3;margin-left:16px}.site-header{gap:12px}.site-header nav{gap:clamp(10px,1.3vw,24px)}.header-socials{display:none}}
 @media(max-width:1099px){.site-header{gap:10px}.menu-toggle{margin-left:0}.site-preferences{gap:6px}}
-/* Modo oscuro (Spec 03 §J3). Los tokens se redefinen también en .scrub-hero, que declara los suyos en claro. */
-html[data-theme="dark"],html[data-theme="dark"] .scrub-hero{color-scheme:dark;--bg:#171A18;--surface:#212623;--surface-2:#2A302C;--text-strong:#F5F5F0;--text:#DEDFD8;--text-muted:#BDC3B9;--focus:#FFAD60;--line:rgba(245,245,240,.14);--line-strong:#818C82;--danger:#FFA593;--success:#9ADB9E;--on-brand:#1E201D;--shadow-1:0 4px 16px #0003;--shadow-2:0 12px 32px #0005;--shadow-3:0 20px 60px #0006}
+/* Modo oscuro (Spec 03 §J3 + §I.2): tokens por escala; `.tone-dark` aplica los mismos al pie, que es oscuro en ambos modos. */
+html[data-theme="dark"],.tone-dark{color-scheme:dark;--page:var(--d-100);--surface-sunken:var(--d-0);--surface-1:var(--d-200);--surface-2:var(--d-300);--surface-3:var(--d-400);--border-subtle:rgba(245,245,240,.10);--border-strong:var(--d-700);--text-strong:var(--d-1000);--text-body:var(--d-900);--text-muted:var(--d-800);--overlay:rgba(8,9,8,.64);--glass-bg:rgba(255,255,255,.06);--glass-border:rgba(255,255,255,.12);--glass-hl:rgba(255,255,255,.14);--brand-soft:rgba(255,127,9,.12);--brand-text:var(--o-400);--brand-glow:rgba(255,127,9,.22);--focus:#FFAD60;--danger:#FFA593;--success:#9ADB9E;--shadow-1:inset 0 1px 0 rgba(245,245,240,.06),0 1px 2px rgba(5,6,5,.40),0 6px 16px rgba(5,6,5,.28);--shadow-2:inset 0 1px 0 rgba(245,245,240,.06),0 2px 4px rgba(5,6,5,.40),0 16px 32px rgba(5,6,5,.36);--shadow-3:inset 0 1px 0 rgba(245,245,240,.06),0 4px 8px rgba(5,6,5,.40),0 28px 64px -8px rgba(5,6,5,.55)}
 html[data-theme="dark"],html[data-theme="dark"] body{background:var(--bg)}
 html[data-theme="dark"] .site-header{background:rgba(23,26,24,.97)}
 /* El texto de los botones naranja es --on-brand en ambos modos (website.css). Aquí NO se fuerza ningún color oscuro global: los secundarios,
    transparentes o con fondo oscuro (cabecera, «Planeemos tu viaje», reseñas) conservan el texto claro de --text-strong. */
-html[data-theme="dark"] .button.secondary,html[data-theme="dark"] .vehicle .button,html[data-theme="dark"] .services-list .button,html[data-theme="dark"] .footer-top .button,html[data-theme="dark"] .review-panel .button,html[data-theme="dark"] .about-preview .button,html[data-theme="dark"] .summary .button,html[data-theme="dark"] .article-body .button{background:var(--surface);color:var(--text-strong);border-color:var(--text-strong)}
-html[data-theme="dark"] .button.g-dark{background:var(--surface-2);color:var(--text-strong)}
+html[data-theme="dark"] .button.secondary,html[data-theme="dark"] .vehicle .button,html[data-theme="dark"] .services-list .button,html[data-theme="dark"] .footer-top .button,html[data-theme="dark"] .review-panel .button,html[data-theme="dark"] .about-preview .button,html[data-theme="dark"] .summary .button,html[data-theme="dark"] .article-body .button{background:var(--surface-2);color:var(--text-strong);border-color:var(--text-strong)}
+html[data-theme="dark"] .button.g-dark{background:var(--surface-1);color:var(--text-strong)}
 html[data-theme="dark"] .nav-cta{color:var(--text-strong);border-color:var(--text-strong)}
-@media(hover:hover) and (pointer:fine){html[data-theme="dark"] .button:not(.secondary):not(.g-dark):not(.hero-btn--quote):hover{background:#FF983F}}
+@media(hover:hover) and (pointer:fine){html[data-theme="dark"] .button:not(.secondary):not(.g-dark):not(.hero-btn--quote):hover{background:var(--brand-solid-hover)}}
 html[data-theme="dark"] .td-steps li[data-on] .td-dot{color:var(--bg)}
 html[data-theme="dark"] .lightbox,html[data-theme="dark"] .lightbox::backdrop{background:rgba(23,26,24,.97)}
 /* Aliados: placa clara con el logo en escala de grises original; la placa oscura de ANATO lleva borde para no fundirse con el fondo. */
@@ -24,7 +24,7 @@ html[data-theme="dark"] .tour-card-image img,html[data-theme="dark"] .fan-photo,
 html[data-theme="dark"] button:disabled,html[data-theme="dark"] [aria-disabled="true"]{opacity:1;color:var(--text-muted);border-color:rgba(245,245,240,.24)}
 button:disabled,[aria-disabled="true"]{opacity:1}
 /* Autorrelleno de formularios: el navegador pinta fondo claro; se fuerza el fondo y el texto del tema. */
-html[data-theme="dark"] input:-webkit-autofill,html[data-theme="dark"] input:-webkit-autofill:hover,html[data-theme="dark"] input:-webkit-autofill:focus,html[data-theme="dark"] textarea:-webkit-autofill,html[data-theme="dark"] select:-webkit-autofill{-webkit-text-fill-color:var(--text-strong);caret-color:var(--text-strong);box-shadow:inset 0 0 0 100px var(--surface);transition:background-color 9999s ease-out 0s}
+html[data-theme="dark"] input:-webkit-autofill,html[data-theme="dark"] input:-webkit-autofill:hover,html[data-theme="dark"] input:-webkit-autofill:focus,html[data-theme="dark"] textarea:-webkit-autofill,html[data-theme="dark"] select:-webkit-autofill{-webkit-text-fill-color:var(--text-strong);caret-color:var(--text-strong);box-shadow:inset 0 0 0 100px var(--surface-2);transition:background-color 9999s ease-out 0s}
 html[data-theme="dark"] input,html[data-theme="dark"] textarea,html[data-theme="dark"] select{color-scheme:dark}
 /* Iconos de redes (TikTok usa currentColor): color explícito en ambos modos */
 .socials a{color:var(--text-strong)}

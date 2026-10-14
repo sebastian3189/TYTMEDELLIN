@@ -1,0 +1,47 @@
+/* Pie siempre oscuro (Spec 03 §I.2: escala --d-*, tokens de .tone-dark), con la silueta de Medellín encima. Contraste AA: texto ≥7:1, iconos naranja no textuales. */
+.pie-wrap{position:relative;margin-top:0;background:transparent}
+.skyline{display:block;width:100%;height:clamp(70px,9vw,120px);margin-bottom:-1px}
+.skyline-far{fill:var(--d-0);opacity:.26}
+.skyline-mid{fill:var(--d-0);opacity:.55}
+.skyline-near{fill:var(--d-0)}
+footer.site-footer.tone-dark{margin:0;padding:clamp(40px,6vw,72px) var(--pad) 0;background:var(--d-0);color:var(--d-900);content-visibility:visible;contain-intrinsic-size:auto;border:0}
+.tone-dark a{color:inherit}
+.pie-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px 40px;max-width:1440px;margin:0 auto;padding-bottom:clamp(32px,4vw,48px);border-bottom:1px solid var(--border-subtle)}
+.pie-top p{margin:0;color:var(--text-strong);font:800 clamp(28px,3.4vw,48px)/1.05 var(--heading);letter-spacing:-.035em}
+.pie-top p em{color:var(--text-strong)}
+.pie-grid{display:grid;grid-template-columns:1.1fr .9fr 1.7fr 1.1fr;gap:clamp(28px,4vw,56px);max-width:1440px;margin:0 auto;padding:clamp(32px,4vw,56px) 0}
+.pie-grid p{color:var(--text-body)}
+.pie-line{margin:16px 0 8px;color:var(--text-strong);font:600 15px/1.4 var(--font)}
+.pie-h{margin:0 0 18px;color:var(--text-muted);font:600 13px/1.2 var(--font);letter-spacing:.12em;text-transform:uppercase}
+.pie-grid ul{display:grid;gap:4px;margin:0;padding:0;list-style:none}
+.pie-grid nav a,.pie-bottom a{display:inline-flex;align-items:center;min-height:44px;color:var(--text-body);font-size:16px;transition:color 200ms ease}
+.pie-grid a:hover,.pie-bottom a:hover{color:var(--text-strong);text-decoration:underline;text-underline-offset:4px}
+.pie-contact li{display:flex;align-items:flex-start;gap:12px;min-height:44px;padding-block:6px;color:var(--text-body);font-size:16px;line-height:1.5}
+.pie-contact a{overflow-wrap:anywhere}
+.pie-ico{display:inline-flex;flex:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:var(--brand-soft);color:var(--o-500)}
+.pie-social li a{display:flex;align-items:center;gap:12px;min-height:44px;padding-block:4px;color:var(--text-body);font-size:16px}
+.pie-circle{display:inline-flex;flex:none;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:1px solid var(--d-600);background:var(--d-200);color:var(--text-strong);transition:background-color 200ms ease,border-color 200ms ease}
+.pie-social li a:hover .pie-circle{background:var(--d-300);border-color:var(--o-500)}
+.pie-bottom{display:flex;flex-wrap:wrap;align-items:center;gap:4px 28px;max-width:1440px;margin:0 auto;padding:20px 0 calc(24px + env(safe-area-inset-bottom));border-top:1px solid var(--border-subtle);color:var(--text-muted);font-size:14px}
+.pie-bottom span{padding-block:8px}
+.pie-bottom a{font-size:14px;min-height:44px;color:var(--text-muted)}
+.pie-bottom span:nth-child(3){margin-right:auto}
+.logo-footer{width:96px;height:96px}
+@media(max-width:1099px){.pie-grid{grid-template-columns:1fr 1fr}.pie-brand{grid-column:1/-1}}
+@media(max-width:699px){.pie-grid{grid-template-columns:minmax(0,1fr);gap:32px}.pie-top{align-items:flex-start}.pie-bottom span:nth-child(3){margin-right:0;flex-basis:100%}}
+
+/* ---------- Modo oscuro: pie NARANJA (escala --o-*) con la silueta en el mismo naranja que nace del fondo oscuro; texto e iconos en tinta (≥4,5:1) ---------- */
+html[data-theme="dark"] .skyline-near{fill:var(--o-600)}
+html[data-theme="dark"] .skyline-far,html[data-theme="dark"] .skyline-mid{fill:var(--o-600)}
+html[data-theme="dark"] footer.site-footer.tone-dark{background:linear-gradient(180deg,var(--o-600) 0%,#E87611 100%);color:var(--n-1000);--text-strong:var(--n-1000);--text-body:var(--n-1000);--text-muted:var(--n-1000);--border-subtle:rgba(30,32,29,.30);--focus:var(--n-1000);--brand-soft:rgba(30,32,29,.12)}
+html[data-theme="dark"] .site-footer :focus-visible{outline:3px solid var(--n-1000);outline-offset:3px}
+html[data-theme="dark"] .pie-ico{background:rgba(30,32,29,.12);color:var(--n-1000)}
+html[data-theme="dark"] .pie-circle{border-color:rgba(30,32,29,.55);background:rgba(30,32,29,.10);color:var(--n-1000)}
+html[data-theme="dark"] .pie-social li a:hover .pie-circle{background:rgba(30,32,29,.22);border-color:var(--n-1000)}
+html[data-theme="dark"] .site-footer .pie-top .button{background:var(--n-1000);color:var(--d-1000);border-color:transparent;box-shadow:none}
+html[data-theme="dark"] .site-footer .pie-top .button:hover{background:var(--n-900)}
+html[data-theme="dark"] .pie-grid nav a,html[data-theme="dark"] .pie-bottom a{color:var(--n-1000)}
+html[data-theme="dark"] .pie-grid a:hover,html[data-theme="dark"] .pie-bottom a:hover{color:var(--n-1000)}
+html[data-theme="dark"] .pie-bottom{margin:0 calc(var(--pad) * -1);max-width:none;padding-inline:var(--pad);background:var(--o-800);border-top:0;color:var(--n-100)}
+html[data-theme="dark"] .pie-bottom a{color:var(--n-100)}
+html[data-theme="dark"] .pie-bottom a:hover{color:#fff}

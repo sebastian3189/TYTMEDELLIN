@@ -299,13 +299,9 @@ try {
     assert.ok(await page.locator('.home-hero h1').isVisible(), `${label}: h1`);
     assert.match(await page.locator('.home-hero h1').innerText(), /Medellín,\s*a otro nivel\./);
     for (const t of ['Experiencias a otro nivel', 'Tours 100% privados · Guía-conductor exclusivo · Horarios flexibles', 'No solo visites Medellín. Vívela.', 'Tu viaje, tus tiempos,']) assert.ok(await page.getByText(t, { exact: false }).first().isVisible(), `${label}: «${t}»`);
-    // Modo estático: rejilla de 12 cartas con foto, nombre, línea literal y enlace real (el libro y el cierre viven aparte).
-    assert.equal(await page.locator('.sc-card').count(), 12, `${label}: 12 cartas`);
-    for (const i of [0, 5, 11]) {
-      const card = page.locator('.sc-card').nth(i);
-      assert.equal((await card.locator('.sc-line').innerText()).replace(/\s+/g, ' '), LINES[i], `${label}: línea literal ${i}`);
-      assert.equal(new URL(await card.getAttribute('href'), base).pathname, `/experiencias/${SLUGS[i]}`, `${label}: enlace ${i}`);
-    }
+    // Modo estático: la lista de experiencias vive ahora en «La mano de viaje» (11 cartas con nombre, emoción y enlace real); ScrubHero conserva póster y texto.
+    assert.equal(await page.locator('.th-card').count(), 11, `${label}: 11 cartas de La mano de viaje`);
+    for (const i of [0, 5, 10]) { const card = page.locator('.th-card').nth(i); assert.match(await card.getAttribute('href'), /^\/experiencias\//, `${label}: enlace ${i}`); assert.match((await card.locator('p').innerText()).replace(/\s+/g, ' '), /^[A-ZÁÉÍÓÚÑ][a-zñáéíóú]+: .+/, `${label}: línea ${i}`); }
     await page.locator('.scrub-poster img').scrollIntoViewIfNeeded(); assert.ok(await page.locator('.scrub-poster img').isVisible(), `${label}: póster`);
     assert.equal(await page.locator('.scrub-skip').count(), 0);
     if (reqs) assert.equal(reqs.filter((u) => /\/(d|m)\/\d+\.webp$/.test(u)).length, 0, `${label}: sin fotogramas`);

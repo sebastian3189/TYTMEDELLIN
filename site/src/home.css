@@ -58,7 +58,7 @@ html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .socials a{col
 }
 
 /* ---------- 9 · Cierre ---------- */
-.home-close{background:var(--surface);text-align:center}
+.home-close{background:var(--surface-2);text-align:center}
 .home-close h2{max-width:16ch;margin-inline:auto}
 .home-close p{max-width:46ch;margin:24px auto 0;font-size:var(--fs-lead)}
 .close-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:40px}

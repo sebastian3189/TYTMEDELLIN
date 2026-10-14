@@ -11,6 +11,7 @@ import { Picture, Arrow, Eyebrow, Rail, TourCard, QuoteSection } from '../shared
 import { usePageMeta } from '../meta';
 import NotFound from './NotFound';
 import '../mobile-motion.css';
+import TourBar from '../TourBar';
 
 function Story({tour}){
  const ref=useRef(null);const [active,setActive]=useState(0);
@@ -28,4 +29,5 @@ export default function Tour(){const {slug}=useParams();const tour=tours.find(t=
  <Trust/><TourDetails slug={tour.slug}/><Story tour={tour}/><div id="fotos"><Gallery tour={tour}/></div>
  <section className="prepare wrap" id="preparar"><div><Eyebrow>Pequeños detalles, mejor viaje</Eyebrow><h2>Ven con ganas.<br/>Lo demás, <em>planeémoslo.</em></h2><p>{tour.advice}</p>{tourInfo[tour.slug]?.recomendaciones.length>0&&<ul className="td-tips" role="list">{tourInfo[tour.slug].recomendaciones.map(t=><li key={t}>{t}</li>)}</ul>}</div><div className="faq"><details open><summary>¿Cómo organizamos la experiencia?</summary><p>Coordinamos el transporte privado y el recorrido contigo. La propuesta confirma las paradas, el acompañamiento, los horarios y el valor antes de contratar.</p></details><details><summary>¿Qué debo confirmar sobre el precio?</summary><p>Entradas, alimentación y actividades adicionales se detallan en la cotización. Consulta qué está incluido y qué se paga por separado.</p></details><details><summary>¿Se puede adaptar para mi grupo?</summary><p>Cuéntanos edades, equipaje, movilidad e intereses. El equipo revisa las opciones y confirma lo que es posible para la fecha elegida.</p></details></div></section>
  <QuoteSection context={tour.name}/><Reviews/><section className="wrap section"><Eyebrow>El viaje puede continuar</Eyebrow><h2>Otros caminos<br/>por <em>descubrir.</em></h2><Rail label="Más experiencias">{tours.filter(t=>t.slug!==slug).sort((a,b)=>Number(b.category===tour.category)-Number(a.category===tour.category)).slice(0,6).map(t=><TourCard key={t.slug} tour={t}/>)}</Rail></section>
+ <TourBar name={tour.name}/>
  </div>}

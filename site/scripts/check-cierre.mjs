@@ -45,35 +45,7 @@ try {
     soft(/^9[0-9](\.\d+)?% /.test(card || ''), `tarjeta JMC: foco ${card}`);
     checks.push(`P1 JMC: portada fuera de galería/miniaturas/visor a 320–1920 px, contador «2 fotografías», ficha y tarjeta siguen recortadas (foco ${card})`);
     await ctx.close(); }
-
-  // 2) [P2] Explorador: Tour de Compras con sus 3 fotos oficiales.
-  { const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage(); watch(page, 'explorer');
-    await page.goto(base + '/', { waitUntil: 'load' }); await page.waitForTimeout(1200);
-    await page.evaluate(() => scrollTo({ top: document.querySelector('#formas-de-viajar').getBoundingClientRect().top + scrollY - 108, behavior: 'instant' })); await page.waitForTimeout(1200);
-    const tab = page.locator('#formas-de-viajar [role=tab]', { hasText: 'Tour de Compras' });
-    soft(await tab.count() === 1, 'el explorador no lista «Tour de Compras»');
-    await tab.click(); await page.waitForTimeout(900);
-    const info = await page.evaluate(() => ({ caption: document.querySelector('.explorer-caption')?.textContent.trim(), photos: document.querySelectorAll('.fan-photo').length, tabs: document.querySelectorAll('#formas-de-viajar [role=tab]').length, groups: [...document.querySelectorAll('.explorer-group')].map((g) => g.textContent.trim()) }));
-    soft(info.photos === 3 && /de 03$/.test(info.caption || ''), `Tour de Compras: ${info.photos} fotos, «${info.caption}»`);
-    soft(info.tabs === 11 && info.groups.join() === 'Ciudad,Pueblos,Naturaleza,Noche,Familia', `explorador: ${info.tabs} tours, grupos ${info.groups}`);
-    await page.screenshot({ path: `${out}/explorador-compras-1440.png` });
-    checks.push(`P2 explorador: ${info.tabs} tours, Tour de Compras con ${info.photos} fotos oficiales («${info.caption}»), grupos ${info.groups.join(' · ')}`);
-    await ctx.close(); }
-
-  // 3) [P2→P3] Explorador móvil: bytes al llegar (≤220 KB) y carta sin franjas laterales (cover).
-  { const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 3 }); const page = await ctx.newPage(); watch(page, 'explorer-m');
-    const urls = []; page.on('response', async (r) => { if (/\/media\/(oficial|exploracion)\//.test(r.url())) urls.push([r.url(), Number(r.headers()['content-length'] || 0) || (await r.body().then((b) => b.length).catch(() => 0))]); });
-    await page.goto(base + '/', { waitUntil: 'load' }); await page.waitForTimeout(1000);
-    await page.evaluate(() => scrollTo({ top: document.querySelector('#formas-de-viajar').getBoundingClientRect().top + scrollY - 76, behavior: 'instant' })); await page.waitForTimeout(2500);
-    const bytes = urls.reduce((a, [, n]) => a + n, 0), desktop = urls.filter(([u]) => /-(main|satellite)\.webp$/.test(u)).length;
-    soft(bytes <= 220_000, `llegada móvil ${Math.round(bytes / 1024)} KB > 220 KB (${urls.length} fotos)`);
-    soft(desktop === 0, `llegada móvil descarga ${desktop} derivados de escritorio (main/satellite)`);
-    const bands = await page.evaluate(() => [...document.querySelectorAll('.explorer-mobile > div')].slice(0, 2).map((d) => { const img = d.querySelector('img'), a = d.getBoundingClientRect(), b = img.getBoundingClientRect(); return { fit: getComputedStyle(img).objectFit, w: Math.round(a.width), iw: Math.round(b.width), h: Math.round(a.height), ih: Math.round(b.height) }; }));
-    soft(bands.every((b) => b.fit === 'cover' && Math.abs(b.w - b.iw) <= 1 && Math.abs(b.h - b.ih) <= 1), `la carta móvil no llena el marco: ${JSON.stringify(bands)}`);
-    await page.screenshot({ path: `${out}/explorador-movil-390.png` });
-    metrics.explorerArrival = `${Math.round(bytes / 1024)} KB en ${urls.length} fotos`;
-    checks.push(`P2 explorador móvil 390: llegada ${metrics.explorerArrival} (límite 220 KB), 0 derivados de escritorio, cartas cover ${JSON.stringify(bands[0])}`);
-    await ctx.close(); }
+  // 2) [P2] El explorador se retiró (Spec 03 §K): su cobertura vive en check-mano.mjs.
 
   // 4) [P3] Quote: un solo role=alert, sin error de indicativo duplicado, aviso en honeypot/time-trap.
   for (const route of ['/cotizar', '/contacto']) {

@@ -5,6 +5,7 @@ import { inicioTextos } from './inicio-textos';
 import { relayDeck, deckPose, RELAY_SVH, FADE_SVH, smooth } from './baraja-geometria';
 import Arrow from './Arrow';
 import { GlassPill, useGlassPill } from './glass';
+import { GoogleBadgeStatic } from './CardExtras';
 import { t as tr, language } from './i18n';
 import './travel-hand.css';
 
@@ -134,7 +135,7 @@ export default function TravelHand() {
   useLayoutEffect(() => {
     if (!ready || !animated) return undefined;
     const trackEl = track.current, stageEl = stage.current, hand = handEl.current, mq = mqEl.current, deck = deckEl.current;
-    const small = window.matchMedia(SMALL).matches, wide = layout === 'wide', seg = wide ? SEG.wide : SEG.compact, shrink = wide ? 1 : 0.82; // móvil: fotos ≈18 % más pequeñas, dentro de su propia región
+    const small = window.matchMedia(SMALL).matches, wide = layout === 'wide', seg = wide ? SEG.wide : SEG.compact, shrink = wide ? 1 : innerWidth < 768 ? 0.62 : 0.82; // compacto: fotos más pequeñas, dentro de su propia región (<768 px: ≈25 % menos que antes, excepción autorizada del usuario)
     const total = RELAY + N * seg + EXIT;
     let raf = 0, visible = true, destroyed = false, q = null, lastT = 0, stageTop = 92, span = 1, RW = 0, RH = 0, sw = 0, sh = 0;
     let groupCache = null, trackTop = 0;
@@ -262,7 +263,7 @@ export default function TravelHand() {
           {ENTRIES.map((e, i) => (
             <li key={e.slug}>
               <Link className="th-card" to={`/experiencias/${e.slug}`}>
-                <span className="th-card-img"><img src={e.photos[0].small} srcSet={e.photos[0].srcSet} sizes="(max-width: 699px) 92vw, (max-width: 1099px) 46vw, 30vw" width="400" height="500" alt="" loading="lazy" decoding="async" /></span>
+                <span className="th-card-img"><GoogleBadgeStatic className="th-card-badge" /><img src={e.photos[0].small} srcSet={e.photos[0].srcSet} sizes="(max-width: 699px) 92vw, (max-width: 1099px) 46vw, 30vw" width="400" height="500" alt="" loading="lazy" decoding="async" /></span>
                 <span className="th-card-count">{two(i + 1)} / {two(N)} · {e.category}</span>
                 <h3>{e.name}</h3>
                 <p><b>{e.emocion}:</b> {e.frase}</p>

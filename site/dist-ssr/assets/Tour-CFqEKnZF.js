@@ -1,7 +1,7 @@
-import { C as useMedia, M as jsx, N as jsxs, O as usePageMeta, S as useLightMotion, T as inicioTextos, _ as EditorialMotion, b as Trust, c as Eyebrow, d as QuoteSection, f as Rail, h as Arrow, j as Fragment, p as TourCard, r as tours, u as Picture, y as Marquee } from "../entry-server.js";
-import NotFound from "./NotFound-DBLEZXem.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-DFRdWTRZ.js";
-import { t as Reviews } from "./Reviews-D2E3dROS.js";
+import { C as useMedia, I as whatsapp, M as Fragment, N as jsx, O as usePageMeta, P as jsxs, S as useLightMotion, T as inicioTextos, _ as EditorialMotion, b as Trust, c as Eyebrow, d as QuoteSection, f as Rail, h as Arrow, p as TourCard, r as tours, u as Picture, y as Marquee } from "../entry-server.js";
+import NotFound from "./NotFound-hdxCCg5R.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-DAxK9jB-.js";
+import { t as Reviews } from "./Reviews-B2hlDlCm.js";
 /* empty css                       */
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -350,6 +350,64 @@ function TourDetails({ slug }) {
 	});
 }
 //#endregion
+//#region src/TourBar.jsx
+function TourBar({ name }) {
+	const mobile = useMedia("(max-width: 767px)");
+	const [show, setShow] = useState(false);
+	useEffect(() => {
+		if (!mobile) return void 0;
+		const html = document.documentElement;
+		let last = scrollY, timer = 0, formVisible = false;
+		html.dataset.tourpage = "1";
+		const set = (value) => {
+			setShow(value);
+			html.dataset.tourbar = value ? "on" : "off";
+		};
+		const form = document.getElementById("consulta");
+		const io = new IntersectionObserver(([entry]) => {
+			formVisible = entry.isIntersecting;
+			if (formVisible) set(false);
+		}, { rootMargin: "0px 0px -10% 0px" });
+		if (form) io.observe(form);
+		const onScroll = () => {
+			const y = scrollY, dy = y - last;
+			last = y;
+			clearTimeout(timer);
+			if (formVisible) {
+				set(false);
+				return;
+			}
+			if (dy > 8 && y > 240) set(true);
+			else if (dy < -8) set(false);
+			timer = setTimeout(() => set(false), 1400);
+		};
+		window.addEventListener("scroll", onScroll, { passive: true });
+		return () => {
+			window.removeEventListener("scroll", onScroll);
+			io.disconnect();
+			clearTimeout(timer);
+			delete html.dataset.tourbar;
+			delete html.dataset.tourpage;
+		};
+	}, [mobile]);
+	return /* @__PURE__ */ jsxs("aside", {
+		className: "tour-bar",
+		"data-on": show,
+		"aria-label": "Cotizar esta experiencia por WhatsApp",
+		inert: !show,
+		children: [/* @__PURE__ */ jsx("p", {
+			className: "tour-bar-name",
+			children: name
+		}), /* @__PURE__ */ jsxs("a", {
+			className: "button tour-bar-cta",
+			href: whatsapp(name),
+			target: "_blank",
+			rel: "noopener noreferrer",
+			children: ["Cotizar por WhatsApp", /* @__PURE__ */ jsx(Arrow, {})]
+		})]
+	});
+}
+//#endregion
 //#region src/pages/Tour.jsx
 function Story({ tour }) {
 	const ref = useRef(null);
@@ -582,7 +640,8 @@ function Tour() {
 						children: tours.filter((t) => t.slug !== slug).sort((a, b) => Number(b.category === tour.category) - Number(a.category === tour.category)).slice(0, 6).map((t) => /* @__PURE__ */ jsx(TourCard, { tour: t }, t.slug))
 					})
 				]
-			})
+			}),
+			/* @__PURE__ */ jsx(TourBar, { name: tour.name })
 		]
 	});
 }

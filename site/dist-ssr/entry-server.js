@@ -816,11 +816,11 @@ function SocialIcon({ id, size = 24, color, className = "" }) {
 		children: /* @__PURE__ */ jsx$1("path", { d: PATHS$1[id] })
 	});
 }
-function Socials({ className = "" }) {
+function Socials({ className = "", only }) {
 	return /* @__PURE__ */ jsx$1("ul", {
 		role: "list",
 		className: `socials ${className}`,
-		children: SOCIALS().map((s) => /* @__PURE__ */ jsx$1("li", { children: /* @__PURE__ */ jsx$1("a", {
+		children: SOCIALS().filter((s) => !only || only.includes(s.id)).map((s) => /* @__PURE__ */ jsx$1("li", { children: /* @__PURE__ */ jsx$1("a", {
 			href: s.url,
 			target: "_blank",
 			rel: "noopener noreferrer",
@@ -833,6 +833,174 @@ function Socials({ className = "" }) {
 				children: /* @__PURE__ */ jsx$1("path", { d: PATHS$1[s.id] })
 			})
 		}) }, s.id))
+	});
+}
+//#endregion
+//#region src/icons.jsx
+var P = (d) => ["path", { d }];
+var C = (cx, cy, r) => ["circle", {
+	cx,
+	cy,
+	r
+}];
+var L = (x1, y1, x2, y2) => ["line", {
+	x1,
+	y1,
+	x2,
+	y2
+}];
+var R$1 = (x, y, width, height, rx) => ["rect", {
+	x,
+	y,
+	width,
+	height,
+	rx
+}];
+var NODES = {
+	snowflake: [
+		P("m10 20-1.25-2.5L6 18"),
+		P("M10 4 8.75 6.5 6 6"),
+		P("m14 20 1.25-2.5L18 18"),
+		P("m14 4 1.25 2.5L18 6"),
+		P("m17 21-3-6h-4"),
+		P("m17 3-3 6 1.5 3"),
+		P("M2 12h6.5L10 9"),
+		P("m20 10-1.5 2 1.5 2"),
+		P("M22 12h-6.5L14 15"),
+		P("m4 10 1.5 2L4 14"),
+		P("m7 21 3-6-1.5-3"),
+		P("m7 3 3 6h4")
+	],
+	armchair: [
+		P("M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"),
+		P("M3 16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V11a2 2 0 0 0-4 0z"),
+		P("M5 18v2"),
+		P("M19 18v2")
+	],
+	wifi: [
+		P("M12 20h.01"),
+		P("M2 8.82a15 15 0 0 1 20 0"),
+		P("M5 12.859a10 10 0 0 1 14 0"),
+		P("M8.5 16.429a5 5 0 0 1 7 0")
+	],
+	usb: [
+		C(10, 7, 1),
+		C(4, 20, 1),
+		P("M4.7 19.3 19 5"),
+		P("m21 3-3 1 2 2Z"),
+		P("M9.26 7.68 5 12l2 5"),
+		P("m10 14 5 2 3.5-3.5"),
+		P("m18 12 1-1 1 1-1 1Z")
+	],
+	music: [
+		P("M9 18V5l12-2v13"),
+		C(6, 18, 3),
+		C(18, 16, 3)
+	],
+	luggage: [
+		P("M6 20a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2"),
+		P("M8 18V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v14"),
+		P("M10 20h4"),
+		C(16, 20, 2),
+		C(8, 20, 2)
+	],
+	frame: [
+		L(22, 6, 2, 6),
+		L(22, 18, 2, 18),
+		L(6, 2, 6, 22),
+		L(18, 2, 18, 22)
+	],
+	mic: [
+		P("M12 19v3"),
+		P("M19 10v2a7 7 0 0 1-14 0v-2"),
+		R$1(9, 2, 6, 13, 3)
+	],
+	refrigerator: [
+		P("M5 6a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6Z"),
+		P("M5 10h14"),
+		P("M15 7v6")
+	],
+	lightbulb: [
+		P("M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"),
+		P("M9 18h6"),
+		P("M10 22h4")
+	],
+	monitorPlay: [
+		P("M15.033 9.44a.647.647 0 0 1 0 1.12l-4.065 2.352a.645.645 0 0 1-.968-.56V7.648a.645.645 0 0 1 .967-.56z"),
+		P("M12 17v4"),
+		P("M8 21h8"),
+		R$1(2, 3, 20, 14, 2)
+	],
+	thermometer: [P("M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z")],
+	users: [
+		P("M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"),
+		P("M16 3.128a4 4 0 0 1 0 7.744"),
+		P("M22 21v-2a4 4 0 0 0-3-3.87"),
+		C(9, 7, 4)
+	],
+	share: [
+		C(18, 5, 3),
+		C(6, 12, 3),
+		C(18, 19, 3),
+		L(8.59, 13.51, 15.42, 17.49),
+		L(15.41, 6.51, 8.59, 10.49)
+	],
+	mail: [P("m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"), R$1(2, 4, 20, 16, 2)],
+	link: [
+		P("M9 17H7A5 5 0 0 1 7 7h2"),
+		P("M15 7h2a5 5 0 1 1 0 10h-2"),
+		L(8, 12, 16, 12)
+	],
+	check: [P("M20 6 9 17l-5-5")],
+	mapPin: [P("M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"), C(12, 10, 3)],
+	phone: [P("M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384")],
+	more: [
+		C(12, 12, 1),
+		C(19, 12, 1),
+		C(5, 12, 1)
+	]
+};
+function Icon({ name, size = 16, className = "" }) {
+	return /* @__PURE__ */ jsx$1("svg", {
+		className: `ico ${className}`,
+		viewBox: "0 0 24 24",
+		width: size,
+		height: size,
+		fill: "none",
+		stroke: "currentColor",
+		strokeWidth: "1.75",
+		strokeLinecap: "round",
+		strokeLinejoin: "round",
+		"aria-hidden": "true",
+		focusable: "false",
+		children: NODES[name].map(([tag, attrs], i) => {
+			return /* @__PURE__ */ jsx$1(tag, { ...attrs }, i);
+		})
+	});
+}
+//#endregion
+//#region src/Skyline.jsx
+function Skyline() {
+	return /* @__PURE__ */ jsxs$1("svg", {
+		className: "skyline",
+		viewBox: "0 0 1440 120",
+		preserveAspectRatio: "xMidYMax slice",
+		"aria-hidden": "true",
+		focusable: "false",
+		children: [
+			/* @__PURE__ */ jsx$1("path", {
+				className: "skyline-far",
+				d: "M0 120V74C90 52 170 60 260 66C350 72 400 38 510 34C600 31 650 56 760 58C880 60 930 30 1050 28C1160 26 1220 52 1320 50C1380 49 1415 58 1440 54V120Z"
+			}),
+			/* @__PURE__ */ jsx$1("path", {
+				className: "skyline-mid",
+				d: "M0 120V92C120 72 220 84 330 80C450 76 520 56 640 60C760 64 840 84 960 80C1080 76 1160 60 1290 66C1360 69 1410 78 1440 74V120Z"
+			}),
+			/* @__PURE__ */ jsx$1("path", {
+				className: "skyline-near",
+				d: "M0 120V92H34V120ZM42 120V104H92V120ZM92 120V52H150V120ZM98 120V44H144V120ZM162 120V52H188V120ZM168 120V44H182V120ZM188 120V66H226V120ZM194 120V58H220V120ZM226 120V66H270V120ZM232 120V58H264V120ZM282 120V86H308V120ZM320 120V66H346V120ZM326 120V58H340V120ZM346 120V52H372V120ZM376 120V92H414V120ZM426 120V80H452V120ZM464 120V92H522V120ZM522 120V86H566V120ZM570 120V86H596V120ZM596 120V104H640V120ZM652 120V86H682V120ZM694 120V86H732V120ZM762 120V86H806V120ZM810 120V86H844V120ZM844 120V86H894V120ZM894 120V80H938V120ZM950 120V74H988V120ZM992 120V98H1036V120ZM1036 120V66H1080V120ZM1042 120V58H1074V120ZM1084 120V60H1114V120ZM1090 120V52H1108V120ZM1114 120V52H1172V120ZM1176 120V74H1210V120ZM1222 120V60H1280V120ZM1228 120V52H1274V120ZM1280 120V60H1314V120ZM1314 120V80H1340V120ZM1352 120V60H1402V120ZM1358 120V52H1396V120ZM1410 120V74H1460V120ZM1416 120V66H1454V120ZM708 120V58H716V44H722V30H727V18H730V4H731V0H732V4H734V18H737V30H742V44H748V58H756V120Z"
+			})
+		]
 	});
 }
 //#endregion
@@ -1358,147 +1526,6 @@ function Arrow({ dir = "ne" }) {
 	});
 }
 //#endregion
-//#region src/icons.jsx
-var P = (d) => ["path", { d }];
-var C = (cx, cy, r) => ["circle", {
-	cx,
-	cy,
-	r
-}];
-var L = (x1, y1, x2, y2) => ["line", {
-	x1,
-	y1,
-	x2,
-	y2
-}];
-var R$1 = (x, y, width, height, rx) => ["rect", {
-	x,
-	y,
-	width,
-	height,
-	rx
-}];
-var NODES = {
-	snowflake: [
-		P("m10 20-1.25-2.5L6 18"),
-		P("M10 4 8.75 6.5 6 6"),
-		P("m14 20 1.25-2.5L18 18"),
-		P("m14 4 1.25 2.5L18 6"),
-		P("m17 21-3-6h-4"),
-		P("m17 3-3 6 1.5 3"),
-		P("M2 12h6.5L10 9"),
-		P("m20 10-1.5 2 1.5 2"),
-		P("M22 12h-6.5L14 15"),
-		P("m4 10 1.5 2L4 14"),
-		P("m7 21 3-6-1.5-3"),
-		P("m7 3 3 6h4")
-	],
-	armchair: [
-		P("M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"),
-		P("M3 16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V11a2 2 0 0 0-4 0z"),
-		P("M5 18v2"),
-		P("M19 18v2")
-	],
-	wifi: [
-		P("M12 20h.01"),
-		P("M2 8.82a15 15 0 0 1 20 0"),
-		P("M5 12.859a10 10 0 0 1 14 0"),
-		P("M8.5 16.429a5 5 0 0 1 7 0")
-	],
-	usb: [
-		C(10, 7, 1),
-		C(4, 20, 1),
-		P("M4.7 19.3 19 5"),
-		P("m21 3-3 1 2 2Z"),
-		P("M9.26 7.68 5 12l2 5"),
-		P("m10 14 5 2 3.5-3.5"),
-		P("m18 12 1-1 1 1-1 1Z")
-	],
-	music: [
-		P("M9 18V5l12-2v13"),
-		C(6, 18, 3),
-		C(18, 16, 3)
-	],
-	luggage: [
-		P("M6 20a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2"),
-		P("M8 18V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v14"),
-		P("M10 20h4"),
-		C(16, 20, 2),
-		C(8, 20, 2)
-	],
-	frame: [
-		L(22, 6, 2, 6),
-		L(22, 18, 2, 18),
-		L(6, 2, 6, 22),
-		L(18, 2, 18, 22)
-	],
-	mic: [
-		P("M12 19v3"),
-		P("M19 10v2a7 7 0 0 1-14 0v-2"),
-		R$1(9, 2, 6, 13, 3)
-	],
-	refrigerator: [
-		P("M5 6a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6Z"),
-		P("M5 10h14"),
-		P("M15 7v6")
-	],
-	lightbulb: [
-		P("M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"),
-		P("M9 18h6"),
-		P("M10 22h4")
-	],
-	monitorPlay: [
-		P("M15.033 9.44a.647.647 0 0 1 0 1.12l-4.065 2.352a.645.645 0 0 1-.968-.56V7.648a.645.645 0 0 1 .967-.56z"),
-		P("M12 17v4"),
-		P("M8 21h8"),
-		R$1(2, 3, 20, 14, 2)
-	],
-	thermometer: [P("M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z")],
-	users: [
-		P("M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"),
-		P("M16 3.128a4 4 0 0 1 0 7.744"),
-		P("M22 21v-2a4 4 0 0 0-3-3.87"),
-		C(9, 7, 4)
-	],
-	share: [
-		C(18, 5, 3),
-		C(6, 12, 3),
-		C(18, 19, 3),
-		L(8.59, 13.51, 15.42, 17.49),
-		L(15.41, 6.51, 8.59, 10.49)
-	],
-	mail: [P("m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"), R$1(2, 4, 20, 16, 2)],
-	link: [
-		P("M9 17H7A5 5 0 0 1 7 7h2"),
-		P("M15 7h2a5 5 0 1 1 0 10h-2"),
-		L(8, 12, 16, 12)
-	],
-	check: [P("M20 6 9 17l-5-5")],
-	more: [
-		C(12, 12, 1),
-		C(19, 12, 1),
-		C(5, 12, 1)
-	]
-};
-function Icon({ name, size = 16, className = "" }) {
-	return /* @__PURE__ */ jsx$1("svg", {
-		className: `ico ${className}`,
-		viewBox: "0 0 24 24",
-		width: size,
-		height: size,
-		fill: "none",
-		stroke: "currentColor",
-		strokeWidth: "1.75",
-		strokeLinecap: "round",
-		strokeLinejoin: "round",
-		"aria-hidden": "true",
-		focusable: "false",
-		children: NODES[name].map(([tag, attrs], i) => {
-			return /* @__PURE__ */ jsx$1(tag, { ...attrs }, i);
-		})
-	});
-}
-//#endregion
 //#region src/CardExtras.jsx
 var RATING = 5;
 function GoogleBadge({ className = "" }) {
@@ -1514,6 +1541,34 @@ function GoogleBadge({ className = "" }) {
 		rel: "noopener noreferrer",
 		"aria-label": label,
 		title: label,
+		children: [
+			/* @__PURE__ */ jsx$1("span", {
+				className: "card-google-stars",
+				"aria-hidden": "true",
+				children: "★★★★★"
+			}),
+			/* @__PURE__ */ jsx$1("span", {
+				"aria-hidden": "true",
+				children: figure
+			}),
+			/* @__PURE__ */ jsx$1("span", {
+				"aria-hidden": "true",
+				className: "card-google-brand",
+				children: "· Google"
+			})
+		]
+	});
+}
+function GoogleBadgeStatic({ className = "" }) {
+	const figure = RATING.toLocaleString(language() === "en" ? "en-US" : "es-CO", {
+		minimumFractionDigits: 1,
+		maximumFractionDigits: 1
+	});
+	const label = language() === "en" ? `Company rating on Google: ${figure} out of 5` : `Valoración de la empresa en Google: ${figure} de 5`;
+	return /* @__PURE__ */ jsxs$1("span", {
+		className: `card-google card-google--static ${className}`,
+		role: "img",
+		"aria-label": label,
 		children: [
 			/* @__PURE__ */ jsx$1("span", {
 				className: "card-google-stars",
@@ -1785,7 +1840,7 @@ function ShareMenu({ name, path, className = "" }) {
 }
 //#endregion
 //#region src/shared.jsx
-var Quote = lazy(() => import("./assets/Quote-xn86n2Sh.js"));
+var Quote = lazy(() => import("./assets/Quote-CSzaIfVi.js"));
 var reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 function Picture({ photo, alt, priority = false, className = "", native = false, sizes = "(max-width: 700px) 100vw, 65vw" }) {
 	if (!photo) return null;
@@ -2070,7 +2125,7 @@ function WhatsAppFab() {
 		const check = (now) => {
 			raf = 0;
 			if (now < until) raf = requestAnimationFrame(check);
-			if (now - lastRun < 120) return;
+			if (now - lastRun < 50) return;
 			lastRun = now;
 			let blocked = Boolean(document.querySelector(".menu-open, dialog[open]"));
 			if (!blocked) outer: for (let k = -1; k < 8; k++) {
@@ -2103,6 +2158,11 @@ function WhatsAppFab() {
 			attributes: true,
 			attributeFilter: ["class", "open"]
 		});
+		const pulse = setInterval(() => {
+			if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+			el.classList.add("wa-pulse");
+			setTimeout(() => el.classList.remove("wa-pulse"), 1900);
+		}, 12e3);
 		const timer = setInterval(schedule, 800);
 		schedule();
 		return () => {
@@ -2110,10 +2170,11 @@ function WhatsAppFab() {
 			window.removeEventListener("resize", onResize);
 			mo.disconnect();
 			clearInterval(timer);
+			clearInterval(pulse);
 			cancelAnimationFrame(raf);
 		};
 	}, []);
-	return /* @__PURE__ */ jsx$1("a", {
+	return /* @__PURE__ */ jsxs$1("a", {
 		ref,
 		className: "wa-fab",
 		"data-hidden": "false",
@@ -2121,10 +2182,14 @@ function WhatsAppFab() {
 		target: "_blank",
 		rel: "noopener noreferrer",
 		"aria-label": "Escribir por WhatsApp",
-		children: /* @__PURE__ */ jsx$1(SocialIcon, {
+		children: [/* @__PURE__ */ jsx$1(SocialIcon, {
 			id: "whatsapp",
-			size: 28
-		})
+			size: 32
+		}), /* @__PURE__ */ jsx$1("span", {
+			className: "wa-label",
+			"aria-hidden": "true",
+			children: language() === "en" ? "Let's talk?" : "¿Hablamos?"
+		})]
 	});
 }
 //#endregion
@@ -2158,21 +2223,21 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-DTS5iCj2.js");
+var company_ = () => import("./assets/Company-Dv3EROpL.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-DMHZuZce.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-PPVH3vYi.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-Dh2egbPx.js").then((m) => m.default)),
-	fleet: lazyRoute(() => import("./assets/Fleet-C47nAFQ_.js").then((m) => m.default)),
-	blog: lazyRoute(pick(() => import("./assets/Blog-xenZLnlO.js"), "Blog")),
-	article: lazyRoute(() => import("./assets/Blog-xenZLnlO.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-B9VgQpHe.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-ALBB3_Xn.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-CFqEKnZF.js").then((m) => m.default)),
+	fleet: lazyRoute(() => import("./assets/Fleet-wUBzdOIg.js").then((m) => m.default)),
+	blog: lazyRoute(pick(() => import("./assets/Blog-CQ-TX4Ul.js"), "Blog")),
+	article: lazyRoute(() => import("./assets/Blog-CQ-TX4Ul.js").then((m) => m.default)),
 	about: lazyRoute(pick(company_, "About")),
 	services: lazyRoute(pick(company_, "Services")),
 	contact: lazyRoute(pick(company_, "Contact")),
 	quote: lazyRoute(pick(company_, "QuotePage")),
 	privacy: lazyRoute(pick(company_, "Privacy")),
 	ratings: lazyRoute(pick(company_, "Ratings")),
-	notFound: lazyRoute(() => import("./assets/NotFound-DBLEZXem.js").then((m) => m.default))
+	notFound: lazyRoute(() => import("./assets/NotFound-hdxCCg5R.js").then((m) => m.default))
 };
 R.home, R.catalog, R.tour, R.fleet, R.blog, R.article, R.about, R.services, R.contact, R.quote, R.privacy, R.ratings;
 var preloadAllRoutes = () => Promise.all(Object.values(R).map((route) => route.preload()));
@@ -2276,84 +2341,157 @@ function Header() {
 	});
 }
 function Footer() {
-	return /* @__PURE__ */ jsxs$1("footer", {
-		className: "site-footer",
-		id: "pie",
-		children: [
-			/* @__PURE__ */ jsxs$1("div", {
-				className: "footer-top",
-				children: [/* @__PURE__ */ jsxs$1("p", { children: [
-					"Tu próxima historia",
-					/* @__PURE__ */ jsx$1("br", {}),
-					"empieza ",
-					/* @__PURE__ */ jsx$1("em", { children: "aquí." })
-				] }), /* @__PURE__ */ jsx$1(Button, {
-					to: "/experiencias",
-					children: "Encuentra tu experiencia"
-				})]
-			}),
-			/* @__PURE__ */ jsxs$1("div", {
-				className: "footer-grid",
-				children: [
-					/* @__PURE__ */ jsxs$1("div", { children: [
+	return /* @__PURE__ */ jsxs$1("div", {
+		className: "pie-wrap",
+		children: [/* @__PURE__ */ jsx$1(Skyline, {}), /* @__PURE__ */ jsxs$1("footer", {
+			className: "site-footer tone-dark",
+			id: "pie",
+			children: [
+				/* @__PURE__ */ jsxs$1("div", {
+					className: "pie-top",
+					children: [/* @__PURE__ */ jsxs$1("p", { children: [
+						"Tu próxima historia",
+						/* @__PURE__ */ jsx$1("br", {}),
+						"empieza ",
+						/* @__PURE__ */ jsx$1("em", { children: "aquí." })
+					] }), /* @__PURE__ */ jsx$1(Button, {
+						to: "/experiencias",
+						children: "Encuentra tu experiencia"
+					})]
+				}),
+				/* @__PURE__ */ jsxs$1("div", {
+					className: "pie-grid",
+					children: [
+						/* @__PURE__ */ jsxs$1("div", {
+							className: "pie-brand",
+							children: [
+								/* @__PURE__ */ jsx$1(Link, {
+									className: "footer-brand",
+									to: "/",
+									"aria-label": "Transporte y Turismo Medellín, inicio",
+									children: /* @__PURE__ */ jsx$1(Logo, {
+										size: 120,
+										sizes: "120px",
+										className: "logo-footer",
+										lazy: true
+									})
+								}),
+								/* @__PURE__ */ jsx$1("p", {
+									className: "pie-line",
+									children: "Experiencias a otro nivel"
+								}),
+								/* @__PURE__ */ jsxs$1("p", { children: [
+									"Nos mueve nuestra tierra.",
+									/* @__PURE__ */ jsx$1("br", {}),
+									"Nos importan las personas."
+								] })
+							]
+						}),
+						/* @__PURE__ */ jsxs$1("nav", {
+							"aria-label": "Enlaces rápidos",
+							children: [/* @__PURE__ */ jsx$1("h2", {
+								className: "pie-h",
+								children: "Enlaces rápidos"
+							}), /* @__PURE__ */ jsx$1("ul", {
+								role: "list",
+								children: [
+									["Inicio", "/"],
+									["Experiencias", "/experiencias"],
+									["Vehículos", "/vehiculos"],
+									["Nosotros", "/nosotros"],
+									["Contacto", "/contacto"]
+								].map(([label, url]) => /* @__PURE__ */ jsx$1("li", { children: /* @__PURE__ */ jsx$1(Link, {
+									to: url,
+									children: label
+								}) }, url))
+							})]
+						}),
+						/* @__PURE__ */ jsxs$1("div", { children: [/* @__PURE__ */ jsx$1("h2", {
+							className: "pie-h",
+							children: "Contacto directo"
+						}), /* @__PURE__ */ jsxs$1("ul", {
+							role: "list",
+							className: "pie-contact",
+							children: [
+								/* @__PURE__ */ jsxs$1("li", { children: [/* @__PURE__ */ jsx$1("span", {
+									className: "pie-ico",
+									children: /* @__PURE__ */ jsx$1(Icon, {
+										name: "mapPin",
+										size: 18
+									})
+								}), /* @__PURE__ */ jsx$1("span", { children: company.address })] }),
+								/* @__PURE__ */ jsxs$1("li", { children: [/* @__PURE__ */ jsx$1("span", {
+									className: "pie-ico",
+									children: /* @__PURE__ */ jsx$1(Icon, {
+										name: "phone",
+										size: 18
+									})
+								}), /* @__PURE__ */ jsx$1("a", {
+									href: `tel:${company.phone.replaceAll(" ", "")}`,
+									children: company.phone
+								})] }),
+								/* @__PURE__ */ jsxs$1("li", { children: [/* @__PURE__ */ jsx$1("span", {
+									className: "pie-ico",
+									children: /* @__PURE__ */ jsx$1(Icon, {
+										name: "mail",
+										size: 18
+									})
+								}), /* @__PURE__ */ jsx$1("a", {
+									href: `mailto:${company.email}`,
+									children: company.email
+								})] })
+							]
+						})] }),
+						/* @__PURE__ */ jsxs$1("div", { children: [/* @__PURE__ */ jsx$1("h2", {
+							className: "pie-h",
+							children: "Síguenos"
+						}), /* @__PURE__ */ jsx$1("ul", {
+							role: "list",
+							className: "pie-social",
+							children: [[
+								"instagram",
+								"Instagram",
+								company.instagram,
+								"@transporteenmedellin"
+							], [
+								"tiktok",
+								"TikTok",
+								company.tiktok,
+								"@tytmedellin"
+							]].map(([id, name, url, handle]) => /* @__PURE__ */ jsx$1("li", { children: /* @__PURE__ */ jsxs$1("a", {
+								href: url,
+								target: "_blank",
+								rel: "noopener noreferrer",
+								"aria-label": `Síguenos en ${name} (se abre en una pestaña nueva)`,
+								children: [/* @__PURE__ */ jsx$1("span", {
+									className: "pie-circle",
+									children: /* @__PURE__ */ jsx$1(SocialIcon, {
+										id,
+										size: 20
+									})
+								}), /* @__PURE__ */ jsx$1("span", { children: handle })]
+							}) }, id))
+						})] })
+					]
+				}),
+				/* @__PURE__ */ jsxs$1("div", {
+					className: "pie-bottom",
+					children: [
+						/* @__PURE__ */ jsx$1("span", { children: "RNT 176384" }),
+						/* @__PURE__ */ jsx$1("span", { children: "NIT 901738550-6" }),
+						/* @__PURE__ */ jsx$1("span", { children: "© 2026 Transporte y Turismo Medellín" }),
 						/* @__PURE__ */ jsx$1(Link, {
-							className: "footer-brand",
-							to: "/",
-							"aria-label": "Transporte y Turismo Medellín, inicio",
-							children: /* @__PURE__ */ jsx$1(Logo, {
-								size: 120,
-								sizes: "120px",
-								className: "logo-footer",
-								lazy: true
-							})
+							to: "/privacidad",
+							children: "Privacidad"
 						}),
-						/* @__PURE__ */ jsx$1("p", { children: "Experiencias a otro nivel" }),
-						/* @__PURE__ */ jsxs$1("p", { children: [
-							"Nos mueve nuestra tierra.",
-							/* @__PURE__ */ jsx$1("br", {}),
-							"Nos importan las personas."
-						] }),
-						/* @__PURE__ */ jsx$1(Socials, { className: "footer-socials" })
-					] }),
-					/* @__PURE__ */ jsx$1("nav", {
-						"aria-label": "Enlaces del pie",
-						children: nav.map(([label, url]) => /* @__PURE__ */ jsx$1(Link, {
-							to: url,
-							children: label
-						}, url))
-					}),
-					/* @__PURE__ */ jsxs$1("div", { children: [
-						/* @__PURE__ */ jsx$1("a", {
-							href: `tel:${company.phone.replaceAll(" ", "")}`,
-							children: company.phone
-						}),
-						/* @__PURE__ */ jsx$1("a", {
-							href: `mailto:${company.email}`,
-							children: company.email
-						}),
-						/* @__PURE__ */ jsx$1("p", { children: company.address })
-					] })
-				]
-			}),
-			/* @__PURE__ */ jsxs$1("div", {
-				className: "footer-bottom",
-				children: [
-					/* @__PURE__ */ jsxs$1("span", { children: [
-						"© ",
-						(/* @__PURE__ */ new Date()).getFullYear(),
-						" T&T Medellín · NIT 901738550-6 · RNT 176384"
-					] }),
-					/* @__PURE__ */ jsx$1(Link, {
-						to: "/privacidad",
-						children: "Privacidad"
-					}),
-					/* @__PURE__ */ jsx$1(Link, {
-						to: "/calificaciones",
-						children: "Calificaciones"
-					})
-				]
-			})
-		]
+						/* @__PURE__ */ jsx$1(Link, {
+							to: "/calificaciones",
+							children: "Calificaciones"
+						})
+					]
+				})
+			]
+		})]
 	});
 }
 function Layout() {
@@ -4167,4 +4305,4 @@ async function render(url) {
 	}));
 }
 //#endregion
-export { Socials as A, useMedia as C, NOT_FOUND as D, textoFase as E, whatsapp as F, language as I, t as L, jsx$1 as M, jsxs$1 as N, usePageMeta as O, company as P, useLightMotion as S, inicioTextos as T, EditorialMotion as _, vehicles as a, Trust as b, Eyebrow as c, QuoteSection as d, Rail as f, QuoteCopy as g, Arrow as h, values as i, Fragment as j, SocialIcon as k, PageTitle as l, Icon as m, metaFor, photos as n, rawTours as o, TourCard as p, paths, tours as r, render, Button as s, articles as t, Picture as u, Manifesto as v, CHAPTERS as w, useFlipGrid as x, Marquee as y };
+export { SocialIcon as A, useMedia as C, NOT_FOUND as D, textoFase as E, company as F, whatsapp as I, language as L, Fragment as M, jsx$1 as N, usePageMeta as O, jsxs$1 as P, t as R, useLightMotion as S, inicioTextos as T, EditorialMotion as _, vehicles as a, Trust as b, Eyebrow as c, QuoteSection as d, Rail as f, QuoteCopy as g, Arrow as h, values as i, Socials as j, Icon as k, PageTitle as l, GoogleBadgeStatic as m, metaFor, photos as n, rawTours as o, TourCard as p, paths, tours as r, render, Button as s, articles as t, Picture as u, Manifesto as v, CHAPTERS as w, useFlipGrid as x, Marquee as y };

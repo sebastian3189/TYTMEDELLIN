@@ -17,6 +17,6 @@ const SOCIALS = () => [
 export function SocialIcon({ id, size = 24, color, className = '' }) {
   return <svg className={className} viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true" focusable="false" style={color ? { color } : undefined}><path d={PATHS[id]} /></svg>;
 }
-export default function Socials({ className = '' }) {
-  return <ul role="list" className={`socials ${className}`}>{SOCIALS().map(s => <li key={s.id}><a href={s.url} target="_blank" rel="noopener noreferrer" aria-label={`${s.label} (se abre en una pestaña nueva)`}><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style={{ color: s.color }}><path d={PATHS[s.id]} /></svg></a></li>)}</ul>;
+export default function Socials({ className = '', only }) {
+  return <ul role="list" className={`socials ${className}`}>{SOCIALS().filter(s => !only || only.includes(s.id)).map(s => <li key={s.id}><a href={s.url} target="_blank" rel="noopener noreferrer" aria-label={`${s.label} (se abre en una pestaña nueva)`}><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style={{ color: s.color }}><path d={PATHS[s.id]} /></svg></a></li>)}</ul>;
 }

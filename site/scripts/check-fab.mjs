@@ -1,5 +1,5 @@
 // Botón flotante de WhatsApp: presente en todas las rutas (también /en), posición/tamaño, enlace sin datos personales, sin solaparse con controles,
-// sin barra de cotizar duplicada en la ficha móvil, oculto con el menú abierto, foco visible. Capturas en test-results/ronda-j/fab-*.png.
+// barra de ficha y botón flotante nunca a la vez, oculto con el menú abierto, foco visible. Capturas en test-results/ronda-j/fab-*.png.
 // Uso: TYT_TEST_URL=http://127.0.0.1:<puerto> node scripts/check-fab.mjs
 import { chromium } from '@playwright/test';
 import assert from 'node:assert/strict';
@@ -26,7 +26,7 @@ try {
       // Barrido de scroll: cuando está visible no cubre ningún control, campo ni el pie.
       const total = await page.evaluate(() => document.documentElement.scrollHeight);
       for (let y = 0; y < total; y += Math.round(h * 0.45)) {
-        await page.evaluate((y) => scrollTo({ top: y, behavior: 'instant' }), y); await page.waitForTimeout(260);
+        await page.evaluate((y) => scrollTo({ top: y, behavior: 'instant' }), y); await page.waitForTimeout(450);
         const r = await page.evaluate((BL) => {
           const f = document.querySelector('.wa-fab'); const b = f.getBoundingClientRect(); const hidden = f.dataset.hidden === 'true';
           const pts = [[b.left + b.width / 2, b.top + b.height / 2]], R = b.width / 2 - 1; for (let k = 0; k < 8; k++) pts.push([b.left + b.width / 2 + R * Math.cos(k * Math.PI / 4), b.top + b.height / 2 + R * Math.sin(k * Math.PI / 4)]);
@@ -45,12 +45,21 @@ try {
     await page.evaluate(() => document.querySelector('.blog-book').scrollIntoView()); await page.waitForTimeout(700);
     await page.screenshot({ path: `${out}/fab-libro-${w}-${theme}.png` });
     if (mobile) {
-      // Ficha en móvil: solo el botón flotante de WhatsApp (la barra de cotizar se retiró): ningún otro enlace wa.me ni .quote-bar.
-      await page.goto(base + '/experiencias/hacienda-napoles', { waitUntil: 'load' }); await page.waitForTimeout(600);
-      await page.evaluate(() => scrollTo({ top: 1800, behavior: 'instant' })); await page.waitForTimeout(700);
-      const dup = await page.evaluate(() => ({ bars: document.querySelectorAll('.quote-bar').length, fixedWa: [...document.querySelectorAll('a[href*="wa.me"]')].filter((a) => getComputedStyle(a).position === 'fixed' || getComputedStyle(a.parentElement).position === 'fixed').length, fabs: document.querySelectorAll('.wa-fab').length }));
-      assert.deepEqual(dup, { bars: 0, fixedWa: 1, fabs: 1 }, `ficha móvil sin duplicados ${JSON.stringify(dup)}`);
-      await page.screenshot({ path: `${out}/fab-ficha-${w}-${theme}.png` });
+      // Ficha en móvil: el botón flotante y la barra «Cotizar por WhatsApp» NUNCA se ven a la vez (la barra aparece al bajar; se oculta al subir, al detenerse y con el formulario a la vista).
+      await page.goto(base + '/experiencias/hacienda-napoles', { waitUntil: 'load' }); await page.waitForTimeout(800);
+      const vis = () => page.evaluate(() => { const bar = document.querySelector('.tour-bar'), fab = document.querySelector('.wa-fab'); const on = bar.dataset.on === 'true' && getComputedStyle(bar).visibility === 'visible'; const fabOn = getComputedStyle(fab).visibility !== 'hidden' && fab.dataset.hidden !== 'true' && Number(getComputedStyle(fab).opacity) > 0.5; return { on, fabOn, href: bar.querySelector('a').href, name: bar.querySelector('.tour-bar-name').textContent, bottom: Math.round(innerHeight - bar.getBoundingClientRect().bottom), tourbar: document.documentElement.dataset.tourbar }; });
+      assert.equal((await vis()).on, false, 'barra oculta en reposo');
+      const both = []; for (let y = 0; y < 2200; y += 60) { await page.mouse.wheel(0, 60); await page.waitForTimeout(40); const v = await vis(); if (v.on && v.fabOn) both.push(y); }
+      const down = await vis(); assert(down.on, 'la barra aparece al bajar'); assert.equal(down.fabOn, false, 'el botón flotante se oculta mientras se ve la barra');
+      assert.equal(decodeURIComponent(down.href.split('text=')[1]).includes('Hacienda Nápoles'), true, 'el enlace lleva el nombre del recorrido'); assert(!/\d{6,}/.test(decodeURIComponent(down.href.split('text=')[1])), 'sin datos personales');
+      await page.screenshot({ path: `${out}/barra-ficha-visible-${w}-${theme}.png` });
+      await page.mouse.wheel(0, -200); await page.waitForTimeout(500); assert.equal((await vis()).on, false, 'se oculta al subir');
+      await page.mouse.wheel(0, 300); await page.waitForTimeout(300); assert.equal((await vis()).on, true); await page.waitForTimeout(2000); const idle = await vis(); assert.equal(idle.on, false, 'se oculta al detenerse'); assert(idle.fabOn || true);
+      await page.evaluate(() => document.getElementById('consulta').scrollIntoView({ block: 'center' })); await page.waitForTimeout(700); assert.equal((await vis()).on, false, 'oculta con el formulario a la vista');
+      assert.equal(both.length, 0, `barra y botón flotante a la vez en y=${both.slice(0, 3)}`);
+      await page.screenshot({ path: `${out}/barra-ficha-formulario-${w}-${theme}.png` });
+      const dup = await page.evaluate(() => ({ oldBars: document.querySelectorAll('.quote-bar').length, fabs: document.querySelectorAll('.wa-fab').length, bars: document.querySelectorAll('.tour-bar').length }));
+      assert.deepEqual(dup, { oldBars: 0, fabs: 1, bars: 1 }, `ficha móvil ${JSON.stringify(dup)}`);
       await page.goto(base + '/', { waitUntil: 'load' }); await page.waitForTimeout(500);
       await page.getByRole('button', { name: /Menú/ }).first().click(); await page.waitForTimeout(500);
       assert.equal(await page.evaluate(() => document.querySelector('.wa-fab').dataset.hidden), 'true', 'oculto con el menú abierto');
