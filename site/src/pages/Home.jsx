@@ -3,6 +3,7 @@ import { tours, photos } from '../content';
 import ScrubHero from '../ScrubHero';
 import TravelHand from '../TravelHand';
 import BlogBook from '../BlogBook';
+import Different from '../Different';
 import '../mobile-motion.css';
 import Reviews from '../Reviews';
 import { HomeHero, HomeStory, HomeClose, HomeSocial } from '../HomeVideos';
@@ -16,6 +17,7 @@ export default function Home(){return <>
   summary="Apertura: una baraja de doce experiencias. La carta superior se abre en una transición cinematográfica sobre Medellín que termina en la Plaza Botero y luego se despliegan las doce experiencias, cada una con su enlace."/>
  <TravelHand/>
  <section className="service-band wrap" id="camino" tabIndex={-1}><Eyebrow>Nos encargamos del camino</Eyebrow><h2>Del primer traslado<br/>al último <em>recuerdo.</em></h2><div className="service-links">{[['01','Traslados de aeropuerto','/experiencias/traslados-aeropuerto-jmc'],['02','Recorridos privados','/experiencias'],['03','Empresas, agencias y grupos','/servicios']].map(([n,name,url])=><Link to={url} key={n}><span>{n}</span><h3>{name}</h3><Arrow/></Link>)}</div></section>
+<Different/>
  <Reviews/><section className="about-preview wrap section"><Picture photo={photos('equipo')[0]} alt="Personas del equipo de T&T Medellín"/><div><Eyebrow>Una historia que nace aquí</Eyebrow><h2>Personas que<br/>mueven <em>personas.</em></h2><p>Desde los primeros traslados, aprendimos a escuchar. Esa cercanía sigue guiando nuestra forma de recibir y acompañar.</p><Button to="/nosotros">Conoce al equipo</Button></div></section>
  <BlogBook/>
  <HomeClose/>

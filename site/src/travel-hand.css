@@ -137,15 +137,49 @@ html[data-theme="dark"] .th-photo{box-shadow:0 18px 40px rgba(0,0,0,.45)}
 html[data-theme="dark"] .th-bg{background:radial-gradient(70% 55% at 50% 58%,rgba(255,150,60,.07),transparent 70%),linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 88%,#000 12%) 100%)}
 .th-deco{grid-area:2/2;position:relative;z-index:0;pointer-events:none;min-height:0}
 .th-glow{position:absolute;left:50%;top:54%;width:min(74%,620px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,var(--brand-glow) 0%,transparent 66%)}
-.th-route{position:absolute;inset:0;width:100%;height:100%;overflow:visible;opacity:0}
-.th-route-line{stroke:var(--text-muted);stroke-width:2.6;stroke-linecap:round;stroke-dasharray:.1 9;opacity:.75}
-.th-stop{fill:var(--text-muted);opacity:clamp(0,calc((var(--rp,0) - var(--at,0)) * 14),.8)}
-.th-coord{font:600 10px var(--font);letter-spacing:.12em;fill:var(--text-muted);opacity:clamp(0,calc(var(--rp,0) * 6),.85)}
 .th-idx{margin-left:12px;font:600 12px var(--font);letter-spacing:.1em;font-variant-numeric:tabular-nums;color:var(--text-muted)}
-.th-lugar{position:absolute;left:0;top:0;z-index:3;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;color:var(--text-strong);opacity:0;pointer-events:none;will-change:transform,opacity}
+.th-lugar{position:absolute;left:0;top:0;z-index:3;display:inline-flex;align-items:center;gap:8px;height:26px;white-space:nowrap;color:var(--text-strong);opacity:0;pointer-events:none;will-change:transform,opacity}
 .th-lugar b{font:700 13px/1 var(--heading);font-variant:small-caps;letter-spacing:.14em}
 .th-lugar svg{flex:none;transform:rotate(-12deg);color:var(--text-muted)}
 /* Carta postal: filo interior fino y sombra de contacto suave bajo cada foto */
 .th-photo{outline:1px solid rgba(255,255,255,.7);outline-offset:-7px;box-shadow:0 1px 2px rgba(30,32,29,.22),0 14px 30px -6px rgba(30,32,29,.32)}
 html[data-theme="dark"] .th-photo{outline:1px solid rgba(245,245,240,.35);outline-offset:-7px;box-shadow:0 1px 2px rgba(0,0,0,.6),0 18px 40px rgba(0,0,0,.45)}
 @media(max-width:1099px){.th-deco{grid-area:5/1}.th-glow{width:92%}.th-idx{margin-left:auto}.th-head .eyebrow{display:flex;width:100%}}
+
+/* Móvil en flujo (<768 px): texto y CTA arriba, composición a todo el ancho debajo */
+.th--flow{margin-top:-34svh;z-index:2;background:var(--bg);padding-block:clamp(28px,8vw,56px) 40px;position:relative}
+.th--flow .th-head{display:block;margin-bottom:18px}
+.th--flow .th-head h2{font-size:clamp(26px,7.6vw,34px)}
+.thf-chips{position:sticky;top:var(--th-top,76px);z-index:4;margin:0 -16px;padding:8px 16px;background:var(--bg)}
+.thf-chips-in{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-block:2px}
+.thf-chips-in::-webkit-scrollbar{display:none}
+.thf-chips a{flex:none;display:inline-flex;align-items:center;min-height:44px;padding:6px 16px;border:1.5px solid var(--line-strong);border-radius:999px;background:var(--surface-1);font:600 15px/1 var(--font);white-space:nowrap;color:var(--text-strong)}
+.thf-chips a[aria-current=true]{background:var(--surface-2);border-color:var(--text-strong);box-shadow:inset 0 0 0 1px var(--text-strong)}
+.thf{padding-top:clamp(36px,10vw,56px);scroll-margin-top:calc(var(--th-top,76px) + 64px)}
+.thf-count{margin:0 0 10px;font:600 13px/1.4 var(--font);letter-spacing:.1em;text-transform:uppercase;font-variant-numeric:tabular-nums;color:var(--text)}
+.thf-title{margin:0;font-weight:800;font-size:clamp(34px,11.4vw,52px);line-height:.96;letter-spacing:-.04em;text-transform:uppercase;text-wrap:balance;color:var(--text-strong)}
+.thf-line{margin:14px 0 0;font-size:17px;line-height:1.45;color:var(--text)}
+.thf-line b{color:var(--text-strong)}
+.thf-links{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:14px}
+.thf-links .button{width:100%;min-height:48px;justify-content:space-between;white-space:nowrap;padding-inline:20px}
+.thf-hand{position:relative;width:100%;aspect-ratio:1/1.5;margin-top:22px;overflow:clip;contain:layout paint}
+.thf-mq{position:absolute;left:0;top:50%;transform:translateY(-50%);white-space:nowrap;font:800 38vw/.9 var(--heading);letter-spacing:-.04em;color:rgba(30,32,29,.05);pointer-events:none}
+html[data-theme="dark"] .thf-mq{color:rgba(245,245,240,.06)}
+.thf-p{position:absolute;display:block;aspect-ratio:4/5;height:auto;max-width:none;object-fit:cover;border-radius:20px;background:var(--surface-1);cursor:pointer;
+ --r:0deg;transform:rotate(var(--r));transition:transform 600ms var(--ease-in-out-strong),opacity 420ms var(--ease-out-strong),left 600ms var(--ease-in-out-strong),top 600ms var(--ease-in-out-strong),width 600ms var(--ease-in-out-strong)}
+.thf:not([data-in]) .thf-p{opacity:0;transform:translateY(48px) rotate(0deg) scale(.88)}
+.thf-p[data-pos="0"]{width:88%;left:6%;top:13.4%;z-index:6;--r:0deg;cursor:default;transition-delay:0s}
+.thf-p[data-pos="1"]{width:40%;left:-1%;top:0;z-index:3;--r:-8deg;transition-delay:.12s}
+.thf-p[data-pos="2"]{width:40%;left:61%;top:1%;z-index:3;--r:7deg;transition-delay:.18s}
+.thf-p[data-pos="3"]{width:40%;left:0;top:67%;z-index:3;--r:6deg;transition-delay:.24s}
+.thf-p[data-pos="4"]{width:40%;left:60%;top:66%;z-index:3;--r:-7deg;transition-delay:.3s}
+.thf-p[data-pos="5"]{width:70%;left:15%;top:20%;z-index:1;--r:-3deg;opacity:0;pointer-events:none}
+.thf-lugar{display:flex;align-items:center;justify-content:center;gap:8px;margin:14px 0 0;color:var(--text-strong)}
+.thf-lugar b{font:700 13px/1 var(--heading);font-variant:small-caps;letter-spacing:.14em}
+.thf-lugar svg{flex:none;transform:rotate(-12deg);color:var(--text-muted)}
+.thf-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px;padding-right:64px}
+.thf-foot .th-dots{display:flex;align-items:center;flex-wrap:wrap}
+.thf-p{outline:1px solid rgba(255,255,255,.7);outline-offset:-7px;box-shadow:0 1px 2px rgba(30,32,29,.22),0 14px 30px -6px rgba(30,32,29,.32)}
+html[data-theme="dark"] .thf-p{outline:1px solid rgba(245,245,240,.35);box-shadow:0 1px 2px rgba(0,0,0,.6),0 18px 40px rgba(0,0,0,.45)}
+.th--flow .th-all{position:static;margin-top:36px;text-align:center;pointer-events:auto}
+@media(prefers-reduced-motion:reduce){.thf-p{transition:opacity 150ms ease}.thf:not([data-in]) .thf-p{transform:rotate(var(--r))}}
