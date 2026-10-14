@@ -434,7 +434,7 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
                   return (
                     <div key={id} className="scrub-cap" data-for={id} aria-hidden="true">
                       <p className="scrub-cap-title">{x.titular}</p>
-                      <p className="scrub-cap-sub">{x.subtitulo}</p>
+                      {x.subtitulo ? <p className="scrub-cap-sub">{x.subtitulo}</p> : null}
                     </div>
                   );
                 })}

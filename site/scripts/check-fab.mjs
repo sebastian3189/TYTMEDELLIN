@@ -19,7 +19,7 @@ try {
       await page.goto(base + route, { waitUntil: 'load' }); await page.waitForTimeout(700);
       const info = await page.evaluate(() => { const f = document.querySelector('.wa-fab'); if (!f) return null; const r = f.getBoundingClientRect(), cs = getComputedStyle(f); return { w: r.width, right: innerWidth - r.right, bottom: innerHeight - r.bottom, href: f.href, label: f.getAttribute('aria-label'), bg: cs.backgroundColor, z: cs.zIndex, pos: cs.position, lang: document.documentElement.lang }; });
       assert(info, `${route} ${w}: sin botón`);
-      assert.equal(info.pos, 'fixed'); assert.equal(info.w, mobile ? 52 : 56); assert.equal(info.bg, 'rgb(37, 211, 102)');
+      assert.equal(info.pos, 'fixed'); assert.equal(info.w, mobile ? 58 : 64); assert.equal(info.bg, 'rgb(37, 211, 102)');
       assert(info.right >= 16 && info.bottom >= 16 - 1, `posición ${JSON.stringify(info)}`);
       assert(/^https:\/\/wa\.me\/573044961698\?text=[^&]*$/.test(info.href) && !/\d{7,}.*\d{7,}/.test(decodeURIComponent(info.href.split('text=')[1])), 'URL sin datos personales');
       assert.equal(info.label, route.startsWith('/en') ? 'Message us on WhatsApp' : 'Escribir por WhatsApp');

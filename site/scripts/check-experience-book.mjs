@@ -174,11 +174,10 @@ try {
     await page.goto(base, { waitUntil: 'load' }); await page.waitForFunction(() => document.querySelector('.scrub-hero')?.dataset.hydrated === 'true');
     const book = page.locator('.ft-book'); await book.scrollIntoViewIfNeeded(); await wait(page, 300);
     const before = await state(book);
-    await book.getByRole('button', { name: 'Nota siguiente', exact: true }).click(); await wait(page, 30);
-    assert.equal(await book.locator('.ft-turn-window').count(), 0, `${mode}: sin hoja`);
-    await wait(page, 20);
-    const fading = await book.evaluate((el) => el.querySelector('.bk-fade').getAnimations().some((a) => a.effect.getTiming().duration === 150));
-    assert(fading, `${mode}: fundido de 150 ms`);
+    // El fundido dura 150 ms: se comprueba en el mismo evaluate que hace el clic (sin carreras con la carga del equipo).
+    const fading = await book.evaluate((el) => new Promise((resolve) => { el.querySelector('button[aria-label="Nota siguiente"]').click(); requestAnimationFrame(() => requestAnimationFrame(() => resolve({ turn: el.querySelectorAll('.ft-turn-window').length, fade: [...el.querySelectorAll('.bk-fade')].some((f) => f.getAnimations().some((a) => a.effect.getTiming().duration === 150)) }))); }));
+    assert.equal(fading.turn, 0, `${mode}: sin hoja`); assert(fading.fade, `${mode}: fundido de 150 ms`);
+    await wait(page, 300);
     const after = await state(book);
     assert.notEqual(after.right, before.right); assert.equal(after.count, '02 / 03'); assert.equal(after.turning, 'false');
     await book.screenshot({ path: `${out}/${width}-${mode}.png` });

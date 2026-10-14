@@ -9,7 +9,7 @@ try{
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto((process.env.TYT_TEST_URL||'http://127.0.0.1:4417')); await page.waitForSelector('[data-hydrated=true]');
   assert.equal(await page.locator('.scrub-hero .ft-book').count(),0);
-  assert(await page.locator('main .blog-book').evaluate(el=>!el.nextElementSibling),'book last in main');
+  assert(await page.locator('main .blog-book').evaluate(el=>el.nextElementSibling?.classList.contains('home-close')),'book followed by closing section');
   await page.locator('.blog-book').scrollIntoViewIfNeeded();await page.waitForTimeout(500);
   assert.equal(await page.locator('.blog-book .ft-thumb').count(),3);
   await page.locator('.ft-main').screenshot({path:`${out}/${width}-book.png`});

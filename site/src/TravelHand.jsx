@@ -44,6 +44,19 @@ const ENTRIES = ORDER.map((slug) => {
 });
 const GROUPS = ENTRIES.reduce((acc, e, i) => { const last = acc[acc.length - 1]; if (last && last.name === e.category) last.items.push(i); else acc.push({ name: e.category, items: [i] }); return acc; }, []);
 
+// Detalles aditivos (decorativos, aria-hidden): nombre de lugar en versalitas bajo la carta, ruta punteada y glow. Solo transform/opacity/stroke-dashoffset.
+const smallCaps = (t) => t.toLocaleLowerCase('es').replace(/(^|[\s·(-])(\p{L})/gu, (m, a, b) => a + b.toLocaleUpperCase('es'));
+const ROUTE = [3, 1, 5, 7, 2, 4, 6]; // casillas por las que pasa el rastro (la carta central queda dentro del lazo)
+function routePath(W, H, slots) {
+  const pts = ROUTE.map((i) => [slots[i].cx * W, slots[i].cy * H]), seg = [`M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6], c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+    seg.push(`C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`);
+  }
+  return { d: seg.join(' '), pts };
+}
+
 // Casillas de la mano (fracciones de la región: centro, alto, giro, profundidad de parallax). La 0 es la delantera.
 const SLOTS = [
   { cx: 0.5, cy: 0.54, h: 0.76, r: 0, d: 1 }, { cx: 0.2, cy: 0.33, h: 0.4, r: -7, d: 1.5 }, { cx: 0.83, cy: 0.3, h: 0.38, r: 6, d: 0.6 }, { cx: 0.13, cy: 0.79, h: 0.34, r: 5, d: 1.2 },
@@ -74,7 +87,7 @@ export default function TravelHand() {
   const [active, setActive] = useState(0), [shown, setShown] = useState(0), [swap, setSwap] = useState(''); // swap: '' | 'out'
   const [full, setFull] = useState(() => new Set([0])), [fronts, setFronts] = useState({}), [live, setLive] = useState('');
   const [fit, setFit] = useState({ size: 64, lines: [ENTRIES[0].name] });
-  const tabList = useRef(null), root = useRef(null), track = useRef(null), stage = useRef(null), handEl = useRef(null), titleHost = useRef(null), mqEl = useRef(null), deckEl = useRef(null), tabs = useRef([]);
+  const decoEl = useRef(null), tabList = useRef(null), root = useRef(null), track = useRef(null), stage = useRef(null), handEl = useRef(null), titleHost = useRef(null), mqEl = useRef(null), deckEl = useRef(null), tabs = useRef([]);
   const st = useRef({ active: 0, fronts: {}, manualY: null, jump: () => {}, flip: 0 });
   st.current.fronts = fronts;
   const animated = mode === 'scrub';
@@ -135,7 +148,7 @@ export default function TravelHand() {
   useLayoutEffect(() => {
     if (!ready || !animated) return undefined;
     const trackEl = track.current, stageEl = stage.current, hand = handEl.current, mq = mqEl.current, deck = deckEl.current;
-    const small = window.matchMedia(SMALL).matches, wide = layout === 'wide', seg = wide ? SEG.wide : SEG.compact, shrink = wide ? 1 : innerWidth < 768 ? 0.62 : 0.82; // compacto: fotos más pequeñas, dentro de su propia región (<768 px: ≈25 % menos que antes, excepción autorizada del usuario)
+    const small = window.matchMedia(SMALL).matches, wide = layout === 'wide', seg = wide ? SEG.wide : SEG.compact, shrink = wide ? 1 : innerWidth < 768 ? 0.5 : 0.82, cap = innerWidth < 768 ? 168 : 1e4; // compacto: fotos más pequeñas, dentro de su propia región (<768 px: ≈25 % menos que antes, excepción autorizada del usuario)
     const total = RELAY + N * seg + EXIT;
     let raf = 0, visible = true, destroyed = false, q = null, lastT = 0, stageTop = 92, span = 1, RW = 0, RH = 0, sw = 0, sh = 0;
     let groupCache = null, trackTop = 0;
@@ -150,9 +163,18 @@ export default function TravelHand() {
       // Mazo de portadas pendientes: misma caja y rotaciones que el relevo de la película.
       const R = relayDeck(sw, sh, small);
       deck.style.setProperty('--dw', `${R.w}px`); deck.style.setProperty('--dh', `${R.h}px`); deck.style.setProperty('--dx', `${R.x - R.w / 2}px`); deck.style.setProperty('--dy', `${R.y - R.h / 2}px`);
+      // Rastro de ruta: se recalcula con el tamaño de la mano.
+      const deco = decoEl.current;
+      if (deco) {
+        const { d, pts } = routePath(RW, RH, SLOTS), mk = deco.querySelector('.th-route-mk'); deco.querySelector('svg').setAttribute('viewBox', `0 0 ${RW} ${RH}`);
+        deco.querySelectorAll('.th-route-d').forEach((el) => el.setAttribute('d', d));
+        routeLen = mk.getTotalLength(); mk.style.strokeDasharray = `${routeLen}`;
+        deco.querySelectorAll('.th-stop').forEach((c, i) => { c.setAttribute('cx', pts[i][0].toFixed(1)); c.setAttribute('cy', pts[i][1].toFixed(1)); });
+        const co = deco.querySelector('.th-coord'); co.setAttribute('x', '4'); co.setAttribute('y', '14');
+      }
       lastKey = '';
     };
-    let lastKey = '';
+    let lastKey = '', routeLen = 1;
 
     const apply = (P) => {
       const idx = clamp(Math.floor(P), 0, N - 1), s = clamp(P - idx, 0, 1), P2 = clamp(P, 0, N);
@@ -164,9 +186,9 @@ export default function TravelHand() {
         const vis = local > -0.2 && local < 1.25; g.style.visibility = vis ? 'visible' : 'hidden';
         if (!vis) continue;
         const ls = clamp(local, 0, 1), before = local < 0 ? smooth(clamp(1 + local * 4)) : 0; // llega desde el mazo en el 0–15 % del tramo
-        const imgs = [...g.querySelectorAll('.th-photo')], n = imgs.length;
+        const imgs = [...g.querySelectorAll('.th-photo')], n = imgs.length; let fr = null;
         imgs.forEach((img, k) => {
-          const slotIdx = k === f ? 0 : k < f ? k + 1 : k, slot = SLOTS[slotIdx % SLOTS.length], h = slot.h * RH * shrink, w = h * 0.8;
+          const slotIdx = k === f ? 0 : k < f ? k + 1 : k, slot = SLOTS[slotIdx % SLOTS.length], h = Math.min(cap, slot.h * RH * shrink), w = h * 0.8;
           if (img._w !== w) { img.style.width = `${w}px`; img.style.height = `${h}px`; img._w = w; }
           const front = slotIdx === 0;
           const tIn = front ? 0 : 0.14 + 0.055 * (slotIdx - 1), eIn = local < 0 ? 0 : front ? smooth(ls / 0.15) : smooth((ls - tIn) / 0.22);
@@ -180,14 +202,21 @@ export default function TravelHand() {
           const o = (front ? Math.max(0.0001, smooth(ls / 0.08) + (local < 0 ? 0 : 0)) : eIn) * (1 - eOut) * (local < 0 ? 0 : 1);
           img.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) rotate(${rot.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
           img.style.opacity = o.toFixed(3); img.style.zIndex = String(front ? 30 : 2 + Math.round(slot.d * 4));
+          if (front) fr = { x, y, w, h, sc, o, rot };
           img.style.pointerEvents = o > 0.6 && local >= 0 && local <= 1 ? 'auto' : 'none';
         });
+        // Nombre del lugar en versalitas bajo la carta delantera (tinta sólida, fuera de la foto).
+        const lg = g.querySelector('.th-lugar');
+        if (lg && fr) { lg.style.transform = `translate3d(${(fr.x + fr.w / 2).toFixed(1)}px,${(fr.y + fr.h / 2 + (fr.h * fr.sc) / 2 + 12).toFixed(1)}px,0) translateX(-50%)`; lg.style.opacity = (fr.o * smooth((ls - 0.12) / 0.1)).toFixed(3); }
       }
       // Marquesina decorativa del lugar: −25 % del ancho por tramo, sin bucle.
       const ls0 = clamp(P2 - idx, 0, 1);
       mq.style.transform = `translate3d(${(0.12 * sw - 0.25 * ls0 * sw).toFixed(1)}px,-50%,0)`;
       // Mazo pendiente: cartas del siguiente al quinto; se desvanece al final.
       deck.style.opacity = String(clamp(1 - (P2 - (N - 2)) * 1.2));
+      // Ruta punteada: se dibuja con el scroll de cada experiencia (0-70 % del tramo) y se desvanece al salir.
+      const deco = decoEl.current;
+      if (deco) { const rp = smooth(ls0 / 0.7), fadeR = smooth(clamp(ls0 * 10)) * (1 - smooth((ls0 - 0.9) / 0.1)); deco.style.setProperty('--rp', rp.toFixed(3)); deco.querySelector('.th-route-mk').style.strokeDashoffset = (routeLen * (1 - rp)).toFixed(1); deco.querySelector('.th-route').style.opacity = fadeR.toFixed(3); }
     };
 
     const render = (now) => {
@@ -249,7 +278,7 @@ export default function TravelHand() {
 
   const header = (
     <div className="th-head">
-      <p className="eyebrow">{t.eleccion}</p>
+      <p className="eyebrow">{t.eleccion}{animated && <span className="th-idx" aria-hidden="true">{two(shown + 1)} / {two(N)}</span>}</p>
       <h2 id="th-titulo">Un lugar para cada{' '}<br /><em>forma de viajar.</em></h2>
     </div>
   );
@@ -279,6 +308,16 @@ export default function TravelHand() {
     <section ref={root} className="th" id="formas-de-viajar" tabIndex={-1} data-hydrated="true" data-layout={layout} aria-labelledby="th-titulo">
       <div ref={track} className="th-track" style={trackStyle}>
         <div ref={stage} className="th-stage" data-on="false" data-swap={swap}>
+          <div className="th-bg" aria-hidden="true" />
+          <div ref={decoEl} className="th-deco" aria-hidden="true">
+            <i className="th-glow" />
+            <svg className="th-route" preserveAspectRatio="none" focusable="false">
+              <mask id="th-rm" maskUnits="userSpaceOnUse" x="-20" y="-20" width="4000" height="4000"><path className="th-route-d th-route-mk" fill="none" stroke="#fff" strokeWidth="8" strokeLinecap="round" /></mask>
+              <path className="th-route-d th-route-line" mask="url(#th-rm)" fill="none" />
+              {ROUTE.map((slot, i) => <circle key={slot} className="th-stop" r="3.2" style={{ '--at': (i / (ROUTE.length - 1)).toFixed(2) }} />)}
+              <text className="th-coord">6.24° N · 75.58° W</text>
+            </svg>
+          </div>
           <div className="th-mq-clip" aria-hidden="true"><div ref={mqEl} className="th-mq"><span>{entry.lugar}</span></div></div>
           {header}
           <div ref={titleHost} className="th-title-host">
@@ -305,12 +344,12 @@ export default function TravelHand() {
             {ENTRIES.map((e, gi) => {
               const near = Math.abs(gi - active) <= 1, hasFull = full.has(gi);
               if (!near && !hasFull) return null;
-              return <div className="th-group" data-i={gi} key={e.slug} aria-hidden={gi === active ? undefined : 'true'}>{e.photos.map((p, k) => (k === 0 || hasFull) ? <Photo key={k} photo={p} entry={e} k={k} primary={gi === active || k === 0} /> : null)}</div>;
+              return <div className="th-group" data-i={gi} key={e.slug} aria-hidden={gi === active ? undefined : 'true'}>{e.photos.map((p, k) => (k === 0 || hasFull) ? <Photo key={k} photo={p} entry={e} k={k} primary={gi === active || k === 0} /> : null)}<span className="th-lugar" aria-hidden="true"><b>{smallCaps(e.lugar)}</b><svg viewBox="0 0 32 32" width="26" height="26" focusable="false"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeDasharray="2 2.2" /><circle cx="16" cy="16" r="9" fill="none" stroke="currentColor" strokeWidth="1.2" /><path d="M11 17.5l3.2-3.2 2.3 2.3 4.5-4.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg></span></div>;
             })}
           </div>
           <div className="th-foot">
             <p className="th-cap">{ENTRIES[active].name} · fotografía {two(nowFront + 1)} de {two(ENTRIES[active].photos.length)}</p>
-            <div className="th-dots" role="group" aria-label="Fotografías">
+            <div className="th-dots" role="group" aria-label="Fotografías" style={{ '--dotw': ENTRIES[active].photos.length > 6 ? '17px' : '24px' }}>
               {ENTRIES[active].photos.map((_, k) => <button key={k} type="button" aria-label={`Foto ${k + 1} de ${ENTRIES[active].photos.length}`} aria-current={k === nowFront ? 'true' : undefined} onClick={() => select(active, k, true)}><i /></button>)}
             </div>
             <div className="th-arrows">

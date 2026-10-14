@@ -26,7 +26,7 @@ export const inicioTextos = {
     c2: {
       rotulo: 'Plaza Botero',
       titular: 'La ciudad como punto de partida', // existente: content.js moments[0]
-      subtitulo: 'Un grupo reunido frente al Palacio de la Cultura.',
+      subtitulo: '', // retirado por el usuario (2026-10-14): sin subtítulo en esta fase
     },
     final: {
       rotulo: 'Cierre',

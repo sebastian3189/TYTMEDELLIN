@@ -6,7 +6,8 @@ import { inicioTextos } from '../src/inicio-textos.js';
 
 // CONSTRUIR, Spec 03 H1/I: película continua, foto completa y 12 tours también en móvil.
 assert.deepEqual(timeline(false), { t0: 30, t1: 80, t2: 245, t3: 260, t4: 305, t5: 335, t6: 335, total: 339, clip: 165 }); // Spec 03 §K: tras la contracción solo queda el relevo
-assert.equal(timeline(true).t6 - timeline(true).t5, 12 * 34);
+assert.equal(timeline(true).t6 - timeline(true).t5, 0); // Spec 03 §K: sin tramo de 12 cartas; solo relevo + fundido
+assert.equal(timeline(true).total - timeline(true).t4, 34);
 const out = 'test-results/mobile-film-transition', checks = [];
 await mkdir(out, { recursive: true });
 const browser = await chromium.launch({ channel: 'msedge', headless: true });
