@@ -1,8 +1,8 @@
-import { A as SocialIcon, C as useMedia, D as textoFase, E as inicioTextos, F as company, I as whatsapp, M as Fragment$1, N as jsx, P as jsxs, S as useLightMotion, T as CHAPTERS, c as Arrow, f as Picture, l as Button, n as photos, o as rawTours, r as tours, t as articles, u as Eyebrow } from "../entry-server.js";
-import { t as Reviews } from "./Reviews-CZkkVS5X.js";
+import { E as textoFase, F as whatsapp, I as language, L as t, M as jsx, N as jsxs, P as company, S as useMedia, T as inicioTextos, c as Eyebrow, j as Fragment, k as SocialIcon, m as Arrow, n as photos, r as tours, s as Button, t as articles, u as Picture, w as CHAPTERS, x as useLightMotion } from "../entry-server.js";
+import { t as Reviews } from "./Reviews-_GbOMycc.js";
 /* empty css                       */
 import { Link } from "react-router-dom";
-import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 var inicio_frames_default = {
 	source: "clip1d-1080p.mp4",
 	fps: 24,
@@ -38,39 +38,41 @@ var inicio_frames_default = {
 		"quality": 74
 	}
 };
-var clamp$1 = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+var clamp$2 = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 var lerp = (a, b, t) => a + (b - a) * t;
 var smooth = (t) => {
-	t = clamp$1(t);
+	t = clamp$2(t);
 	return t * t * (3 - 2 * t);
 };
-/** Límites del recorrido en svh. Fase del clip: 165 svh escritorio / 140 svh móvil (ajuste aprobado, se conserva). */
+/** Límites del recorrido en svh. Fase del clip: 165 svh escritorio / 140 svh móvil (ajuste aprobado, se conserva). Tras la contracción (t4) solo queda el relevo (t4→t5) y el fundido final. */
 function timeline(mobile) {
-	if (mobile) return {
-		t0: 24,
-		t1: 64,
-		t2: 204,
-		t3: 228,
-		t4: 276,
-		t5: 300,
-		t6: 708,
-		total: 732,
-		clip: 140
-	};
+	if (mobile) {
+		const t0 = 24, t1 = 64, t2 = 204, t3 = 228, t4 = 276, t5 = 306;
+		return {
+			t0,
+			t1,
+			t2,
+			t3,
+			t4,
+			t5,
+			t6: t5,
+			total: 310,
+			clip: 140
+		};
+	}
+	const t0 = 30, t1 = 80, t2 = 245, t3 = 260, t4 = 305, t5 = 335;
 	return {
-		t0: 30,
-		t1: 80,
-		t2: 245,
-		t3: 260,
-		t4: 305,
-		t5: 335,
-		t6: 743,
-		total: 767,
+		t0,
+		t1,
+		t2,
+		t3,
+		t4,
+		t5,
+		t6: t5,
+		total: 339,
 		clip: 165
 	};
 }
-/** Progreso (svh) en el que la carta i queda enfocada (meseta). */
-var uForCard = (T, i) => T.t5 + 34 * i + 34 * .2;
 var ROT = [
 	-5.2,
 	3.8,
@@ -114,16 +116,13 @@ var DY = [
 	-7
 ];
 var FRAME_ROT = -2.4;
-/** Estado derivado de u: fase de interfaz, ventana del marco, foco de cartas. */
+/** Estado derivado de u: fase de interfaz, ventana del marco y relevo. */
 function stateAt(u, T, mobile) {
 	let ui = "deck";
 	if (u >= T.t0) ui = "flip";
 	if (u >= T.t1) ui = "clip";
 	if (u >= T.t3) ui = "shrink";
-	if (mobile && u >= T.t4) ui = "reveal";
-	if (!mobile && u >= T.t3 + .5 * (T.t4 - T.t3)) ui = "deck";
-	if (!mobile && u >= T.t4) ui = "fan";
-	if (u >= T.t5) ui = "cards";
+	if (u >= T.t4) ui = "relay";
 	let w = 0;
 	if (u >= T.t0 && u < T.t1) w = smooth((u - T.t0) / (T.t1 - T.t0));
 	else if (u >= T.t1 && u < T.t3) w = 1;
@@ -132,40 +131,56 @@ function stateAt(u, T, mobile) {
 	if (u < T.t1) D = 1 - smooth((u - T.t0) / (.45 * (T.t1 - T.t0)));
 	else if (u < T.t3) D = 0;
 	else if (u < T.t4) D = mobile ? 0 : smooth((u - T.t3 - .3 * (T.t4 - T.t3)) / (.7 * (T.t4 - T.t3)));
-	else D = mobile ? 0 : 1 - smooth((u - T.t4) / (.35 * (T.t5 - T.t4)));
-	const clipT = clamp$1((u - T.t1) / (T.t2 - T.t1));
-	const fanT = smooth((u - T.t4) / (T.t5 - T.t4));
-	let f = 0;
-	if (u >= T.t5) {
-		const raw = clamp$1((u - T.t5) / 34, 0, 12);
-		const i = Math.min(11, Math.floor(raw));
-		f = i + (i < 11 ? smooth((raw - i - .4) / .6) : 0);
-	}
-	const active = Math.round(f);
-	const sh = clamp$1(u / T.t0);
+	else D = mobile ? 0 : 1 - smooth((u - T.t4) / (.12 * (T.t5 - T.t4)));
+	const clipT = clamp$2((u - T.t1) / (T.t2 - T.t1));
+	const rel = smooth((u - T.t4) / (T.t5 - T.t4));
+	const fade = clamp$2((u - T.t5) / (T.total - T.t5));
+	const sh = clamp$2(u / T.t0);
 	return {
 		ui,
 		w,
 		D,
 		clipT,
-		fanT,
-		f,
-		active,
+		rel,
+		fade,
 		sh
 	};
 }
+/**
+* Caja del mazo en «La mano de viaje» (Spec 03 §K3/K4): abajo a la derecha del escenario. La comparten ScrubHero (destino del relevo) y TravelHand
+* (posición del mazo de portadas pendientes): mismo centro, misma altura y las mismas rotaciones (`deckPose`).
+*/
+function relayDeck(W, H, mobile) {
+	const h = mobile ? 96 : 150;
+	return mobile ? {
+		x: W - 16 - h * .4,
+		y: H - 200 - h * .5 - 12,
+		h,
+		w: h * .8
+	} : {
+		x: W - clamp$2(W * .05, 22, 88) - h * .4 - 8,
+		y: H - h * .5 - 32,
+		h,
+		w: h * .8
+	};
+}
+var deckPose = (i) => ({
+	dx: DX[i % 12],
+	dy: DY[i % 12],
+	r: ROT[i % 12]
+});
 /**
 * Medidas del escenario. `frame` = rectángulo natural de la capa del clip (x, y, w, h) en coordenadas del escenario.
 * Devuelve tamaños base, centro de la baraja, centro de la carta enfocada y rejilla de cierre.
 */
 function buildDims(W, H, mobile, frame) {
-	const pad = clamp$1(W * .05, 22, 88);
+	const pad = clamp$2(W * .05, 22, 88);
 	let Bh, Hd, deck, focus, m = null;
 	if (mobile) {
-		const A = H - 200, line = clamp$1((W - 44) / 10.5, 28, 40) * 1.05 * 2, short = A < 480;
+		const A = H - 200, line = clamp$2((W - 44) / 10.5, 28, 40) * 1.05 * 2, short = A < 480;
 		const t1Top = short ? 12 : 40, gapT = 16, pb = 12;
 		const rotAllow = (hd) => hd * .4 * Math.sin(6.5 * Math.PI / 180) + 8;
-		Hd = clamp$1(A - (t1Top + line + gapT + pb) - 2 * rotAllow(300), 150, 300);
+		Hd = clamp$2(A - (t1Top + line + gapT + pb) - 2 * rotAllow(300), 150, 300);
 		const al = rotAllow(Hd);
 		const deckTop = t1Top + line + gapT + al;
 		const free = H - 164 - (deckTop + Hd + al);
@@ -184,8 +199,8 @@ function buildDims(W, H, mobile, frame) {
 			A
 		};
 	} else {
-		Bh = clamp$1(H * .64, 280, 640);
-		Hd = clamp$1(H * .31, 220, 360);
+		Bh = clamp$2(H * .64, 280, 640);
+		Hd = clamp$2(H * .31, 220, 360);
 		deck = {
 			x: W / 2,
 			y: H * .49
@@ -208,7 +223,8 @@ function buildDims(W, H, mobile, frame) {
 		deck,
 		focus,
 		frame,
-		m
+		m,
+		relay: relayDeck(W, H, mobile)
 	};
 }
 /**
@@ -241,9 +257,9 @@ function frameWindow(d, w, out, clipT = 0) {
 	out.r = radius;
 	return out;
 }
-/** Posición de la carta i: mezcla baraja → columna (fan) → rejilla (gridT). Escribe en `out`. */
+/** Posición de la carta i: baraja → mazo del relevo (caja de «La mano de viaje»). Escribe en `out`. */
 function cardPlace(d, st, i, out) {
-	const { Bw, Bh, deck, focus, mobile } = d;
+	const { deck, mobile } = d;
 	const bump = Math.sin(Math.PI * st.sh), ang = i * 2.4 + st.sh * 3;
 	const rank = (i + Math.round(st.sh * 5)) % 12;
 	const dk = {
@@ -254,57 +270,23 @@ function cardPlace(d, st, i, out) {
 		o: mobile && i >= 5 && st.sh < .01 ? 0 : mobile && i >= 5 ? bump : 1,
 		z: 22 - rank
 	};
-	if (mobile) {
-		i - st.f;
-		const a = st.fanT;
-		const col = {
-			x: focus.x,
-			y: focus.y,
-			s: 1,
-			r: 0,
-			o: i === st.active ? 1 : 0,
-			z: i === st.active ? 200 : 1
-		};
-		for (const k of [
-			"x",
-			"y",
-			"s",
-			"r"
-		]) out[k] = lerp(dk[k], col[k], a);
-		out.o = st.clipT === 1 ? col.o * a : dk.o * (1 - smooth(st.w / .2));
-		out.z = a > 0 ? col.z : dk.z;
-		return out;
-	}
-	const dd = i - st.f, ad = Math.abs(dd), sg = Math.sign(dd);
-	const near = Math.min(ad, 1), far = Math.max(0, ad - 1);
-	const sc = (1 - .6 * smooth(near)) * (1 - .06 * far);
-	const col = {
-		x: focus.x + sg * Bw * ((sg < 0 ? .78 : .62) * near + .4 * far),
-		y: focus.y + sg * Bh * ((sg < 0 ? .12 : .8) * near + (sg < 0 ? .2 : .3) * far),
-		s: sc,
-		r: clamp$1(dd, -2.5, 2.5) * 4.5,
-		o: clamp$1(3 - ad, 0, 1),
-		z: Math.round(200 - ad * 20)
-	};
-	const a = st.fanT;
-	const mix = (k) => lerp(dk[k], col[k], a);
-	out.x = mix("x");
-	out.y = mix("y");
-	out.s = mix("s");
-	out.r = mix("r");
-	out.o = mix("o");
-	out.z = a < .5 ? dk.z : col.z;
-	if (st.w > .9) out.o = 0;
+	const a = st.rel, R = d.relay, ts = R.h / d.Bh, k = ts / dk.s;
+	out.x = lerp(dk.x, R.x + DX[i] * k, a);
+	out.y = lerp(dk.y, R.y + DY[i] * k, a);
+	out.s = lerp(dk.s, ts, a);
+	out.r = lerp(dk.r, ROT[i], a);
+	out.o = mobile ? dk.o * (1 - smooth(st.w / .2)) : st.w > .9 ? 0 : dk.o;
+	out.z = dk.z;
 	return out;
 }
 //#endregion
 //#region src/ScrubHero.jsx
 var BASE = "/media/inicio";
-var CARDS = "/media/baraja";
+var CARDS$1 = "/media/baraja";
 var MOBILE_QUERY = "(max-width: 799px)";
 var REDUCE_QUERY = "(prefers-reduced-motion: reduce)";
 var LOW_HEIGHT_QUERY = "(max-height: 560px)";
-var REDUCE_KEY = "tyt-reducir-movimiento";
+var REDUCE_KEY$1 = "tyt-reducir-movimiento";
 var WINDOW = {
 	desktop: {
 		ahead: 14,
@@ -356,22 +338,22 @@ var FLOATS = [
 		-3
 	]
 ];
-var clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
-var readReduce = () => {
+var clamp$1 = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+var readReduce$1 = () => {
 	try {
-		return localStorage.getItem(REDUCE_KEY) === "1";
+		return localStorage.getItem(REDUCE_KEY$1) === "1";
 	} catch {
 		return false;
 	}
 };
 var writeReduce = (on) => {
 	try {
-		if (on) localStorage.setItem(REDUCE_KEY, "1");
-		else localStorage.removeItem(REDUCE_KEY);
+		if (on) localStorage.setItem(REDUCE_KEY$1, "1");
+		else localStorage.removeItem(REDUCE_KEY$1);
 	} catch {}
 };
 var osReduce = () => typeof window !== "undefined" && window.matchMedia(REDUCE_QUERY).matches;
-var prefersStatic = (user) => {
+var prefersStatic$1 = (user) => {
 	if (typeof window === "undefined") return true;
 	if (user || osReduce() || window.matchMedia(LOW_HEIGHT_QUERY).matches) return true;
 	const c = navigator.connection;
@@ -400,59 +382,11 @@ function frameOrder(count, mobile) {
 	if (!seen.has(count - 1)) order.splice(1, 0, count - 1);
 	return order;
 }
-var cardImg = (slug, k) => `${CARDS}/${slug}-${k}.webp`;
-var copy = (slug) => inicioTextos.cartas[slug];
-var two$1 = (n) => String(n).padStart(2, "0");
-function CartaLista({ card }) {
-	const c = copy(card.slug);
-	return /* @__PURE__ */ jsxs(Link, {
-		className: "sc-card",
-		to: `/experiencias/${card.slug}`,
-		children: [
-			/* @__PURE__ */ jsx("span", {
-				className: "sc-img",
-				children: /* @__PURE__ */ jsx("img", {
-					src: cardImg(card.slug, "t"),
-					srcSet: `${cardImg(card.slug, "t")} 320w, ${cardImg(card.slug, "m")} 400w, ${cardImg(card.slug, "d")} 640w`,
-					sizes: "(max-width: 600px) 46vw, (max-width: 1000px) 30vw, 22vw",
-					width: "320",
-					height: "400",
-					alt: "",
-					loading: "lazy",
-					decoding: "async"
-				})
-			}),
-			/* @__PURE__ */ jsxs("span", {
-				className: "sc-count",
-				children: [
-					two$1(card.n),
-					" / ",
-					12
-				]
-			}),
-			/* @__PURE__ */ jsx("h3", {
-				className: "sc-name",
-				children: card.name
-			}),
-			/* @__PURE__ */ jsxs("p", {
-				className: "sc-line",
-				children: [
-					/* @__PURE__ */ jsxs("b", { children: [c.emocion, ":"] }),
-					" ",
-					c.frase
-				]
-			})
-		]
-	});
-}
+var cardImg = (slug, k) => `${CARDS$1}/${slug}-${k}.webp`;
+var two$2 = (n) => String(n).padStart(2, "0");
 function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary }) {
 	const root = useRef(null), track = useRef(null), stage = useRef(null), canvas = useRef(null), skipRef = useRef(null), media = useRef(null);
-	const floatRef = useRef(null), deckRef = useRef(null), mqRef = useRef(null), titleRef = useRef(null), stripRef = useRef(null), stackRef = useRef(null);
-	const api = useRef({
-		jump: () => {},
-		step: () => {},
-		active: 0
-	});
+	const floatRef = useRef(null), deckRef = useRef(null), titleRef = useRef(null), stackRef = useRef(null);
 	const [ready, setReady] = useState(false);
 	const [reduce, setReduce] = useState(false);
 	const [mode, setMode] = useState("static");
@@ -461,20 +395,20 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 	const reduceRef = useRef(reduce);
 	reduceRef.current = reduce;
 	useLayoutEffect(() => {
-		const user = readReduce();
+		const user = readReduce$1();
 		reduceRef.current = user;
 		setReduce(user);
 		setMobile(window.matchMedia(MOBILE_QUERY).matches);
-		setMode(prefersStatic(user) ? "static" : "scrub");
+		setMode(prefersStatic$1(user) ? "static" : "scrub");
 		setReady(true);
 	}, []);
 	const osNow = ready && osReduce();
 	useEffect(() => {
 		const queries = [REDUCE_QUERY, LOW_HEIGHT_QUERY].map((q) => window.matchMedia(q));
 		const size = window.matchMedia(MOBILE_QUERY);
-		const onReduce = () => setMode((m) => prefersStatic(reduceRef.current) ? "static" : m === "failed" || m === "tight" ? m : "scrub");
+		const onReduce = () => setMode((m) => prefersStatic$1(reduceRef.current) ? "static" : m === "failed" || m === "tight" ? m : "scrub");
 		const onSize = () => setMobile(size.matches);
-		const onResize = () => setMode((m) => m === "tight" && tightKey.current !== `${innerWidth}x${innerHeight}` ? prefersStatic(reduceRef.current) ? "static" : "scrub" : m);
+		const onResize = () => setMode((m) => m === "tight" && tightKey.current !== `${innerWidth}x${innerHeight}` ? prefersStatic$1(reduceRef.current) ? "static" : "scrub" : m);
 		queries.forEach((q) => q.addEventListener("change", onReduce));
 		size.addEventListener("change", onSize);
 		window.addEventListener("resize", onResize);
@@ -490,7 +424,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 		setReduce(next);
 		reduceRef.current = next;
 		window.dispatchEvent(new Event("tyt-motion"));
-		setMode((m) => prefersStatic(next) ? "static" : m === "failed" || m === "tight" ? m : "scrub");
+		setMode((m) => prefersStatic$1(next) ? "static" : m === "failed" || m === "tight" ? m : "scrub");
 	};
 	useLayoutEffect(() => {
 		if (!ready || mode !== "scrub") return void 0;
@@ -513,15 +447,12 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 		const CAP_C2 = [PLAZA, T.t3 + .5 * (T.t4 - T.t3)];
 		const blobs = new Array(count).fill(null), full = new Array(count).fill(null), low = new Array(count).fill(null);
 		const pending = /* @__PURE__ */ new Set(), controller = new AbortController();
-		let raf = 0, visible = true, destroyed = false, lastKey = "", ui = "", cap = "", chapter = 0, activeCard = -1, loaded = 0, failures = 0;
-		let W = 0, H = 0, stageTop = 92, q = null, lastT = 0, center = 0, version = 0, live = 0, peak = 0, bytes = 0, peakBytes = 0, dims = null, mqWidths = [], span = 1;
+		let raf = 0, visible = true, destroyed = false, lastKey = "", ui = "", cap = "", chapter = 0, loaded = 0, failures = 0;
+		let W = 0, H = 0, stageTop = 92, q = null, lastT = 0, center = 0, version = 0, live = 0, peak = 0, bytes = 0, peakBytes = 0, dims = null, span = 1;
 		const fw = {}, cp = {}, lastCard = new Array(12).fill(""), lastFx = {};
 		const cardEls = deckRef.current ? [...deckRef.current.querySelectorAll(".bd-card")] : [];
-		const fullImgs = cardEls.map((el) => el.querySelector(".bd-full"));
-		const mqItems = mqRef.current ? [...mqRef.current.querySelectorAll(".bd-mq-item")] : [];
-		const fxEls = titleRef.current ? [...titleRef.current.querySelectorAll("[data-fx]")] : [], stripEl = stripRef.current;
+		const fxEls = titleRef.current ? [...titleRef.current.querySelectorAll("[data-fx]")] : [];
 		const floatEls = floatRef.current ? [...floatRef.current.querySelectorAll(".bd-float")] : [];
-		const capEls = [...stageEl.querySelectorAll(".bd-cap")], planEls = [...stageEl.querySelectorAll(".bd-plan")], stripBtns = [...stageEl.querySelectorAll(".scrub-strip [data-i]")];
 		const track2 = (delta, size) => {
 			live += delta;
 			bytes += delta * size;
@@ -582,13 +513,6 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 			}
 			stageEl.style.setProperty("--deck-top", `${dims.deck.y - dims.Hd / 2}px`);
 			stageEl.style.setProperty("--deck-bottom", `${dims.deck.y + dims.Hd / 2}px`);
-			const room = Math.max(40, (dims.focus.y - dims.Bh / 2 - 22 - 26) / .9), usable = .9 * (dims.W - 2 * dims.pad);
-			mqWidths = mqItems.map((el) => {
-				el.style.fontSize = "100px";
-				const w100 = el.firstElementChild?.getBoundingClientRect().width || 1, size = Math.min(120, room, usable * 100 / w100);
-				el.style.fontSize = `${size.toFixed(1)}px`;
-				return w100 * size / 100;
-			});
 			lastCard.fill("");
 			Object.keys(lastFx).forEach((k) => delete lastFx[k]);
 			lastKey = "";
@@ -651,17 +575,11 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 				});
 			}
 		};
-		const wantFull = (from, to) => {
-			for (let i = Math.max(0, from); i <= Math.min(11, to); i++) {
-				const img = fullImgs[i];
-				if (img && !img.getAttribute("src")) img.setAttribute("src", img.dataset.src);
-			}
-		};
 		const place = (u, st) => {
 			frameWindow(dims, st.w, fw, st.clipT);
 			const fullFrame = st.w >= .999 && (!mobile || st.clipT <= .6);
 			const fkey = fullFrame ? "full" : `${fw.tx.toFixed(1)}|${fw.ty.toFixed(1)}|${fw.rot.toFixed(2)}|${fw.s.toFixed(4)}|${fw.ix.toFixed(1)}|${fw.iy.toFixed(1)}|${fw.r.toFixed(2)}`;
-			const fo = 1 - smooth(clamp(st.fanT * 2));
+			const fo = 1 - smooth(clamp$1(st.rel * 2.5));
 			const mkey = `${fkey}|${fo.toFixed(3)}`;
 			if (lastFx.media !== mkey) {
 				lastFx.media = mkey;
@@ -677,12 +595,6 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 			}
 			for (let i = 0; i < cardEls.length; i++) {
 				cardPlace(dims, st, i, cp);
-				if (mobile) {
-					const interactive = st.ui === "cards" && i === st.active;
-					cardEls[i].tabIndex = interactive ? 0 : -1;
-					cardEls[i].setAttribute("aria-hidden", String(!interactive));
-					cardEls[i].style.pointerEvents = interactive ? "auto" : "none";
-				}
 				const key = `${cp.x.toFixed(1)}|${cp.y.toFixed(1)}|${cp.r.toFixed(2)}|${cp.s.toFixed(4)}|${cp.o.toFixed(3)}|${cp.z}`;
 				if (key === lastCard[i]) continue;
 				lastCard[i] = key;
@@ -692,7 +604,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 				el.style.zIndex = String(cp.z);
 				el.style.setProperty("--inv", (1 / cp.s).toFixed(3));
 			}
-			const dKey = st.D.toFixed(3), dOp = mobile ? clamp(st.D * 2 - 1) : st.D, dMove = mobile ? .035 : .05;
+			const dKey = st.D.toFixed(3), dOp = mobile ? clamp$1(st.D * 2 - 1) : st.D, dMove = mobile ? .035 : .05;
 			if (lastFx.d !== dKey) {
 				lastFx.d = dKey;
 				for (const el of fxEls) {
@@ -702,7 +614,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 					el.style.visibility = dOp < .01 ? "hidden" : "visible";
 				}
 			}
-			const fp = clamp(u / T.t1), fk = `${fp.toFixed(3)}|${dKey}`;
+			const fp = clamp$1(u / T.t1), fk = `${fp.toFixed(3)}|${dKey}`;
 			if (floatEls.length && lastFx.f !== fk) {
 				lastFx.f = fk;
 				for (const el of floatEls) {
@@ -712,23 +624,11 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 					el.style.visibility = st.D < .01 ? "hidden" : "visible";
 				}
 			}
-			const sv = Math.max(st.D, st.fanT), sKey = sv.toFixed(3);
-			if (stripEl && lastFx.s !== sKey) {
-				lastFx.s = sKey;
-				stripEl.style.opacity = sKey;
-				stripEl.style.visibility = sv < .01 ? "hidden" : "visible";
-			}
-			const mqA = st.fanT, drift = dims.W * .04;
-			for (let i = 0; i < mqItems.length; i++) {
-				const a = st.f - i, o = clamp(1 - Math.abs(a) * 1.6) * mqA;
-				const dx = -Math.sign(a) * drift * clamp((Math.abs(a) - .3) / .7);
-				const mk = `${o.toFixed(2)}|${Math.round(dx)}`;
-				if (lastFx[`m${i}`] === mk) continue;
-				lastFx[`m${i}`] = mk;
-				const el = mqItems[i];
-				el.style.opacity = o.toFixed(3);
-				el.style.visibility = o < .01 ? "hidden" : "visible";
-				if (o >= .01) el.style.transform = `translate3d(${(dims.W - mqWidths[i]) / 2 + dx}px,0,0)`;
+			const fadeKey = st.fade.toFixed(3);
+			if (lastFx.fade !== fadeKey) {
+				lastFx.fade = fadeKey;
+				stageEl.style.opacity = st.fade > 0 ? String(1 - st.fade) : "";
+				stageEl.style.pointerEvents = st.fade >= 1 ? "none" : "";
 			}
 		};
 		const render = (now) => {
@@ -739,7 +639,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 			}
 			const rect = trackEl.getBoundingClientRect();
 			span = Math.max(1, trackEl.offsetHeight - stageEl.offsetHeight);
-			const target = clamp((stageTop - rect.top) / span);
+			const target = clamp$1((stageTop - rect.top) / span);
 			const dt = lastT ? Math.min(64, now - lastT) : 16;
 			lastT = now;
 			if (q === null || Math.abs(target - q) > JUMP) q = target;
@@ -751,14 +651,13 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 			}
 			const u = q * T.total;
 			const st = stateAt(u, T, mobile);
-			if (mobile) stageEl.dataset.phase = u < T.t2 ? "film" : u < T.t3 ? "hold" : u < T.t4 ? "shrink" : u < T.t5 ? "reveal" : "cards";
+			if (mobile) stageEl.dataset.phase = u < T.t2 ? "film" : u < T.t3 ? "hold" : u < T.t4 ? "shrink" : "relay";
 			if (st.ui !== ui) {
 				ui = st.ui;
 				stageEl.dataset.ui = ui;
 			}
 			let newCap = "";
-			if (st.ui === "cards") newCap = "cards";
-			else if (u >= CAP_C1[0] && u < CAP_C1[1]) newCap = "c1";
+			if (u >= CAP_C1[0] && u < CAP_C1[1]) newCap = "c1";
 			else if (u >= CAP_C2[0] && u < CAP_C2[1]) newCap = "c2";
 			if (newCap !== cap) {
 				cap = newCap;
@@ -769,19 +668,6 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 				chapter = newChapter;
 				stageEl.dataset.ch = String(chapter);
 			}
-			const act = st.ui === "cards" ? st.active : -1;
-			if (act !== activeCard) {
-				stageEl.style.setProperty("--card-enter", act >= activeCard ? "22px" : "-22px");
-				cardEls.forEach((el, i) => el.classList.toggle("is-current", i === act));
-				activeCard = act;
-				stageEl.dataset.card = String(act);
-				api.current.active = act;
-				capEls.forEach((el, i) => el.classList.toggle("is-on", i === act));
-				planEls.forEach((el, i) => el.classList.toggle("is-on", i === act));
-				stripBtns.forEach((el, i) => el.toggleAttribute("data-on", i === act));
-				if (act >= 0) wantFull(act - 1, act + 2);
-			}
-			if (u >= T.t2 && u < T.t5 && !fullImgs[0]?.getAttribute("src")) wantFull(0, 2);
 			center = Math.round(st.clipT * (count - 1));
 			manage();
 			const baseIdx = Math.round(st.clipT * (count - 1));
@@ -806,19 +692,6 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 		const schedule = () => {
 			if (!raf && !destroyed) raf = requestAnimationFrame(render);
 		};
-		api.current.jump = (u) => {
-			const top = trackEl.getBoundingClientRect().top + window.scrollY;
-			window.scrollTo({
-				top: top - stageTop + u / T.total * span,
-				behavior: "instant"
-			});
-			schedule();
-		};
-		api.current.step = (dir) => api.current.jump(uForCard(T, clamp(Math.max(api.current.active, 0) + dir, 0, 11)));
-		api.current.card = (i) => {
-			if (Math.abs((q === null ? 0 : q * T.total) - uForCard(T, i)) > 6) api.current.jump(uForCard(T, i));
-		};
-		api.current.T = T;
 		const fetchBlob = async (url) => {
 			const response = await fetch(url, { signal: controller.signal });
 			if (!response.ok) throw new Error(String(response.status));
@@ -889,7 +762,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 		});
 		measure();
 		if (dims) {
-			q = clamp((stageTop - trackEl.getBoundingClientRect().top) / Math.max(1, trackEl.offsetHeight - stageEl.offsetHeight));
+			q = clamp$1((stageTop - trackEl.getBoundingClientRect().top) / Math.max(1, trackEl.offsetHeight - stageEl.offsetHeight));
 			span = Math.max(1, trackEl.offsetHeight - stageEl.offsetHeight);
 			const st0 = stateAt(q * T.total, T, mobile);
 			stageEl.dataset.ui = ui = st0.ui;
@@ -912,7 +785,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 		const start = () => {
 			if (started || destroyed) return;
 			started = true;
-			for (const el of [...floatEls, ...stripEl ? stripEl.querySelectorAll("i[data-bg]") : []]) if (el.dataset.bg) el.style.backgroundImage = `url(${el.dataset.bg})`;
+			for (const el of floatEls) if (el.dataset.bg) el.style.backgroundImage = `url(${el.dataset.bg})`;
 			load();
 		};
 		const near = new IntersectionObserver(([entry]) => {
@@ -920,7 +793,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 				start();
 				near.disconnect();
 			}
-		}, { rootMargin: "100% 0px" });
+		}, { rootMargin: "60% 0px" });
 		near.observe(section);
 		return () => {
 			destroyed = true;
@@ -952,16 +825,15 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 			]) delete section.dataset[k];
 			for (const el of [
 				mediaEl,
-				stripEl,
 				...floatEls,
 				...cardEls,
-				...mqItems,
 				...fxEls
 			]) el?.removeAttribute("style");
+			stageEl.style.opacity = "";
+			stageEl.style.pointerEvents = "";
 			stageEl.dataset.ui = "deck";
 			stageEl.dataset.cap = "";
 			stageEl.dataset.ch = "1";
-			stageEl.dataset.card = "-1";
 			for (const k of [
 				"--bw",
 				"--bh",
@@ -972,9 +844,6 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 			]) stageEl.style.removeProperty(k);
 			delete stageEl.dataset.short;
 			delete stageEl.dataset.phase;
-			api.current.jump = () => {};
-			api.current.step = () => {};
-			api.current.card = () => {};
 		};
 	}, [
 		ready,
@@ -982,7 +851,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 		mobile
 	]);
 	const skip = () => {
-		const next = nextId && document.getElementById(nextId);
+		const next = nextId && document.getElementById(nextId) || document.getElementById("formas-de-viajar");
 		if (!next) return;
 		next.scrollIntoView({
 			behavior: "instant",
@@ -990,364 +859,218 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 		});
 		next.focus({ preventScroll: true });
 	};
-	const tilt = (e) => {
-		if (e.pointerType !== "mouse") return;
-		const el = e.currentTarget.querySelector(".bd-tilt");
-		if (!el) return;
-		const r = e.currentTarget.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
-		el.style.setProperty("--ry", `${(x * 8).toFixed(2)}deg`);
-		el.style.setProperty("--rx", `${(-y * 8).toFixed(2)}deg`);
-	};
-	const untilt = (e) => {
-		const el = e.currentTarget.querySelector(".bd-tilt");
-		if (el) {
-			el.style.removeProperty("--ry");
-			el.style.removeProperty("--rx");
-		}
-	};
-	const onCardKey = (e, i) => {
-		const next = e.key === "ArrowRight" ? i + 1 : e.key === "ArrowLeft" ? i - 1 : null;
-		if (next === null || next < 0 || next >= 12) return;
-		deckRef.current?.querySelectorAll(".bd-card")[next]?.focus({ preventScroll: true });
-	};
 	const staticMode = mode !== "scrub";
 	const animated = !staticMode;
-	const deckLinks = animated;
 	const t = inicioTextos;
-	const bar = /* @__PURE__ */ jsx("button", {
+	const bar = /* @__PURE__ */ jsxs("button", {
 		type: "button",
 		className: "scrub-motion",
 		"aria-pressed": reduce || osNow,
 		disabled: osNow,
 		onClick: toggleReduce,
-		children: reduce || osNow ? "Activar movimiento" : "Reducir movimiento"
+		title: reduce || osNow ? "Activar movimiento" : "Reducir movimiento",
+		children: [/* @__PURE__ */ jsx("svg", {
+			className: "ctl-ico",
+			viewBox: "0 0 24 24",
+			width: "18",
+			height: "18",
+			fill: "currentColor",
+			"aria-hidden": "true",
+			focusable: "false",
+			children: reduce || osNow ? /* @__PURE__ */ jsx("path", { d: "M8 5.5v13l10-6.5z" }) : /* @__PURE__ */ jsx("path", { d: "M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" })
+		}), /* @__PURE__ */ jsx("span", {
+			className: "ctl-label",
+			children: reduce || osNow ? "Activar movimiento" : "Reducir movimiento"
+		})]
 	});
 	return /* @__PURE__ */ jsxs("section", {
 		ref: root,
 		className: `scrub-hero ${staticMode ? "is-static" : ""}`,
 		"data-hydrated": ready ? "true" : "false",
 		"aria-label": "Elige tu próximo recuerdo",
-		children: [
-			/* @__PURE__ */ jsx("div", {
-				ref: track,
-				className: "scrub-track",
-				style: animated ? { "--total": timeline(mobile).total } : void 0,
-				children: /* @__PURE__ */ jsxs("div", {
-					ref: stage,
-					className: "scrub-stage",
-					"data-ui": "deck",
-					"data-cap": "",
-					"data-ch": "1",
-					"data-card": "-1",
-					"data-textos": t.estado,
-					children: [
-						animated && !mobile && /* @__PURE__ */ jsx("div", {
-							ref: mqRef,
-							className: "bd-mq",
-							"aria-hidden": "true",
-							children: cards.map((c) => {
-								const place = copy(c.slug).lugar;
-								return /* @__PURE__ */ jsx("p", {
-									className: "bd-mq-item",
-									children: /* @__PURE__ */ jsx("span", { children: place })
-								}, c.slug);
-							})
-						}),
-						/* @__PURE__ */ jsxs("div", {
-							ref: media,
-							className: "scrub-media",
-							children: [/* @__PURE__ */ jsxs("picture", {
-								className: "scrub-poster",
-								children: [
-									/* @__PURE__ */ jsx("source", {
-										media: MOBILE_QUERY,
-										type: "image/avif",
-										srcSet: `${BASE}/poster-m.avif`
-									}),
-									/* @__PURE__ */ jsx("source", {
-										media: MOBILE_QUERY,
-										type: "image/webp",
-										srcSet: `${BASE}/poster-m.webp`
-									}),
-									/* @__PURE__ */ jsx("source", {
-										type: "image/avif",
-										srcSet: `${BASE}/poster-1280.avif 1280w, ${BASE}/poster-1600.avif 1600w`,
-										sizes: "100vw"
-									}),
-									/* @__PURE__ */ jsx("img", {
-										src: `${BASE}/poster-1600.webp`,
-										srcSet: `${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`,
-										sizes: "100vw",
-										width: "1600",
-										height: "900",
-										alt: "Vista de Medellín desde la ladera de la Comuna 13",
-										loading: "lazy",
-										decoding: "async"
-									})
-								]
-							}), animated && /* @__PURE__ */ jsx("canvas", {
-								ref: canvas,
-								className: "scrub-canvas",
-								"aria-hidden": "true"
-							})]
-						}),
-						/* @__PURE__ */ jsxs("div", {
-							ref: titleRef,
-							className: "scrub-title",
-							children: [/* @__PURE__ */ jsx("p", {
-								className: "eyebrow scrub-lema",
-								"data-fx": "0",
-								children: "Experiencias"
-							}), /* @__PURE__ */ jsx("h2", {
-								className: "scrub-t1",
-								"data-fx": "-1",
-								children: t.eleccion
-							})]
-						}),
-						/* @__PURE__ */ jsxs("div", {
-							className: "scrub-panel",
-							children: [animated && /* @__PURE__ */ jsxs("div", {
-								className: "scrub-index",
-								"aria-hidden": "true",
-								children: [/* @__PURE__ */ jsx("div", {
-									className: "scrub-ch-stack",
-									children: CHAPTERS.map((id, i) => /* @__PURE__ */ jsxs("p", {
-										className: "scrub-ch",
-										"data-for": i + 1,
-										children: [/* @__PURE__ */ jsxs("span", {
-											className: "scrub-count",
-											children: [
-												two$1(i + 1),
-												" / ",
-												two$1(CHAPTERS.length)
-											]
-										}), /* @__PURE__ */ jsx("span", {
-											className: "scrub-place",
-											children: t.fases[id].rotulo
-										})]
-									}, id))
-								}), /* @__PURE__ */ jsx("div", {
-									className: "scrub-segs",
-									children: CHAPTERS.map((id, i) => /* @__PURE__ */ jsx("i", { "data-for": i + 1 }, id))
-								})]
-							}), /* @__PURE__ */ jsx("div", {
-								className: "scrub-text",
-								children: /* @__PURE__ */ jsxs("div", {
-									ref: stackRef,
-									className: "scrub-stack",
-									children: [
-										/* @__PURE__ */ jsxs("div", {
-											className: "scrub-intro",
-											children: [/* @__PURE__ */ jsx("p", {
-												className: "scrub-vive",
-												children: textoFase("c1").titular
-											}), /* @__PURE__ */ jsx("p", {
-												className: "scrub-vive-sub",
-												children: textoFase("c1").subtitulo
-											})]
-										}),
-										animated && ["c1", "c2"].map((id) => {
-											const x = textoFase(id);
-											return /* @__PURE__ */ jsxs("div", {
-												className: "scrub-cap",
-												"data-for": id,
-												"aria-hidden": "true",
-												children: [/* @__PURE__ */ jsx("p", {
-													className: "scrub-cap-title",
-													children: x.titular
-												}), /* @__PURE__ */ jsx("p", {
-													className: "scrub-cap-sub",
-													children: x.subtitulo
-												})]
-											}, id);
-										}),
-										deckLinks && cards.map((c, i) => {
-											const tx = copy(c.slug);
-											return /* @__PURE__ */ jsxs("div", {
-												className: "scrub-cap bd-cap",
-												"data-for": "card",
-												"data-i": i,
-												children: [
-													/* @__PURE__ */ jsxs("p", {
-														className: "scrub-count bd-count",
-														children: [
-															two$1(i + 1),
-															" / ",
-															12
-														]
-													}),
-													/* @__PURE__ */ jsx("h2", {
-														className: "scrub-cap-title bd-name",
-														children: c.name
-													}),
-													/* @__PURE__ */ jsxs("p", {
-														className: "scrub-cap-sub",
-														children: [
-															/* @__PURE__ */ jsxs("b", { children: [tx.emocion, ":"] }),
-															" ",
-															tx.frase
-														]
-													})
-												]
-											}, c.slug);
-										})
-									]
+		children: [/* @__PURE__ */ jsx("div", {
+			ref: track,
+			className: "scrub-track",
+			style: animated ? { "--total": timeline(mobile).total } : void 0,
+			children: /* @__PURE__ */ jsxs("div", {
+				ref: stage,
+				className: "scrub-stage",
+				"data-ui": "deck",
+				"data-cap": "",
+				"data-ch": "1",
+				"data-textos": t.estado,
+				children: [
+					/* @__PURE__ */ jsxs("div", {
+						ref: media,
+						className: "scrub-media",
+						children: [/* @__PURE__ */ jsxs("picture", {
+							className: "scrub-poster",
+							children: [
+								/* @__PURE__ */ jsx("source", {
+									media: MOBILE_QUERY,
+									type: "image/avif",
+									srcSet: `${BASE}/poster-m.avif`
+								}),
+								/* @__PURE__ */ jsx("source", {
+									media: MOBILE_QUERY,
+									type: "image/webp",
+									srcSet: `${BASE}/poster-m.webp`
+								}),
+								/* @__PURE__ */ jsx("source", {
+									type: "image/avif",
+									srcSet: `${BASE}/poster-1280.avif 1280w, ${BASE}/poster-1600.avif 1600w`,
+									sizes: "100vw"
+								}),
+								/* @__PURE__ */ jsx("img", {
+									src: `${BASE}/poster-1600.webp`,
+									srcSet: `${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`,
+									sizes: "100vw",
+									width: "1600",
+									height: "900",
+									alt: "Vista de Medellín desde la ladera de la Comuna 13",
+									loading: "lazy",
+									decoding: "async"
 								})
-							})]
-						}),
-						animated && !mobile && /* @__PURE__ */ jsx("div", {
-							ref: stripRef,
-							className: "scrub-strip",
+							]
+						}), animated && /* @__PURE__ */ jsx("canvas", {
+							ref: canvas,
+							className: "scrub-canvas",
+							"aria-hidden": "true"
+						})]
+					}),
+					/* @__PURE__ */ jsxs("div", {
+						ref: titleRef,
+						className: "scrub-title",
+						children: [/* @__PURE__ */ jsx("p", {
+							className: "eyebrow scrub-lema",
+							"data-fx": "0",
+							children: "Experiencias"
+						}), /* @__PURE__ */ jsx("h2", {
+							className: "scrub-t1",
+							"data-fx": "-1",
+							children: t.eleccion
+						})]
+					}),
+					/* @__PURE__ */ jsxs("div", {
+						className: "scrub-panel",
+						children: [animated && /* @__PURE__ */ jsxs("div", {
+							className: "scrub-index",
 							"aria-hidden": "true",
-							children: cards.map((c, i) => /* @__PURE__ */ jsx("button", {
-								type: "button",
-								tabIndex: -1,
-								"data-i": i,
-								onClick: () => api.current.jump(uForCard(api.current.T, i)),
-								"aria-label": c.name,
+							children: [/* @__PURE__ */ jsx("div", {
+								className: "scrub-ch-stack",
+								children: CHAPTERS.map((id, i) => /* @__PURE__ */ jsxs("p", {
+									className: "scrub-ch",
+									"data-for": i + 1,
+									children: [/* @__PURE__ */ jsxs("span", {
+										className: "scrub-count",
+										children: [
+											two$2(i + 1),
+											" / ",
+											two$2(CHAPTERS.length)
+										]
+									}), /* @__PURE__ */ jsx("span", {
+										className: "scrub-place",
+										children: t.fases[id].rotulo
+									})]
+								}, id))
+							}), /* @__PURE__ */ jsx("div", {
+								className: "scrub-segs",
+								children: CHAPTERS.map((id, i) => /* @__PURE__ */ jsx("i", { "data-for": i + 1 }, id))
+							})]
+						}), /* @__PURE__ */ jsx("div", {
+							className: "scrub-text",
+							children: /* @__PURE__ */ jsxs("div", {
+								ref: stackRef,
+								className: "scrub-stack",
+								children: [/* @__PURE__ */ jsxs("div", {
+									className: "scrub-intro",
+									children: [/* @__PURE__ */ jsx("p", {
+										className: "scrub-vive",
+										children: textoFase("c1").titular
+									}), /* @__PURE__ */ jsx("p", {
+										className: "scrub-vive-sub",
+										children: textoFase("c1").subtitulo
+									})]
+								}), animated && ["c1", "c2"].map((id) => {
+									const x = textoFase(id);
+									return /* @__PURE__ */ jsxs("div", {
+										className: "scrub-cap",
+										"data-for": id,
+										"aria-hidden": "true",
+										children: [/* @__PURE__ */ jsx("p", {
+											className: "scrub-cap-title",
+											children: x.titular
+										}), /* @__PURE__ */ jsx("p", {
+											className: "scrub-cap-sub",
+											children: x.subtitulo
+										})]
+									}, id);
+								})]
+							})
+						})]
+					}),
+					/* @__PURE__ */ jsxs("div", {
+						className: "scrub-ctl",
+						children: [animated && /* @__PURE__ */ jsxs("button", {
+							ref: skipRef,
+							type: "button",
+							className: "scrub-skip",
+							onClick: skip,
+							title: skipLabel,
+							children: [/* @__PURE__ */ jsx("span", {
+								className: "ctl-label",
+								children: skipLabel
+							}), /* @__PURE__ */ jsx(Arrow, { dir: "down" })]
+						}), bar]
+					}),
+					animated && !mobile && /* @__PURE__ */ jsx("div", {
+						ref: floatRef,
+						className: "bd-floats",
+						"aria-hidden": "true",
+						children: FLOATS.map(([fx, fy, w, dp, ci, rot], k) => /* @__PURE__ */ jsx("i", {
+							className: "bd-float",
+							"data-fx": fx,
+							"data-fy": fy,
+							"data-dp": dp,
+							"data-rot": rot,
+							"data-bg": cardImg(cards[ci].slug, "t"),
+							style: {
+								width: w,
+								height: w * 1.25
+							}
+						}, k))
+					}),
+					/* @__PURE__ */ jsx("div", {
+						ref: deckRef,
+						className: "bd-deck",
+						children: animated && cards.map((c) => /* @__PURE__ */ jsx("div", {
+							className: "bd-card",
+							"aria-hidden": "true",
+							children: /* @__PURE__ */ jsx("span", {
+								className: "bd-tilt",
 								children: /* @__PURE__ */ jsx("img", {
+									className: "bd-thumb",
 									src: cardImg(c.slug, "t"),
-									width: "48",
-									height: "60",
+									width: "320",
+									height: "400",
 									alt: "",
 									decoding: "async",
 									loading: "lazy"
 								})
-							}, c.slug))
-						}),
-						animated && mobile && /* @__PURE__ */ jsx("div", {
-							ref: stripRef,
-							className: "scrub-strip scrub-strip--m",
-							"aria-hidden": "true",
-							children: cards.map((c) => /* @__PURE__ */ jsx("i", { "data-bg": cardImg(c.slug, "t") }, c.slug))
-						}),
-						/* @__PURE__ */ jsxs("div", {
-							className: "scrub-ctl",
-							children: [animated && /* @__PURE__ */ jsxs("button", {
-								ref: skipRef,
-								type: "button",
-								className: "scrub-skip",
-								onClick: skip,
-								children: [
-									skipLabel,
-									" ",
-									/* @__PURE__ */ jsx("span", {
-										"aria-hidden": "true",
-										children: "↓"
-									})
-								]
-							}), bar]
-						}),
-						animated && !mobile && /* @__PURE__ */ jsx("div", {
-							ref: floatRef,
-							className: "bd-floats",
-							"aria-hidden": "true",
-							children: FLOATS.map(([fx, fy, w, dp, ci, rot], k) => /* @__PURE__ */ jsx("i", {
-								className: "bd-float",
-								"data-fx": fx,
-								"data-fy": fy,
-								"data-dp": dp,
-								"data-rot": rot,
-								"data-bg": cardImg(cards[ci].slug, "t"),
-								style: {
-									width: w,
-									height: w * 1.25
-								}
-							}, k))
-						}),
-						/* @__PURE__ */ jsx("div", {
-							ref: deckRef,
-							className: "bd-deck",
-							children: animated && cards.map((c, i) => {
-								const tx = copy(c.slug);
-								return deckLinks ? /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsx(Link, {
-									className: "bd-card",
-									to: `/experiencias/${c.slug}`,
-									"aria-label": `${c.name}. ${tx.emocion}: ${tx.frase}`,
-									onFocus: () => api.current.card(i),
-									onKeyDown: (e) => onCardKey(e, i),
-									onPointerMove: tilt,
-									onPointerLeave: untilt,
-									children: /* @__PURE__ */ jsxs("span", {
-										className: "bd-tilt",
-										children: [/* @__PURE__ */ jsx("img", {
-											className: "bd-thumb",
-											src: cardImg(c.slug, "t"),
-											width: "320",
-											height: "400",
-											alt: "",
-											decoding: "async",
-											loading: "lazy"
-										}), /* @__PURE__ */ jsx("img", {
-											className: "bd-full",
-											"data-src": cardImg(c.slug, "h"),
-											width: "960",
-											height: "1200",
-											alt: "",
-											decoding: "async",
-											onLoad: (e) => e.currentTarget.classList.add("ready")
-										})]
-									})
-								}) }, c.slug) : /* @__PURE__ */ jsx("div", {
-									className: "bd-card",
-									"aria-hidden": "true",
-									children: /* @__PURE__ */ jsx("span", {
-										className: "bd-tilt",
-										children: /* @__PURE__ */ jsx("img", {
-											className: "bd-thumb",
-											src: cardImg(c.slug, "t"),
-											width: "320",
-											height: "400",
-											alt: "",
-											decoding: "async",
-											loading: "lazy"
-										})
-									})
-								}, c.slug);
 							})
-						}),
-						animated && cards.map((c) => /* @__PURE__ */ jsxs(Link, {
-							className: "bd-plan scrub-btn-plan",
-							to: `/experiencias/${c.slug}#consulta`,
-							"aria-label": `Planea esta experiencia: ${c.name}`,
-							children: ["Planea esta experiencia ", /* @__PURE__ */ jsx("span", {
-								"aria-hidden": "true",
-								children: "↗"
-							})]
-						}, c.slug)),
-						animated && /* @__PURE__ */ jsxs("div", {
-							className: "bd-nav",
-							children: [/* @__PURE__ */ jsx("button", {
-								type: "button",
-								className: "bd-arrow",
-								"aria-label": "Carta anterior",
-								onClick: () => api.current.step(-1),
-								children: mobile ? "↑" : "←"
-							}), /* @__PURE__ */ jsx("button", {
-								type: "button",
-								className: "bd-arrow",
-								"aria-label": "Carta siguiente",
-								onClick: () => api.current.step(1),
-								children: mobile ? "↓" : "→"
-							})]
-						})
-					]
-				})
-			}),
-			summary && /* @__PURE__ */ jsx("p", {
-				className: "scrub-summary",
-				children: summary
-			}),
-			staticMode && /* @__PURE__ */ jsx("div", {
-				className: "wrap sc-list",
-				children: cards.map((card) => /* @__PURE__ */ jsx(CartaLista, { card }, card.slug))
+						}, c.slug))
+					})
+				]
 			})
-		]
+		}), summary && /* @__PURE__ */ jsx("p", {
+			className: "scrub-summary",
+			children: summary
+		})]
 	});
 }
 //#endregion
-//#region src/ExperienceExplorer.jsx
-var entries = [
+//#region src/TravelHand.jsx
+var ORDER = [
 	"city-tour-comuna-13",
 	"tour-de-compras",
 	"guatape-piedra-del-penol",
@@ -1359,351 +1082,736 @@ var entries = [
 	"tour-nocturno-medellin",
 	"tour-miradores",
 	"hacienda-napoles"
-].map((slug) => {
-	const t = rawTours.find((r) => r[0] === slug);
-	return {
-		slug,
-		name: t[1],
-		category: t[2]
-	};
-});
-var MOBILE = "(max-width:899px)";
-var idle = (fn) => window.requestIdleCallback ? window.requestIdleCallback(fn, { timeout: 2e3 }) : setTimeout(fn, 300);
-function ExperienceExplorer() {
-	const [tourIndex, setTour] = useState(0), [view, setView] = useState({
-		photo: 0,
-		prev: -1,
-		slots: [
-			0,
-			1,
-			2,
-			3
-		]
-	}), [pin, setPin] = useState(false), [failed, setFailed] = useState(/* @__PURE__ */ new Set()), [near, setNear] = useState(false), [data, setData] = useState(null);
-	const root = useRef(null), stage = useRef(null), tabs = useRef([]), fan = useRef(null), mobile = useRef(null), positions = useRef(/* @__PURE__ */ new Map()), manual = useRef(null), light = useLightMotion();
-	const tour = entries[tourIndex], pictures = (data?.[tour.slug] || []).filter((p) => !failed.has(p.src)), copy = inicioTextos.cartas[tour.slug], index = pictures.length ? view.photo % pictures.length : 0;
-	const setPhoto = (n) => setView((v) => {
-		if (n === v.photo) return v;
-		const slots = [...v.slots], cur = slots.indexOf(0), to = slots.indexOf(0) >= 0 && n < slots.length ? n : cur;
-		[slots[cur], slots[to]] = [slots[to], slots[cur]];
-		return {
-			photo: n,
-			prev: v.photo,
-			slots
-		};
-	});
-	useEffect(() => {
-		let alive = true;
-		const id = idle(() => import("./explorer-data-Dicxwxqs.js").then((m) => {
-			if (alive) setData(m.pictures);
-		}));
-		return () => {
-			alive = false;
-			window.cancelIdleCallback?.(id);
-		};
-	}, []);
-	useEffect(() => {
-		const observer = new IntersectionObserver(([e]) => {
-			if (e.isIntersecting) {
-				setNear(true);
-				observer.disconnect();
-			}
-		}, { rootMargin: "50%" });
-		observer.observe(root.current);
-		return () => observer.disconnect();
-	}, []);
-	useLayoutEffect(() => {
-		const check = () => {
-			if (!stage.current) return;
-			const index = stage.current.querySelector(".explorer-index"), visual = stage.current.querySelector(".explorer-visual");
-			setPin(!light && (innerWidth < 900 ? stage.current.scrollHeight <= innerHeight - 88 : innerWidth >= 1100 && Math.max(index.scrollHeight, visual.scrollHeight) <= innerHeight - 108));
-		};
-		const observer = new ResizeObserver(check);
-		observer.observe(stage.current);
-		window.addEventListener("resize", check);
-		check();
-		return () => {
-			observer.disconnect();
-			window.removeEventListener("resize", check);
-		};
-	}, [light]);
-	useEffect(() => {
-		if (light || !pin && innerWidth < 1100 || pictures.length < 2) return;
-		let frame = 0;
-		const update = () => {
-			cancelAnimationFrame(frame);
-			frame = requestAnimationFrame(() => {
-				if (!root.current || !stage.current) return;
-				const r = root.current.getBoundingClientRect();
-				if (r.bottom < 0 || r.top > innerHeight || document.hidden) return;
-				if (manual.current !== null && Math.abs(scrollY - manual.current) < 24) return;
-				manual.current = null;
-				const top = innerWidth < 900 ? 76 : 108;
-				const span = Math.max(1, root.current.offsetHeight - stage.current.offsetHeight);
-				const progress = Math.min(.999, Math.max(0, (top - r.top) / span));
-				setPhoto(Math.floor(progress * pictures.length));
-			});
-		};
-		window.addEventListener("scroll", update, { passive: true });
-		window.addEventListener("resize", update);
-		update();
-		return () => {
-			window.removeEventListener("scroll", update);
-			window.removeEventListener("resize", update);
-			cancelAnimationFrame(frame);
-		};
-	}, [
-		light,
-		pin,
-		pictures.length,
-		tourIndex
-	]);
-	useEffect(() => {
-		if (!near || navigator.connection?.saveData || light) return;
-		const phone = matchMedia(MOBILE).matches;
-		pictures.forEach((p, i) => {
-			const d = Math.abs(i - index), around = d <= 1 || d === pictures.length - 1;
-			if (phone) {
-				if (around) new Image().src = p.mobile;
-				return;
-			}
-			new Image().src = p.small || p.src;
-			if (around) new Image().src = p.src;
-		});
-	}, [
-		near,
-		tourIndex,
-		index,
-		light,
-		pictures.length
-	]);
-	const chooseTour = (i) => {
-		setTour(i);
-		setView({
-			photo: 0,
-			prev: -1,
-			slots: [
-				0,
-				1,
-				2,
-				3
-			]
-		});
-		positions.current.clear();
-		requestAnimationFrame(() => {
-			if (mobile.current) mobile.current.scrollLeft = 0;
-		});
-	};
-	const choosePhoto = (i) => {
-		if (!pictures.length) return;
-		const n = (i + pictures.length) % pictures.length;
-		manual.current = scrollY;
-		setPhoto(n);
-	};
-	const onTabKey = (e, i) => {
-		const next = e.key === "ArrowDown" || e.key === "ArrowRight" ? (i + 1) % entries.length : e.key === "ArrowUp" || e.key === "ArrowLeft" ? (i + entries.length - 1) % entries.length : e.key === "Home" ? 0 : e.key === "End" ? entries.length - 1 : null;
-		if (next === null) return;
-		e.preventDefault();
-		chooseTour(next);
-		tabs.current[next]?.focus();
-	};
-	const preload = (t) => {
-		if (!near || !data || navigator.connection?.saveData || matchMedia(MOBILE).matches) return;
-		data[t.slug].forEach((p) => {
-			const img = new Image();
-			img.src = p.small || p.src;
-		});
-	};
-	const picture = (p, i, small = false) => /* @__PURE__ */ jsxs("picture", { children: [/* @__PURE__ */ jsx("source", {
-		media: "(max-width:899px)",
-		srcSet: `${p.mobile} 600w, ${p.main} 720w`,
-		sizes: "(max-width:899px) 80vw, 42vw"
-	}), /* @__PURE__ */ jsx("img", {
-		src: small ? p.satellite : p.main,
+];
+var N = ORDER.length;
+var CARDS = "/media/baraja";
+var SEG = {
+	wide: 30,
+	compact: 24
+};
+var EXIT = 20;
+var RELAY = 34;
+var WIDE = "(min-width: 1100px)";
+var SMALL = "(max-width: 799px)";
+var REDUCE = "(prefers-reduced-motion: reduce)";
+var LOW = "(max-height: 560px)";
+var REDUCE_KEY = "tyt-reducir-movimiento";
+var two$1 = (n) => String(n).padStart(2, "0");
+var clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+var readReduce = () => {
+	try {
+		return localStorage.getItem(REDUCE_KEY) === "1";
+	} catch {
+		return false;
+	}
+};
+var prefersStatic = () => {
+	if (typeof window === "undefined") return true;
+	if (readReduce() || window.matchMedia(REDUCE).matches || window.matchMedia(LOW).matches) return true;
+	const c = navigator.connection;
+	return Boolean(c && (c.saveData || [
+		"slow-2g",
+		"2g",
+		"3g"
+	].includes(c.effectiveType)));
+};
+var ENTRIES = ORDER.map((slug) => {
+	const t = tours.find((x) => x.slug === slug), copy = inicioTextos.cartas[slug];
+	const pool = t.gallery.filter((_, i) => i > 0 || slug === "tour-de-compras");
+	const n = Math.min(7, pool.length), picked = Array.from({ length: n }, (_, k) => pool[Math.floor(k * pool.length / n)]);
+	const photosList = [{
+		src: `${CARDS}/${slug}-d.webp`,
+		srcSet: `${CARDS}/${slug}-m.webp 400w, ${CARDS}/${slug}-d.webp 640w, ${CARDS}/${slug}-h.webp 960w`,
+		width: 960,
+		height: 1200,
+		small: `${CARDS}/${slug}-t.webp`
+	}, ...picked.map((p) => ({
+		src: p.src,
+		srcSet: p.srcset || `${p.small} 640w, ${p.src} ${p.width}w`,
 		width: p.width,
 		height: p.height,
-		alt: `${tour.name}, fotografía ${i + 1}`,
+		small: p.small || p.src
+	}))];
+	return {
+		slug,
+		name: t.name,
+		category: t.category,
+		emocion: copy.emocion,
+		frase: copy.frase,
+		lugar: copy.lugar,
+		photos: photosList
+	};
+});
+var GROUPS = ENTRIES.reduce((acc, e, i) => {
+	const last = acc[acc.length - 1];
+	if (last && last.name === e.category) last.items.push(i);
+	else acc.push({
+		name: e.category,
+		items: [i]
+	});
+	return acc;
+}, []);
+var SLOTS = [
+	{
+		cx: .5,
+		cy: .54,
+		h: .76,
+		r: 0,
+		d: 1
+	},
+	{
+		cx: .2,
+		cy: .33,
+		h: .4,
+		r: -7,
+		d: 1.5
+	},
+	{
+		cx: .83,
+		cy: .3,
+		h: .38,
+		r: 6,
+		d: .6
+	},
+	{
+		cx: .13,
+		cy: .79,
+		h: .34,
+		r: 5,
+		d: 1.2
+	},
+	{
+		cx: .88,
+		cy: .74,
+		h: .4,
+		r: -5,
+		d: 1.7
+	},
+	{
+		cx: .36,
+		cy: .16,
+		h: .27,
+		r: 4,
+		d: .5
+	},
+	{
+		cx: .68,
+		cy: .89,
+		h: .28,
+		r: -4,
+		d: .8
+	},
+	{
+		cx: .63,
+		cy: .15,
+		h: .26,
+		r: 7,
+		d: 1.1
+	}
+];
+function measure(host, text) {
+	const m = document.createElement("span");
+	m.textContent = text;
+	m.setAttribute("aria-hidden", "true");
+	m.style.cssText = "position:absolute;left:0;top:0;visibility:hidden;white-space:nowrap;font:800 100px/1 Montserrat,Arial,sans-serif;letter-spacing:-.04em";
+	host.appendChild(m);
+	const w = m.getBoundingClientRect().width / 100;
+	m.remove();
+	return w;
+}
+function fitTitle(host, text, small) {
+	const avail = host.clientWidth;
+	if (avail <= 0) return null;
+	const target = avail * .92, one = Math.min(128, target / measure(host, text));
+	if (!small && one >= 44) return {
+		size: one,
+		lines: [text]
+	};
+	const words = text.split(" ");
+	let best = null;
+	for (let i = 1; i < words.length; i++) {
+		const a = words.slice(0, i).join(" "), b = words.slice(i).join(" "), w = Math.max(measure(host, a), measure(host, b));
+		if (!best || w < best.w) best = {
+			w,
+			lines: [a, b]
+		};
+	}
+	return best ? {
+		size: Math.min(128, target / best.w),
+		lines: best.lines
+	} : {
+		size: one,
+		lines: [text]
+	};
+}
+function Photo({ photo, entry, k, primary }) {
+	return /* @__PURE__ */ jsx("img", {
+		className: "th-photo",
+		"data-k": k,
+		src: photo.src,
+		srcSet: photo.srcSet,
+		sizes: primary ? "(max-width: 799px) 84vw, 36vw" : "(max-width: 799px) 40vw, 18vw",
+		width: photo.width,
+		height: photo.height,
+		alt: `${entry.name}, fotografía ${k + 1}`,
+		loading: primary ? "eager" : "lazy",
+		fetchPriority: primary ? "auto" : "low",
 		decoding: "async",
-		loading: "lazy",
-		onError: () => setFailed((previous) => /* @__PURE__ */ new Set([...previous, p.src]))
-	})] });
-	const panel = /* @__PURE__ */ jsxs("div", {
-		className: "explorer-copy",
-		children: [
-			/* @__PURE__ */ jsx("h3", { children: tour.name }),
-			/* @__PURE__ */ jsxs("p", { children: [
-				/* @__PURE__ */ jsxs("b", { children: [copy.emocion, ":"] }),
-				" ",
-				copy.frase
-			] }),
-			/* @__PURE__ */ jsx(Link, {
-				className: "text-link",
-				to: `/experiencias/${tour.slug}`,
-				children: "Ver experiencia ↗"
-			}),
-			/* @__PURE__ */ jsx(Link, {
-				className: "button",
-				to: `/experiencias/${tour.slug}#consulta`,
-				children: "Planea esta experiencia ↗"
-			})
-		]
-	}, tour.slug);
-	return /* @__PURE__ */ jsxs("section", {
-		className: `experience-explorer wrap section ${light ? "explorer-light" : ""}`,
+		draggable: "false"
+	});
+}
+function TravelHand() {
+	const [ready, setReady] = useState(false), [mode, setMode] = useState("static"), [layout, setLayout] = useState("wide");
+	const [active, setActive] = useState(0), [shown, setShown] = useState(0), [swap, setSwap] = useState("");
+	const [full, setFull] = useState(() => /* @__PURE__ */ new Set([0])), [fronts, setFronts] = useState({}), [live, setLive] = useState("");
+	const [fit, setFit] = useState({
+		size: 64,
+		lines: [ENTRIES[0].name]
+	});
+	const root = useRef(null), track = useRef(null), stage = useRef(null), handEl = useRef(null), titleHost = useRef(null), mqEl = useRef(null), deckEl = useRef(null), tabs = useRef([]);
+	const st = useRef({
+		active: 0,
+		fronts: {},
+		manualY: null,
+		jump: () => {},
+		flip: 0
+	});
+	st.current.fronts = fronts;
+	const animated = mode === "scrub";
+	const display = (i) => t(ENTRIES[i].name).toLocaleUpperCase(language() === "en" ? "en" : "es");
+	useLayoutEffect(() => {
+		const decide = () => {
+			const head = document.querySelector(".site-header")?.offsetHeight || 92, wide = window.matchMedia(WIDE).matches;
+			const fits = window.innerHeight - head >= (wide ? 560 : 640);
+			setLayout(wide ? "wide" : "compact");
+			setMode(prefersStatic() || !fits ? "static" : "scrub");
+		};
+		decide();
+		setReady(true);
+		const queries = [
+			WIDE,
+			REDUCE,
+			LOW,
+			SMALL
+		].map((q) => window.matchMedia(q));
+		queries.forEach((q) => q.addEventListener("change", decide));
+		window.addEventListener("tyt-motion", decide);
+		window.addEventListener("resize", decide);
+		return () => {
+			queries.forEach((q) => q.removeEventListener("change", decide));
+			window.removeEventListener("tyt-motion", decide);
+			window.removeEventListener("resize", decide);
+		};
+	}, []);
+	const shownRef = useRef(0), swapTimer = useRef(0);
+	useEffect(() => {
+		if (active === shownRef.current) return void 0;
+		if (!animated) {
+			shownRef.current = active;
+			setShown(active);
+			return;
+		}
+		setSwap("out");
+		clearTimeout(swapTimer.current);
+		swapTimer.current = setTimeout(() => {
+			shownRef.current = active;
+			setShown(active);
+			setSwap("");
+		}, 220);
+		return () => clearTimeout(swapTimer.current);
+	}, [active, animated]);
+	useEffect(() => {
+		setFull((prev) => prev.has(active) ? prev : new Set(prev).add(active));
+	}, [active]);
+	useLayoutEffect(() => {
+		if (!animated || !titleHost.current) return void 0;
+		const run = () => {
+			const f = fitTitle(titleHost.current, display(shown), window.matchMedia(SMALL).matches);
+			if (f) setFit((p) => p.size === f.size && p.lines.join("|") === f.lines.join("|") ? p : f);
+		};
+		run();
+		document.fonts?.ready.then(run);
+		const ro = new ResizeObserver(run);
+		ro.observe(titleHost.current);
+		return () => ro.disconnect();
+	}, [
+		animated,
+		shown,
+		layout
+	]);
+	useLayoutEffect(() => {
+		if (!ready || !animated) return void 0;
+		const trackEl = track.current, stageEl = stage.current, hand = handEl.current, mq = mqEl.current, deck = deckEl.current;
+		const small = window.matchMedia(SMALL).matches, seg = layout === "wide" ? SEG.wide : SEG.compact;
+		const total = RELAY + N * seg + EXIT;
+		let raf = 0, visible = true, destroyed = false, q = null, lastT = 0, stageTop = 92, span = 1, RW = 0, RH = 0, sw = 0, sh = 0;
+		const groups = () => [...hand.querySelectorAll(".th-group")];
+		const metrics = () => {
+			stageTop = document.querySelector(".site-header")?.offsetHeight || 92;
+			root.current.style.setProperty("--th-top", `${stageTop}px`);
+			RW = hand.clientWidth;
+			RH = hand.clientHeight;
+			sw = stageEl.clientWidth;
+			sh = stageEl.clientHeight;
+			const R = relayDeck(sw, sh, small);
+			deck.style.setProperty("--dw", `${R.w}px`);
+			deck.style.setProperty("--dh", `${R.h}px`);
+			deck.style.setProperty("--dx", `${R.x - R.w / 2}px`);
+			deck.style.setProperty("--dy", `${R.y - R.h / 2}px`);
+			lastKey = "";
+		};
+		let lastKey = "";
+		const apply = (P) => {
+			const idx = clamp(Math.floor(P), 0, N - 1);
+			P - idx;
+			const P2 = clamp(P, 0, N);
+			if (idx !== st.current.active) {
+				st.current.active = idx;
+				setActive(idx);
+			}
+			const key = `${P2.toFixed(4)}|${RW}x${RH}|${JSON.stringify(st.current.fronts)}`;
+			if (key === lastKey) return;
+			lastKey = key;
+			for (const g of groups()) {
+				const gi = Number(g.dataset.i), local = P2 - gi, f = st.current.fronts[gi] || 0;
+				const vis = local > -.2 && local < 1.25;
+				g.style.visibility = vis ? "visible" : "hidden";
+				if (!vis) continue;
+				const ls = clamp(local, 0, 1);
+				local < 0 && smooth(clamp(1 + local * 4));
+				const imgs = [...g.querySelectorAll(".th-photo")];
+				imgs.length;
+				imgs.forEach((img, k) => {
+					const slotIdx = k === f ? 0 : k < f ? k + 1 : k, slot = SLOTS[slotIdx % SLOTS.length], h = slot.h * RH, w = h * .8;
+					if (img._w !== w) {
+						img.style.width = `${w}px`;
+						img.style.height = `${h}px`;
+						img._w = w;
+					}
+					const front = slotIdx === 0;
+					const tIn = front ? 0 : .14 + .055 * (slotIdx - 1), eIn = local < 0 ? 0 : front ? smooth(ls / .15) : smooth((ls - tIn) / .22);
+					const eOut = smooth((ls - (.86 + .012 * slotIdx)) / .14);
+					const dirx = (slot.cx - .5) * 1.7, diry = (slot.cy - .5) * 1.7, inv = 1 - eIn;
+					const par = (.5 - ls) * slot.d * .16 * RH, parx = (ls - .5) * slot.d * .035 * RW;
+					const sc = (front ? .82 + .18 * eIn : .55 + .45 * eIn) * (1 + .04 * eOut) * (1 + .03 * (slot.d - 1) * (ls - .5));
+					const rot = front ? slot.r - 6 * inv - 8 * eOut : slot.r * (.4 + .6 * eIn) + 14 * inv * Math.sign(dirx || 1) - 8 * eOut;
+					const x = slot.cx * RW - w / 2 + (front ? 0 : dirx * RW * .5 * inv) + parx - eOut * RW * .3 * (.4 + slot.d * .3);
+					const y = slot.cy * RH - h / 2 + (front ? .28 * RH * inv : diry * RH * .5 * inv) + par - eOut * RH * .45 * (.5 + slot.d * .25);
+					const o = (front ? Math.max(1e-4, smooth(ls / .08) + (local < 0 ? 0 : 0)) : eIn) * (1 - eOut) * (local < 0 ? 0 : 1);
+					img.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) rotate(${rot.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
+					img.style.opacity = o.toFixed(3);
+					img.style.zIndex = String(front ? 30 : 2 + Math.round(slot.d * 4));
+					img.style.pointerEvents = o > .6 && local >= 0 && local <= 1 ? "auto" : "none";
+				});
+			}
+			const ls0 = clamp(P2 - idx, 0, 1);
+			mq.style.transform = `translate3d(${(-.25 * ls0 * sw).toFixed(1)}px,-50%,0)`;
+			deck.style.opacity = String(clamp(1 - (P2 - (N - 2)) * 1.2));
+		};
+		const render = (now) => {
+			raf = 0;
+			if (destroyed || !visible || document.hidden) {
+				lastT = 0;
+				return;
+			}
+			const rect = trackEl.getBoundingClientRect();
+			span = Math.max(1, trackEl.offsetHeight - stageEl.offsetHeight);
+			const u = clamp((stageTop - rect.top) / span) * total;
+			const fin = clamp((u - (RELAY - 4)) / 4);
+			if (stageEl._fin !== fin) {
+				stageEl._fin = fin;
+				stageEl.style.setProperty("--fin", fin.toFixed(3));
+				stageEl.style.pointerEvents = fin < 1 ? "none" : "";
+				stageEl.dataset.on = fin > 0 ? "true" : "false";
+			}
+			const target = clamp((u - RELAY) / seg, 0, N);
+			const dt = lastT ? Math.min(64, now - lastT) : 16;
+			lastT = now;
+			if (q === null || Math.abs(target - q) > .36) q = target;
+			else q += (target - q) * (1 - Math.exp(-dt / 60));
+			let moving = true;
+			if (Math.abs(target - q) < 4e-4) {
+				q = target;
+				moving = false;
+			}
+			if (st.current.manualY !== null && Math.abs(scrollY - st.current.manualY) > 24) {
+				st.current.manualY = null;
+				if (Object.keys(st.current.fronts).length) setFronts({});
+			}
+			apply(q);
+			if (moving) schedule();
+			else lastT = 0;
+		};
+		const schedule = () => {
+			if (!raf && !destroyed) raf = requestAnimationFrame(render);
+		};
+		const onScroll = () => schedule();
+		const observer = new IntersectionObserver(([e]) => {
+			visible = e.isIntersecting;
+			if (visible) {
+				lastT = 0;
+				lastKey = "";
+				schedule();
+			} else if (raf) {
+				cancelAnimationFrame(raf);
+				raf = 0;
+			}
+		}, { rootMargin: "200px 0px" });
+		const resize = new ResizeObserver(() => {
+			metrics();
+			schedule();
+		});
+		st.current.jump = (i, s = .56) => {
+			const top = trackEl.getBoundingClientRect().top + scrollY, u = RELAY + (i + s) * seg;
+			window.scrollTo({
+				top: top - stageTop + u / total * span,
+				behavior: "instant"
+			});
+			schedule();
+		};
+		st.current.refresh = () => {
+			lastKey = "";
+			schedule();
+		};
+		metrics();
+		observer.observe(root.current);
+		resize.observe(hand);
+		resize.observe(stageEl);
+		window.addEventListener("scroll", onScroll, { passive: true });
+		window.addEventListener("resize", onScroll, { passive: true });
+		document.addEventListener("visibilitychange", onScroll);
+		schedule();
+		return () => {
+			destroyed = true;
+			cancelAnimationFrame(raf);
+			observer.disconnect();
+			resize.disconnect();
+			window.removeEventListener("scroll", onScroll);
+			window.removeEventListener("resize", onScroll);
+			document.removeEventListener("visibilitychange", onScroll);
+			st.current.jump = () => {};
+			st.current.refresh = () => {};
+			for (const img of hand.querySelectorAll(".th-photo")) {
+				img.removeAttribute("style");
+				delete img._w;
+			}
+		};
+	}, [
+		ready,
+		animated,
+		layout
+	]);
+	useLayoutEffect(() => {
+		st.current.refresh?.();
+	}, [full, fronts]);
+	const select = useCallback((gi, next, announce) => {
+		const n = ENTRIES[gi].photos.length, f = (next % n + n) % n;
+		setFronts((p) => ({
+			...p,
+			[gi]: f
+		}));
+		st.current.manualY = scrollY;
+		const el = handEl.current;
+		if (el) {
+			el.dataset.flip = "true";
+			clearTimeout(st.current.flip);
+			st.current.flip = setTimeout(() => {
+				el.dataset.flip = "false";
+			}, 650);
+		}
+		if (announce) setLive(`Foto ${f + 1} de ${n}, ${ENTRIES[gi].name}`);
+	}, []);
+	const onTabKey = (e, i) => {
+		const next = e.key === "ArrowDown" || e.key === "ArrowRight" ? (i + 1) % N : e.key === "ArrowUp" || e.key === "ArrowLeft" ? (i + N - 1) % N : e.key === "Home" ? 0 : e.key === "End" ? N - 1 : null;
+		if (next === null) return;
+		e.preventDefault();
+		st.current.jump(next);
+		tabs.current[next]?.focus({ preventScroll: true });
+	};
+	const nowFront = fronts[active] || 0, entry = ENTRIES[shown];
+	const t$1 = inicioTextos, seg = layout === "wide" ? SEG.wide : SEG.compact;
+	const trackStyle = animated ? { "--th-total": RELAY + N * seg + EXIT } : void 0;
+	const header = /* @__PURE__ */ jsxs("div", {
+		className: "th-head",
+		children: [/* @__PURE__ */ jsx("p", {
+			className: "eyebrow",
+			children: t$1.eleccion
+		}), /* @__PURE__ */ jsxs("h2", {
+			id: "th-titulo",
+			children: [
+				"Un lugar para cada",
+				/* @__PURE__ */ jsx("br", {}),
+				/* @__PURE__ */ jsx("em", { children: "forma de viajar." })
+			]
+		})]
+	});
+	if (!animated) return /* @__PURE__ */ jsxs("section", {
+		ref: root,
+		className: "th th--static wrap section",
 		id: "formas-de-viajar",
+		tabIndex: -1,
+		"data-hydrated": ready ? "true" : "false",
+		"aria-labelledby": "th-titulo",
+		children: [/* @__PURE__ */ jsxs("div", {
+			className: "section-title",
+			children: [/* @__PURE__ */ jsx("div", { children: header }), /* @__PURE__ */ jsxs(Link, {
+				className: "text-link",
+				to: "/experiencias",
+				children: ["Ver las 12 experiencias", /* @__PURE__ */ jsx(Arrow, {})]
+			})]
+		}), /* @__PURE__ */ jsx("ul", {
+			className: "th-list",
+			role: "list",
+			children: ENTRIES.map((e, i) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsxs(Link, {
+				className: "th-card",
+				to: `/experiencias/${e.slug}`,
+				children: [
+					/* @__PURE__ */ jsx("span", {
+						className: "th-card-img",
+						children: /* @__PURE__ */ jsx("img", {
+							src: e.photos[0].small,
+							srcSet: e.photos[0].srcSet,
+							sizes: "(max-width: 699px) 92vw, (max-width: 1099px) 46vw, 30vw",
+							width: "400",
+							height: "500",
+							alt: "",
+							loading: "lazy",
+							decoding: "async"
+						})
+					}),
+					/* @__PURE__ */ jsxs("span", {
+						className: "th-card-count",
+						children: [
+							two$1(i + 1),
+							" / ",
+							two$1(N),
+							" · ",
+							e.category
+						]
+					}),
+					/* @__PURE__ */ jsx("h3", { children: e.name }),
+					/* @__PURE__ */ jsxs("p", { children: [
+						/* @__PURE__ */ jsxs("b", { children: [e.emocion, ":"] }),
+						" ",
+						e.frase
+					] })
+				]
+			}) }, e.slug))
+		})]
+	});
+	return /* @__PURE__ */ jsxs("section", {
+		ref: root,
+		className: "th",
+		id: "formas-de-viajar",
+		tabIndex: -1,
+		"data-hydrated": "true",
+		"data-layout": layout,
+		"aria-labelledby": "th-titulo",
 		children: [
-			/* @__PURE__ */ jsxs("div", {
-				className: "section-title",
-				children: [/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("p", {
-					className: "eyebrow",
-					children: "Elige tu próximo recuerdo"
-				}), /* @__PURE__ */ jsxs("h2", { children: [
-					"Un lugar para cada",
-					/* @__PURE__ */ jsx("br", {}),
-					/* @__PURE__ */ jsx("em", { children: "forma de viajar." })
-				] })] }), /* @__PURE__ */ jsx(Link, {
-					className: "text-link",
-					to: "/experiencias",
-					children: "Ver las 12 experiencias ↗"
-				})]
-			}),
 			/* @__PURE__ */ jsx("div", {
-				ref: root,
-				className: `explorer-track ${pin ? "is-pinned" : ""}`,
+				ref: track,
+				className: "th-track",
+				style: trackStyle,
 				children: /* @__PURE__ */ jsxs("div", {
 					ref: stage,
-					className: "explorer-stage",
-					children: [/* @__PURE__ */ jsxs("div", {
-						className: "explorer-index",
-						children: [/* @__PURE__ */ jsx("div", {
-							role: "tablist",
-							"aria-label": "Formas de viajar",
-							"aria-orientation": "vertical",
-							children: entries.map((t, i) => /* @__PURE__ */ jsxs("div", {
-								className: "explorer-item",
-								children: [(i === 0 || entries[i - 1].category !== t.category) && /* @__PURE__ */ jsx("p", {
-									className: "explorer-group",
-									children: t.category
-								}), /* @__PURE__ */ jsxs("button", {
-									ref: (el) => tabs.current[i] = el,
-									role: "tab",
-									id: `explorer-tab-${i}`,
-									"aria-controls": "explorer-panel",
-									"aria-selected": tourIndex === i,
-									tabIndex: tourIndex === i ? 0 : -1,
-									onClick: () => chooseTour(i),
-									onKeyDown: (e) => onTabKey(e, i),
-									onMouseEnter: () => preload(t),
-									onFocus: () => preload(t),
-									children: [/* @__PURE__ */ jsx("span", { children: String(i + 1).padStart(2, "0") }), t.name]
-								})]
-							}, t.slug))
-						}), panel]
-					}), /* @__PURE__ */ jsxs("div", {
-						id: "explorer-panel",
-						role: "tabpanel",
-						"aria-labelledby": `explorer-tab-${tourIndex}`,
-						className: "explorer-visual",
-						tabIndex: 0,
-						onKeyDown: (e) => {
-							if (e.target === e.currentTarget && ["ArrowLeft", "ArrowRight"].includes(e.key)) {
-								e.preventDefault();
-								choosePhoto(index + (e.key === "ArrowRight" ? 1 : -1));
-							}
-						},
-						children: [
-							/* @__PURE__ */ jsx("div", {
-								ref: fan,
-								className: "explorer-fan",
-								role: "region",
-								"aria-roledescription": "carrusel",
-								"aria-label": `Fotografías de ${tour.name}`,
-								children: pictures.map((p, i) => {
-									const order = view.slots[i] ?? i, role = i === index ? view.prev >= 0 ? "in" : "" : i === view.prev ? "out" : "";
-									return /* @__PURE__ */ jsx("button", {
-										"data-photo": p.src,
-										"data-role": role,
-										className: `fan-photo fan-slot-${order} ${p.horizontal ? "fan-horizontal" : ""}`,
-										style: {
-											aspectRatio: p.horizontal ? "4 / 3" : "4 / 5",
-											"--photo-width": `${p.width}px`
-										},
-										onClick: () => choosePhoto(i),
-										"aria-label": `Mostrar fotografía ${i + 1} de ${tour.name}`,
-										tabIndex: order === 0 ? 0 : -1,
-										children: near && picture(p, i, order !== 0)
-									}, p.src);
-								})
-							}),
-							/* @__PURE__ */ jsx("div", {
-								ref: mobile,
-								className: "explorer-mobile",
-								onScroll: (e) => {
-									const el = e.currentTarget;
-									const w = el.children[0]?.offsetWidth + 16;
-									if (w) setPhoto(Math.min(pictures.length - 1, Math.round(el.scrollLeft / w)));
-								},
-								children: pictures.map((p, i) => /* @__PURE__ */ jsx("div", {
-									style: { aspectRatio: p.horizontal ? "4 / 3" : "4 / 5" },
-									children: near && picture(p, i)
-								}, p.src))
-							}),
-							/* @__PURE__ */ jsxs("p", {
-								className: "explorer-caption",
-								children: [
-									tour.name,
-									" · fotografía ",
-									String(index + 1).padStart(2, "0"),
-									" de ",
-									String(pictures.length).padStart(2, "0")
-								]
-							}),
-							/* @__PURE__ */ jsxs("div", {
-								className: "gallery-controls",
-								children: [
-									/* @__PURE__ */ jsx("button", {
-										onClick: () => choosePhoto(index - 1),
-										disabled: !pictures.length,
-										"aria-label": "Fotografía anterior",
-										children: "←"
-									}),
-									/* @__PURE__ */ jsxs("span", {
-										className: "sr-only",
-										"aria-live": "polite",
-										children: [
-											"Foto ",
-											pictures.length ? index + 1 : 0,
-											" de ",
-											pictures.length,
-											", ",
-											tour.name
-										]
-									}),
-									/* @__PURE__ */ jsx("button", {
-										onClick: () => choosePhoto(index + 1),
-										disabled: !pictures.length,
-										"aria-label": "Fotografía siguiente",
-										children: "→"
-									})
-								]
-							}),
-							data && !pictures.length && /* @__PURE__ */ jsxs("p", { children: ["No pudimos cargar las fotografías. ", /* @__PURE__ */ jsx(Link, {
-								className: "text-link",
-								to: `/experiencias/${tour.slug}`,
-								children: "Ver experiencia"
-							})] }),
-							/* @__PURE__ */ jsx("div", {
-								className: "explorer-mobile-copy",
-								children: panel
+					className: "th-stage",
+					"data-on": "false",
+					"data-swap": swap,
+					children: [
+						/* @__PURE__ */ jsx("div", {
+							ref: mqEl,
+							className: "th-mq",
+							"aria-hidden": "true",
+							children: /* @__PURE__ */ jsx("span", { children: entry.lugar })
+						}),
+						header,
+						/* @__PURE__ */ jsx("div", {
+							ref: titleHost,
+							className: "th-title-host",
+							children: /* @__PURE__ */ jsx("h3", {
+								className: "th-title",
+								style: { fontSize: `${fit.size.toFixed(2)}px` },
+								children: fit.lines.map((l) => /* @__PURE__ */ jsx("span", { children: l }, l))
 							})
-						]
-					})]
+						}),
+						/* @__PURE__ */ jsxs("nav", {
+							className: "th-index",
+							"aria-label": "Experiencias",
+							children: [/* @__PURE__ */ jsx("div", {
+								role: "tablist",
+								"aria-orientation": layout === "wide" ? "vertical" : "horizontal",
+								children: GROUPS.map((g) => /* @__PURE__ */ jsxs("div", {
+									className: "th-group-tabs",
+									children: [/* @__PURE__ */ jsx("p", {
+										className: "th-group-label",
+										"aria-hidden": "true",
+										children: g.name
+									}), g.items.map((i) => /* @__PURE__ */ jsxs("button", {
+										ref: (el) => {
+											tabs.current[i] = el;
+										},
+										type: "button",
+										role: "tab",
+										id: `th-tab-${i}`,
+										"aria-controls": "th-hand",
+										"aria-selected": active === i,
+										tabIndex: active === i ? 0 : -1,
+										onClick: () => st.current.jump(i),
+										onKeyDown: (e) => onTabKey(e, i),
+										children: [/* @__PURE__ */ jsx("span", { children: two$1(i + 1) }), ENTRIES[i].name]
+									}, ENTRIES[i].slug))]
+								}, g.name))
+							}), /* @__PURE__ */ jsx("a", {
+								className: "th-skip",
+								href: "#camino",
+								children: "Saltar experiencias"
+							})]
+						}),
+						/* @__PURE__ */ jsx("div", {
+							ref: handEl,
+							id: "th-hand",
+							className: "th-hand",
+							role: "region",
+							"aria-roledescription": "carrusel",
+							"aria-label": `Fotografías de ${ENTRIES[active].name}`,
+							tabIndex: 0,
+							onKeyDown: (e) => {
+								if (["ArrowLeft", "ArrowRight"].includes(e.key)) {
+									e.preventDefault();
+									select(active, nowFront + (e.key === "ArrowRight" ? 1 : -1), true);
+								}
+							},
+							onClick: (e) => {
+								const img = e.target.closest?.(".th-photo");
+								if (img) select(active, Number(img.dataset.k), true);
+							},
+							onPointerDown: (e) => {
+								st.current.sx = e.clientX;
+								st.current.sy = e.clientY;
+							},
+							onPointerUp: (e) => {
+								const dx = e.clientX - (st.current.sx ?? e.clientX), dy = e.clientY - (st.current.sy ?? e.clientY);
+								if (e.pointerType !== "mouse" && Math.abs(dx) >= 48 && Math.abs(dx) > Math.abs(dy) * 1.2) select(active, nowFront + (dx < 0 ? 1 : -1), true);
+							},
+							children: ENTRIES.map((e, gi) => {
+								const near = Math.abs(gi - active) <= 1, hasFull = full.has(gi);
+								if (!near && !hasFull) return null;
+								return /* @__PURE__ */ jsx("div", {
+									className: "th-group",
+									"data-i": gi,
+									"aria-hidden": gi === active ? void 0 : "true",
+									children: e.photos.map((p, k) => k === 0 || hasFull ? /* @__PURE__ */ jsx(Photo, {
+										photo: p,
+										entry: e,
+										k,
+										primary: gi === active || k === 0
+									}, k) : null)
+								}, e.slug);
+							})
+						}),
+						/* @__PURE__ */ jsxs("div", {
+							className: "th-foot",
+							children: [/* @__PURE__ */ jsxs("p", {
+								className: "th-cap",
+								children: [
+									ENTRIES[active].name,
+									" · fotografía ",
+									two$1(nowFront + 1),
+									" de ",
+									two$1(ENTRIES[active].photos.length)
+								]
+							}), /* @__PURE__ */ jsxs("div", {
+								className: "th-arrows",
+								children: [/* @__PURE__ */ jsx("button", {
+									type: "button",
+									"aria-label": "Fotografía anterior",
+									onClick: () => select(active, nowFront - 1, true),
+									children: /* @__PURE__ */ jsx(Arrow, { dir: "left" })
+								}), /* @__PURE__ */ jsx("button", {
+									type: "button",
+									"aria-label": "Fotografía siguiente",
+									onClick: () => select(active, nowFront + 1, true),
+									children: /* @__PURE__ */ jsx(Arrow, { dir: "right" })
+								})]
+							})]
+						}),
+						/* @__PURE__ */ jsxs("aside", {
+							className: "th-panel",
+							"aria-label": "Detalle de la experiencia",
+							children: [
+								/* @__PURE__ */ jsxs("p", {
+									className: "th-count",
+									children: [
+										two$1(shown + 1),
+										" / ",
+										two$1(N),
+										" · ",
+										entry.category
+									]
+								}),
+								/* @__PURE__ */ jsxs("p", {
+									className: "th-line",
+									children: [
+										/* @__PURE__ */ jsxs("b", { children: [entry.emocion, ":"] }),
+										" ",
+										entry.frase
+									]
+								}),
+								/* @__PURE__ */ jsxs(Link, {
+									className: "text-link",
+									to: `/experiencias/${entry.slug}`,
+									children: ["Ver experiencia", /* @__PURE__ */ jsx(Arrow, {})]
+								}),
+								/* @__PURE__ */ jsxs(Link, {
+									className: "button",
+									to: `/experiencias/${entry.slug}#consulta`,
+									children: ["Planea esta experiencia", /* @__PURE__ */ jsx(Arrow, {})]
+								})
+							]
+						}),
+						/* @__PURE__ */ jsx("div", {
+							ref: deckEl,
+							className: "th-deck",
+							"aria-hidden": "true",
+							inert: true,
+							children: ENTRIES.slice(active + 1, active + 6).map((e, i) => {
+								const pose = deckPose(i);
+								return /* @__PURE__ */ jsx("img", {
+									src: e.photos[0].small,
+									alt: "",
+									width: "120",
+									height: "150",
+									style: {
+										transform: `translate(${pose.dx * .5}px,${pose.dy * .5}px) rotate(${pose.r}deg)`,
+										zIndex: 9 - i
+									}
+								}, e.slug);
+							})
+						}),
+						/* @__PURE__ */ jsx("p", {
+							className: "sr-only",
+							"aria-live": "polite",
+							children: live
+						})
+					]
 				})
 			}),
-			/* @__PURE__ */ jsx("noscript", { children: /* @__PURE__ */ jsx("ul", { children: entries.map((t) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx("a", {
-				href: `/experiencias/${t.slug}`,
-				children: t.name
-			}) }, t.slug)) }) })
+			/* @__PURE__ */ jsx("div", {
+				id: "th-inicio",
+				className: "th-marker",
+				tabIndex: -1,
+				role: "group",
+				"aria-label": "Un lugar para cada forma de viajar",
+				style: { top: `calc(${RELAY} * 1svh)` }
+			}),
+			/* @__PURE__ */ jsx("p", {
+				className: "th-all",
+				children: /* @__PURE__ */ jsxs(Link, {
+					className: "text-link",
+					to: "/experiencias",
+					children: ["Ver las 12 experiencias", /* @__PURE__ */ jsx(Arrow, {})]
+				})
+			})
 		]
 	});
 }
@@ -1718,6 +1826,19 @@ var ANGLE_B = [
 	[1, 0]
 ];
 var SPLIT = .3;
+var HINT_KEY = "tyt-libro-gesto";
+var hintSeen = () => {
+	try {
+		return sessionStorage.getItem(HINT_KEY) === "1";
+	} catch {
+		return false;
+	}
+};
+var markSeen = () => {
+	try {
+		sessionStorage.setItem(HINT_KEY, "1");
+	} catch {}
+};
 function PagePhoto({ item, link }) {
 	const image = /* @__PURE__ */ jsx(Picture, {
 		photo: item.image,
@@ -1754,16 +1875,10 @@ function PageText({ item, live }) {
 				className: "ft-plan",
 				to: `/blog/${item.slug}`,
 				"aria-label": `Leer la nota: ${item.title}`,
-				children: ["Leer la nota ", /* @__PURE__ */ jsx("span", {
-					"aria-hidden": "true",
-					children: "↗"
-				})]
+				children: ["Leer la nota ", /* @__PURE__ */ jsx(Arrow, {})]
 			}) : /* @__PURE__ */ jsxs("span", {
 				className: "ft-plan",
-				children: ["Leer la nota ", /* @__PURE__ */ jsx("span", {
-					"aria-hidden": "true",
-					children: "↗"
-				})]
+				children: ["Leer la nota ", /* @__PURE__ */ jsx(Arrow, {})]
 			})
 		]
 	});
@@ -1776,7 +1891,7 @@ var textPage = (item) => /* @__PURE__ */ jsx("div", {
 	className: "bk-page bk-page--text",
 	children: /* @__PURE__ */ jsx(PageText, { item })
 });
-var faceContent = (kind, item) => kind === "photo" ? photoPage(item) : kind === "text" ? textPage(item) : /* @__PURE__ */ jsxs(Fragment$1, { children: [photoPage(item), textPage(item)] });
+var faceContent = (kind, item) => kind === "photo" ? photoPage(item) : kind === "text" ? textPage(item) : /* @__PURE__ */ jsxs(Fragment, { children: [photoPage(item), textPage(item)] });
 function Face({ kind, item, side, spine, segment, split }) {
 	const w = segment === "a" ? SPLIT : .7;
 	const inner = split ? `${(100 / w).toFixed(4)}%` : "100%";
@@ -1862,6 +1977,8 @@ function BlogBook() {
 		r: 0
 	});
 	const [turn, setTurn] = useState(null);
+	const [tip, setTip] = useState(false), [hint, setHint] = useState(false), [breathe, setBreathe] = useState(false);
+	const hintRef = useRef(null);
 	const windowRef = useRef(null), selected = useRef(0), serial = useRef(0), touch = useRef(null), wasLight = useRef(light);
 	const canAnimate = () => !light && typeof Element.prototype.animate === "function";
 	const rootRef = useRef(null);
@@ -1880,6 +1997,64 @@ function BlogBook() {
 		observer.observe(rootRef.current);
 		return () => observer.disconnect();
 	}, [cards]);
+	useEffect(() => {
+		if (!mobile) {
+			setTip(false);
+			setHint(false);
+			return;
+		}
+		const seen = hintSeen();
+		setTip(!seen);
+		if (seen) return void 0;
+		const observer = new IntersectionObserver(([entry]) => {
+			if (!entry.isIntersecting) return;
+			observer.disconnect();
+			if (!light && typeof Element.prototype.animate === "function") {
+				setBreathe(true);
+				setHint(true);
+			}
+		}, { threshold: .6 });
+		observer.observe(hintRef.current);
+		return () => observer.disconnect();
+	}, [mobile, light]);
+	useLayoutEffect(() => {
+		if (!hint || turn) return void 0;
+		const root = windowRef.current;
+		if (!root) return void 0;
+		const a = root.querySelector(".ft-leaf").animate([
+			{ transform: "translateZ(0) rotateY(0deg)" },
+			{
+				transform: "translateZ(12px) rotateY(-15deg)",
+				offset: .45
+			},
+			{ transform: "translateZ(0) rotateY(0deg)" }
+		], {
+			duration: 1100,
+			easing: "ease-in-out",
+			fill: "both"
+		});
+		const shades = [...root.querySelectorAll(".bk-shade")].map((el) => el.animate([
+			{ opacity: 0 },
+			{
+				opacity: .28,
+				offset: .45
+			},
+			{ opacity: 0 }
+		], {
+			duration: 1100,
+			easing: "ease-in-out",
+			fill: "both"
+		}));
+		a.onfinish = () => {
+			setHint(false);
+			setBreathe(false);
+		};
+		return () => {
+			a.onfinish = null;
+			a.cancel();
+			shades.forEach((x) => x.cancel());
+		};
+	}, [hint, turn]);
 	const settle = (to) => {
 		setView((v) => v.l === to && v.r === to ? v : {
 			l: to,
@@ -1893,6 +2068,9 @@ function BlogBook() {
 		if (i === from) return;
 		selected.current = i;
 		setSel(i);
+		markSeen();
+		setTip(false);
+		setHint(false);
 		if (!canAnimate()) {
 			settle(i);
 			return;
@@ -2117,108 +2295,159 @@ function BlogBook() {
 					"con más ",
 					/* @__PURE__ */ jsx("em", { children: "sentido." })
 				]
-			})] }), /* @__PURE__ */ jsx(Link, {
+			})] }), /* @__PURE__ */ jsxs(Link, {
 				className: "text-link",
 				to: "/blog",
-				children: "Todas las notas ↗"
+				children: ["Todas las notas", /* @__PURE__ */ jsx(Arrow, {})]
 			})]
 		}), /* @__PURE__ */ jsxs("div", {
 			className: "ft ft-book",
 			"data-turning": Boolean(turn),
 			"data-mobile": mobile || void 0,
-			children: [/* @__PURE__ */ jsx("div", {
-				className: "ft-main",
-				onTouchStart,
-				onTouchEnd,
-				children: /* @__PURE__ */ jsxs("div", {
-					className: "bk-spread",
-					children: [
-						/* @__PURE__ */ jsx("div", {
-							className: "bk-page bk-page--photo",
-							children: /* @__PURE__ */ jsx("div", {
-								className: "bk-fade",
-								children: /* @__PURE__ */ jsx(PagePhoto, {
-									item: left,
-									link: card
-								})
-							}, view.l)
-						}),
-						/* @__PURE__ */ jsx("div", {
-							className: "bk-page bk-page--text",
-							children: /* @__PURE__ */ jsx("div", {
-								className: "bk-fade",
-								children: /* @__PURE__ */ jsx(PageText, {
-									item: right,
-									live: true
-								})
-							}, view.r)
-						}),
-						/* @__PURE__ */ jsx("span", {
-							className: "bk-spine",
-							"aria-hidden": "true"
-						}),
-						turn && /* @__PURE__ */ jsxs("div", {
-							ref: windowRef,
-							className: "ft-turn-window",
-							"aria-hidden": "true",
-							inert: true,
-							"data-direction": fw ? "next" : "previous",
-							children: [/* @__PURE__ */ jsx("i", { className: "bk-cast" }), /* @__PURE__ */ jsx(Leaf, {
-								turn,
-								cards,
-								split: !mobile,
-								mobileSingle: mobile
-							}, turn.id)]
-						})
-					]
-				})
-			}), /* @__PURE__ */ jsxs("div", {
-				className: "bk-footer",
-				children: [/* @__PURE__ */ jsx("div", {
-					className: "ft-strip",
-					role: "group",
-					"aria-label": "Elegir nota",
-					children: cards.map((x, i) => /* @__PURE__ */ jsxs("button", {
-						type: "button",
-						className: "ft-thumb",
-						"aria-pressed": i === sel,
-						"aria-label": x.title,
-						onClick: () => choose(i),
-						onKeyDown: (e) => onKey(e, i),
-						children: [/* @__PURE__ */ jsx("span", {
-							className: "book-index",
-							children: two(i + 1)
-						}), /* @__PURE__ */ jsx("span", { children: x.tag })]
-					}, x.slug))
-				}), /* @__PURE__ */ jsxs("div", {
-					className: "bk-ctl",
-					children: [/* @__PURE__ */ jsxs("p", {
-						className: "ft-count",
-						role: "status",
-						"aria-live": "polite",
+			children: [
+				/* @__PURE__ */ jsx("div", {
+					className: "ft-main",
+					onTouchStart,
+					onTouchEnd,
+					children: /* @__PURE__ */ jsxs("div", {
+						className: "bk-spread",
 						children: [
-							two(sel + 1),
-							" / ",
-							two(cards.length)
+							/* @__PURE__ */ jsx("div", {
+								className: "bk-page bk-page--photo",
+								children: /* @__PURE__ */ jsx("div", {
+									className: "bk-fade",
+									children: /* @__PURE__ */ jsx(PagePhoto, {
+										item: left,
+										link: card
+									})
+								}, view.l)
+							}),
+							/* @__PURE__ */ jsx("div", {
+								className: "bk-page bk-page--text",
+								children: /* @__PURE__ */ jsx("div", {
+									className: "bk-fade",
+									children: /* @__PURE__ */ jsx(PageText, {
+										item: right,
+										live: true
+									})
+								}, view.r)
+							}),
+							/* @__PURE__ */ jsx("span", {
+								className: "bk-spine",
+								"aria-hidden": "true"
+							}),
+							hint && !turn && mobile && /* @__PURE__ */ jsx("div", {
+								ref: windowRef,
+								className: "ft-turn-window",
+								"aria-hidden": "true",
+								inert: true,
+								"data-direction": "next",
+								children: /* @__PURE__ */ jsx(Leaf, {
+									turn: {
+										from: sel,
+										to: sel,
+										forward: true
+									},
+									cards,
+									split: false,
+									mobileSingle: true
+								}, "hint")
+							}),
+							mobile && sel < cards.length - 1 && /* @__PURE__ */ jsx("span", {
+								className: "bk-curl",
+								"data-breathe": breathe || void 0,
+								"aria-hidden": "true"
+							}),
+							turn && /* @__PURE__ */ jsxs("div", {
+								ref: windowRef,
+								className: "ft-turn-window",
+								"aria-hidden": "true",
+								inert: true,
+								"data-direction": fw ? "next" : "previous",
+								children: [/* @__PURE__ */ jsx("i", { className: "bk-cast" }), /* @__PURE__ */ jsx(Leaf, {
+									turn,
+									cards,
+									split: !mobile,
+									mobileSingle: mobile
+								}, turn.id)]
+							})
 						]
+					})
+				}),
+				/* @__PURE__ */ jsx("div", {
+					ref: hintRef,
+					className: "bk-hint-anchor"
+				}),
+				mobile && tip && /* @__PURE__ */ jsxs("p", {
+					className: "bk-swipe",
+					children: [/* @__PURE__ */ jsxs("svg", {
+						viewBox: "0 0 24 24",
+						width: "20",
+						height: "20",
+						fill: "none",
+						stroke: "currentColor",
+						strokeWidth: "1.75",
+						strokeLinecap: "round",
+						strokeLinejoin: "round",
+						"aria-hidden": "true",
+						focusable: "false",
+						children: [/* @__PURE__ */ jsx("path", { d: "M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4" }), /* @__PURE__ */ jsx("circle", {
+							cx: "12",
+							cy: "12",
+							r: "2.2",
+							fill: "currentColor",
+							stroke: "none"
+						})]
+					}), "Desliza para pasar la página"]
+				}),
+				/* @__PURE__ */ jsxs("div", {
+					className: "bk-footer",
+					children: [/* @__PURE__ */ jsx("div", {
+						className: "ft-strip",
+						role: "group",
+						"aria-label": "Elegir nota",
+						children: cards.map((x, i) => /* @__PURE__ */ jsxs("button", {
+							type: "button",
+							className: "ft-thumb",
+							"aria-pressed": i === sel,
+							"aria-label": x.title,
+							onClick: () => choose(i),
+							onKeyDown: (e) => onKey(e, i),
+							children: [/* @__PURE__ */ jsx("span", {
+								className: "book-index",
+								children: two(i + 1)
+							}), /* @__PURE__ */ jsx("span", { children: x.tag })]
+						}, x.slug))
 					}), /* @__PURE__ */ jsxs("div", {
-						className: "ft-nav",
-						children: [/* @__PURE__ */ jsx("button", {
-							type: "button",
-							"aria-label": "Nota anterior",
-							disabled: sel === 0,
-							onClick: () => choose(selected.current - 1),
-							children: "←"
-						}), /* @__PURE__ */ jsx("button", {
-							type: "button",
-							"aria-label": "Nota siguiente",
-							disabled: sel === cards.length - 1,
-							onClick: () => choose(selected.current + 1),
-							children: "→"
+						className: "bk-ctl",
+						children: [/* @__PURE__ */ jsxs("p", {
+							className: "ft-count",
+							role: "status",
+							"aria-live": "polite",
+							children: [
+								two(sel + 1),
+								" / ",
+								two(cards.length)
+							]
+						}), /* @__PURE__ */ jsxs("div", {
+							className: "ft-nav",
+							children: [/* @__PURE__ */ jsx("button", {
+								type: "button",
+								"aria-label": "Nota anterior",
+								disabled: sel === 0,
+								onClick: () => choose(selected.current - 1),
+								children: /* @__PURE__ */ jsx(Arrow, { dir: "left" })
+							}), /* @__PURE__ */ jsx("button", {
+								type: "button",
+								"aria-label": "Nota siguiente",
+								disabled: sel === cards.length - 1,
+								onClick: () => choose(selected.current + 1),
+								children: /* @__PURE__ */ jsx(Arrow, { dir: "right" })
+							})]
 						})]
 					})]
-				})]
-			})]
+				})
+			]
 		})]
 	});
 }
@@ -2618,10 +2847,7 @@ function HomeSocial() {
 					"También en TikTok ",
 					tiktok.handle,
 					" ",
-					/* @__PURE__ */ jsx("span", {
-						"aria-hidden": "true",
-						children: "↗"
-					})
+					/* @__PURE__ */ jsx(Arrow, {})
 				]
 			})
 		]
@@ -2630,11 +2856,11 @@ function HomeSocial() {
 //#endregion
 //#region src/pages/Home.jsx
 function Home() {
-	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
+	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsx(HomeHero, {}),
 		/* @__PURE__ */ jsx(HomeStory, {}),
 		/* @__PURE__ */ jsx(ScrubHero, {
-			nextId: "formas-de-viajar",
+			nextId: "th-inicio",
 			cards: tours.map((t, i) => ({
 				slug: t.slug,
 				name: t.name,
@@ -2642,9 +2868,11 @@ function Home() {
 			})),
 			summary: "Apertura: una baraja de doce experiencias. La carta superior se abre en una transición cinematográfica sobre Medellín que termina en la Plaza Botero y luego se despliegan las doce experiencias, cada una con su enlace."
 		}),
-		/* @__PURE__ */ jsx(ExperienceExplorer, {}),
+		/* @__PURE__ */ jsx(TravelHand, {}),
 		/* @__PURE__ */ jsxs("section", {
 			className: "service-band wrap",
+			id: "camino",
+			tabIndex: -1,
 			children: [
 				/* @__PURE__ */ jsx(Eyebrow, { children: "Nos encargamos del camino" }),
 				/* @__PURE__ */ jsxs("h2", { children: [

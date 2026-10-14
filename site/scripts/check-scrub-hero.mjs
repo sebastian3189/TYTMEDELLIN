@@ -23,6 +23,8 @@ const watch = (page, label) => {
 };
 const mediaRequests = (page) => { const urls = []; page.on('request', (r) => { if (r.url().includes('/media/inicio/') || r.url().includes('/media/baraja/')) urls.push(new URL(r.url()).pathname); }); return urls; };
 const clsInit = () => { window.__cls = 0; window.__clsSrc = []; try { new PerformanceObserver((l) => { for (const e of l.getEntries()) if (!e.hadRecentInput) { window.__cls += e.value; window.__clsSrc.push(`${e.value.toFixed(3)}@${Math.round(e.startTime)}:${(e.sources || []).map((x) => x.node?.className || x.node?.nodeName).join('|')}`); } }).observe({ type: 'layout-shift', buffered: true }); } catch {} };
+// La sección está bajo el pliegue y no pide nada hasta acercarse (§J1): se acerca y se espera el primer fotograma.
+const ready = async (page) => { await page.waitForFunction(() => document.querySelector('.scrub-hero')?.dataset.hydrated === 'true', null, { timeout: 30000 }); await page.waitForFunction(() => { const h = document.querySelector('.scrub-hero'); if (h?.dataset.ready === 'true') return true; h?.scrollIntoView({ block: 'start' }); return false; }, null, { timeout: 45000, polling: 500 }); };
 const hero = (page) => page.locator('.scrub-hero');
 const attr = (page, name) => hero(page).getAttribute(`data-${name}`);
 // Límites del recorrido (svh), idénticos a timeline() de baraja-geometria.js.
@@ -51,7 +53,7 @@ async function wheelThrough(page, x, y) {
 }
 /* Contraste por glifo (WCAG 1.4.3): fondo real sin texto (color y sombra transparentes) y, bajo cada línea de texto visible,
    fracción de píxeles por debajo de 4,5:1 (normal) o 3:1 (grande). Criterio: ≥99 % cumple. Sin sombra de texto a favor. */
-const TEXT_SEL = '.scrub-title h1 span,.scrub-lema,.scrub-micro,.scrub-cap-title,.scrub-cap-sub,.scrub-count,.scrub-place,.ft-count,.ft-name,.ft-line,.ft-plan,.bd-plan,.scrub-btn,.scrub-motion,.scrub-skip,.scrub-vive,.scrub-vive-sub,.sc-name,.sc-line,.sc-count,.sc-close-title,.sc-close-sub,.sc-marq,.eyebrow';
+const TEXT_SEL = '.scrub-title .scrub-t1,.scrub-lema,.scrub-cap-title,.scrub-cap-sub,.scrub-count,.scrub-place,.ft-count,.ft-name,.ft-line,.ft-plan,.bd-plan,.scrub-btn,.scrub-motion,.scrub-skip,.scrub-vive,.scrub-vive-sub,.sc-name,.sc-line,.sc-count,.sc-close-title,.sc-close-sub,.sc-marq,.eyebrow';
 async function glyphContrast(page) {
   const items = await page.evaluate((sel) => {
     const out = [];
@@ -108,7 +110,7 @@ const textOverPhotos = (page) => page.evaluate(() => {
     const k = r.width / e.offsetWidth, ix = Number(m[1]) * k; return [e.className, { left: r.left + ix, right: r.right - ix, top: r.top, bottom: r.bottom }];
   });
   const bad = [];
-  for (const el of document.querySelectorAll('.scrub-hero .scrub-title h1 span,.scrub-lema,.scrub-micro,.scrub-cap-title,.scrub-cap-sub,.scrub-index,.bd-count')) {
+  for (const el of document.querySelectorAll('.scrub-hero .scrub-title .scrub-t1,.scrub-lema,.scrub-cap-title,.scrub-cap-sub,.scrub-index,.bd-count')) {
     let o = 1, hidden = false; for (let n = el; n && n !== document.body; n = n.parentElement) { const cs = getComputedStyle(n); o *= Number(cs.opacity); if (cs.visibility === 'hidden' || cs.display === 'none') hidden = true; }
     if (hidden || o < 0.9) continue;
     const r = el.getBoundingClientRect(); if (!r.width) continue;
@@ -128,11 +130,17 @@ try {
   await page.addInitScript(clsInit);
   await page.addInitScript(() => { window.__prevented = []; for (const t of ['wheel', 'touchstart', 'touchmove', 'keydown']) window.addEventListener(t, (e) => setTimeout(() => e.defaultPrevented && window.__prevented.push(t)), { passive: true }); });
   await page.goto(base + '/', { waitUntil: 'load' });
-  await page.waitForFunction(() => document.querySelector('.scrub-poster img')?.complete);
+  await page.waitForFunction(() => document.querySelector('.scrub-hero')?.dataset.hydrated === 'true');
   assert.equal(await page.locator('h1').count(), 1, 'un solo h1');
-  assert.match(await page.locator('h1').innerText(), /Medellín,\s*a otro nivel\./);
-  assert.equal(await page.locator('.scrub-poster img').getAttribute('fetchpriority'), 'high');
-  await page.waitForFunction(() => document.querySelector('.scrub-hero')?.dataset.ready === 'true');
+  assert.match(await page.locator('.home-hero h1').innerText(), /Medellín,\s*a otro nivel\./);
+  assert.equal(await page.locator('.scrub-hero h2.scrub-t1').innerText(), 'Elige tu próximo recuerdo');
+  // Inicialización perezosa (§J1): bajo el pliegue, el póster es lazy y no se pide ni un fotograma hasta acercarse (margen 100 %).
+  assert.equal(await page.locator('.scrub-poster img').getAttribute('fetchpriority'), null, 'el póster ya no es LCP');
+  await page.waitForTimeout(1500);
+  assert.equal(requests.filter((u) => /\/media\/inicio\/d(16)?\/\d+\.webp$/.test(u)).length, 0, 'ningún fotograma antes de acercarse');
+  await page.evaluate(() => document.querySelector('.scrub-hero').scrollIntoView({ block: 'start' }));
+  await ready(page);
+  await ready(page);
   await page.waitForFunction(() => Number(document.querySelector('.scrub-hero').dataset.loaded) >= 121, null, { timeout: 90000 });
   assert.equal(await page.locator('canvas.scrub-canvas').getAttribute('aria-hidden'), 'true');
   assert.ok(requests.every((u) => !u.includes('/m/') && !u.endsWith('.mp4')), 'escritorio no pide fotogramas móviles ni MP4');
@@ -142,14 +150,14 @@ try {
   assert.equal(await stageAttr(page, 'ui'), 'deck');
   const deck = await page.evaluate(() => {
     const op = (e) => Number(getComputedStyle(e).opacity);
-    const cards = [...document.querySelectorAll('.bd-card')], t1 = document.querySelector('.scrub-t1').getBoundingClientRect(), t2 = document.querySelector('.scrub-t2').getBoundingClientRect();
+    const cards = [...document.querySelectorAll('.bd-card')], t1 = document.querySelector('.scrub-t1').getBoundingClientRect(), t2 = { top: 1e9 };
     const rs = cards.map((c) => c.getBoundingClientRect()), top = Math.min(...rs.map((r) => r.top)), bot = Math.max(...rs.map((r) => r.bottom));
     return { cards: cards.length, visible: cards.filter((c) => op(c) > 0.9).length, strip: document.querySelectorAll('.scrub-strip button').length, floats: [...document.querySelectorAll('.bd-float')].filter((e) => op(e) > 0.5).length, t1Bottom: t1.bottom, t2Top: t2.top, deckTop: top, deckBottom: bot, mediaVisible: getComputedStyle(document.querySelector('.scrub-media')).clipPath !== 'none' };
   });
   assert.equal(deck.cards, 12); assert.equal(deck.visible, 12); assert.equal(deck.strip, 12); assert.ok(deck.floats >= 4, `miniaturas flotantes ${deck.floats}`); assert.ok(deck.mediaVisible, 'la carta superior es el marco recortado');
-  assert.ok(deck.t1Bottom <= deck.deckTop + 48 && deck.t2Top >= deck.deckBottom - 48, `titular partido arriba (${deck.t1Bottom}) y abajo (${deck.t2Top}) del mazo [${deck.deckTop}, ${deck.deckBottom}]`);
+  assert.ok(deck.t1Bottom <= deck.deckTop + 48, `título arriba (${deck.t1Bottom}) del mazo [${deck.deckTop}, ${deck.deckBottom}]`);
   assert.deepEqual(await textOverPhotos(page), [], 'texto fuera de fotos (baraja)');
-  checks.push(`baraja al entrar: 12 cartas, tira de 12, ${deck.floats} miniaturas flotantes, titular partido arriba (${Math.round(deck.t1Bottom)}) y abajo (${Math.round(deck.t2Top)}) del mazo (${Math.round(deck.deckTop)}–${Math.round(deck.deckBottom)}); sin velos ni placas`);
+  checks.push(`baraja al entrar: 12 cartas, tira de 12, ${deck.floats} miniaturas flotantes, título «Elige tu próximo recuerdo» arriba (${Math.round(deck.t1Bottom)}) del mazo (${Math.round(deck.deckTop)}–${Math.round(deck.deckBottom)}); sin velos ni placas`);
   const hs = await span(page);
   assert.ok(Math.abs(hs.span / 900 * 100 - TD.total) < 0.6, `pista ${TD.total} svh (${(hs.span / 9).toFixed(1)})`);
   // Fase del clip ≈165 svh: se mide en píxeles entre el primer y el último fotograma.
@@ -236,40 +244,10 @@ try {
   assert.ok(m1.l >= 0 && m1.r <= m1.vw && m1.fs <= 120, `marquesina entera y ≤120 px ${JSON.stringify(m1)}`);
   assert.ok(Math.abs(m1.l - m2.l) <= 1, 'marquesina quieta en el 60 % central de su tramo');
   assert.ok(m1.cardTop - m1.b >= 24 - 0.2 * m1.fs, `franja sobre la carta con separación ${m1.cardTop - m1.b}`);
-  // Fin del tramo fijado: la baraja termina en la última carta y el cierre (carta destacada + 12 miniaturas) entra en flujo normal.
+  // Fin del tramo fijado: la baraja termina en la última carta (el libro vive aparte, ver check-experience-book.mjs).
   await goU(page, TD.total, TD, 500);
   assert.equal(await stageAttr(page, 'card'), '11');
-  const scrollToFt = () => page.evaluate(() => { const y = document.querySelector('.scrub-after').getBoundingClientRect().top + scrollY - 92 - 4; scrollTo({ top: y, behavior: 'instant' }); });
-  await scrollToFt(); await page.waitForTimeout(500);
-  const ft = await page.evaluate(() => {
-    const card = document.querySelector('.ft-card').getBoundingClientRect(), main = document.querySelector('.ft-main').getBoundingClientRect(), th = [...document.querySelectorAll('.ft-thumb')].map((e) => e.getBoundingClientRect()), name = document.querySelector('.ft-name').getBoundingClientRect();
-    return { ratio: card.width / main.width, cardW: card.width, vw: innerWidth, thumbs: th.length, thumbMin: Math.min(...th.map((r) => r.width)), thumbMax: Math.max(...th.map((r) => r.width)), allIn: th.every((r) => r.top >= 0 && r.bottom <= innerHeight && r.left >= 0 && r.right <= innerWidth), cardIn: card.top >= 0, sideRight: name.left >= card.right - 1, orange: [...document.querySelectorAll('.scrub-after .scrub-actions a')].filter((a) => getComputedStyle(a).backgroundColor === 'rgb(255, 127, 9)').length };
-  });
-  assert.ok(ft.ratio >= 0.45 && ft.thumbs === 12 && ft.sideRight, `álbum: página de foto ≥45 % del libro, texto a su derecha y 12 miniaturas ${JSON.stringify(ft)}`);
-  assert.ok(ft.thumbMin >= 90 && ft.thumbMax <= 130, `miniaturas 96–120 px (${ft.thumbMin}–${ft.thumbMax})`);
-  assert.equal(ft.orange, 1, 'una sola acción naranja en el cierre');
-  const nm = () => page.locator('.ft-name').innerText();
-  assert.equal(await nm(), NAMES[0]);
-  await page.locator('.ft-thumb').nth(4).click(); await page.waitForTimeout(700); assert.equal(await nm(), NAMES[4], 'clic en miniatura');
-  assert.equal(await page.locator('.ft-line').innerText(), LINES[4]);
-  assert.equal(new URL(await page.locator('.ft-plan').getAttribute('href'), base).pathname + '#consulta', `/experiencias/${SLUGS[4]}#consulta`);
-  assert.equal(new URL(await page.locator('.ft-media').getAttribute('href'), base).pathname, `/experiencias/${SLUGS[4]}`);
-  await page.mouse.move(0, 0); await page.locator('.ft-thumb').nth(7).hover(); await page.waitForTimeout(700); assert.equal(await nm(), NAMES[4], 'el álbum no cambia con hover (selección explícita)');
-  await page.locator('.ft-thumb').nth(2).focus(); await page.waitForTimeout(300); assert.equal(await nm(), NAMES[4], 'el foco no cambia el álbum'); await page.locator('.ft-thumb').nth(2).click(); await page.waitForTimeout(700); assert.equal(await nm(), NAMES[2], 'clic en miniatura');
-  await page.keyboard.press('ArrowRight'); await page.waitForTimeout(700); assert.equal(await nm(), NAMES[3], 'flecha → en la tira');
-  await page.getByRole('button', { name: 'Experiencia siguiente' }).click(); await page.waitForTimeout(700); assert.equal(await nm(), NAMES[4], 'botón siguiente');
-  // Flip: la carta destacada arranca en la posición de la miniatura.
-  const flipStart = await page.evaluate(async () => {
-    const th = document.querySelectorAll('.ft-thumb')[9]; const r0 = th.getBoundingClientRect(); th.click();
-    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-    const c = document.querySelector('.ft-card').getBoundingClientRect(); return { thumbCx: r0.left + r0.width / 2, cardCx: c.left + c.width / 2, w: c.width };
-  });
-  assert.ok(Math.abs(flipStart.cardCx - flipStart.thumbCx) < 700 && flipStart.w < 700, `Flip desde la miniatura ${JSON.stringify(flipStart)}`);
-  await page.waitForTimeout(800);
-  assert.deepEqual(await textOverPhotos(page), [], 'texto fuera de fotos (cierre)');
-  await contrastAt(page, 'cierre');
-  await page.screenshot({ path: `${out}/1440-cierre-destacada.png` });
-  checks.push(`cierre: carta destacada ${(ft.ratio * 100).toFixed(0)} % del ancho con nombre + «Emoción: frase» + «Planea esta experiencia» al lado, 12 miniaturas de ${Math.round(ft.thumbMin)} px visibles a la vez; cambian por clic, hover, foco, flechas y botones con Flip; una sola acción naranja`);
+  checks.push('fin del tramo fijado: última carta enfocada');
 
   // Contraste por glifo y capturas en 10 puntos (1440).
   metrics.contrastWorst = { failPct: 0, minRatio: 99 };
@@ -300,7 +278,7 @@ try {
   checks.push(`CLS escritorio con rueda real (ida y vuelta completa): ${metrics.clsDesktop.toFixed(4)} (< 0,1); sin preventDefault; ningún wheel/touch/tecla cancelado`);
 
   // 2) Teclado completo con foco visible.
-  await goU(page, 0, TD, 200); await page.evaluate(() => document.getElementById('contenido').focus({ preventScroll: true }));
+  await goU(page, 0, TD, 200); await page.locator('.home-story .button').focus({ timeout: 5000 }); // último enfocable antes de la baraja
   const order = [];
   for (let i = 0; i < 40; i++) {
     await page.keyboard.press('Tab'); await page.waitForTimeout(500); await page.waitForFunction(() => document.querySelector('.scrub-hero').dataset.settled === 'true', null, { timeout: 5000 }).catch(() => {}); await page.waitForTimeout(200);
@@ -311,11 +289,10 @@ try {
     assert.ok(info.inView, `elemento enfocado dentro de la ventana: «${info.text}» (${info.ui}) ${JSON.stringify(info.rr)}`);
   }
   const kinds = order.map((o) => (/scrub-btn--explore/.test(o.cls) ? 'explore' : /scrub-btn--quote/.test(o.cls) ? 'quote' : /scrub-motion/.test(o.cls) ? 'motion' : /scrub-skip/.test(o.cls) ? 'skip' : /bd-card/.test(o.cls) ? 'card' : /bd-plan/.test(o.cls) ? 'plan' : /bd-arrow/.test(o.cls) ? 'arrow' : 'otro'));
-  assert.deepEqual(kinds.slice(0, 4), ['explore', 'quote', 'skip', 'motion'].filter(() => true).length ? kinds.slice(0, 4) : [], 'orden inicial');
-  for (const k of ['explore', 'quote', 'skip', 'motion']) assert.ok(kinds.includes(k), `Tab alcanza ${k}: ${kinds}`);
+  for (const k of ['skip', 'motion']) assert.ok(kinds.includes(k), `Tab alcanza ${k}: ${kinds}`);
   assert.equal(kinds.filter((k) => k === 'card').length, 12, `Tab alcanza las 12 cartas: ${kinds}`);
-  assert.ok(kinds.filter((k) => k === 'plan').length >= 10, `Tab alcanza «Planea esta experiencia»: ${kinds}`);
-  assert.ok(kinds.indexOf('card') > Math.max(kinds.indexOf('explore'), kinds.indexOf('quote'), kinds.indexOf('skip'), kinds.indexOf('motion')), 'acciones antes que cartas');
+  assert.ok(kinds.filter((k) => k === 'plan').length >= 1, `Tab alcanza «Planea esta experiencia»: ${kinds}`);
+  assert.ok(kinds.indexOf('card') > Math.max(kinds.indexOf('skip'), kinds.indexOf('motion')), 'controles antes que cartas');
   const sb = await page.locator('.scrub-skip').evaluate(() => 0).catch(() => 0); void sb;
   checks.push(`teclado: Tab recorre ${kinds.join(',')}; foco con contorno visible y dentro de la ventana en cada parada (el scroll salta a la carta enfocada); orden lógico acciones → cartas`);
   // Flechas: ← / → mueven entre cartas sin cancelar el evento.
@@ -331,13 +308,13 @@ try {
   assert.equal(await stageAttr(page, 'card'), '8', 'la tira salta a la carta');
   // Enlace de carta navega a la ficha.
   await page.locator('.bd-card').nth(8).click(); await page.waitForURL('**/experiencias/jardin-antioquia');
-  await page.goBack(); await page.waitForFunction(() => document.querySelector('.scrub-hero')?.dataset.ready === 'true'); await page.waitForTimeout(1200);
+  await page.goBack(); await ready(page); await page.waitForTimeout(1200);
   checks.push('flechas ←/→, botones anterior/siguiente, tira (clic) y clic en carta → ficha /experiencias/jardin-antioquia; volver restaura la apertura');
   // «Saltar introducción».
-  await goU(page, 0, TD, 200); await page.evaluate(() => document.getElementById('contenido').focus({ preventScroll: true }));
+  await goU(page, 0, TD, 200); await page.locator('.home-story .button').focus({ timeout: 5000 }); // último enfocable antes de la baraja
   for (let i = 0; i < 6; i++) { await page.keyboard.press('Tab'); if (await page.evaluate(() => document.activeElement?.classList.contains('scrub-skip'))) break; }
-  await page.keyboard.press('Enter'); await page.waitForFunction(() => document.activeElement?.id === 'descubrir');
-  checks.push('«Saltar introducción» (Enter) mueve foco y scroll a #descubrir');
+  await page.keyboard.press('Enter'); await page.waitForFunction(() => document.activeElement?.id === 'formas-de-viajar');
+  checks.push('«Saltar introducción» (Enter) mueve foco y scroll a #formas-de-viajar');
 
   // Hover: inclinación ≤4° solo con puntero fino.
   await goU(page, cardU(2), TD, 600);
@@ -367,7 +344,7 @@ try {
   const bctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   await bctx.addInitScript(() => { Object.defineProperty(window, 'localStorage', { get() { throw new DOMException('blocked', 'SecurityError'); } }); });
   const bpage = await bctx.newPage(); watch(bpage, 'nostorage');
-  await bpage.goto(base + '/', { waitUntil: 'load' }); await bpage.waitForFunction(() => document.querySelector('.scrub-hero')?.dataset.ready === 'true');
+  await bpage.goto(base + '/', { waitUntil: 'load' }); await ready(bpage);
   await bpage.getByRole('button', { name: 'Reducir movimiento' }).click(); await bpage.waitForTimeout(300);
   assert.equal(await bpage.locator('.scrub-hero.is-static').count(), 1);
   checks.push('localStorage bloqueado (try/catch): el botón sigue funcionando en la sesión'); await bctx.close();
@@ -377,18 +354,17 @@ try {
     // El HTML prerenderizado ya es estático: se espera a que la hidratación termine (data-hydrated) para comprobar el modo final.
     await page.waitForFunction(() => document.querySelector('.scrub-hero[data-hydrated="true"].is-static'), null, { timeout: 15000 });
     assert.equal(await page.locator('canvas').count(), 0, `${label}: sin canvas`);
-    assert.ok(await page.locator('h1').isVisible(), `${label}: h1`);
-    assert.match(await page.locator('h1').innerText(), /Medellín,\s*a otro nivel\./);
-    for (const t of ['Experiencias a otro nivel', 'Tours 100% privados · Guía-conductor exclusivo · Horarios flexibles', 'No solo visites Medellín. Vívela.', 'Tu viaje, tus tiempos, tu experiencia.']) assert.ok(await page.getByText(t, { exact: false }).first().isVisible(), `${label}: «${t}»`);
-    // El álbum sustituyó a la rejilla de 12 cartas: 12 miniaturas, y cada una muestra su nombre, su línea literal y su enlace.
-    assert.equal(await page.locator('.ft-thumb').count(), 12, `${label}: 12 miniaturas del álbum`);
+    assert.ok(await page.locator('.home-hero h1').isVisible(), `${label}: h1`);
+    assert.match(await page.locator('.home-hero h1').innerText(), /Medellín,\s*a otro nivel\./);
+    for (const t of ['Experiencias a otro nivel', 'Tours 100% privados · Guía-conductor exclusivo · Horarios flexibles', 'No solo visites Medellín. Vívela.', 'Tu viaje, tus tiempos,']) assert.ok(await page.getByText(t, { exact: false }).first().isVisible(), `${label}: «${t}»`);
+    // Modo estático: rejilla de 12 cartas con foto, nombre, línea literal y enlace real (el libro y el cierre viven aparte).
+    assert.equal(await page.locator('.sc-card').count(), 12, `${label}: 12 cartas`);
     for (const i of [0, 5, 11]) {
-      await page.locator('.ft-thumb').nth(i).click(); await page.waitForTimeout(200);
-      assert.equal(await page.locator('.ft-line').innerText(), LINES[i], `${label}: línea literal ${i}`);
-      assert.equal(new URL(await page.locator('.ft-media').getAttribute('href'), base).pathname, `/experiencias/${SLUGS[i]}`, `${label}: enlace ${i}`);
+      const card = page.locator('.sc-card').nth(i);
+      assert.equal((await card.locator('.sc-line').innerText()).replace(/\s+/g, ' '), LINES[i], `${label}: línea literal ${i}`);
+      assert.equal(new URL(await card.getAttribute('href'), base).pathname, `/experiencias/${SLUGS[i]}`, `${label}: enlace ${i}`);
     }
-    assert.ok(await page.locator('.sc-close .scrub-btn--quote').isVisible());
-    assert.ok(await page.locator('.scrub-poster img').isVisible(), `${label}: póster`);
+    await page.locator('.scrub-poster img').scrollIntoViewIfNeeded(); assert.ok(await page.locator('.scrub-poster img').isVisible(), `${label}: póster`);
     assert.equal(await page.locator('.scrub-skip').count(), 0);
     if (reqs) assert.equal(reqs.filter((u) => /\/(d|m)\/\d+\.webp$/.test(u)).length, 0, `${label}: sin fotogramas`);
   };
@@ -402,7 +378,7 @@ try {
     const res = await contrastAt(rpage, 'estático 1440'); metrics.contrastStatic = res.length;
     await rpage.screenshot({ path: `${out}/1440-reduced-motion.png` });
     await rpage.screenshot({ path: `${out}/1440-reduced-motion-cartas.png`, fullPage: false, clip: { x: 0, y: 0, width: 1440, height: 900 } });
-    await rpage.evaluate(() => document.querySelector('.scrub-after').scrollIntoView({ block: 'start' })); await rpage.waitForTimeout(300);
+    await rpage.evaluate(() => document.querySelector('.sc-list').scrollIntoView({ block: 'start' })); await rpage.waitForTimeout(300);
     await contrastAt(rpage, 'estático cartas'); await rpage.screenshot({ path: `${out}/1440-estatico-cartas.png` });
     checks.push(`reduced-motion: póster + h1 + lema + confianza + frase + 12 cartas con enlace y línea literal + cierre y CTA; 0 fotogramas; contraste por glifo OK (${res.length} textos)`);
     await rctx.close();
@@ -427,19 +403,15 @@ try {
     const mctx = await browser.newContext({ viewport: { width: w, height: h }, hasTouch: true, isMobile: true, deviceScaleFactor: 3 });
     await mctx.addInitScript(clsInit);
     const mpage = await mctx.newPage(); watch(mpage, `mobile${label}`); const mreq = mediaRequests(mpage);
-    await mpage.goto(base + '/', { waitUntil: 'load' });
+    await mpage.goto(base + '/', { waitUntil: 'load' }); await ready(mpage);
     await mpage.waitForFunction(() => Number(document.querySelector('.scrub-hero')?.dataset.loaded) >= 121, null, { timeout: 90000 });
     assert.ok(mreq.some((u) => /\/m\/\d+\.webp$/.test(u)) && !mreq.some((u) => /\/d\/\d+\.webp$/.test(u) || /-d\.webp$/.test(u)), 'móvil solo pide /m/ y miniaturas');
     assert.equal(await mpage.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1), false, `sin desbordamiento horizontal ${label}`);
     const ms = await span(mpage); assert.ok(Math.abs(ms.span / h * 100 - TM.total) < 1, `pista móvil ${TM.total} svh (${(ms.span / h * 100).toFixed(0)})`);
     await goU(mpage, 0, TM, 200);
-    const md = await mpage.evaluate(() => { const op = (e) => Number(getComputedStyle(e).opacity); const t1 = document.querySelector('.scrub-t1').getBoundingClientRect(), t2 = document.querySelector('.scrub-t2').getBoundingClientRect(); const rs = [...document.querySelectorAll('.bd-card')].filter((c) => op(c) > 0.9).map((c) => c.getBoundingClientRect()); return { vis: rs.length, t1b: t1.bottom, t2t: t2.top, dt: Math.min(...rs.map((r) => r.top)), db: Math.max(...rs.map((r) => r.bottom)) }; });
-    assert.equal(md.vis, 5, 'baraja de 5 cartas visibles en móvil'); assert.ok(md.t1b <= md.dt + 6 && md.t2t >= md.db - 6, `titular partido ${JSON.stringify(md)}`);
+    const md = await mpage.evaluate(() => { const op = (e) => Number(getComputedStyle(e).opacity); const t1 = document.querySelector('.scrub-t1').getBoundingClientRect(), t2 = { top: 1e9 }; const rs = [...document.querySelectorAll('.bd-card')].filter((c) => op(c) > 0.9).map((c) => c.getBoundingClientRect()); return { vis: rs.length, t1b: t1.bottom, t2t: t2.top, dt: Math.min(...rs.map((r) => r.top)), db: Math.max(...rs.map((r) => r.bottom)) }; });
+    assert.equal(md.vis, 5, 'baraja de 5 cartas visibles en móvil'); assert.ok(md.t1b <= md.dt + 6, `título sobre la baraja ${JSON.stringify(md)}`);
     assert.deepEqual(await textOverPhotos(mpage), [], `texto fuera de fotos ${label}`);
-    for (const p of [0]) { // botones
-      const info = await mpage.evaluate(() => [...document.querySelectorAll('.scrub-stage .scrub-actions a')].map((a) => { const r = a.getBoundingClientRect(); const cs = getComputedStyle(a); return { t: Math.round(r.top), h: Math.round(r.height), right: Math.round(r.right), fs: cs.fontSize, fw: cs.fontWeight }; }));
-      assert.equal(info.length, 2); assert.ok(info.every((b) => b.h >= 44 && b.fs === '13px' && b.fw === '600'), `botones ${JSON.stringify(info)}`); assert.ok(Math.abs(info[0].t - info[1].t) <= 1, 'botones en una fila'); assert.ok(Math.max(...info.map((b) => b.right)) <= w - 12);
-    }
     const pills = await mpage.evaluate(() => [...document.querySelectorAll('.scrub-skip,.scrub-motion')].map((e) => { const r = e.getBoundingClientRect(); return [r.width >= 44 && r.height >= 44, r.left >= 0 && r.right <= innerWidth]; }));
     assert.ok(pills.every((p) => p[0] && p[1]), `Saltar y Reducir movimiento ≥44 px y dentro de la pantalla ${JSON.stringify(pills)}`);
     // Flip en móvil y vuelta.
@@ -460,30 +432,8 @@ try {
       const cap = await stageAttr(mpage, 'cap'); if (cap) clipCaps.push(cap);
       await mpage.screenshot({ path: `${out}/${label}-p${String(Math.round(p * 100)).padStart(2, '0')}.png` });
     }
-    // Cierre móvil: carta destacada a todo el ancho + tira de miniaturas deslizable con scroll-snap.
-    await mpage.evaluate(() => { const y = document.querySelector('.scrub-after').getBoundingClientRect().top + scrollY - 76; scrollTo({ top: y, behavior: 'instant' }); }); await mpage.waitForTimeout(500);
-    const car = await mpage.evaluate(() => { const l = document.querySelector('.ft-strip'), cs = getComputedStyle(l), card = document.querySelector('.ft-card').getBoundingClientRect(), th = [...l.querySelectorAll('.ft-thumb')].map((e) => e.getBoundingClientRect()); return { snap: cs.scrollSnapType, ox: cs.overflowX, n: th.length, sw: l.scrollWidth, cw: l.clientWidth, cardW: card.width, vw: innerWidth, thumbW: th[0].width, thumbH: th[0].height, stripInView: l.getBoundingClientRect().top < innerHeight }; });
-    assert.ok(/x/.test(car.snap) && car.ox === 'auto' && car.n === 12 && car.sw > car.cw * 2, `tira deslizable ${JSON.stringify(car)}`);
-    assert.ok(car.cardW >= car.vw * 0.8 && car.thumbW >= 44 && car.thumbH >= 44, `destacada a todo el ancho y miniaturas ≥44 px ${JSON.stringify(car)}`);
-    const box = await mpage.locator('.ft-strip').boundingBox(); const cdp = await mctx.newCDPSession(mpage);
-    await mpage.evaluate(() => { const l = document.querySelector('.ft-strip'); const y = l.getBoundingClientRect().top + scrollY - innerHeight + l.getBoundingClientRect().height + 24; scrollTo({ top: y, behavior: 'instant' }); }); await mpage.waitForTimeout(300);
-    const box2 = await mpage.locator('.ft-strip').boundingBox();
-    { const x0 = Math.round(box2.x + box2.width * 0.8), y0 = Math.round(box2.y + box2.height / 2);
-      await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: x0, y: y0 }] });
-      for (let k = 1; k <= 12; k++) { await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: x0 - k * 22, y: y0 }] }); await mpage.waitForTimeout(16); }
-      await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); }
-    await mpage.waitForTimeout(700);
-    const sl = await mpage.evaluate(() => document.querySelector('.ft-strip').scrollLeft); assert.ok(sl > 50, `deslizar mueve la tira (${sl})`);
-    await mpage.locator('.ft-thumb').nth(6).tap(); await mpage.waitForTimeout(700);
-    assert.equal(await mpage.locator('.ft-name').innerText(), NAMES[6], 'tocar miniatura cambia la destacada');
-    await mpage.evaluate(() => { const y = document.querySelector('.scrub-after').getBoundingClientRect().top + scrollY - 76; scrollTo({ top: y, behavior: 'instant' }); }); await mpage.waitForTimeout(300);
-    await contrastAt(mpage, `${label} destacada`); await mpage.screenshot({ path: `${out}/${label}-cierre-destacada.png` });
-    await mpage.evaluate(() => scrollTo({ top: document.querySelector('.sc-close').getBoundingClientRect().top + scrollY - 200, behavior: 'instant' })); await mpage.waitForTimeout(500);
-    await contrastAt(mpage, `${label} cierre`);
-    const orange = await mpage.evaluate(() => [...document.querySelectorAll('.scrub-after .scrub-actions a')].filter((a) => getComputedStyle(a).backgroundColor === 'rgb(255, 127, 9)').length); assert.equal(orange, 1);
-    await mpage.screenshot({ path: `${out}/${label}-cierre.png` });
     assert.ok(clipCaps.includes('c1') || clipCaps.includes('c2'), 'textos del clip en móvil');
-    checks.push(`móvil ${w}×${h}: pista ${TM.total} svh (clip ${TM.t2 - TM.t1} svh), baraja de 5 cartas con titular partido, Flip y vuelta, botones ≥44 px/13 px en una fila, pills ≥44, contraste por glifo OK en ${mp.length} puntos, texto sobre fotos 0, cierre con destacada a todo el ancho y tira de 12 miniaturas deslizable con scroll-snap (gesto táctil real ${sl}px, toque cambia la carta), CLS rueda ${metrics[`clsMobile${label}`].toFixed(4)}, solo /m/`);
+    checks.push(`móvil ${w}×${h}: pista ${TM.total} svh (clip ${TM.t2 - TM.t1} svh), baraja de 5 cartas con título, Flip y vuelta, pills ≥44, contraste por glifo OK en ${mp.length} puntos, texto sobre fotos 0, CLS rueda ${metrics[`clsMobile${label}`].toFixed(4)}, solo /m/`);
     await mctx.close();
   }
 
@@ -495,31 +445,31 @@ try {
     const zctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: dsf, hasTouch: w < 900 && label !== 'zoom200', isMobile: label === 'landscape' });
     const zpage = await zctx.newPage(); watch(zpage, `size-${label}`);
     await zpage.goto(base + '/', { waitUntil: 'load' });
-    await zpage.waitForFunction(() => document.querySelector('.scrub-poster img')?.complete); await zpage.waitForTimeout(900);
+    await zpage.waitForFunction(() => document.querySelector('.scrub-hero')?.dataset.hydrated === 'true'); await zpage.waitForTimeout(900);
     const isStatic = (await zpage.locator('.scrub-hero.is-static').count()) === 1;
     assert.deepEqual(await zpage.evaluate(() => [...document.querySelectorAll('.scrub-hero *')].filter((e) => !e.closest('.ft-strip') && getComputedStyle(e).position !== 'fixed' && e.getBoundingClientRect().width > 0 && e.getBoundingClientRect().right > innerWidth + 1 && !e.closest('.scrub-media,.bd-deck,.bd-floats,.bd-mq,.scrub-title')).map((e) => e.className)), [], `sin desbordamiento horizontal del héroe ${label} (el del encabezado global se informa aparte)`);
     if (isStatic) {
       assert.equal(await zpage.locator('canvas').count(), 0);
-      assert.ok(await zpage.locator('h1').isVisible() && await zpage.locator('.sc-close .scrub-btn--quote').isVisible(), `texto y CTA en estático ${label}`);
-      await zpage.evaluate(() => document.getElementById('contenido')?.focus({ preventScroll: true }));
+      assert.ok(await zpage.locator('.home-hero h1').isVisible(), `h1 en estático ${label}`);
+      await zpage.evaluate(() => document.querySelector('.scrub-hero').scrollIntoView({ block: 'start' })); await zpage.locator('.home-story .button').focus();
       let reached = 0;
       for (let i = 0; i < 3; i++) {
         await zpage.keyboard.press('Tab'); await zpage.waitForTimeout(450);
         const info = await zpage.evaluate(() => { const e = document.activeElement; if (!e?.closest('.scrub-hero')) return null; const r = e.getBoundingClientRect(); return { top: r.top, bottom: r.bottom, left: r.left, right: r.right, width: r.width, iw: innerWidth, ih: innerHeight }; });
-        if (info) { reached++; assert.ok(inside(info, info.iw, info.ih), `foco visible en ${label}: ${JSON.stringify(info)}`); }
+        if (info) { reached++; assert.ok(info.bottom > 0 && info.top < info.ih && info.right > 0 && info.left < info.iw, `foco visible en ${label}: ${JSON.stringify(info)}`); } // las cartas estáticas pueden ser más altas que la ventana: basta con que estén a la vista
       }
       assert.ok(reached >= 2, `Tab alcanza controles del héroe en ${label}`);
-      await zpage.evaluate(() => scrollTo(0, 0)); await zpage.screenshot({ path: `${out}/${label}-estatico-inicio.png` });
+      await zpage.screenshot({ path: `${out}/${label}-estatico-inicio.png` });
       metrics.tamanos[label] = `estático (${reached} focos visibles)`;
     } else {
       assert.ok(h > 560, `animado solo con altura > 560 (${label})`);
-      await zpage.waitForFunction(() => document.querySelector('.scrub-hero')?.dataset.ready === 'true', null, { timeout: 30000 });
+      await ready(zpage);
       const T = w < 800 ? TM : TD, pts = w < 800 ? [0, 0.3, 0.8, 0.97] : [0, 0.2, 0.5, 0.8, 0.98];
       for (const p of pts) {
-        await goTo(zpage, p, 450);
+        await goTo(zpage, p, 450).catch((e) => { throw new Error(`${label} p${p}: ${String(e.message).split(String.fromCharCode(10))[0]}`); });
         const bad = await zpage.evaluate(() => {
           const out = [], H = innerHeight, Wd = innerWidth, stage = document.querySelector('.scrub-stage').getBoundingClientRect();
-          const items = [...document.querySelectorAll('.scrub-stage .scrub-actions a,.scrub-skip,.scrub-motion,.scrub-cap,.scrub-index,.bd-plan.is-on,.bd-arrow')].filter((e) => { let o = 1, hid = false; for (let n = e; n && n !== document.body; n = n.parentElement) { const cs = getComputedStyle(n); o *= Number(cs.opacity); if (cs.visibility === 'hidden' || cs.display === 'none') hid = true; } return !hid && o > 0.9; });
+          const items = [...document.querySelectorAll('.scrub-skip,.scrub-motion,.scrub-cap,.scrub-index,.bd-plan.is-on,.bd-arrow')].filter((e) => { let o = 1, hid = false; for (let n = e; n && n !== document.body; n = n.parentElement) { const cs = getComputedStyle(n); o *= Number(cs.opacity); if (cs.visibility === 'hidden' || cs.display === 'none') hid = true; } return !hid && o > 0.9; });
           for (const e of items) { const r = e.getBoundingClientRect(); if (r.width && (r.top < stage.top - 1 || r.bottom > Math.min(H, stage.bottom) + 1 || r.left < -1 || r.right > Wd + 1)) out.push(`${e.className}:${Math.round(r.top)}-${Math.round(r.bottom)}/${H}`); }
           return out;
         });

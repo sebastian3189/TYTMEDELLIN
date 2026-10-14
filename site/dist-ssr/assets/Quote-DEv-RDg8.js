@@ -1,4 +1,4 @@
-import { F as company, I as whatsapp, L as language, N as jsx, P as jsxs, R as t, g as QuoteCopy, o as rawTours } from "../entry-server.js";
+import { F as whatsapp, I as language, L as t, M as jsx, N as jsxs, P as company, h as QuoteCopy, m as Arrow, o as rawTours } from "../entry-server.js";
 import { Link } from "react-router-dom";
 import { startTransition, useEffect, useRef, useState } from "react";
 //#region src/indicativos.json
@@ -1511,10 +1511,7 @@ function Quote({ context = "Un recorrido a mi medida", mode = "cotizar" }) {
 				/* @__PURE__ */ jsxs("button", {
 					className: "button full",
 					type: "submit",
-					children: [withType && !plan ? "Preparar mi mensaje" : "Preparar mi consulta", /* @__PURE__ */ jsx("span", {
-						"aria-hidden": "true",
-						children: "↗"
-					})]
+					children: [withType && !plan ? "Preparar mi mensaje" : "Preparar mi consulta", /* @__PURE__ */ jsx(Arrow, {})]
 				}),
 				/* @__PURE__ */ jsxs("p", {
 					className: "form-note full",
@@ -1559,10 +1556,7 @@ function Quote({ context = "Un recorrido a mi medida", mode = "cotizar" }) {
 								href: whatsapp(plan ? v.experiencia : "mi consulta"),
 								target: "_blank",
 								rel: "noreferrer",
-								children: ["Abrir WhatsApp y pegar", /* @__PURE__ */ jsx("span", {
-									"aria-hidden": "true",
-									children: "↗"
-								})]
+								children: ["Abrir WhatsApp y pegar", /* @__PURE__ */ jsx(Arrow, {})]
 							})]
 						}),
 						/* @__PURE__ */ jsx("p", {

@@ -1,7 +1,7 @@
-import { C as useMedia, E as inicioTextos, I as whatsapp, N as jsx, P as jsxs, S as useLightMotion, _ as EditorialMotion, b as Trust, c as Arrow, f as Picture, h as TourCard, k as usePageMeta, m as Rail, p as QuoteSection, r as tours, u as Eyebrow, w as useMounted, y as Marquee } from "../entry-server.js";
-import NotFound from "./NotFound-D0uRj_7U.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-C4tRee2w.js";
-import { t as Reviews } from "./Reviews-CZkkVS5X.js";
+import { C as useMounted, F as whatsapp, M as jsx, N as jsxs, O as usePageMeta, S as useMedia, T as inicioTextos, c as Eyebrow, d as QuoteSection, f as Rail, g as EditorialMotion, j as Fragment, m as Arrow, p as TourCard, r as tours, u as Picture, v as Marquee, x as useLightMotion, y as Trust } from "../entry-server.js";
+import NotFound from "./NotFound-B0H4hQI8.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-CBW4kyy0.js";
+import { t as Reviews } from "./Reviews-_GbOMycc.js";
 /* empty css                       */
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -386,10 +386,7 @@ function QuoteBar({ name, ctaId = "cta-principal", formId = "consulta" }) {
 			/* @__PURE__ */ jsxs("a", {
 				className: "button quote-bar-cta",
 				href: `#${formId}`,
-				children: ["Cotizar", /* @__PURE__ */ jsx("span", {
-					"aria-hidden": "true",
-					children: "↗"
-				})]
+				children: ["Cotizar", /* @__PURE__ */ jsx(Arrow, {})]
 			}),
 			/* @__PURE__ */ jsx("a", {
 				className: "quote-bar-wa",
@@ -501,7 +498,7 @@ function Story({ tour }) {
 					}),
 					/* @__PURE__ */ jsx("span", {
 						className: "story-hint",
-						children: staticMode ? "A tu ritmo" : "Desliza para seguir la historia ↓"
+						children: staticMode ? "A tu ritmo" : /* @__PURE__ */ jsxs(Fragment, { children: ["Desliza para seguir la historia ", /* @__PURE__ */ jsx(Arrow, { dir: "down" })] })
 					})
 				]
 			})]
@@ -524,10 +521,10 @@ function Tour() {
 				children: [/* @__PURE__ */ jsxs("div", {
 					className: "tour-hero-content",
 					children: [
-						/* @__PURE__ */ jsx(Link, {
+						/* @__PURE__ */ jsxs(Link, {
 							to: "/experiencias",
 							className: "back-link",
-							children: "← Todas las experiencias"
+							children: [/* @__PURE__ */ jsx(Arrow, { dir: "left" }), "Todas las experiencias"]
 						}),
 						/* @__PURE__ */ jsxs(Eyebrow, { children: [tour.category, " · Desde Medellín"] }),
 						/* @__PURE__ */ jsx("h1", { children: tour.name }),

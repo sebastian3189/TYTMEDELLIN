@@ -1,5 +1,5 @@
-import { M as Fragment, N as jsx, P as jsxs, d as PageTitle, f as Picture, k as usePageMeta, l as Button, t as articles, u as Eyebrow } from "../entry-server.js";
-import NotFound from "./NotFound-D0uRj_7U.js";
+import { M as jsx, N as jsxs, O as usePageMeta, c as Eyebrow, j as Fragment, l as PageTitle, m as Arrow, s as Button, t as articles, u as Picture } from "../entry-server.js";
+import NotFound from "./NotFound-B0H4hQI8.js";
 import { Link, useParams } from "react-router-dom";
 //#region src/pages/Blog.jsx
 function Blog() {
@@ -29,9 +29,9 @@ function Blog() {
 				] }),
 				/* @__PURE__ */ jsx("h2", { children: a.title }),
 				/* @__PURE__ */ jsx("p", { children: a.intro }),
-				/* @__PURE__ */ jsx("span", {
+				/* @__PURE__ */ jsxs("span", {
 					className: "text-link",
-					children: "Leer la nota ↗"
+					children: ["Leer la nota", /* @__PURE__ */ jsx(Arrow, {})]
 				})
 			]
 		}, a.slug))
@@ -63,10 +63,10 @@ function Article() {
 					to: "/experiencias",
 					children: "Encuentra tu recorrido"
 				}),
-				/* @__PURE__ */ jsx(Link, {
+				/* @__PURE__ */ jsxs(Link, {
 					className: "text-link",
 					to: "/blog",
-					children: "← Volver al cuaderno"
+					children: [/* @__PURE__ */ jsx(Arrow, { dir: "left" }), "Volver al cuaderno"]
 				})
 			]
 		})

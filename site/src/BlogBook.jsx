@@ -4,6 +4,7 @@ import { articles } from './content';
 import { Picture } from './shared';
 import { useLightMotion, useMedia } from './PremiumMotion';
 import './experience-book.css';
+import Arrow from './Arrow';
 
 /*
  * Libro «Ideas para viajar con más sentido» — Spec 03 §J4 (aprobado 2026-10-14).
@@ -20,6 +21,9 @@ const two = (n) => String(n).padStart(2, '0');
 const EASE = 'cubic-bezier(.77,0,.175,1)';
 const ANGLE_B = [[0, 0], [0.4, -14], [0.75, 6], [1, 0]]; // giro relativo del segmento exterior (hacia delante; hacia atrás se invierte)
 const SPLIT = 0.3;
+const HINT_KEY = 'tyt-libro-gesto'; // sessionStorage: la pista de «desliza» desaparece tras el primer giro
+const hintSeen = () => { try { return sessionStorage.getItem(HINT_KEY) === '1'; } catch { return false; } };
+const markSeen = () => { try { sessionStorage.setItem(HINT_KEY, '1'); } catch { /* sin almacenamiento: dura lo que la página */ } };
 
 /* Contenido de una página (también usado por las copias de la hoja: mismas clases, sin enlaces). */
 function PagePhoto({ item, link }) {
@@ -35,8 +39,8 @@ function PageText({ item, live }) {
       <h3 className="ft-name">{item.title}</h3>
       <p className="ft-line">{item.intro}</p>
       {live
-        ? <Link className="ft-plan" to={`/blog/${item.slug}`} aria-label={`Leer la nota: ${item.title}`}>Leer la nota <span aria-hidden="true">↗</span></Link>
-        : <span className="ft-plan">Leer la nota <span aria-hidden="true">↗</span></span>}
+        ? <Link className="ft-plan" to={`/blog/${item.slug}`} aria-label={`Leer la nota: ${item.title}`}>Leer la nota <Arrow/></Link>
+        : <span className="ft-plan">Leer la nota <Arrow/></span>}
     </div>
   );
 }
@@ -90,6 +94,8 @@ export default function BlogBook() {
   const [sel, setSel] = useState(0);
   const [view, setView] = useState({ l: 0, r: 0 }); // nota que muestran la página izquierda (foto) y la derecha (texto)
   const [turn, setTurn] = useState(null);
+  const [tip, setTip] = useState(false), [hint, setHint] = useState(false), [breathe, setBreathe] = useState(false); // afordancia móvil: texto, giro de 15° y esquina que respira
+  const hintRef = useRef(null);
   const windowRef = useRef(null), selected = useRef(0), serial = useRef(0), touch = useRef(null), wasLight = useRef(light);
   const canAnimate = () => !light && typeof Element.prototype.animate === 'function'; // evaluado solo en eventos (el servidor no lo necesita)
 
@@ -101,12 +107,35 @@ export default function BlogBook() {
     return () => observer.disconnect();
   }, [cards]);
 
+  // Afordancia móvil (pedido del usuario 2026-10-14): esquina levantada que «respira» una vez y la hoja se inclina ~15° la primera vez que entra en pantalla.
+  useEffect(() => {
+    if (!mobile) { setTip(false); setHint(false); return undefined; }
+    const seen = hintSeen(); setTip(!seen);
+    if (seen) return undefined;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      if (!light && typeof Element.prototype.animate === 'function') { setBreathe(true); setHint(true); }
+    }, { threshold: 0.6 });
+    observer.observe(hintRef.current);
+    return () => observer.disconnect();
+  }, [mobile, light]);
+  useLayoutEffect(() => {
+    if (!hint || turn) return undefined;
+    const root = windowRef.current;
+    if (!root) return undefined;
+    const leaf = root.querySelector('.ft-leaf'), a = leaf.animate([{ transform: 'translateZ(0) rotateY(0deg)' }, { transform: 'translateZ(12px) rotateY(-15deg)', offset: 0.45 }, { transform: 'translateZ(0) rotateY(0deg)' }], { duration: 1100, easing: 'ease-in-out', fill: 'both' });
+    const shades = [...root.querySelectorAll('.bk-shade')].map((el) => el.animate([{ opacity: 0 }, { opacity: 0.28, offset: 0.45 }, { opacity: 0 }], { duration: 1100, easing: 'ease-in-out', fill: 'both' }));
+    a.onfinish = () => { setHint(false); setBreathe(false); };
+    return () => { a.onfinish = null; a.cancel(); shades.forEach((x) => x.cancel()); };
+  }, [hint, turn]);
   const settle = (to) => { setView((v) => (v.l === to && v.r === to ? v : { l: to, r: to })); setTurn(null); };
   const choose = (i) => {
     i = Math.min(cards.length - 1, Math.max(0, i));
     const from = selected.current;
     if (i === from) return;
     selected.current = i; setSel(i);
+    markSeen(); setTip(false); setHint(false);
     if (!canAnimate()) { settle(i); return; }
     const forward = i > from;
     // Si había un giro en curso, `from` ya es su destino: se da por terminado y solo se gira hacia el último destino.
@@ -184,13 +213,19 @@ export default function BlogBook() {
   const fw = turn?.forward;
   return (
     <section ref={rootRef} className="blog-book wrap section" aria-labelledby="blog-book-title">
-      <div className="section-title"><div><p className="eyebrow">Cuaderno de viaje</p><h2 id="blog-book-title">Ideas para viajar<br />con más <em>sentido.</em></h2></div><Link className="text-link" to="/blog">Todas las notas ↗</Link></div>
+      <div className="section-title"><div><p className="eyebrow">Cuaderno de viaje</p><h2 id="blog-book-title">Ideas para viajar<br />con más <em>sentido.</em></h2></div><Link className="text-link" to="/blog">Todas las notas<Arrow/></Link></div>
       <div className="ft ft-book" data-turning={Boolean(turn)} data-mobile={mobile || undefined}>
         <div className="ft-main" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
           <div className="bk-spread">
             <div className="bk-page bk-page--photo"><div className="bk-fade" key={view.l}><PagePhoto item={left} link={card} /></div></div>
             <div className="bk-page bk-page--text"><div className="bk-fade" key={view.r}><PageText item={right} live /></div></div>
             <span className="bk-spine" aria-hidden="true" />
+            {hint && !turn && mobile && (
+              <div ref={windowRef} className="ft-turn-window" aria-hidden="true" inert data-direction="next">
+                <Leaf key="hint" turn={{ from: sel, to: sel, forward: true }} cards={cards} split={false} mobileSingle />
+              </div>
+            )}
+            {mobile && sel < cards.length - 1 && <span className="bk-curl" data-breathe={breathe || undefined} aria-hidden="true" />}
             {turn && (
               <div ref={windowRef} className="ft-turn-window" aria-hidden="true" inert data-direction={fw ? 'next' : 'previous'}>
                 <i className="bk-cast" />
@@ -199,6 +234,8 @@ export default function BlogBook() {
             )}
           </div>
         </div>
+        <div ref={hintRef} className="bk-hint-anchor" />
+        {mobile && tip && <p className="bk-swipe"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4" /><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none" /></svg>Desliza para pasar la página</p>}
         <div className="bk-footer">
           <div className="ft-strip" role="group" aria-label="Elegir nota">
             {cards.map((x, i) => (
@@ -210,8 +247,8 @@ export default function BlogBook() {
           <div className="bk-ctl">
             <p className="ft-count" role="status" aria-live="polite">{two(sel + 1)} / {two(cards.length)}</p>
             <div className="ft-nav">
-              <button type="button" aria-label="Nota anterior" disabled={sel === 0} onClick={() => choose(selected.current - 1)}>←</button>
-              <button type="button" aria-label="Nota siguiente" disabled={sel === cards.length - 1} onClick={() => choose(selected.current + 1)}>→</button>
+              <button type="button" aria-label="Nota anterior" disabled={sel === 0} onClick={() => choose(selected.current - 1)}><Arrow dir="left"/></button>
+              <button type="button" aria-label="Nota siguiente" disabled={sel === cards.length - 1} onClick={() => choose(selected.current + 1)}><Arrow dir="right"/></button>
             </div>
           </div>
         </div>

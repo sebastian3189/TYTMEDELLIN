@@ -168,7 +168,7 @@ try {
   // Reducido (sistema) y ahorro de datos: sin 3D, fundido de 150 ms; y cambio dinámico a mitad de giro.
   for (const [width, mode] of [[1440, 'reduced'], [390, 'reduced'], [1440, 'saveData']]) {
     const context = await browser.newContext({ viewport: { width, height: 1000 }, reducedMotion: mode === 'reduced' ? 'reduce' : 'no-preference' });
-    if (mode === 'saveData') await context.addInitScript(() => Object.defineProperty(navigator.connection, 'saveData', { get: () => true }));
+    if (mode === 'saveData') await context.addInitScript(() => Object.defineProperty(navigator, 'connection', { value: Object.assign(new EventTarget(), { saveData: true, effectiveType: '4g' }), configurable: true }));
     const page = await context.newPage();
     page.on('pageerror', (error) => errors.push(`${mode} ${error.message}`));
     await page.goto(base, { waitUntil: 'load' }); await page.waitForFunction(() => document.querySelector('.scrub-hero')?.dataset.hydrated === 'true');

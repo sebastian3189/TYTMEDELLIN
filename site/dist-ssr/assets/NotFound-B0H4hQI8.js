@@ -1,4 +1,4 @@
-import { M as Fragment, N as jsx, O as NOT_FOUND, P as jsxs, d as PageTitle, h as TourCard, k as usePageMeta, r as tours } from "../entry-server.js";
+import { D as NOT_FOUND, M as jsx, N as jsxs, O as usePageMeta, j as Fragment, l as PageTitle, m as Arrow, p as TourCard, r as tours } from "../entry-server.js";
 import { Link } from "react-router-dom";
 //#region src/pages/NotFound.jsx
 function NotFound() {
@@ -20,10 +20,10 @@ function NotFound() {
 				tours[0],
 				tours[4]
 			].map((t) => /* @__PURE__ */ jsx(TourCard, { tour: t }, t.slug))
-		}), /* @__PURE__ */ jsx(Link, {
+		}), /* @__PURE__ */ jsxs(Link, {
 			className: "text-link",
 			to: "/experiencias",
-			children: "Volver a las experiencias ↗"
+			children: ["Volver a las experiencias", /* @__PURE__ */ jsx(Arrow, {})]
 		})]
 	})] });
 }

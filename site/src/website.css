@@ -42,3 +42,8 @@
 /* Menú sin JavaScript (Spec 04): el botón no funciona sin scripts; en <1100 px se ofrece un enlace «Menú» al pie, que trae todas las rutas. */
 .menu-nojs{display:none}
 @media(max-width:1099px){html:not([data-js]) .menu-toggle{display:none}html:not([data-js]) .menu-nojs{display:inline-flex;align-items:center;min-height:44px;padding:8px 16px;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface);font-weight:600}}
+/* Flecha única SVG (Arrow.jsx): hereda el color del texto en claro y oscuro */
+.ico-arrow{flex:none;width:18px;height:18px;vertical-align:-3px}
+.back-link{gap:8px}
+.bd-arrow,.ft-nav button,.rail-controls button,.g-controls button,.gallery-controls button,.chapter-controls button{display:inline-flex;align-items:center;justify-content:center}
+.bd-arrow .ico-arrow,.ft-nav .ico-arrow,.rail-controls .ico-arrow,.g-controls .ico-arrow,.gallery-controls .ico-arrow{vertical-align:0}

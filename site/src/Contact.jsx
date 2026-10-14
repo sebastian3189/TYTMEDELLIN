@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { company } from './company';
 import Socials from './Socials';
+import Arrow from './Arrow';
 
 /*
  * Contacto (Spec 02 «Pedido del usuario», Spec 04 «Integraciones»). Datos de la sede Medellín: tnt-colombia-connect/src/data/sedes.ts
@@ -22,9 +23,9 @@ export function MapFacade() {
     <div className="map-frame">
       {loaded
         ? <iframe ref={frame} title={MAP.title} src={mapEmbed} loading="lazy" referrerPolicy="no-referrer-when-downgrade" sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"/>
-        : <div className="map-facade"><svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg><p><strong>{company.address}</strong></p><button type="button" className="button secondary" onClick={() => setLoaded(true)}>Cargar mapa interactivo <span aria-hidden="true">↗</span></button><small>Al cargarlo, tu navegador se conecta a OpenStreetMap.</small></div>}
+        : <div className="map-facade"><svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg><p><strong>{company.address}</strong></p><button type="button" className="button secondary" onClick={() => setLoaded(true)}>Cargar mapa interactivo <Arrow/></button><small>Al cargarlo, tu navegador se conecta a OpenStreetMap.</small></div>}
     </div>
-    <figcaption><a className="text-link" href={googleMaps} target="_blank" rel="noopener noreferrer">Abrir en Google Maps<span className="sr-only"> (se abre en una pestaña nueva)</span> ↗</a><a className="text-link" href={openStreetMap} target="_blank" rel="noopener noreferrer">Abrir en OpenStreetMap<span className="sr-only"> (se abre en una pestaña nueva)</span> ↗</a></figcaption>
+    <figcaption><a className="text-link" href={googleMaps} target="_blank" rel="noopener noreferrer">Abrir en Google Maps<span className="sr-only"> (se abre en una pestaña nueva)</span><Arrow/></a><a className="text-link" href={openStreetMap} target="_blank" rel="noopener noreferrer">Abrir en OpenStreetMap<span className="sr-only"> (se abre en una pestaña nueva)</span><Arrow/></a></figcaption>
   </figure>;
 }
 

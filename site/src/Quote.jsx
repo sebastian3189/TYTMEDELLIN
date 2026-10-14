@@ -5,6 +5,7 @@ import { company, whatsapp } from './company';
 import indicativos from './indicativos.json';
 import QuoteCopy from './QuoteCopy';
 import { language, t } from './i18n';
+import Arrow from './Arrow';
 const countryLabel = row => language()==='en' ? new Intl.DisplayNames(['en'],{type:'region'}).of(row[1]) : row[2];
 
 /*
@@ -105,8 +106,8 @@ export default function Quote({ context = 'Un recorrido a mi medida', mode = 'co
       <div className="consent full"><input {...attrs('consentimiento')} type="checkbox" checked={v.consentimiento} onChange={set('consentimiento')} required/><label htmlFor="consentimiento">He leído el <Link to="/privacidad" target="_blank">aviso de privacidad</Link> y autorizo compartir esta solicitud con T&T cuando la envíe.</label>{error('consentimiento')}</div>
       {retry && <div className="form-errors full" role="alert"><strong>No pudimos preparar tu consulta.</strong> Inténtalo de nuevo en unos segundos.</div>}
       {!retry && errorList.length > 0 && <div className="form-errors full" role="alert"><strong>Revisa {errorList.length === 1 ? 'este campo' : `estos ${errorList.length} campos`}:</strong> {errorList.map((name, i) => <span key={name}>{i > 0 && ', '}<a href={`#${name}`} onClick={(e) => { e.preventDefault(); form.current.querySelector(`#${name}`)?.focus(); }}>{LABEL[name]}</a></span>)}.</div>}
-      <button className="button full" type="submit">{withType && !plan ? 'Preparar mi mensaje' : 'Preparar mi consulta'}<span aria-hidden="true">↗</span></button>
+      <button className="button full" type="submit">{withType && !plan ? 'Preparar mi mensaje' : 'Preparar mi consulta'}<Arrow/></button>
       <p className="form-note full">Los datos permanecen en esta página hasta que tú decidas compartirlos. Preparar la consulta no confirma una reserva. También puedes llamarnos: <a href={`tel:${company.phone.replaceAll(' ', '')}`}>{company.phone}</a>.</p>
-      {summary && <div className="summary full" id="resumen-solicitud" tabIndex={-1}><h3>Revisa y comparte tu solicitud</h3><ol className="summary-steps"><li>Revisa el texto.</li><li>Cópialo (ya lo intentamos por ti).</li><li>Ábrelo en WhatsApp y pégalo.</li></ol><textarea aria-label="Resumen de solicitud" value={summary} readOnly rows={8}/><div className="summary-actions"><button type="button" className="button" onClick={copy}>Copiar solicitud</button><a className="button" href={whatsapp(plan ? v.experiencia : 'mi consulta')} target="_blank" rel="noreferrer">Abrir WhatsApp y pegar<span aria-hidden="true">↗</span></a></div><p role="status">{message}</p><button type="button" className="text-link" onClick={() => { setSummary(''); form.current.querySelector('#nombre')?.focus(); }}>Editar mis datos</button></div>}
+      {summary && <div className="summary full" id="resumen-solicitud" tabIndex={-1}><h3>Revisa y comparte tu solicitud</h3><ol className="summary-steps"><li>Revisa el texto.</li><li>Cópialo (ya lo intentamos por ti).</li><li>Ábrelo en WhatsApp y pégalo.</li></ol><textarea aria-label="Resumen de solicitud" value={summary} readOnly rows={8}/><div className="summary-actions"><button type="button" className="button" onClick={copy}>Copiar solicitud</button><a className="button" href={whatsapp(plan ? v.experiencia : 'mi consulta')} target="_blank" rel="noreferrer">Abrir WhatsApp y pegar<Arrow/></a></div><p role="status">{message}</p><button type="button" className="text-link" onClick={() => { setSummary(''); form.current.querySelector('#nombre')?.focus(); }}>Editar mis datos</button></div>}
     </form></section>;
 }

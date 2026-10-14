@@ -139,7 +139,7 @@ export function HomeSocial() {
           </li>
         ))}
       </ul>
-      <a className="text-link ig-tiktok" href={tiktok.url} target="_blank" rel="noopener noreferrer" aria-label={`También en TikTok ${tiktok.handle} (se abre en una pestaña nueva)`}>También en TikTok {tiktok.handle} <span aria-hidden="true">↗</span></a>
+      <a className="text-link ig-tiktok" href={tiktok.url} target="_blank" rel="noopener noreferrer" aria-label={`También en TikTok ${tiktok.handle} (se abre en una pestaña nueva)`}>También en TikTok {tiktok.handle} <Arrow/></a>
     </section>
   );
 }

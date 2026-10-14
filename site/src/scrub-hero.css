@@ -121,13 +121,15 @@
 
 /* Controles «Reducir movimiento» y «Saltar»: nunca sobre la imagen. Escritorio: arriba a la derecha mientras no hay marco a pantalla
    completa y, durante el Flip/clip/contracción, en la banda de texto bajo el marco (transform, no layout). Móvil: fila fija en la banda. */
-.scrub-ctl{position:absolute;z-index:90;top:clamp(14px,3vh,32px);right:var(--pad);display:flex;flex-direction:row-reverse;gap:12px;align-items:center;animation:ctl-top 240ms var(--ease-out-strong) both}
+.scrub-ctl{position:absolute;z-index:300;top:clamp(14px,3vh,32px);right:var(--pad);display:flex;flex-direction:row-reverse;gap:12px;align-items:center;animation:ctl-top 240ms var(--ease-out-strong) both}
 .scrub-skip,.scrub-motion{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;min-width:44px;padding:10px 18px;border-radius:999px;font:600 13px/1.2 var(--font,Inter,Arial,sans-serif);transition:opacity var(--dur-ui) var(--ease-out-strong),transform var(--dur-press) var(--ease-out-strong),background-color var(--dur-ui) ease}
 .scrub-skip{width:196px}
 .scrub-motion:disabled{color:var(--text-muted);border-color:var(--line-strong);cursor:default}
+/* ≥800 px: «Saltar» y «Reducir movimiento» son controles icónicos de 44 px (el texto queda como nombre accesible y tooltip) arriba a la derecha en todas las fases:
+   nunca comparten esquina con el botón de WhatsApp ni se montan sobre las cartas (sobre foto solo se admite un control icónico, Spec 03 §I2.1). */
 @media(min-width:800px){
- .scrub-stage:not([data-ui=deck]) .scrub-ctl{flex-direction:column;align-items:flex-end;gap:8px;right:24px;transform:translateY(calc(var(--stage-h,600px) - var(--band) - clamp(14px,3vh,32px) + 6px));animation-name:ctl-band}
- .scrub-stage:not([data-ui=deck]) .scrub-motion{width:196px}
+ .scrub-hero:not(.is-static) .scrub-skip,.scrub-hero:not(.is-static) .scrub-motion{width:44px;padding:0;gap:0}
+ .scrub-hero:not(.is-static) .ctl-label{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 }
 @media(min-width:800px) and (max-height:760px){.scrub-strip button{width:40px;height:50px}}
 @keyframes ctl-top{from{opacity:0}to{opacity:1}}
@@ -174,7 +176,7 @@
 .sc-close .scrub-actions{margin-top:28px}
 
 /* ---------- Estático: rejilla de cartas P3 (retrato 4:5, texto bajo la foto) ---------- */
-.sc-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,2.4vw,32px);margin:24px 0 0;padding:0}
+.sc-list{content-visibility:auto;contain-intrinsic-size:auto 1400px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,2.4vw,32px);margin:24px 0 0;padding:0}
 @media(max-width:1099px){.sc-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:699px){.sc-list{grid-template-columns:minmax(0,1fr)}}
 .sc-card{display:block;overflow:hidden;border:1px solid var(--line);border-radius:20px;background:var(--surface);box-shadow:var(--shadow-1);color:var(--text-strong);text-decoration:none;transition:transform var(--dur-ui) var(--ease-out-strong),box-shadow var(--dur-ui) ease}

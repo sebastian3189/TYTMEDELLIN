@@ -1,4 +1,4 @@
-import { M as Fragment$1, N as jsx, P as jsxs, b as Trust, d as PageTitle, h as TourCard, r as tours, x as useFlipGrid, y as Marquee } from "../entry-server.js";
+import { M as jsx, N as jsxs, b as useFlipGrid, j as Fragment, l as PageTitle, p as TourCard, r as tours, v as Marquee, y as Trust } from "../entry-server.js";
 import { useRef, useState } from "react";
 //#region src/pages/Catalog.jsx
 function Catalog() {
@@ -8,12 +8,12 @@ function Catalog() {
 	const grid = useRef(null);
 	const list = tours.filter((t) => (filter === "Todos" || t.category === filter) && `${t.name} ${t.description}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()));
 	useFlipGrid(grid, list.map((t) => t.slug).join("|"));
-	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
+	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsx(PageTitle, {
 			photo: tours[1].images[0],
 			floating: [tours[0].images[0], tours[4].images[0]],
 			tag: "La colección T&T",
-			title: /* @__PURE__ */ jsxs(Fragment$1, { children: [
+			title: /* @__PURE__ */ jsxs(Fragment, { children: [
 				"¿Qué historia",
 				/* @__PURE__ */ jsx("br", {}),
 				"quieres ",

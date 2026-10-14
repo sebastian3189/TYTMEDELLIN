@@ -1,6 +1,6 @@
-import { F as company, I as whatsapp, M as Fragment$1, N as jsx, P as jsxs, d as PageTitle, f as Picture, i as values, j as Socials, l as Button, n as photos, p as QuoteSection, u as Eyebrow, v as Manifesto } from "../entry-server.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-C4tRee2w.js";
-import { t as Reviews } from "./Reviews-CZkkVS5X.js";
+import { A as Socials, F as whatsapp, M as jsx, N as jsxs, P as company, _ as Manifesto, c as Eyebrow, d as QuoteSection, i as values, j as Fragment, l as PageTitle, m as Arrow, n as photos, s as Button, u as Picture } from "../entry-server.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-CBW4kyy0.js";
+import { t as Reviews } from "./Reviews-_GbOMycc.js";
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 //#region src/Contact.jsx
@@ -53,10 +53,7 @@ function MapFacade() {
 						type: "button",
 						className: "button secondary",
 						onClick: () => setLoaded(true),
-						children: ["Cargar mapa interactivo ", /* @__PURE__ */ jsx("span", {
-							"aria-hidden": "true",
-							children: "↗"
-						})]
+						children: ["Cargar mapa interactivo ", /* @__PURE__ */ jsx(Arrow, {})]
 					}),
 					/* @__PURE__ */ jsx("small", { children: "Al cargarlo, tu navegador se conecta a OpenStreetMap." })
 				]
@@ -72,7 +69,7 @@ function MapFacade() {
 					className: "sr-only",
 					children: " (se abre en una pestaña nueva)"
 				}),
-				" ↗"
+				/* @__PURE__ */ jsx(Arrow, {})
 			]
 		}), /* @__PURE__ */ jsxs("a", {
 			className: "text-link",
@@ -85,7 +82,7 @@ function MapFacade() {
 					className: "sr-only",
 					children: " (se abre en una pestaña nueva)"
 				}),
-				" ↗"
+				/* @__PURE__ */ jsx(Arrow, {})
 			]
 		})] })]
 	});
@@ -119,12 +116,12 @@ function ContactPlace() {
 //#region src/pages/Company.jsx
 var Gallery = ({ tour }) => /* @__PURE__ */ jsx(FeaturedGallery, { tour });
 function About() {
-	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
+	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsx(PageTitle, {
 			photo: photos("historia")[0],
 			floating: photos("historia").slice(1, 3),
 			tag: "Nuestra casa. Nuestra gente.",
-			title: /* @__PURE__ */ jsxs(Fragment$1, { children: [
+			title: /* @__PURE__ */ jsxs(Fragment, { children: [
 				"Somos del camino.",
 				/* @__PURE__ */ jsx("br", {}),
 				"Somos de ",
@@ -216,10 +213,10 @@ function About() {
 	] });
 }
 function Services() {
-	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
+	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsx(PageTitle, {
 			tag: "Transporte con atención local",
-			title: /* @__PURE__ */ jsxs(Fragment$1, { children: [
+			title: /* @__PURE__ */ jsxs(Fragment, { children: [
 				"Tu plan tiene",
 				/* @__PURE__ */ jsx("br", {}),
 				"muchas formas.",
@@ -273,10 +270,10 @@ function Services() {
 	] });
 }
 function Contact() {
-	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
+	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsx(PageTitle, {
 			tag: "Aquí empieza la conversación",
-			title: /* @__PURE__ */ jsxs(Fragment$1, { children: [
+			title: /* @__PURE__ */ jsxs(Fragment, { children: [
 				"Tu plan merece",
 				/* @__PURE__ */ jsx("br", {}),
 				"que lo ",
@@ -294,7 +291,7 @@ function Contact() {
 					children: [
 						/* @__PURE__ */ jsx(Eyebrow, { children: "WhatsApp Medellín" }),
 						/* @__PURE__ */ jsx("h2", { children: company.phone }),
-						/* @__PURE__ */ jsx("span", { children: "Conversar con el equipo ↗" })
+						/* @__PURE__ */ jsxs("span", { children: ["Conversar con el equipo", /* @__PURE__ */ jsx(Arrow, {})] })
 					]
 				}),
 				/* @__PURE__ */ jsxs("a", {
@@ -302,7 +299,7 @@ function Contact() {
 					children: [
 						/* @__PURE__ */ jsx(Eyebrow, { children: "Llámanos" }),
 						/* @__PURE__ */ jsx("h2", { children: company.phone }),
-						/* @__PURE__ */ jsx("span", { children: "Llamar a T&T Medellín ↗" })
+						/* @__PURE__ */ jsxs("span", { children: ["Llamar a T&T Medellín", /* @__PURE__ */ jsx(Arrow, {})] })
 					]
 				}),
 				/* @__PURE__ */ jsxs("a", {
@@ -318,7 +315,7 @@ function Contact() {
 								company.email.split("@")[1]
 							]
 						}),
-						/* @__PURE__ */ jsx("span", { children: "Escribir un correo ↗" })
+						/* @__PURE__ */ jsxs("span", { children: ["Escribir un correo", /* @__PURE__ */ jsx(Arrow, {})] })
 					]
 				})
 			]
@@ -330,9 +327,9 @@ function Contact() {
 function QuotePage() {
 	const { search } = useLocation();
 	const params = new URLSearchParams(search);
-	return /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx(PageTitle, {
+	return /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(PageTitle, {
 		tag: "Planeemos el siguiente camino",
-		title: /* @__PURE__ */ jsxs(Fragment$1, { children: [
+		title: /* @__PURE__ */ jsxs(Fragment, { children: [
 			"Tu viaje, tus tiempos,",
 			/* @__PURE__ */ jsx("br", {}),
 			"tu ",
@@ -341,9 +338,9 @@ function QuotePage() {
 	}), /* @__PURE__ */ jsx(QuoteSection, { context: params.get("vehiculo") || params.get("servicio") || "Un recorrido a mi medida" })] });
 }
 function Privacy() {
-	return /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx(PageTitle, {
+	return /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(PageTitle, {
 		tag: "Información clara",
-		title: /* @__PURE__ */ jsxs(Fragment$1, { children: [
+		title: /* @__PURE__ */ jsxs(Fragment, { children: [
 			"Tu información,",
 			/* @__PURE__ */ jsx("br", {}),
 			"bajo tu ",
@@ -365,20 +362,20 @@ function Privacy() {
 				}),
 				". WhatsApp y los sitios externos aplican sus propias políticas al abrirlos."
 			] }),
-			/* @__PURE__ */ jsxs("p", { children: ["Responsable identificado en el sitio de la marca: T&T, NIT 901738550-6. ", /* @__PURE__ */ jsx("a", {
+			/* @__PURE__ */ jsxs("p", { children: ["Responsable identificado en el sitio de la marca: T&T, NIT 901738550-6. ", /* @__PURE__ */ jsxs("a", {
 				href: "https://www.transporteyturismocolombia.com/privacidad",
 				target: "_blank",
 				rel: "noreferrer",
-				children: "Consultar la política de tratamiento de datos de la empresa ↗"
+				children: ["Consultar la política de tratamiento de datos de la empresa", /* @__PURE__ */ jsx(Arrow, {})]
 			})] }),
 			/* @__PURE__ */ jsx("p", { children: "Este sitio no incorpora analítica publicitaria ni almacenamiento de solicitudes. Las fotografías y las fuentes se sirven desde el proyecto." })
 		]
 	})] });
 }
 function Ratings() {
-	return /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx(PageTitle, {
+	return /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(PageTitle, {
 		tag: "Confianza con fuente",
-		title: /* @__PURE__ */ jsxs(Fragment$1, { children: [
+		title: /* @__PURE__ */ jsxs(Fragment, { children: [
 			"Lo que cuenta",
 			/* @__PURE__ */ jsx("br", {}),
 			"quien ya ",

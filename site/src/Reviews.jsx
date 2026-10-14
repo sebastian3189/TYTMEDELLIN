@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { company } from './company';
 import reviews from './reviews.json';
+import Arrow from './Arrow';
 
 // Reseñas reales de Google tomadas LITERALMENTE de ResenasGoogle.tsx del sitio oficial (18, todas de 5 estrellas); sin resumir ni alterar.
 // Cifras (5,0 · 265 en Google; Tripadvisor 5,0 · 5): ResenasExternas.tsx, verificadas por el cliente en septiembre de 2026.
@@ -29,11 +30,11 @@ export default function Reviews({ full = false }) {
         <p className="g-sub">Opiniones sobre Transporte &amp; Turismo Medellín publicadas en Google. Referencia: septiembre de 2026.</p>
         <div className="g-score"><span className="g-big">5.0<span className="sr-only"> de 5 estrellas en Google</span></span><Stars /><span className="g-count">265 reseñas en Google</span></div>
         <div className="g-actions">
-          <a className="button g-dark" href={company.reviews} target="_blank" rel="noopener noreferrer">Ver todas las reseñas en Google <span aria-hidden="true">↗</span></a>
-          <a className="g-ta" href={TRIPADVISOR} target="_blank" rel="noopener noreferrer"><img src="/media/marca/tripadvisor.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span>Tripadvisor <b>5.0</b> · 5 reseñas <span aria-hidden="true">↗</span></span></a>
+          <a className="button g-dark" href={company.reviews} target="_blank" rel="noopener noreferrer">Ver todas las reseñas en Google <Arrow/></a>
+          <a className="g-ta" href={TRIPADVISOR} target="_blank" rel="noopener noreferrer"><img src="/media/marca/tripadvisor.svg" alt="" width="32" height="32" loading="lazy" decoding="async" /><span>Tripadvisor <b>5.0</b> · 5 reseñas <Arrow/></span></a>
         </div>
       </header>
-      <div className="g-controls"><button type="button" onClick={() => move(-1)} aria-label="Reseñas anteriores">←</button><button type="button" onClick={() => move(1)} aria-label="Reseñas siguientes">→</button></div>
+      <div className="g-controls"><button type="button" onClick={() => move(-1)} aria-label="Reseñas anteriores"><Arrow dir="left"/></button><button type="button" onClick={() => move(1)} aria-label="Reseñas siguientes"><Arrow dir="right"/></button></div>
       <div ref={ref} className="g-rail" role="region" aria-roledescription="carrusel" aria-label="Reseñas de clientes en Google" tabIndex={0}
         onKeyDown={e => { if (e.target === e.currentTarget && ['ArrowLeft', 'ArrowRight'].includes(e.key)) { e.preventDefault(); move(e.key === 'ArrowLeft' ? -1 : 1) } }}
         onPointerDown={e => { if (e.pointerType === 'mouse' && e.button === 0 && !e.target.closest('button')) { drag.current = { x: e.clientX, left: ref.current.scrollLeft }; moved.current = false } }}
@@ -41,7 +42,7 @@ export default function Reviews({ full = false }) {
         onPointerUp={() => { drag.current = null }} onPointerLeave={() => { drag.current = null }} onDragStart={e => e.preventDefault()}>
         {reviews.map(r => <Card key={r.nombre} r={r} />)}
       </div>
-      {!full && <Link className="text-link g-about" to="/calificaciones">Sobre nuestras calificaciones →</Link>}
+      {!full && <Link className="text-link g-about" to="/calificaciones">Sobre nuestras calificaciones<Arrow dir="right"/></Link>}
     </div>
   </section>;
 }

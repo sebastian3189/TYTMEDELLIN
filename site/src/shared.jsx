@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { inicioTextos } from './inicio-textos';
 import { useMounted, EditorialMotion } from './PremiumMotion';
 import QuoteCopy from './QuoteCopy';
+import Arrow from './Arrow';
 
 const Quote = lazy(() => import('./Quote')); // formulario, indicativos y validaciones: fuera del paquete inicial
 export const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -18,13 +19,13 @@ export function Reveal({children,className=''}){
  useEffect(()=>{const node=ref.current;if(!('IntersectionObserver' in window))return;const observer=new IntersectionObserver(([e])=>{if(e.isIntersecting){node.classList.add('visible');observer.disconnect()}},{threshold:.08});node.classList.add('will-reveal');observer.observe(node);return()=>observer.disconnect()},[]);
  return <div className={`reveal ${className}`} ref={ref}>{children}</div>;
 }
-export function Arrow(){return <span aria-hidden="true">↗</span>}
+export { Arrow };
 export function Eyebrow({children}){return <p className="eyebrow">{children}</p>}
 export function Button({to,children,...props}){return <Link className="button" to={to} {...props}>{children}<Arrow/></Link>}
 export function Rail({children,label}){
  const ref=useRef(null),drag=useRef(null),moved=useRef(false);
  const move=d=>ref.current.scrollBy({left:d*ref.current.clientWidth*.8,behavior:reduced()?'instant':'smooth'});
- return <div className="rail-shell"><div className="rail-controls"><span>Explora a tu ritmo</span><button onClick={()=>move(-1)} aria-label={`Anterior: ${label}`}>←</button><button onClick={()=>move(1)} aria-label={`Siguiente: ${label}`}>→</button></div><div ref={ref} className="rail" role="region" aria-label={label} tabIndex={0} onKeyDown={e=>{if(e.target===e.currentTarget&&['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();move(e.key==='ArrowLeft'?-1:1)}}} onPointerDown={e=>{if(e.pointerType==='mouse'&&e.button===0){drag.current={x:e.clientX,left:ref.current.scrollLeft};moved.current=false}}} onPointerMove={e=>{if(!drag.current)return;const dx=e.clientX-drag.current.x;if(Math.abs(dx)>8){moved.current=true;ref.current.scrollLeft=drag.current.left-dx}}} onPointerUp={()=>{drag.current=null}} onPointerLeave={()=>{drag.current=null}} onClickCapture={e=>{if(moved.current){e.preventDefault();e.stopPropagation();moved.current=false}}} onDragStart={e=>e.preventDefault()}>{children}</div></div>;
+ return <div className="rail-shell"><div className="rail-controls"><span>Explora a tu ritmo</span><button onClick={()=>move(-1)} aria-label={`Anterior: ${label}`}><Arrow dir="left"/></button><button onClick={()=>move(1)} aria-label={`Siguiente: ${label}`}><Arrow dir="right"/></button></div><div ref={ref} className="rail" role="region" aria-label={label} tabIndex={0} onKeyDown={e=>{if(e.target===e.currentTarget&&['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();move(e.key==='ArrowLeft'?-1:1)}}} onPointerDown={e=>{if(e.pointerType==='mouse'&&e.button===0){drag.current={x:e.clientX,left:ref.current.scrollLeft};moved.current=false}}} onPointerMove={e=>{if(!drag.current)return;const dx=e.clientX-drag.current.x;if(Math.abs(dx)>8){moved.current=true;ref.current.scrollLeft=drag.current.left-dx}}} onPointerUp={()=>{drag.current=null}} onPointerLeave={()=>{drag.current=null}} onClickCapture={e=>{if(moved.current){e.preventDefault();e.stopPropagation();moved.current=false}}} onDragStart={e=>e.preventDefault()}>{children}</div></div>;
 }
 export function TourCard({tour}){const copy=inicioTextos.cartas[tour.slug];return <Link className="tour-card" data-flip-key={tour.slug} to={`/experiencias/${tour.slug}`}><div className="tour-card-image"><Picture photo={tour.images[0]} alt={tour.name} sizes="(max-width: 700px) 100vw, (max-width: 1099px) 50vw, 33vw"/></div><div className="card-copy"><div className="card-meta"><span>{tour.category}</span><span>{tour.number} / T&T</span></div><h3>{tour.name}</h3><p><b>{copy.emocion}:</b> {copy.frase}</p><span className="card-action">Planea esta experiencia <Arrow/></span></div></Link>}
 export function PageTitle({tag,title,text,photo,floating=[]}){return <EditorialMotion className={`page-title wrap ${photo?'page-title-with-photo':''}`}><div className="page-title-copy"><Eyebrow>{tag}</Eyebrow><h1>{title}</h1>{text&&<p>{text}</p>}</div>{photo&&<div className="page-title-media"><figure className="page-title-card"><Picture photo={photo} alt={tag} priority sizes="(max-width: 700px) 72vw, 320px"/></figure>{floating.map((p,i)=><figure className={`editorial-float editorial-float-${i}`} key={p.src} aria-hidden="true"><Picture photo={p} alt="" sizes="140px"/></figure>)}</div>}</EditorialMotion>}

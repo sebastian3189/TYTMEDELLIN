@@ -1,9 +1,9 @@
-import { Fragment, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import manifest from './inicio-frames.json';
 import { inicioTextos, CHAPTERS, textoFase } from './inicio-textos';
-import { N, timeline, stateAt, buildDims, frameWindow, filmOpening, cardPlace, uForCard, smooth } from './baraja-geometria';
+import { N, timeline, stateAt, buildDims, frameWindow, filmOpening, cardPlace, smooth } from './baraja-geometria';
 import './scrub-hero.css';
+import Arrow from './Arrow';
 
 /*
  * Apertura del inicio: «La baraja de recuerdos» (Spec 03 §H1) sobre la película controlada por scroll (§E, §G) — Spec 04.
@@ -51,28 +51,11 @@ function frameOrder(count, mobile) {
 }
 
 const cardImg = (slug, k) => `${CARDS}/${slug}-${k}.webp`;
-const copy = (slug) => inicioTextos.cartas[slug];
 const two = (n) => String(n).padStart(2, '0');
-
-/* Carta de rejilla / carrusel (estático y móvil): foto, nombre y la línea aprobada «Emoción: frase». */
-function CartaLista({ card }) {
-  const c = copy(card.slug);
-  return (
-    <Link className="sc-card" to={`/experiencias/${card.slug}`}>
-      <span className="sc-img">
-        <img src={cardImg(card.slug, 't')} srcSet={`${cardImg(card.slug, 't')} 320w, ${cardImg(card.slug, 'm')} 400w, ${cardImg(card.slug, 'd')} 640w`} sizes="(max-width: 600px) 46vw, (max-width: 1000px) 30vw, 22vw" width="320" height="400" alt="" loading="lazy" decoding="async" />
-      </span>
-      <span className="sc-count">{two(card.n)} / {N}</span>
-      <h3 className="sc-name">{card.name}</h3>
-      <p className="sc-line"><b>{c.emocion}:</b> {c.frase}</p>
-    </Link>
-  );
-}
 
 export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', nextId, summary }) {
   const root = useRef(null), track = useRef(null), stage = useRef(null), canvas = useRef(null), skipRef = useRef(null), media = useRef(null);
-  const floatRef = useRef(null), deckRef = useRef(null), mqRef = useRef(null), titleRef = useRef(null), stripRef = useRef(null), stackRef = useRef(null);
-  const api = useRef({ jump: () => {}, step: () => {}, active: 0 });
+  const floatRef = useRef(null), deckRef = useRef(null), titleRef = useRef(null), stackRef = useRef(null);
   // Prerender (Spec 04): el servidor y la primera pasada de hidratación son el modo estático (HTML legible, enlaces reales, sin JS); un efecto de
   // diseño lee el entorno (preferencias, tamaño, red) y pasa al modo animado antes del primer pintado, así no hay desajuste de hidratación.
   const [ready, setReady] = useState(false);
@@ -127,15 +110,13 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
     // Comprimidos: Blob de cada fotograma (≈ 8 MB). Decodificados: ImageBitmap solo en ventana (se cierran al salir).
     const blobs = new Array(count).fill(null), full = new Array(count).fill(null), low = new Array(count).fill(null);
     const pending = new Set(), controller = new AbortController();
-    let raf = 0, visible = true, destroyed = false, lastKey = '', ui = '', cap = '', chapter = 0, activeCard = -1, loaded = 0, failures = 0;
-    let W = 0, H = 0, stageTop = 92, q = null, lastT = 0, center = 0, version = 0, live = 0, peak = 0, bytes = 0, peakBytes = 0, dims = null, mqWidths = [], span = 1;
+    let raf = 0, visible = true, destroyed = false, lastKey = '', ui = '', cap = '', chapter = 0, loaded = 0, failures = 0;
+    let W = 0, H = 0, stageTop = 92, q = null, lastT = 0, center = 0, version = 0, live = 0, peak = 0, bytes = 0, peakBytes = 0, dims = null, span = 1;
     const fw = {}, cp = {}, lastCard = new Array(N).fill(''), lastFx = {};
     const cardEls = deckRef.current ? [...deckRef.current.querySelectorAll('.bd-card')] : [];
-    const fullImgs = cardEls.map((el) => el.querySelector('.bd-full'));
-    const mqItems = mqRef.current ? [...mqRef.current.querySelectorAll('.bd-mq-item')] : [];
-    const fxEls = titleRef.current ? [...titleRef.current.querySelectorAll('[data-fx]')] : [], stripEl = stripRef.current;
+    const fxEls = titleRef.current ? [...titleRef.current.querySelectorAll('[data-fx]')] : [];
     const floatEls = floatRef.current ? [...floatRef.current.querySelectorAll('.bd-float')] : [];
-    const capEls = [...stageEl.querySelectorAll('.bd-cap')], planEls = [...stageEl.querySelectorAll('.bd-plan')], stripBtns = [...stageEl.querySelectorAll('.scrub-strip [data-i]')];
+
 
     const track2 = (delta, size) => {
       live += delta; bytes += delta * size; if (live > peak) peak = live; if (bytes > peakBytes) peakBytes = bytes;
@@ -172,14 +153,6 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
         stageEl.dataset.short = dims.m.short ? '1' : '0';
       }
       stageEl.style.setProperty('--deck-top', `${dims.deck.y - dims.Hd / 2}px`); stageEl.style.setProperty('--deck-bottom', `${dims.deck.y + dims.Hd / 2}px`);
-      // Marquesina: tamaño por elemento = mín(120 px, 0,9 × ancho útil / ancho natural, espacio sobre la carta enfocada − 32 px).
-      const room = Math.max(40, (dims.focus.y - dims.Bh / 2 - 22 - 26) / 0.9), usable = 0.9 * (dims.W - 2 * dims.pad);
-      mqWidths = mqItems.map((el) => {
-        el.style.fontSize = '100px';
-        const w100 = el.firstElementChild?.getBoundingClientRect().width || 1, size = Math.min(120, room, (usable * 100) / w100);
-        el.style.fontSize = `${size.toFixed(1)}px`;
-        return (w100 * size) / 100;
-      });
       lastCard.fill(''); Object.keys(lastFx).forEach((k) => delete lastFx[k]);
       lastKey = '';
     };
@@ -230,20 +203,12 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
       }
     };
 
-    // Carta enfocada: se pide su foto grande (640×800) y la de sus vecinas cuando el recorrido se acerca a las cartas.
-    const wantFull = (from, to) => {
-      for (let i = Math.max(0, from); i <= Math.min(N - 1, to); i++) {
-        const img = fullImgs[i];
-        if (img && !img.getAttribute('src')) img.setAttribute('src', img.dataset.src);
-      }
-    };
-
     const place = (u, st) => {
       // Marco del clip (Flip): transform + clip-path de la capa de tamaño natural; la carta superior y el lienzo son la misma capa.
       frameWindow(dims, st.w, fw, st.clipT);
       const fullFrame = st.w >= .999 && (!mobile || st.clipT <= .6);
       const fkey = fullFrame ? 'full' : `${fw.tx.toFixed(1)}|${fw.ty.toFixed(1)}|${fw.rot.toFixed(2)}|${fw.s.toFixed(4)}|${fw.ix.toFixed(1)}|${fw.iy.toFixed(1)}|${fw.r.toFixed(2)}`;
-      const fo = 1 - smooth(clamp(st.fanT * 2));
+      const fo = 1 - smooth(clamp(st.rel * 2.5)); // la postal se funde mientras el mazo viaja a su caja
       const mkey = `${fkey}|${fo.toFixed(3)}`;
       if (lastFx.media !== mkey) {
         lastFx.media = mkey;
@@ -254,12 +219,6 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
       // Baraja de cartas.
       for (let i = 0; i < cardEls.length; i++) {
         cardPlace(dims, st, i, cp);
-        if (mobile) {
-          const interactive = st.ui === 'cards' && i === st.active;
-          cardEls[i].tabIndex = interactive ? 0 : -1;
-          cardEls[i].setAttribute('aria-hidden', String(!interactive));
-          cardEls[i].style.pointerEvents = interactive ? 'auto' : 'none';
-        }
         const key = `${cp.x.toFixed(1)}|${cp.y.toFixed(1)}|${cp.r.toFixed(2)}|${cp.s.toFixed(4)}|${cp.o.toFixed(3)}|${cp.z}`;
         if (key === lastCard[i]) continue;
         lastCard[i] = key;
@@ -289,22 +248,9 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
           el.style.opacity = st.D.toFixed(3); el.style.visibility = st.D < 0.01 ? 'hidden' : 'visible';
         }
       }
-      // La tira de miniaturas acompaña a la baraja y al despliegue.
-      const sv = Math.max(st.D, st.fanT), sKey = sv.toFixed(3);
-      if (stripEl && lastFx.s !== sKey) { lastFx.s = sKey; stripEl.style.opacity = sKey; stripEl.style.visibility = sv < 0.01 ? 'hidden' : 'visible'; }
-      // Marquesina de lugar (P2): una franja sobre la carta enfocada (≥24 px de separación). El nombre se lee entero: tamaño
-      // por elemento ajustado al ancho, centrado y quieto en el 60 % central de su tramo, con una deriva ≤ ±4 vw en los extremos.
-      const mqA = st.fanT, drift = dims.W * 0.04;
-      for (let i = 0; i < mqItems.length; i++) {
-        const a = st.f - i, o = clamp(1 - Math.abs(a) * 1.6) * mqA;
-        const dx = -Math.sign(a) * drift * clamp((Math.abs(a) - 0.3) / 0.7);
-        const mk = `${o.toFixed(2)}|${Math.round(dx)}`;
-        if (lastFx[`m${i}`] === mk) continue;
-        lastFx[`m${i}`] = mk;
-        const el = mqItems[i];
-        el.style.opacity = o.toFixed(3); el.style.visibility = o < 0.01 ? 'hidden' : 'visible';
-        if (o >= 0.01) el.style.transform = `translate3d(${(dims.W - mqWidths[i]) / 2 + dx}px,0,0)`;
-      }
+      // Fundido final del escenario sobre el de «La mano de viaje» (Spec 03 §K3).
+      const fadeKey = st.fade.toFixed(3);
+      if (lastFx.fade !== fadeKey) { lastFx.fade = fadeKey; stageEl.style.opacity = st.fade > 0 ? String(1 - st.fade) : ''; stageEl.style.pointerEvents = st.fade >= 1 ? 'none' : ''; }
     };
 
     const render = (now) => {
@@ -323,27 +269,15 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
       const u = q * T.total;
       const st = stateAt(u, T, mobile);
       if (mobile) {
-        stageEl.dataset.phase = u < T.t2 ? 'film' : u < T.t3 ? 'hold' : u < T.t4 ? 'shrink' : u < T.t5 ? 'reveal' : 'cards';
+        stageEl.dataset.phase = u < T.t2 ? 'film' : u < T.t3 ? 'hold' : u < T.t4 ? 'shrink' : 'relay';
       }
       if (st.ui !== ui) { ui = st.ui; stageEl.dataset.ui = ui; }
       let newCap = '';
-      if (st.ui === 'cards') newCap = 'cards';
-      else if (u >= CAP_C1[0] && u < CAP_C1[1]) newCap = 'c1';
+      if (u >= CAP_C1[0] && u < CAP_C1[1]) newCap = 'c1';
       else if (u >= CAP_C2[0] && u < CAP_C2[1]) newCap = 'c2';
       if (newCap !== cap) { cap = newCap; stageEl.dataset.cap = cap; }
       const newChapter = u >= PLAZA ? 2 : 1;
       if (newChapter !== chapter) { chapter = newChapter; stageEl.dataset.ch = String(chapter); }
-      const act = st.ui === 'cards' ? st.active : -1;
-      if (act !== activeCard) {
-        stageEl.style.setProperty('--card-enter', act >= activeCard ? '22px' : '-22px');
-        cardEls.forEach((el, i) => el.classList.toggle('is-current', i === act));
-        activeCard = act; stageEl.dataset.card = String(act); api.current.active = act;
-        capEls.forEach((el, i) => el.classList.toggle('is-on', i === act));
-        planEls.forEach((el, i) => el.classList.toggle('is-on', i === act));
-        stripBtns.forEach((el, i) => el.toggleAttribute('data-on', i === act));
-        if (act >= 0) wantFull(act - 1, act + 2);
-      }
-      if (u >= T.t2 && u < T.t5 && !fullImgs[0]?.getAttribute('src')) wantFull(0, 2);
 
       center = Math.round(st.clipT * (count - 1));
       manage();
@@ -366,16 +300,6 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
       if (moving) schedule(); else lastT = 0;
     };
     const schedule = () => { if (!raf && !destroyed) raf = requestAnimationFrame(render); };
-
-    // Salto a un progreso en svh (foco de carta, tira, botones): scroll nativo instantáneo, nunca animado ni interceptado.
-    api.current.jump = (u) => {
-      const top = trackEl.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: top - stageTop + (u / T.total) * span, behavior: 'instant' });
-      schedule();
-    };
-    api.current.step = (dir) => api.current.jump(uForCard(T, clamp(Math.max(api.current.active, 0) + dir, 0, N - 1)));
-    api.current.card = (i) => { if (Math.abs((q === null ? 0 : q * T.total) - uForCard(T, i)) > 6) api.current.jump(uForCard(T, i)); };
-    api.current.T = T;
 
     const fetchBlob = async (url) => {
       const response = await fetch(url, { signal: controller.signal });
@@ -429,14 +353,14 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
     document.addEventListener('visibilitychange', onVisibility);
     schedule();
     // Inicialización perezosa (Spec 03 §J1): el bloque está bajo el pliegue; los fotogramas y las imágenes decorativas se piden
-    // cuando la sección queda a menos de una pantalla (margen 100 %). Antes, solo el HTML y el layout.
+    // cuando la sección queda a menos de una pantalla (margen 60 % de la ventana). Antes, solo el HTML y el layout.
     let started = false;
     const start = () => {
       if (started || destroyed) return; started = true;
-      for (const el of [...floatEls, ...(stripEl ? stripEl.querySelectorAll('i[data-bg]') : [])]) if (el.dataset.bg) el.style.backgroundImage = `url(${el.dataset.bg})`;
+      for (const el of floatEls) if (el.dataset.bg) el.style.backgroundImage = `url(${el.dataset.bg})`;
       load();
     };
-    const near = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { start(); near.disconnect(); } }, { rootMargin: '100% 0px' });
+    const near = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { start(); near.disconnect(); } }, { rootMargin: '60% 0px' });
     near.observe(section);
 
     return () => {
@@ -447,57 +371,34 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
       for (let i = 0; i < count; i++) { drop(full, i); drop(low, i); }
       blobs.fill(null);
       for (const k of ['ready', 'frame', 'loaded', 'progress', 'target', 'settled', 'u', 'bitmaps', 'bitmapsPeak', 'bitmapMb', 'bitmapMbPeak']) delete section.dataset[k];
-      for (const el of [mediaEl, stripEl, ...floatEls, ...cardEls, ...mqItems, ...fxEls]) { el?.removeAttribute('style'); }
-      stageEl.dataset.ui = 'deck'; stageEl.dataset.cap = ''; stageEl.dataset.ch = '1'; stageEl.dataset.card = '-1';
+      for (const el of [mediaEl, ...floatEls, ...cardEls, ...fxEls]) { el?.removeAttribute('style'); }
+      stageEl.style.opacity = ''; stageEl.style.pointerEvents = '';
+      stageEl.dataset.ui = 'deck'; stageEl.dataset.cap = ''; stageEl.dataset.ch = '1';
       for (const k of ['--bw', '--bh', '--stage-h', '--m-t1', '--deck-top', '--deck-bottom']) stageEl.style.removeProperty(k);
       delete stageEl.dataset.short;
       delete stageEl.dataset.phase;
-      api.current.jump = () => {}; api.current.step = () => {}; api.current.card = () => {};
     };
   }, [ready, mode, mobile]);
 
   const skip = () => {
-    const next = nextId && document.getElementById(nextId);
+    const next = (nextId && document.getElementById(nextId)) || document.getElementById('formas-de-viajar');
     if (!next) return;
     next.scrollIntoView({ behavior: 'instant', block: 'start' });
     next.focus({ preventScroll: true });
   };
-  const tilt = (e) => {
-    if (e.pointerType !== 'mouse') return;
-    const el = e.currentTarget.querySelector('.bd-tilt'); if (!el) return;
-    const r = e.currentTarget.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
-    el.style.setProperty('--ry', `${(x * 8).toFixed(2)}deg`); el.style.setProperty('--rx', `${(-y * 8).toFixed(2)}deg`);
-  };
-  const untilt = (e) => { const el = e.currentTarget.querySelector('.bd-tilt'); if (el) { el.style.removeProperty('--ry'); el.style.removeProperty('--rx'); } };
-  const onCardKey = (e, i) => {
-    // Flechas izquierda/derecha recorren las cartas sin cancelar el evento (no se secuestra el scroll).
-    const next = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : null;
-    if (next === null || next < 0 || next >= N) return;
-    deckRef.current?.querySelectorAll('.bd-card')[next]?.focus({ preventScroll: true });
-  };
-
   const staticMode = mode !== 'scrub';
   const animated = !staticMode;
-  const deckLinks = animated; // El mismo recorrido de 12 experiencias también existe en móvil.
   const t = inicioTextos;
   const bar = (
-    <button type="button" className="scrub-motion" aria-pressed={reduce || osNow} disabled={osNow} onClick={toggleReduce}>
-      {reduce || osNow ?'Activar movimiento' : 'Reducir movimiento'}
+    <button type="button" className="scrub-motion" aria-pressed={reduce || osNow} disabled={osNow} onClick={toggleReduce} title={reduce || osNow ? 'Activar movimiento' : 'Reducir movimiento'}>
+      <svg className="ctl-ico" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" focusable="false">{reduce || osNow ? <path d="M8 5.5v13l10-6.5z" /> : <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" />}</svg><span className="ctl-label">{reduce || osNow ?'Activar movimiento' : 'Reducir movimiento'}</span>
     </button>
   );
 
   return (
     <section ref={root} className={`scrub-hero ${staticMode ? 'is-static' : ''}`} data-hydrated={ready ? 'true' : 'false'} aria-label="Elige tu próximo recuerdo">
       <div ref={track} className="scrub-track" style={animated ? { '--total': timeline(mobile).total } : undefined}>
-        <div ref={stage} className="scrub-stage" data-ui="deck" data-cap="" data-ch="1" data-card="-1" data-textos={t.estado}>
-          {animated && !mobile && (
-            <div ref={mqRef} className="bd-mq" aria-hidden="true">
-              {cards.map((c) => {
-                const place = copy(c.slug).lugar;
-                return <p key={c.slug} className="bd-mq-item"><span>{place}</span></p>;
-              })}
-            </div>
-          )}
+        <div ref={stage} className="scrub-stage" data-ui="deck" data-cap="" data-ch="1" data-textos={t.estado}>
           <div ref={media} className="scrub-media">
             <picture className="scrub-poster">
               <source media={MOBILE_QUERY} type="image/avif" srcSet={`${BASE}/poster-m.avif`} />
@@ -537,35 +438,11 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
                     </div>
                   );
                 })}
-                {deckLinks && cards.map((c, i) => {
-                  const tx = copy(c.slug);
-                  return (
-                    <div key={c.slug} className="scrub-cap bd-cap" data-for="card" data-i={i}>
-                      <p className="scrub-count bd-count">{two(i + 1)} / {N}</p>
-                      <h2 className="scrub-cap-title bd-name">{c.name}</h2>
-                      <p className="scrub-cap-sub"><b>{tx.emocion}:</b> {tx.frase}</p>
-                    </div>
-                  );
-                })}
               </div>
             </div>
           </div>
-          {animated && !mobile && (
-            <div ref={stripRef} className="scrub-strip" aria-hidden="true">
-              {cards.map((c, i) => (
-                <button key={c.slug} type="button" tabIndex={-1} data-i={i} onClick={() => api.current.jump(uForCard(api.current.T, i))} aria-label={c.name}>
-                  <img src={cardImg(c.slug, 't')} width="48" height="60" alt="" decoding="async" loading="lazy" />
-                </button>
-              ))}
-            </div>
-          )}
-          {animated && mobile && (
-            <div ref={stripRef} className="scrub-strip scrub-strip--m" aria-hidden="true">
-              {cards.map((c) => <i key={c.slug} data-bg={cardImg(c.slug, 't')} />)}
-            </div>
-          )}
           <div className="scrub-ctl">
-            {animated && <button ref={skipRef} type="button" className="scrub-skip" onClick={skip}>{skipLabel} <span aria-hidden="true">↓</span></button>}
+            {animated && <button ref={skipRef} type="button" className="scrub-skip" onClick={skip} title={skipLabel}><span className="ctl-label">{skipLabel}</span><Arrow dir="down"/></button>}
             {bar}
           </div>
           {animated && !mobile && (
@@ -574,34 +451,13 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
             </div>
           )}
           <div ref={deckRef} className="bd-deck">
-            {animated && cards.map((c, i) => {
-              const tx = copy(c.slug);
-              return deckLinks ? (
-                <Fragment key={c.slug}>
-                  <Link className="bd-card" to={`/experiencias/${c.slug}`} aria-label={`${c.name}. ${tx.emocion}: ${tx.frase}`} onFocus={() => api.current.card(i)} onKeyDown={(e) => onCardKey(e, i)} onPointerMove={tilt} onPointerLeave={untilt}>
-                    <span className="bd-tilt">
-                      <img className="bd-thumb" src={cardImg(c.slug, 't')} width="320" height="400" alt="" decoding="async" loading="lazy" />
-                      <img className="bd-full" data-src={cardImg(c.slug, 'h')} width="960" height="1200" alt="" decoding="async" onLoad={(e) => e.currentTarget.classList.add('ready')} />
-                    </span>
-                    
-                  </Link>
-                </Fragment>
-              ) : (
-                <div key={c.slug} className="bd-card" aria-hidden="true"><span className="bd-tilt"><img className="bd-thumb" src={cardImg(c.slug, 't')} width="320" height="400" alt="" decoding="async" loading="lazy" /></span></div>
-              );
-            })}
+            {animated && cards.map((c) => (
+              <div key={c.slug} className="bd-card" aria-hidden="true"><span className="bd-tilt"><img className="bd-thumb" src={cardImg(c.slug, 't')} width="320" height="400" alt="" decoding="async" loading="lazy" /></span></div>
+            ))}
           </div>
-          {animated && cards.map(c => <Link key={c.slug} className="bd-plan scrub-btn-plan" to={`/experiencias/${c.slug}#consulta`} aria-label={`Planea esta experiencia: ${c.name}`}>Planea esta experiencia <span aria-hidden="true">↗</span></Link>)}
-          {animated && (
-            <div className="bd-nav">
-              <button type="button" className="bd-arrow" aria-label="Carta anterior" onClick={() => api.current.step(-1)}>{mobile ? '↑' : '←'}</button>
-              <button type="button" className="bd-arrow" aria-label="Carta siguiente" onClick={() => api.current.step(1)}>{mobile ? '↓' : '→'}</button>
-            </div>
-          )}
         </div>
       </div>
       {summary && <p className="scrub-summary">{summary}</p>}
-      {staticMode && <div className="wrap sc-list">{cards.map(card => <CartaLista key={card.slug} card={card}/>)}</div>}
     </section>
   );
 }

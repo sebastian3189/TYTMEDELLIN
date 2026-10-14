@@ -1,4 +1,4 @@
-import { F as company, N as jsx, P as jsxs } from "../entry-server.js";
+import { M as jsx, N as jsxs, P as company, m as Arrow } from "../entry-server.js";
 import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
 //#region src/reviews.json
@@ -178,10 +178,7 @@ function Reviews({ full = false }) {
 								href: company.reviews,
 								target: "_blank",
 								rel: "noopener noreferrer",
-								children: ["Ver todas las reseñas en Google ", /* @__PURE__ */ jsx("span", {
-									"aria-hidden": "true",
-									children: "↗"
-								})]
+								children: ["Ver todas las reseñas en Google ", /* @__PURE__ */ jsx(Arrow, {})]
 							}), /* @__PURE__ */ jsxs("a", {
 								className: "g-ta",
 								href: TRIPADVISOR,
@@ -198,10 +195,7 @@ function Reviews({ full = false }) {
 									"Tripadvisor ",
 									/* @__PURE__ */ jsx("b", { children: "5.0" }),
 									" · 5 reseñas ",
-									/* @__PURE__ */ jsx("span", {
-										"aria-hidden": "true",
-										children: "↗"
-									})
+									/* @__PURE__ */ jsx(Arrow, {})
 								] })]
 							})]
 						})
@@ -213,12 +207,12 @@ function Reviews({ full = false }) {
 						type: "button",
 						onClick: () => move(-1),
 						"aria-label": "Reseñas anteriores",
-						children: "←"
+						children: /* @__PURE__ */ jsx(Arrow, { dir: "left" })
 					}), /* @__PURE__ */ jsx("button", {
 						type: "button",
 						onClick: () => move(1),
 						"aria-label": "Reseñas siguientes",
-						children: "→"
+						children: /* @__PURE__ */ jsx(Arrow, { dir: "right" })
 					})]
 				}),
 				/* @__PURE__ */ jsx("div", {
@@ -260,10 +254,10 @@ function Reviews({ full = false }) {
 					onDragStart: (e) => e.preventDefault(),
 					children: reviews_default.map((r) => /* @__PURE__ */ jsx(Card, { r }, r.nombre))
 				}),
-				!full && /* @__PURE__ */ jsx(Link, {
+				!full && /* @__PURE__ */ jsxs(Link, {
 					className: "text-link g-about",
 					to: "/calificaciones",
-					children: "Sobre nuestras calificaciones →"
+					children: ["Sobre nuestras calificaciones", /* @__PURE__ */ jsx(Arrow, { dir: "right" })]
 				})
 			]
 		})

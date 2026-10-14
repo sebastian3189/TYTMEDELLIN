@@ -66,6 +66,16 @@ html[data-theme="dark"] .ft-book .ft-nav button:disabled{border-color:rgba(245,2
 /* Reducido / ahorro de datos / sin WAAPI: sin 3D; el fundido cruzado de 150 ms lo hace BlogBook.jsx (WAAPI) */
 @media(prefers-reduced-motion:reduce){.ft-turn-window{display:none}}
 
+/* Afordancia móvil: esquina levantada (curl), que respira una vez, y la pista «Desliza para pasar la página» */
+.bk-hint-anchor{height:0}
+.bk-curl{position:absolute;z-index:2;right:0;bottom:0;width:44px;height:44px;pointer-events:none;transform-origin:100% 100%}
+.bk-curl::before{content:"";position:absolute;inset:0;background:var(--bk-cover);clip-path:polygon(100% 0,100% 100%,0 100%)}
+.bk-curl::after{content:"";position:absolute;inset:0;background:linear-gradient(315deg,rgba(0,0,0,.26),rgba(0,0,0,0) 62%),var(--bk-back);clip-path:polygon(0 0,100% 0,0 100%);filter:drop-shadow(-2px -2px 3px rgba(0,0,0,.35))}
+.bk-curl[data-breathe]{animation:bk-breathe 1100ms ease-in-out 1 both}
+@keyframes bk-breathe{0%,100%{transform:scale(1)}45%{transform:scale(1.4)}}
+.bk-swipe{display:flex;align-items:center;justify-content:center;gap:10px;margin:14px 0 0;font:600 13px/1.3 var(--font);letter-spacing:.04em;color:var(--text)}
+@media(prefers-reduced-motion:reduce){.bk-curl[data-breathe]{animation:none}}
+
 /* Móvil: una sola página (foto arriba, texto debajo) */
 @media(max-width:799px){
  .ft-book{--bk-persp:1400px}

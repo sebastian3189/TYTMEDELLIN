@@ -1,4 +1,4 @@
-import { N as jsx, P as jsxs, S as useLightMotion } from "../entry-server.js";
+import { M as jsx, N as jsxs, m as Arrow, x as useLightMotion } from "../entry-server.js";
 import { useLayoutEffect, useRef, useState } from "react";
 //#region src/FeaturedGallery.jsx
 function FeaturedGallery({ tour }) {
@@ -121,10 +121,10 @@ function FeaturedGallery({ tour }) {
 							" de ",
 							String(images.length).padStart(2, "0")
 						] }),
-						/* @__PURE__ */ jsx("button", {
+						/* @__PURE__ */ jsxs("button", {
 							className: "button secondary",
 							onClick: open,
-							children: "Ampliar fotografía ↗"
+							children: ["Ampliar fotografía", /* @__PURE__ */ jsx(Arrow, {})]
 						}),
 						/* @__PURE__ */ jsxs("div", {
 							className: "gallery-controls",
@@ -132,7 +132,7 @@ function FeaturedGallery({ tour }) {
 								/* @__PURE__ */ jsx("button", {
 									onClick: () => choose(index - 1),
 									"aria-label": "Fotografía anterior",
-									children: "←"
+									children: /* @__PURE__ */ jsx(Arrow, { dir: "left" })
 								}),
 								/* @__PURE__ */ jsxs("span", {
 									"aria-live": "polite",
@@ -145,7 +145,7 @@ function FeaturedGallery({ tour }) {
 								/* @__PURE__ */ jsx("button", {
 									onClick: () => choose(index + 1),
 									"aria-label": "Fotografía siguiente",
-									children: "→"
+									children: /* @__PURE__ */ jsx(Arrow, { dir: "right" })
 								})
 							]
 						})
@@ -192,7 +192,7 @@ function FeaturedGallery({ tour }) {
 							/* @__PURE__ */ jsx("button", {
 								onClick: () => choose(index - 1),
 								"aria-label": "Fotografía anterior",
-								children: "←"
+								children: /* @__PURE__ */ jsx(Arrow, { dir: "left" })
 							}),
 							/* @__PURE__ */ jsxs("span", {
 								"aria-live": "polite",
@@ -207,7 +207,7 @@ function FeaturedGallery({ tour }) {
 							/* @__PURE__ */ jsx("button", {
 								onClick: () => choose(index + 1),
 								"aria-label": "Fotografía siguiente",
-								children: "→"
+								children: /* @__PURE__ */ jsx(Arrow, { dir: "right" })
 							})
 						]
 					})
