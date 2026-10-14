@@ -2,20 +2,31 @@
 .site-preferences button,.site-preferences a{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 10px;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface);color:var(--text-strong);font:600 13px var(--font)}
 @media(min-width:1100px){.site-preferences{order:3;margin-left:16px}.site-header{gap:12px}.site-header nav{gap:clamp(10px,1.3vw,24px)}.header-socials{display:none}}
 @media(max-width:1099px){.site-header{gap:10px}.menu-toggle{margin-left:0}.site-preferences{gap:6px}}
-html[data-theme="dark"],html[data-theme="dark"] .scrub-hero{color-scheme:dark;--bg:#171A18;--surface:#212623;--surface-2:#2A302C;--text-strong:#F5F5F0;--text:#DEDFD8;--text-muted:#BDC3B9;--focus:#FFAD60;--line:rgba(245,245,240,.14);--line-strong:#818C82;--danger:#FFA593;--success:#9ADB9E;--shadow-1:0 4px 16px #0003;--shadow-2:0 12px 32px #0005;--shadow-3:0 20px 60px #0006}
-html[data-theme="dark"],html[data-theme="dark"] body,html[data-theme="dark"] #boot{background:var(--bg)}
-html[data-theme="dark"] #boot-layer{background:var(--surface)}
+/* Modo oscuro (Spec 03 §J3). Los tokens se redefinen también en .scrub-hero, que declara los suyos en claro. */
+html[data-theme="dark"],html[data-theme="dark"] .scrub-hero{color-scheme:dark;--bg:#171A18;--surface:#212623;--surface-2:#2A302C;--text-strong:#F5F5F0;--text:#DEDFD8;--text-muted:#BDC3B9;--focus:#FFAD60;--line:rgba(245,245,240,.14);--line-strong:#818C82;--danger:#FFA593;--success:#9ADB9E;--on-brand:#1E201D;--shadow-1:0 4px 16px #0003;--shadow-2:0 12px 32px #0005;--shadow-3:0 20px 60px #0006}
+html[data-theme="dark"],html[data-theme="dark"] body{background:var(--bg)}
 html[data-theme="dark"] .site-header,html[data-theme="dark"] .quote-bar{background:rgba(23,26,24,.97)}
-html[data-theme="dark"] .button,html[data-theme="dark"] .nav-cta{color:#1E201D}
-html[data-theme="dark"] .button.secondary,html[data-theme="dark"] .vehicle .button,html[data-theme="dark"] .services-list .button,html[data-theme="dark"] .footer-top .button,html[data-theme="dark"] .review-panel .button,html[data-theme="dark"] .about-preview .button,html[data-theme="dark"] .summary .button,html[data-theme="dark"] .article-body .button{color:var(--text-strong)}
+/* El texto de los botones naranja es --on-brand en ambos modos (website.css). Aquí NO se fuerza ningún color oscuro global: los secundarios,
+   transparentes o con fondo oscuro (cabecera, «Planeemos tu viaje», reseñas) conservan el texto claro de --text-strong. */
+html[data-theme="dark"] .button.secondary,html[data-theme="dark"] .vehicle .button,html[data-theme="dark"] .services-list .button,html[data-theme="dark"] .footer-top .button,html[data-theme="dark"] .review-panel .button,html[data-theme="dark"] .about-preview .button,html[data-theme="dark"] .summary .button,html[data-theme="dark"] .article-body .button{background:var(--surface);color:var(--text-strong);border-color:var(--text-strong)}
 html[data-theme="dark"] .button.g-dark{background:var(--surface-2);color:var(--text-strong)}
+html[data-theme="dark"] .nav-cta{color:var(--text-strong);border-color:var(--text-strong)}
+@media(hover:hover) and (pointer:fine){html[data-theme="dark"] .button:not(.secondary):not(.g-dark):not(.hero-btn--quote):hover,html[data-theme="dark"] .quote-bar-cta:hover{background:#FF983F}}
 html[data-theme="dark"] .td-steps li[data-on] .td-dot{color:var(--bg)}
-html[data-theme="dark"] .ally-chip.is-dark{background:#1E201D}
 html[data-theme="dark"] .lightbox,html[data-theme="dark"] .lightbox::backdrop{background:rgba(23,26,24,.97)}
-html[data-theme="dark"] .blog-book .ft-main{background:#101311;border-color:#59635B;box-shadow:0 3px 0 #353D37,0 6px 0 #525A53,0 18px 48px #0006}
-html[data-theme="dark"] .ft-book .ft-card,html[data-theme="dark"] .ft-book .ft-side,html[data-theme="dark"] .ft-leaf-front{background:var(--surface)}
-html[data-theme="dark"] .ft-book .ft-leaf-back{background:linear-gradient(90deg,#121612,var(--surface) 14%)}
-html[data-theme="dark"] .ft-book .ft-main::after{background:linear-gradient(90deg,transparent,#0006 45%,#ffffff12 52%,transparent)}
-html[data-theme="dark"] .ft-book .ft-plan,html[data-theme="dark"] .ft-book .ft-nav{background:transparent;color:var(--text-strong)}
-html[lang="en"] .scrub-title h1{font-size:clamp(48px,min(9vw,13svh),160px)}
-@media(max-width:799px){html[lang="en"] .scrub-title h1{font-size:clamp(26px,8.7vw,54px)}}
+/* Aliados: placa clara con el logo en escala de grises original; la placa oscura de ANATO lleva borde para no fundirse con el fondo. */
+html[data-theme="dark"] .ally-chip{background:#F4F4F4;border-color:#F4F4F4}
+html[data-theme="dark"] .ally-chip.is-dark{background:#1E201D;border:1px solid #818C82}
+/* Cartas, fotos y separación sobre fondo oscuro */
+html[data-theme="dark"] .tour-card,html[data-theme="dark"] .service-links a,html[data-theme="dark"] .g-card,html[data-theme="dark"] .review-panel,html[data-theme="dark"] .vehicle,html[data-theme="dark"] .values-grid article,html[data-theme="dark"] .blog-card,html[data-theme="dark"] .quote-form,html[data-theme="dark"] .map-frame{border-color:rgba(245,245,240,.14)}
+html[data-theme="dark"] .tour-card-image img,html[data-theme="dark"] .fan-photo,html[data-theme="dark"] .gallery-feature,html[data-theme="dark"] .story-images,html[data-theme="dark"] .about-preview img,html[data-theme="dark"] .about-photo img,html[data-theme="dark"] .page-title-card,html[data-theme="dark"] .editorial-float,html[data-theme="dark"] .editorial-photo img,html[data-theme="dark"] .blog-card>img,html[data-theme="dark"] .explorer-mobile>div,html[data-theme="dark"] .vehicle-media img,html[data-theme="dark"] .bd-tilt,html[data-theme="dark"] .sc-img{outline:1px solid rgba(245,245,240,.12);outline-offset:-1px}
+/* Controles desactivados: sin opacity (el texto sigue legible), tono atenuado y borde claro */
+html[data-theme="dark"] button:disabled,html[data-theme="dark"] [aria-disabled="true"]{opacity:1;color:var(--text-muted);border-color:rgba(245,245,240,.24)}
+button:disabled,[aria-disabled="true"]{opacity:1}
+/* Autorrelleno de formularios: el navegador pinta fondo claro; se fuerza el fondo y el texto del tema. */
+html[data-theme="dark"] input:-webkit-autofill,html[data-theme="dark"] input:-webkit-autofill:hover,html[data-theme="dark"] input:-webkit-autofill:focus,html[data-theme="dark"] textarea:-webkit-autofill,html[data-theme="dark"] select:-webkit-autofill{-webkit-text-fill-color:var(--text-strong);caret-color:var(--text-strong);box-shadow:inset 0 0 0 100px var(--surface);transition:background-color 9999s ease-out 0s}
+html[data-theme="dark"] input,html[data-theme="dark"] textarea,html[data-theme="dark"] select{color-scheme:dark}
+/* Iconos de redes (TikTok usa currentColor): color explícito en ambos modos */
+.socials a{color:var(--text-strong)}
+html[lang="en"] .home-hero h1{font-size:clamp(48px,min(9vw,14svh),160px)}
+@media(max-width:799px){html[lang="en"] .home-hero h1{font-size:clamp(30px,calc((100vw - 40px) / 9.8),54px)}}

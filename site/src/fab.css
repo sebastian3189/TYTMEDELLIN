@@ -1,0 +1,11 @@
+/* Botón flotante de WhatsApp: bajo diálogos y cabecera, sobre el contenido. Sin pulso (sin animación en reducido ni en reposo). */
+.wa-fab{position:fixed;z-index:85;right:calc(16px + env(safe-area-inset-right));bottom:calc(16px + env(safe-area-inset-bottom));display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:#25D366;color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.28),0 1px 3px rgba(0,0,0,.2);transition:opacity 150ms ease,transform 140ms var(--ease-out-strong),bottom 200ms var(--ease-out-strong)}
+.wa-fab:active{transform:scale(.96)}
+.wa-fab:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+html[data-theme="dark"] .wa-fab{box-shadow:0 4px 16px rgba(0,0,0,.6),0 0 0 1px rgba(245,245,240,.18)}
+.wa-fab[data-hidden="true"]{opacity:0;pointer-events:none}
+@media(max-width:899px){
+ .wa-fab{width:52px;height:52px}
+ body:has(.quote-bar.is-visible) .wa-fab{bottom:calc(84px + env(safe-area-inset-bottom))}
+}
+@media(prefers-reduced-motion:reduce){.wa-fab{transition:none}}

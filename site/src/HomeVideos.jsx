@@ -1,0 +1,145 @@
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { inicioTextos } from './inicio-textos';
+import { inicioVideos, instagram } from './inicio-videos';
+import { whatsapp } from './company';
+import { SocialIcon } from './Socials';
+import { Arrow, Eyebrow } from './shared';
+import { useLightMotion } from './PremiumMotion';
+import './home.css';
+
+/*
+ * Inicio, Spec 03 §J1–J2: hero de video a sangre, historia con video miniatura, cierre y «Síguenos en redes».
+ * Los datos de video viven en inicio-videos.js: con `src` nulo cada espacio es un bloque oscuro provisional con las
+ * dimensiones finales (CLS 0); con `src` es un <video>. Nada aquí pide archivos mientras no haya `src`.
+ */
+const Provisional = () => <span className="vlabel">Video próximamente</span>;
+
+/* Mantiene el estado de «Pausar / Reproducir» de un video y lo detiene fuera de vista (sin pisar la decisión de la persona). */
+function useHeroPlayback(ref, light, enabled) {
+  const [playing, setPlaying] = useState(false);
+  const manual = useRef(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!enabled || !el) return undefined;
+    const sync = () => setPlaying(!el.paused);
+    el.addEventListener('play', sync); el.addEventListener('pause', sync);
+    if (light) el.pause(); else el.play().catch(() => {});
+    const observer = new IntersectionObserver(([entry]) => {
+      if (light || manual.current) return;
+      if (entry.isIntersecting) el.play().catch(() => {}); else el.pause();
+    });
+    observer.observe(el);
+    return () => { observer.disconnect(); el.removeEventListener('play', sync); el.removeEventListener('pause', sync); };
+  }, [ref, light, enabled]);
+  const toggle = () => {
+    const el = ref.current; if (!el) return;
+    manual.current = true;
+    if (el.paused) el.play().catch(() => {}); else el.pause();
+  };
+  return [playing, toggle];
+}
+
+export function HomeHero() {
+  const v = inicioVideos.hero, light = useLightMotion(), video = useRef(null), section = useRef(null);
+  const [playing, toggle] = useHeroPlayback(video, light, Boolean(v.src));
+  // La cabecera es transparente sobre el hero y vuelve a su material sólido al salir de él (umbral = alto de la cabecera).
+  useEffect(() => {
+    const html = document.documentElement, header = document.querySelector('.site-header')?.offsetHeight || 92;
+    const observer = new IntersectionObserver(([entry]) => { html.dataset.hero = entry.isIntersecting ? 'over' : 'past'; }, { rootMargin: `-${header}px 0px 0px 0px` });
+    observer.observe(section.current);
+    return () => { observer.disconnect(); delete html.dataset.hero; };
+  }, []);
+  const t = inicioTextos;
+  return (
+    <section ref={section} className="home-hero" data-hero data-video={v.src ? 'on' : 'off'} aria-labelledby="hero-titulo">
+      <div className="hero-media" aria-hidden="true">
+        {v.src && <video ref={video} src={v.src} poster={v.poster || undefined} muted loop playsInline autoPlay={!light} preload="metadata" tabIndex={-1} />}
+      </div>
+      {v.src && <div className="hero-shade" aria-hidden="true" />}
+      <div className="hero-copy">
+        <p className="eyebrow hero-eyebrow">{t.lema}</p>
+        <h1 id="hero-titulo"><span className="hero-l1">{t.titular[0]}</span> <span className="hero-l2">{t.titular[1]}</span></h1>
+        <p className="hero-support">{t.confianza}</p>
+        <div className="hero-actions">
+          <Link className="button hero-btn hero-btn--explore" to="/experiencias">Explorar experiencias<Arrow /></Link>
+          <Link className="button hero-btn hero-btn--quote" to="/cotizar">Planeemos tu viaje<Arrow /></Link>
+        </div>
+      </div>
+      {v.src && (
+        <button type="button" className="hero-pause" onClick={toggle} aria-label={playing ? 'Pausar video' : 'Reproducir video'}>
+          <span aria-hidden="true">{playing ? '❚❚' : '▶'}</span>
+        </button>
+      )}
+    </section>
+  );
+}
+
+export function HomeStory() {
+  const v = inicioVideos.historia;
+  return (
+    <section className="home-story wrap" id="historia" aria-labelledby="historia-titulo">
+      <div className="vframe vframe--story">
+        {v.src
+          ? <video src={v.src} poster={v.poster || undefined} controls playsInline preload="none" aria-label="Video de presentación de T&T Medellín">{v.captions && <track kind="captions" srcLang="es" label="Español" src={v.captions} default />}</video>
+          : <Provisional />}
+      </div>
+      <div className="story-copy">
+        <Eyebrow>Más que llegar</Eyebrow>
+        <h2 id="historia-titulo">Hay una Medellín que se mira.<br />Y otra que se <em>vive.</em></h2>
+        <p>La encuentras en una conversación, en el color de una calle y en la curva que abre un nuevo paisaje. Queremos acompañarte a descubrirla con el cuidado de un equipo local.</p>
+        <Link className="button secondary" to="/nosotros">Conoce al equipo<Arrow /></Link>
+      </div>
+    </section>
+  );
+}
+
+export function HomeClose() {
+  const f = inicioTextos.fases.final;
+  return (
+    <section className="home-close section" aria-labelledby="cierre-titulo">
+      <div className="wrap">
+        <h2 id="cierre-titulo">Tu viaje, tus tiempos,<br />tu <em>experiencia.</em></h2>
+        <p>{f.subtitulo}</p>
+        <div className="close-actions">
+          <Link className="button" to="/cotizar">Planeemos tu viaje<Arrow /></Link>
+          <a className="button secondary" href={whatsapp()} target="_blank" rel="noopener noreferrer">Escríbenos por WhatsApp<Arrow /></a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const TYPE_LABEL = { reel: 'Reel', carousel: 'Carrusel', photo: 'Publicación' };
+const REEL = 'M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Zm0 5h16M9 3l3 5m3-5 3 5M10 12.5v5l4.5-2.5-4.5-2.5Z';
+const CAROUSEL = 'M7 7h11a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Zm2-3h9a3 3 0 0 1 3 3v9';
+
+export function HomeSocial() {
+  const { profile, tiktok, posts } = instagram, st = profile.stats;
+  const stats = st ? [['Publicaciones', st.posts], ['Seguidores', st.followers], ['Siguiendo', st.following]].filter(([, v]) => v) : [];
+  return (
+    <section className="home-social wrap section" aria-labelledby="redes-titulo">
+      <h2 id="redes-titulo">Síguenos en redes</h2>
+      <div className="ig-head">
+        <img className="ig-avatar" src="/media/marca/logo/logo-112.webp" srcSet="/media/marca/logo/logo-112.webp 112w, /media/marca/logo/logo-168.webp 168w, /media/marca/logo/logo-224.webp 224w" sizes="112px" width="112" height="112" alt="" loading="lazy" decoding="async" />
+        <p className="ig-name">{profile.name}</p>
+        <p className="ig-handle">{profile.handle}</p>
+        {stats.length > 0 && <dl className="ig-stats">{stats.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>}
+        <a className="ig-follow" href={profile.url} target="_blank" rel="noopener noreferrer" aria-label={`Seguir a ${profile.handle} en Instagram (se abre en una pestaña nueva)`}><SocialIcon id="instagram" size={20} />Seguir</a>
+      </div>
+      <ul className="ig-grid" role="list">
+        {posts.map((post, i) => (
+          <li key={i}>
+            <a className="ig-tile" href={post.url} target="_blank" rel="noopener noreferrer" aria-label={`${post.alt || `${TYPE_LABEL[post.type] || 'Publicación'} ${i + 1} de Instagram`} (se abre en una pestaña nueva)`}>
+              {post.image && <img src={post.image} alt="" width="640" height="640" loading="lazy" decoding="async" />}
+              {(post.type === 'reel' || post.type === 'carousel') && (
+                <svg className="ig-type" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d={post.type === 'reel' ? REEL : CAROUSEL} /></svg>
+              )}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a className="text-link ig-tiktok" href={tiktok.url} target="_blank" rel="noopener noreferrer" aria-label={`También en TikTok ${tiktok.handle} (se abre en una pestaña nueva)`}>También en TikTok {tiktok.handle} <span aria-hidden="true">↗</span></a>
+    </section>
+  );
+}

@@ -1,6 +1,6 @@
-import { F as company, I as whatsapp, L as language, N as jsx, P as jsxs, R as t, _ as QuoteCopy, o as rawTours } from "../entry-server.js";
+import { F as company, I as whatsapp, L as language, N as jsx, P as jsxs, R as t, g as QuoteCopy, o as rawTours } from "../entry-server.js";
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { startTransition, useEffect, useRef, useState } from "react";
 //#region src/indicativos.json
 var indicativos_default = [
 	[
@@ -1144,7 +1144,7 @@ function Quote({ context = "Un recorrido a mi medida", mode = "cotizar" }) {
 			`${plan ? "Details" : "Message"}: ${v.mensaje.trim() || "I'd like to know what options are available."}`
 		].filter(Boolean);
 		const text = (language() === "en" ? englishLines : lines).join("\n");
-		setSummary(text);
+		startTransition(() => setSummary(text));
 		try {
 			await navigator.clipboard.writeText(text);
 			setCopied("ok");

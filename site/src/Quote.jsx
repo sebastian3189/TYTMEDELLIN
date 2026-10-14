@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { startTransition, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { rawTours } from './tours-text';
 import { company, whatsapp } from './company';
@@ -72,7 +72,7 @@ export default function Quote({ context = 'Un recorrido a mi medida', mode = 'co
     const lines = [`Hola, T&T Medellín. ${plan ? `Quiero cotizar: ${v.experiencia}.` : `${tipo}.`}`, withType ? `Tipo de solicitud: ${tipo}` : '', `Nombre: ${v.nombre.trim()}`, v.empresa.trim() && `Empresa: ${v.empresa.trim()}`, `Teléfono: ${phone}`, v.correo.trim() && `Correo: ${v.correo.trim()}`, plan && `Fecha: ${v.fecha}`, plan && `Personas: ${Number(v.personas)}`, plan && `Punto de salida: ${v.salida.trim() || 'Por acordar'}`, `${plan ? 'Detalles' : 'Mensaje'}: ${v.mensaje.trim() || 'Me gustaría conocer las opciones disponibles.'}`].filter(Boolean);
     const englishLines=[`Hello, T&T Medellín. ${plan?`I'd like a quote for: ${t(v.experiencia)}.`:`${t(tipo)}.`}`,withType&&`Inquiry type: ${t(tipo)}`,`Name: ${v.nombre.trim()}`,v.empresa.trim()&&`Company: ${v.empresa.trim()}`,`Phone: ${phone}`,v.correo.trim()&&`Email: ${v.correo.trim()}`,plan&&`Date: ${v.fecha}`,plan&&`People: ${Number(v.personas)}`,plan&&`Departure point: ${v.salida.trim()||'To be arranged'}`,`${plan?'Details':'Message'}: ${v.mensaje.trim()||"I'd like to know what options are available."}`].filter(Boolean);
     const text = (language()==='en'?englishLines:lines).join('\n');
-    setSummary(text);
+    startTransition(() => setSummary(text)); // el resumen es trabajo diferible: no retrasa la respuesta al clic (INP)
     try { await navigator.clipboard.writeText(text); setCopied('ok'); } catch { setCopied('manual'); }
     requestAnimationFrame(() => document.querySelector('#resumen-solicitud')?.focus());
   }

@@ -202,6 +202,7 @@ var en_default = {
 	"Equipo de T&T Medellín": "The T&T Medellín team",
 	"Es la segunda vez que utilizamos la compañía, y la seguiremos utilizando en el futuro. Estamos 100% complacidos con el servicio. Yo tengo una lesión en la rodilla y ellos hasta me cargaron en la espalda para ayudarme a bajar escaleras, y me consiguieron silla de ruedas en todos los lugares.": "This is our second time using the company, and we will keep using them. We are completely satisfied with the service. I have a knee injury, and they even carried me on their back to help me down stairs and found wheelchairs for me everywhere.",
 	"Escribir un correo ↗": "Send an email ↗",
+	"Escribir por WhatsApp": "Message us on WhatsApp",
 	"Escríbenos por WhatsApp (se abre en una pestaña nueva)": "Message us on WhatsApp (opens in a new tab)",
 	"Escríbenos, llámanos o prepara una consulta con los detalles de tu recorrido.": "Write, call or prepare an inquiry with the details of your journey.",
 	"Escuchamos tu propósito y damos seguimiento a lo acordado.": "We listen to your plans and follow up on what we agree.",
@@ -706,6 +707,9 @@ function t(value) {
 	const key = normalize(value);
 	if (Object.hasOwn(en_default, key)) return value.replace(value.trim(), en_default[key]);
 	const patterns = [
+		[/^estos (\d+) campos$/, (n) => `these ${n} fields`],
+		[/^Foto (\d+) de (\d+), (.+)$/, (n, total, name) => `Photo ${n} of ${total}, ${t(name)}`],
+		[/^(.+)\. (Descubre|Explora|Siente|Conecta|Vive|Disfruta|Sorpréndete|Recuerda|Enamórate|Inspírate): (.+)$/, (name, verb, text) => `${t(name)}. ${t(verb)}: ${t(text)}`],
 		[/^Ampliar fotografía (\d+) de (.+)$/, (n, name) => `Enlarge photo ${n} of ${t(name)}`],
 		[/^Fotografía (\d+) de (.+)$/, (n, name) => `Photo ${n} of ${t(name)}`],
 		[/^Mostrar fotografía (\d+) de (.+)$/, (n, name) => `Show photo ${n} of ${t(name)}`],
@@ -787,6 +791,19 @@ var SOCIALS = () => [
 		color: "#128C7E"
 	}
 ];
+function SocialIcon({ id, size = 24, color, className = "" }) {
+	return /* @__PURE__ */ jsx$1("svg", {
+		className,
+		viewBox: "0 0 24 24",
+		width: size,
+		height: size,
+		fill: "currentColor",
+		"aria-hidden": "true",
+		focusable: "false",
+		style: color ? { color } : void 0,
+		children: /* @__PURE__ */ jsx$1("path", { d: PATHS[id] })
+	});
+}
 function Socials({ className = "" }) {
 	return /* @__PURE__ */ jsx$1("ul", {
 		role: "list",
@@ -937,6 +954,12 @@ var fullTitle = (title) => `${title} | T&T Medellín`;
 function applyMeta(title, description) {
 	document.title = fullTitle(t(title));
 	document.querySelector("meta[name=\"description\"]")?.setAttribute("content", t(description));
+	const canonical = document.querySelector("link[rel=\"canonical\"]");
+	if (canonical) try {
+		const url = new URL(canonical.href);
+		url.pathname = location.pathname.replace(/\/+$/, "") || "/";
+		canonical.href = url.href;
+	} catch {}
 }
 function usePageMeta(title, description) {
 	useEffect(() => {
@@ -1299,7 +1322,7 @@ function QuoteCopy({ withType = false }) {
 }
 //#endregion
 //#region src/shared.jsx
-var Quote = lazy(() => import("./assets/Quote-BvkffkIr.js"));
+var Quote = lazy(() => import("./assets/Quote-9KO0F7R3.js"));
 var reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 function Picture({ photo, alt, priority = false, className = "", native = false, sizes = "(max-width: 700px) 100vw, 65vw" }) {
 	if (!photo) return null;
@@ -1315,27 +1338,6 @@ function Picture({ photo, alt, priority = false, className = "", native = false,
 		loading: priority ? "eager" : "lazy",
 		fetchPriority: priority ? "high" : "auto",
 		decoding: "async"
-	});
-}
-function Reveal({ children, className = "" }) {
-	const ref = useRef(null);
-	useEffect(() => {
-		const node = ref.current;
-		if (!("IntersectionObserver" in window)) return;
-		const observer = new IntersectionObserver(([e]) => {
-			if (e.isIntersecting) {
-				node.classList.add("visible");
-				observer.disconnect();
-			}
-		}, { threshold: .08 });
-		node.classList.add("will-reveal");
-		observer.observe(node);
-		return () => observer.disconnect();
-	}, []);
-	return /* @__PURE__ */ jsx$1("div", {
-		className: `reveal ${className}`,
-		ref,
-		children
 	});
 }
 function Arrow() {
@@ -1582,11 +1584,82 @@ function Preferences() {
 	});
 }
 //#endregion
+//#region src/WhatsAppFab.jsx
+var BLOCKERS = "a,button,input,select,textarea,label,summary,[role=tab],.site-footer";
+function WhatsAppFab() {
+	const ref = useRef(null);
+	useEffect(() => {
+		const el = ref.current;
+		let raf = 0, until = 0;
+		const check = () => {
+			raf = 0;
+			if (performance.now() < until) raf = requestAnimationFrame(check);
+			const r = el.getBoundingClientRect();
+			let blocked = Boolean(document.querySelector(".menu-open, dialog[open]"));
+			if (!blocked) {
+				const pad = 6, xs = [
+					r.left - pad,
+					r.left + r.width / 2,
+					r.right + pad
+				], ys = [
+					r.top - pad,
+					r.top + r.height / 2,
+					r.bottom + pad
+				];
+				outer: for (const x of xs) for (const y of ys) for (const hit of document.elementsFromPoint(x, y)) {
+					if (hit === el || el.contains(hit) || hit.closest(".wa-fab")) continue;
+					if (hit.closest(BLOCKERS)) {
+						blocked = true;
+						break outer;
+					}
+				}
+			}
+			el.dataset.hidden = blocked ? "true" : "false";
+		};
+		const schedule = () => {
+			until = performance.now() + 500;
+			if (!raf) raf = requestAnimationFrame(check);
+		};
+		window.addEventListener("scroll", schedule, { passive: true });
+		window.addEventListener("resize", schedule);
+		const mo = new MutationObserver(schedule);
+		mo.observe(document.body, {
+			subtree: true,
+			attributes: true,
+			attributeFilter: ["class", "open"]
+		});
+		const timer = setInterval(schedule, 600);
+		schedule();
+		return () => {
+			window.removeEventListener("scroll", schedule);
+			window.removeEventListener("resize", schedule);
+			mo.disconnect();
+			clearInterval(timer);
+			cancelAnimationFrame(raf);
+		};
+	}, []);
+	return /* @__PURE__ */ jsx$1("a", {
+		ref,
+		className: "wa-fab",
+		"data-hidden": "false",
+		href: whatsapp(),
+		target: "_blank",
+		rel: "noopener noreferrer",
+		"aria-label": "Escribir por WhatsApp",
+		children: /* @__PURE__ */ jsx$1(SocialIcon, {
+			id: "whatsapp",
+			size: 28
+		})
+	});
+}
+//#endregion
 //#region src/Website.jsx
 var LOGO_SRCSET = "/media/marca/logo/logo-40.webp 40w, /media/marca/logo/logo-44.webp 44w, /media/marca/logo/logo-56.webp 56w, /media/marca/logo/logo-80.webp 80w, /media/marca/logo/logo-88.webp 88w, /media/marca/logo/logo-112.webp 112w, /media/marca/logo/logo-120.webp 120w, /media/marca/logo/logo-132.webp 132w, /media/marca/logo/logo-168.webp 168w, /media/marca/logo/logo-224.webp 224w, /media/marca/logo/logo-240.webp 240w, /media/marca/logo/logo-336.webp 336w, /media/marca/logo/logo-360.webp 360w, /media/marca/logo/logo-400.webp 400w";
-function Logo({ size, sizes, className = "" }) {
+function Logo({ size, sizes, className = "", lazy = false }) {
 	return /* @__PURE__ */ jsx$1("img", {
 		className: `logo-mark ${className}`,
+		fetchPriority: lazy ? void 0 : "low",
+		loading: lazy ? "lazy" : void 0,
 		src: "/media/marca/logo/logo-400.png",
 		srcSet: LOGO_SRCSET,
 		sizes,
@@ -1610,21 +1683,21 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-CC-D5d7H.js");
+var company_ = () => import("./assets/Company-DLoJj8qX.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-DOYuVhIN.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-UEYBLRl_.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-DJeSs7j1.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-DAnMOCq-.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-BULWF8x_.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-CVQCW8tV.js").then((m) => m.default)),
 	fleet: lazyRoute(() => import("./assets/Fleet-vAejHkyQ.js").then((m) => m.default)),
-	blog: lazyRoute(pick(() => import("./assets/Blog-Cq3PR5Tf.js"), "Blog")),
-	article: lazyRoute(() => import("./assets/Blog-Cq3PR5Tf.js").then((m) => m.default)),
+	blog: lazyRoute(pick(() => import("./assets/Blog-CxwhBCtc.js"), "Blog")),
+	article: lazyRoute(() => import("./assets/Blog-CxwhBCtc.js").then((m) => m.default)),
 	about: lazyRoute(pick(company_, "About")),
 	services: lazyRoute(pick(company_, "Services")),
 	contact: lazyRoute(pick(company_, "Contact")),
 	quote: lazyRoute(pick(company_, "QuotePage")),
 	privacy: lazyRoute(pick(company_, "Privacy")),
 	ratings: lazyRoute(pick(company_, "Ratings")),
-	notFound: lazyRoute(() => import("./assets/NotFound-DHo54wv4.js").then((m) => m.default))
+	notFound: lazyRoute(() => import("./assets/NotFound-D0uRj_7U.js").then((m) => m.default))
 };
 R.home, R.catalog, R.tour, R.fleet, R.blog, R.article, R.about, R.services, R.contact, R.quote, R.privacy, R.ratings;
 var preloadAllRoutes = () => Promise.all(Object.values(R).map((route) => route.preload()));
@@ -1674,7 +1747,7 @@ function Header() {
 		return () => window.removeEventListener("keydown", key);
 	}, [open]);
 	return /* @__PURE__ */ jsxs$1("header", {
-		className: "site-header",
+		className: `site-header${unprefix(location.pathname) === "/" ? " is-home" : ""}${open ? " menu-open" : ""}`,
 		children: [
 			/* @__PURE__ */ jsx$1(Link, {
 				to: "/",
@@ -1686,6 +1759,11 @@ function Header() {
 				})
 			}),
 			/* @__PURE__ */ jsx$1(Preferences, {}),
+			/* @__PURE__ */ jsx$1("a", {
+				className: "menu-nojs",
+				href: "#pie",
+				children: "Menú"
+			}),
 			/* @__PURE__ */ jsxs$1("button", {
 				ref: toggle,
 				className: "menu-toggle",
@@ -1725,6 +1803,7 @@ function Header() {
 function Footer() {
 	return /* @__PURE__ */ jsxs$1("footer", {
 		className: "site-footer",
+		id: "pie",
 		children: [
 			/* @__PURE__ */ jsxs$1("div", {
 				className: "footer-top",
@@ -1749,7 +1828,8 @@ function Footer() {
 							children: /* @__PURE__ */ jsx$1(Logo, {
 								size: 120,
 								sizes: "120px",
-								className: "logo-footer"
+								className: "logo-footer",
+								lazy: true
 							})
 						}),
 						/* @__PURE__ */ jsx$1("p", { children: "Experiencias a otro nivel" }),
@@ -1887,7 +1967,8 @@ function Layout() {
 			})
 		}, pathname),
 		/* @__PURE__ */ jsx$1(Allies, {}),
-		/* @__PURE__ */ jsx$1(Footer, {})
+		/* @__PURE__ */ jsx$1(Footer, {}),
+		/* @__PURE__ */ jsx$1(WhatsAppFab, {})
 	] });
 }
 function Website() {
@@ -3552,4 +3633,4 @@ async function render(url) {
 	}));
 }
 //#endregion
-export { usePageMeta as A, useLightMotion as C, inicioTextos as D, CHAPTERS as E, company as F, whatsapp as I, language as L, Fragment$1 as M, jsx$1 as N, textoFase as O, jsxs$1 as P, t as R, useFlipGrid as S, useMounted as T, QuoteCopy as _, vehicles as a, Marquee as b, Arrow as c, PageTitle as d, Picture as f, TourCard as g, Reveal as h, values as i, Socials as j, NOT_FOUND as k, Button as l, Rail as m, metaFor, photos as n, rawTours as o, QuoteSection as p, paths, tours as r, render, media_default as s, articles as t, Eyebrow as u, EditorialMotion as v, useMedia as w, Trust as x, Manifesto as y };
+export { SocialIcon as A, useMedia as C, textoFase as D, inicioTextos as E, company as F, whatsapp as I, language as L, Fragment$1 as M, jsx$1 as N, NOT_FOUND as O, jsxs$1 as P, t as R, useLightMotion as S, CHAPTERS as T, EditorialMotion as _, vehicles as a, Trust as b, Arrow as c, PageTitle as d, Picture as f, QuoteCopy as g, TourCard as h, values as i, Socials as j, usePageMeta as k, Button as l, Rail as m, metaFor, photos as n, rawTours as o, QuoteSection as p, paths, tours as r, render, media_default as s, articles as t, Eyebrow as u, Manifesto as v, useMounted as w, useFlipGrid as x, Marquee as y };

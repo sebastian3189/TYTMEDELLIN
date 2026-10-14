@@ -49,13 +49,14 @@ try {
   const page = await ctx.newPage(); watch(page, 'desktop');
   const net = trackBytes(page);
   await page.goto(base + '/', { waitUntil: 'load' });
-  const order = await page.evaluate(() => { const ids = ['.scrub-hero', '#descubrir', '#formas-de-viajar', '.service-band', '.reviews-g', '.about-preview']; const tops = ids.map((s) => { const e = document.querySelector(s); return e ? e.getBoundingClientRect().top + scrollY : -1; }); return { ids, tops, text: document.body.innerText }; });
+  await page.waitForFunction(() => document.querySelector('.scrub-hero')?.dataset.hydrated === 'true'); // hidratación terminada (Spec 04): sin carreras con el efecto de diseño
+  const order = await page.evaluate(() => { const ids = ['.home-hero', '.home-story', '.scrub-hero', '#formas-de-viajar', '.service-band', '.reviews-g', '.about-preview', '.blog-book', '.home-close', '.home-social']; const tops = ids.map((s) => { const e = document.querySelector(s); return e ? e.getBoundingClientRect().top + scrollY : -1; }); return { ids, tops, text: document.body.innerText }; });
   assert.ok(order.tops.every((t) => t >= 0) && order.tops.every((t, i) => i === 0 || t > order.tops[i - 1]), `orden del inicio ${JSON.stringify(order.tops)}`);
   assert.ok(!/La ciudad en tres encuentros/i.test(order.text), 'sin «La ciudad en tres encuentros»');
   assert.equal(await page.locator('.rail-shell').count(), 0, 'sin el carril de 4 tarjetas');
   assert.equal(await page.locator('#formas-de-viajar h2').count(), 1);
   assert.match((await page.locator('#formas-de-viajar h2').innerText()).replace(/\s+/g, ' '), /^Un lugar para cada forma de viajar\.$/);
-  checks.push('orden del inicio: héroe → intro → #formas-de-viajar → Nos encargamos del camino → reseñas → equipo; sin «La ciudad en tres encuentros» ni carril de 4 tarjetas; h2 «Un lugar para cada forma de viajar.»');
+  checks.push('orden del inicio (§J1): hero → historia → baraja → #formas-de-viajar → Nos encargamos del camino → reseñas → equipo → libro → cierre → redes; sin «La ciudad en tres encuentros» ni carril de 4 tarjetas; h2 «Un lugar para cada forma de viajar.»');
   // Índice: 10 tours en orden por grupo con rótulo.
   const idx = await page.evaluate(() => ({ names: [...document.querySelectorAll('#formas-de-viajar [role=tab]')].map((t) => t.textContent.replace(/^\d+/, '').trim()), groups: [...document.querySelectorAll('.explorer-group')].map((g) => g.textContent.trim()), tabindex: [...document.querySelectorAll('#formas-de-viajar [role=tab]')].map((t) => t.tabIndex), listAria: document.querySelector('[role=tablist]').getAttribute('aria-orientation') }));
   assert.deepEqual(idx.names, NAMES); assert.deepEqual(idx.groups, GROUPS); assert.equal(idx.tabindex.filter((x) => x === 0).length, 1, 'tabindex itinerante'); assert.equal(idx.listAria, 'vertical');

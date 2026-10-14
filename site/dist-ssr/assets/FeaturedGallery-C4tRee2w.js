@@ -1,4 +1,4 @@
-import { C as useLightMotion, N as jsx, P as jsxs } from "../entry-server.js";
+import { N as jsx, P as jsxs, S as useLightMotion } from "../entry-server.js";
 import { useLayoutEffect, useRef, useState } from "react";
 //#region src/FeaturedGallery.jsx
 function FeaturedGallery({ tour }) {
@@ -45,7 +45,11 @@ function FeaturedGallery({ tour }) {
 	const img = (photo, full = false) => /* @__PURE__ */ jsx("img", {
 		src: full ? photo.src : photo.small || photo.src,
 		srcSet: full ? photo.srcset || (photo.small ? `${photo.small} 640w, ${photo.src} ${photo.width}w` : void 0) : void 0,
-		sizes: "(max-width:899px) 100vw, 62vw",
+		sizes: `(max-width:899px) min(100vw, ${photo.width}px), min(62vw, ${photo.width}px)`,
+		style: full ? {
+			maxWidth: `${photo.width}px`,
+			marginInline: "auto"
+		} : void 0,
 		width: photo.width,
 		height: photo.height,
 		alt: full ? `${tour.name}, fotografía ${index + 1}` : "",
@@ -72,6 +76,11 @@ function FeaturedGallery({ tour }) {
 				children: [/* @__PURE__ */ jsx("button", {
 					ref: image,
 					className: "gallery-feature",
+					style: {
+						maxWidth: `${Math.max(480, images[index].width)}px`,
+						justifySelf: "start",
+						width: "100%"
+					},
 					onClick: (e) => {
 						if (swiped.current) {
 							swiped.current = false;

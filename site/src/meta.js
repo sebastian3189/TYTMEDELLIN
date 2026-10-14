@@ -19,6 +19,9 @@ export const fullTitle = (title) => `${title} | T&T Medellín`;
 export function applyMeta(title, description) {
   document.title = fullTitle(t(title));
   document.querySelector('meta[name="description"]')?.setAttribute('content', t(description));
+  // Canonical absoluto por ruta (lo escribe el prerender); en la navegación del cliente solo cambia la ruta, no el dominio.
+  const canonical = document.querySelector('link[rel="canonical"]');
+  if (canonical) { try { const url = new URL(canonical.href); url.pathname = location.pathname.replace(/\/+$/, '') || '/'; canonical.href = url.href; } catch { /* href inválido: se deja */ } }
 }
 // Fichas y notas: título y descripción de la propia página (el 404 de un slug desconocido lo fija NotFound).
 export function usePageMeta(title, description) {

@@ -209,3 +209,153 @@ entrada «a tu manera.» por «a tu ritmo.»; `final.titular` «Tú eliges cómo
 puede conservarse o sustituirse por «Tu viaje, tus tiempos, tu experiencia.»; `c1`
 «Nosotros conocemos el camino.» por «No solo visites Medellín. Vívela.». Los demás
 titulares y subtítulos aprobados se conservan.
+
+
+## Preguntas frecuentes — APROBADAS por el usuario 2026-10-14 (13 preguntas; las PENDIENTE CLIENTE no se publican)
+
+Estado: propuesta del constructor-producto (skill `tt-contenido-conversion`); pendiente
+de aprobación del usuario y de auditoría. Solo se publican respuestas con fuente.
+Abreviaturas: `content.ts` = TYTCOLOMBIA/tnt-colombia-connect/src/data/content.ts;
+`tour-info` = site/src/tour-info.json; `content.js` = site/src/content.js.
+
+| # | Grupo | Pregunta | Respuesta (≤60 palabras) | Fuente |
+|---|---|---|---|---|
+| 1 | Reservas y cotización | ¿Cómo cotizo mi viaje? | Cuéntanos fechas, número de personas, punto de salida y llegada, y equipaje. Puedes hacerlo desde el formulario de cotización o escribirnos por WhatsApp al +57 304 496 1698. | [content.ts:faqCorporativa[1]; SPECS/02 §Conversión; company.js:whatsapp] |
+| 2 | Reservas y cotización | ¿Cotizar es lo mismo que reservar? | No. La cotización no confirma una reserva. Primero revisamos contigo la experiencia, las fechas y el número de viajeros; luego confirmas con el equipo. | [content.ts:faqViajero[2]] |
+| 3 | Recorridos y experiencias | ¿Los recorridos son privados? | Sí, es nuestra propuesta: tours 100% privados, con guía-conductor exclusivo, vehículo privado y sin grupos masivos. Los horarios son flexibles; las condiciones de cada recorrido se confirman al cotizar. | [SPECS/02 §Mensajes de marca, regla 5] |
+| 4 | Recorridos y experiencias | ¿Qué incluye una experiencia? | En las fichas: transporte privado, vehículos cómodos, conductores y guías profesionales, atención personalizada, y fotos y videos del recorrido. Confirma paradas, entradas y alimentación en tu propuesta antes de reservar. | [tour-info:*.incluye; content.ts:faqViajero[0]] |
+| 5 | Recorridos y experiencias | ¿Dónde empieza el recorrido? | En la mayoría de experiencias, con la recogida en tu hotel en Medellín. Dinos tu alojamiento o punto de salida y confirmaremos el lugar de encuentro y si hay costos adicionales. | [tour-info:*.punto; content.ts:faqViajero[1]] |
+| 6 | Recorridos y experiencias | ¿Puedo adaptar el recorrido a mi grupo? | Sí, cuéntanos qué lugares quieres visitar, cuánto tiempo tienes y qué necesitas. Revisaremos contigo las opciones disponibles para que sea tu viaje, tus tiempos, tu experiencia. | [Tour.jsx:faq «¿Se puede adaptar…»; content.ts:faqViajero[3]] |
+| 7 | Recorridos y experiencias | ¿Cómo elijo entre ciudad, pueblos o naturaleza? | Ciudad para historias y arte urbano; pueblos para cambiar de ritmo; naturaleza para mirar de cerca. Consulta los tiempos de traslado antes de llenar la agenda y cuéntanos tus preferencias. | [content.js:articles «elegir-tu-experiencia»] |
+| 8 | Traslados aeropuerto | ¿Cómo funciona el traslado desde el aeropuerto? | Coordinamos el traslado entre el Aeropuerto José María Córdova y tu alojamiento en Medellín, con seguimiento del vuelo. Comparte tu número de vuelo, dirección y número de pasajeros. | [tour-info:traslados-aeropuerto-jmc.descripcion, .ampliada] |
+| 9 | Traslados aeropuerto | ¿Qué pasa si mi vuelo cambia de hora? | El servicio incluye seguimiento del vuelo y ajustamos la recogida según tu número de vuelo. Las condiciones de espera y el punto de encuentro se confirman con el equipo. | [tour-info:traslados-aeropuerto-jmc.ampliada, .recomendaciones] |
+| 10 | Vehículos y grupos | ¿Qué vehículos tienen y para cuántas personas? | Sedán Ejecutivo (1–3), SUV Ejecutiva (1–4), Van Ejecutiva (1–8), Van Master (1–14), Van Sprinter (1–17) y buses (25–40). La unidad y su disponibilidad se confirman al cotizar. | [content.js:vehicles; content.ts:flota] |
+| 11 | Vehículos y grupos | ¿Atienden empresas y grupos? | Sí: puedes consultar transporte para equipos de trabajo, eventos y grupos. Indica horarios, rutas y número de pasajeros para preparar la propuesta. | [content.ts:faqCorporativa[3]; content.js:vehicles] |
+| 12 | Pagos y precios | ¿Qué debo confirmar antes de contratar? | Revisa el valor total, las inclusiones, el horario, el vehículo propuesto y las condiciones de pago y cancelación con el equipo que atiende tu solicitud. | [content.ts:faqCorporativa[2]; Tour.jsx:faq «¿Qué debo confirmar sobre el precio?»] |
+| 13 | Antes de viajar | ¿Qué debo preparar antes del recorrido? | Ten a la mano fecha, punto de partida y, si llegas en avión, tu número de vuelo. Cada ficha trae recomendaciones propias, como calzado cómodo para los miradores o la cámara con espacio. | [content.js:articles «preparar-tu-recorrido»; tour-info:*.recomendaciones] |
+
+Notas de redacción: «Sí» en 6 y 11 se apoya en que la fuente invita a consultar; si
+el auditor lo considera promesa, usar «Puedes consultarlo:». Respuesta 5 dice «en la
+mayoría»: confirmar por ficha (el traslado JMC también admite la terminal).
+
+### Requiere respuesta del cliente — PENDIENTE CLIENTE (no publicar)
+
+1. Cancelación, cambios y reembolsos: define riesgo económico y legal del viajero.
+2. Medios de pago, anticipo y facturación: decide la confianza al contratar.
+3. Idiomas de los guías-conductores (la versión EN no basta como prueba).
+4. Seguros, pólizas y requisitos de seguridad del servicio.
+5. Duración y hora de salida de cada experiencia (no hay dato verificado).
+6. Qué NO incluye cada experiencia (entradas, alimentación, propinas).
+7. Niños, edad mínima y mascotas.
+8. Accesibilidad y movilidad reducida (vehículos y senderos).
+9. Clima: ¿se reprograma un recorrido por lluvia?
+10. Tiempo de espera gratuito y señalización en el aeropuerto.
+11. Precios de referencia: solo si el cliente autoriza publicarlos.
+12. Horario de atención del equipo y tiempo de respuesta a cotizaciones.
+
+### Ubicación y marcado
+
+- Inicio: 4–5 preguntas (1, 2, 3, 6, 12) antes del cierre «Tu viaje, tus tiempos…».
+- /contacto y /cotizar: 1, 2, 11, 12 junto al formulario (reducen dudas antes de enviar).
+- Fichas: grupo Recorridos (4, 5, 6) fusionado con las tres FAQ actuales; ficha de
+  Traslados JMC: 8, 9. /vehiculos: 10, 11.
+- JSON-LD `FAQPage` solo con las 13 respuestas publicadas, texto idéntico al visible,
+  una vez por página (solo las preguntas mostradas en esa página). Nada de PENDIENTE.
+- EN: el sitio sí tiene patrón (`site/src/locales/en.json`, clave = cadena en español,
+  vía `i18n.js`). Las traducciones de estas preguntas NO existen todavía: añadirlas
+  como claves nuevas, revisión del usuario pendiente; el proyecto oficial aporta EN
+  para las filas 1, 2, 5, 6, 11, 12 (content.ts) como base.
+- Criterio medible: clics en WhatsApp/cotizar desde páginas con FAQ frente a sin FAQ.
+
+## Respuestas del cliente a las FAQ pendientes (aportadas por el usuario, 2026-10-14)
+
+Datos verificados por el cliente; se publican con su texto (edición mínima de estilo
+permitida, sin cambiar condiciones, porcentajes ni plazos). La pregunta 11 (precios de
+referencia) NO fue respondida: sigue `PENDIENTE CLIENTE` y no se publica.
+
+**1. Cancelación, cambios y reembolsos.** Entendemos que los planes pueden cambiar. Por
+eso, ofrecemos alternativas de reprogramación sujetas a disponibilidad. Para
+cancelaciones, manejamos las siguientes condiciones sobre el anticipo recibido:
+más de 15 días de anticipación: devolución del 60 %; entre 8 y 14 días: devolución del
+20 %; con 7 días o menos: no aplica devolución. Las solicitudes de cambio de fecha están
+sujetas a disponibilidad y a las condiciones de la reserva.
+> Nota de revisión: el texto no cubre exactamente 15 días (queda entre «más de 15» y
+> «8 a 14»). Confirmar con el cliente antes de publicar o redactar «15 días o más» si
+> el cliente lo aprueba.
+
+**2. Medios de pago, anticipo y facturación.** Para confirmar una experiencia
+solicitamos un anticipo del 30 % del valor total. El 70 % restante puede cancelarse
+durante o al finalizar la experiencia. Contamos con enlaces de pago electrónicos seguros
+y opciones de pago en pesos colombianos (COP). Para algunos servicios de traslado
+aeroportuario, el anticipo puede ser del 50 %. Emitimos certificados de reserva y
+contamos con facturación electrónica según los datos suministrados por el cliente.
+
+**3. Idiomas de los guías.** Nuestros servicios se ofrecen principalmente en español.
+También contamos con guías bilingües en inglés y podemos coordinar acompañamiento en
+portugués u otros idiomas, previa solicitud y según disponibilidad.
+
+**4. Seguros y pólizas.** Trabajamos con vehículos de servicio especial debidamente
+habilitados, documentación vigente y las coberturas reglamentarias correspondientes,
+incluyendo SOAT y seguros aplicables al transporte contratado. Contamos con el Registro
+Nacional de Turismo RNT 176384 y NIT 901738550-6.
+
+**5. Duración y hora de salida.** Nuestras experiencias son privadas, por lo que
+ofrecemos flexibilidad para ajustar los horarios según las necesidades del viajero.
+
+| Experiencia | Duración y salida de referencia |
+|---|---|
+| City Tour Medellín + Comuna 13 | 9 horas, desde las 9:00 a. m. |
+| Guatapé y Piedra del Peñol | 10 horas aprox., desde las 8:30 a. m. |
+| Tour de Miradores | 4 a 5 horas, horario flexible |
+| Tour Nocturno Medellín | Horario acordado con el cliente |
+| Hacienda Nápoles | Día completo, desde las 5:00 a. m. |
+| Tour Vuelta Oriente | Según itinerario contratado |
+| Tour del Café | Según lugar de salida e itinerario |
+| Transporte privado por horas | Mínimo 4 horas |
+
+Los horarios pueden modificarse dependiendo del lugar de recogida, tráfico, condiciones
+climáticas e itinerario. (Sin dato del cliente: Santa Fe de Antioquia, Jardín, Salto
+del Buey, Tour de Compras y Traslados JMC → no mostrar duración en esas fichas.)
+
+**6. Qué no incluye.** Salvo que la cotización indique expresamente lo contrario,
+nuestros servicios no incluyen entradas a parques o atracciones, compras personales,
+propinas ni actividades adicionales. Cada propuesta comercial especifica claramente los
+servicios incluidos y los costos que corren por cuenta del viajero.
+
+**7. Niños, edad mínima y mascotas.** ¡Las familias son bienvenidas! Los bebés pueden
+viajar sin costo adicional, de acuerdo con las condiciones de la reserva y la capacidad
+del vehículo. No manejamos una edad mínima general para las experiencias, aunque algunas
+atracciones pueden establecer restricciones particulares. También podemos recibir
+mascotas, coordinando previamente sus condiciones de transporte para garantizar
+comodidad y seguridad.
+
+**8. Accesibilidad y movilidad reducida.** Buscamos adaptar nuestras experiencias a las
+necesidades de cada viajero. Si algún pasajero tiene movilidad reducida o requiere
+asistencia especial, recomendamos informarlo antes de reservar para verificar el
+vehículo apropiado, las condiciones del recorrido y la accesibilidad de los lugares que
+desea visitar.
+
+**9. ¿Qué pasa si llueve?** ¡La experiencia no tiene por qué detenerse! La mayoría de
+nuestros recorridos pueden realizarse con lluvia moderada. Cuando las condiciones
+climáticas afectan alguna actividad, buscamos ajustar el itinerario o proponer
+alternativas, priorizando siempre la seguridad de nuestros viajeros.
+
+**10. Tiempo de espera en el aeropuerto y señalización.** Realizamos seguimiento a los
+vuelos para coordinar la llegada de nuestros pasajeros. Nuestro conductor se comunica
+previamente y comparte las instrucciones del punto de encuentro, así como sus datos y los
+del vehículo. En servicios previamente coordinados podemos ofrecer señalización
+personalizada con el nombre del pasajero o grupo. Entendemos que pueden presentarse
+demoras en migración, recogida de equipaje o vuelos, por lo que ofrecemos acompañamiento
+y flexibilidad en la espera.
+
+**12. Horario de atención y respuesta a cotizaciones.** Nuestra operación de transporte
+cuenta con disponibilidad las 24 horas, mediante reserva previa. Brindamos asesoría
+personalizada por nuestros canales digitales y WhatsApp. Nos esforzamos por responder
+las solicitudes de cotización lo más pronto posible, teniendo en cuenta la
+disponibilidad de nuestro equipo comercial. Nuestro compromiso es acompañar al viajero
+desde la planeación hasta la finalización de su experiencia.
+
+**Uso:** integrar 1–10 y 12 en las FAQ por página (Reservas/Pagos: 1, 2, 12; Recorridos:
+3, 5, 6, 7, 8, 9; Traslados: 10; Confianza/legal: 4 en /nosotros o pie con RNT y NIT).
+La duración de la tabla 5 se muestra además en la ficha de cada experiencia que la
+tenga. EN: añadir claves a `site/src/locales/en.json` para revisión del usuario.

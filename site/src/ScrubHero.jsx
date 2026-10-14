@@ -11,6 +11,8 @@ import './scrub-hero.css';
  * fotograma, el fotograma del clip, el Flip de la carta superior (transform + clip-path), la baraja y la marquesina.
  * Scroll nativo + contenedor sticky: nunca se intercepta rueda, teclado ni gesto. Texto en HTML; imagen en <canvas>.
  * Memoria acotada (ventana de ImageBitmap, ver WINDOW).
+ * Spec 03 §J1: el bloque vive bajo el pliegue (tras el hero de video y la historia). Nada se pide hasta acercarse (ver `near`):
+ * ni los fotogramas, ni las miniaturas flotantes, ni la tira móvil.
  */
 const BASE = '/media/inicio';
 const CARDS = '/media/baraja';
@@ -67,7 +69,7 @@ function CartaLista({ card }) {
   );
 }
 
-export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introducción', nextId, summary }) {
+export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', nextId, summary }) {
   const root = useRef(null), track = useRef(null), stage = useRef(null), canvas = useRef(null), skipRef = useRef(null), media = useRef(null);
   const floatRef = useRef(null), deckRef = useRef(null), mqRef = useRef(null), titleRef = useRef(null), stripRef = useRef(null), stackRef = useRef(null);
   const api = useRef({ jump: () => {}, step: () => {}, active: 0 });
@@ -86,12 +88,6 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
     setReduce(user); setMobile(window.matchMedia(MOBILE_QUERY).matches); setMode(prefersStatic(user) ? 'static' : 'scrub'); setReady(true);
   }, []);
   const osNow = ready && osReduce();
-
-  // Retira el póster de arranque de index.html cuando la primera carta de React ya está pintada en el mismo sitio (LCP estable).
-  useEffect(() => {
-    let r2 = 0; const r1 = requestAnimationFrame(() => { r2 = requestAnimationFrame(() => { document.getElementById('boot')?.remove(); document.documentElement.classList.remove('boot-scrub'); }); });
-    return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
-  }, []);
 
   // Cambios dinámicos: movimiento reducido y tamaño de pantalla.
   useEffect(() => {
@@ -171,8 +167,8 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
       if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; }
       dims = buildDims(stageEl.clientWidth, stageEl.clientHeight, mobile, { x: mediaEl.offsetLeft, y: mediaEl.offsetTop, w: mediaEl.offsetWidth, h: mediaEl.offsetHeight });
       stageEl.style.setProperty('--bw', `${dims.Bw}px`); stageEl.style.setProperty('--bh', `${dims.Bh}px`); stageEl.style.setProperty('--stage-h', `${stageEl.clientHeight}px`);
-      if (dims.m) { // móvil: posiciones del titular partido y la confianza calculadas con la baraja (sin solapes)
-        stageEl.style.setProperty('--m-t1', `${dims.m.t1Top}px`); stageEl.style.setProperty('--m-t2', `${dims.m.t2Top}px`); stageEl.style.setProperty('--m-micro', `${dims.m.microTop}px`);
+      if (dims.m) { // móvil: posición del título calculada con la baraja (sin solapes)
+        stageEl.style.setProperty('--m-t1', `${dims.m.t1Top}px`);
         stageEl.dataset.short = dims.m.short ? '1' : '0';
       }
       stageEl.style.setProperty('--deck-top', `${dims.deck.y - dims.Hd / 2}px`); stageEl.style.setProperty('--deck-bottom', `${dims.deck.y + dims.Hd / 2}px`);
@@ -432,11 +428,20 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
     window.addEventListener('resize', onScroll, { passive: true });
     document.addEventListener('visibilitychange', onVisibility);
     schedule();
-    load();
+    // Inicialización perezosa (Spec 03 §J1): el bloque está bajo el pliegue; los fotogramas y las imágenes decorativas se piden
+    // cuando la sección queda a menos de una pantalla (margen 100 %). Antes, solo el HTML y el layout.
+    let started = false;
+    const start = () => {
+      if (started || destroyed) return; started = true;
+      for (const el of [...floatEls, ...(stripEl ? stripEl.querySelectorAll('i[data-bg]') : [])]) if (el.dataset.bg) el.style.backgroundImage = `url(${el.dataset.bg})`;
+      load();
+    };
+    const near = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { start(); near.disconnect(); } }, { rootMargin: '100% 0px' });
+    near.observe(section);
 
     return () => {
       destroyed = true; controller.abort();
-      cancelAnimationFrame(raf); observer.disconnect(); resize.disconnect();
+      cancelAnimationFrame(raf); observer.disconnect(); resize.disconnect(); near.disconnect();
       window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll);
       document.removeEventListener('visibilitychange', onVisibility);
       for (let i = 0; i < count; i++) { drop(full, i); drop(low, i); }
@@ -444,7 +449,7 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
       for (const k of ['ready', 'frame', 'loaded', 'progress', 'target', 'settled', 'u', 'bitmaps', 'bitmapsPeak', 'bitmapMb', 'bitmapMbPeak']) delete section.dataset[k];
       for (const el of [mediaEl, stripEl, ...floatEls, ...cardEls, ...mqItems, ...fxEls]) { el?.removeAttribute('style'); }
       stageEl.dataset.ui = 'deck'; stageEl.dataset.cap = ''; stageEl.dataset.ch = '1'; stageEl.dataset.card = '-1';
-      for (const k of ['--bw', '--bh', '--stage-h', '--m-t1', '--m-t2', '--m-micro', '--deck-top', '--deck-bottom']) stageEl.style.removeProperty(k);
+      for (const k of ['--bw', '--bh', '--stage-h', '--m-t1', '--deck-top', '--deck-bottom']) stageEl.style.removeProperty(k);
       delete stageEl.dataset.short;
       delete stageEl.dataset.phase;
       api.current.jump = () => {}; api.current.step = () => {}; api.current.card = () => {};
@@ -482,7 +487,7 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
   );
 
   return (
-    <section ref={root} className={`scrub-hero ${staticMode ? 'is-static' : ''}`} data-hydrated={ready ? 'true' : 'false'} aria-label="Apertura: Medellín, a otro nivel">
+    <section ref={root} className={`scrub-hero ${staticMode ? 'is-static' : ''}`} data-hydrated={ready ? 'true' : 'false'} aria-label="Elige tu próximo recuerdo">
       <div ref={track} className="scrub-track" style={animated ? { '--total': timeline(mobile).total } : undefined}>
         <div ref={stage} className="scrub-stage" data-ui="deck" data-cap="" data-ch="1" data-card="-1" data-textos={t.estado}>
           {animated && !mobile && (
@@ -498,14 +503,13 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
               <source media={MOBILE_QUERY} type="image/avif" srcSet={`${BASE}/poster-m.avif`} />
               <source media={MOBILE_QUERY} type="image/webp" srcSet={`${BASE}/poster-m.webp`} />
               <source type="image/avif" srcSet={`${BASE}/poster-1280.avif 1280w, ${BASE}/poster-1600.avif 1600w`} sizes="100vw" />
-              <img src={`${BASE}/poster-1600.webp`} srcSet={`${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`} sizes="100vw" width="1600" height="900" alt="Vista de Medellín desde la ladera de la Comuna 13" loading="eager" fetchPriority="high" decoding="async" />
+              <img src={`${BASE}/poster-1600.webp`} srcSet={`${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`} sizes="100vw" width="1600" height="900" alt="Vista de Medellín desde la ladera de la Comuna 13" loading="lazy" decoding="async" />
             </picture>
             {animated && <canvas ref={canvas} className="scrub-canvas" aria-hidden="true" />}
           </div>
           <div ref={titleRef} className="scrub-title">
-            <p className="eyebrow scrub-lema" data-fx="0">{t.lema}</p>
-            <h1><span className="scrub-t1" data-fx="-1"><i className="ln">{t.titular[0]}</i></span> <span className="scrub-t2" data-fx="1"><i className="ln">{t.titular[1]}</i></span></h1>
-            <p className="scrub-micro" data-fx="0">{t.confianza}</p>
+            <p className="eyebrow scrub-lema" data-fx="0">Experiencias</p>
+            <h2 className="scrub-t1" data-fx="-1">{t.eleccion}</h2>
           </div>
           <div className="scrub-panel">
             {animated && (
@@ -544,7 +548,6 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
                   );
                 })}
               </div>
-              <div className="scrub-actions">{actions}</div>
             </div>
           </div>
           {animated && !mobile && (
@@ -558,7 +561,7 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
           )}
           {animated && mobile && (
             <div ref={stripRef} className="scrub-strip scrub-strip--m" aria-hidden="true">
-              {cards.map((c) => <i key={c.slug} style={{ backgroundImage: `url(${cardImg(c.slug, 't')})` }} />)}
+              {cards.map((c) => <i key={c.slug} data-bg={cardImg(c.slug, 't')} />)}
             </div>
           )}
           <div className="scrub-ctl">
@@ -567,7 +570,7 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
           </div>
           {animated && !mobile && (
             <div ref={floatRef} className="bd-floats" aria-hidden="true">
-              {FLOATS.map(([fx, fy, w, dp, ci, rot], k) => <i key={k} className="bd-float" data-fx={fx} data-fy={fy} data-dp={dp} data-rot={rot} style={{ width: w, height: w * 1.25, backgroundImage: `url(${cardImg(cards[ci].slug, 't')})` }} />)}
+              {FLOATS.map(([fx, fy, w, dp, ci, rot], k) => <i key={k} className="bd-float" data-fx={fx} data-fy={fy} data-dp={dp} data-rot={rot} data-bg={cardImg(cards[ci].slug, 't')} style={{ width: w, height: w * 1.25 }} />)}
             </div>
           )}
           <div ref={deckRef} className="bd-deck">
@@ -577,14 +580,14 @@ export default function ScrubHero({ actions, cards, skipLabel = 'Saltar introduc
                 <Fragment key={c.slug}>
                   <Link className="bd-card" to={`/experiencias/${c.slug}`} aria-label={`${c.name}. ${tx.emocion}: ${tx.frase}`} onFocus={() => api.current.card(i)} onKeyDown={(e) => onCardKey(e, i)} onPointerMove={tilt} onPointerLeave={untilt}>
                     <span className="bd-tilt">
-                      <img className="bd-thumb" src={cardImg(c.slug, 't')} width="320" height="400" alt="" decoding="async" fetchPriority="low" />
+                      <img className="bd-thumb" src={cardImg(c.slug, 't')} width="320" height="400" alt="" decoding="async" loading="lazy" />
                       <img className="bd-full" data-src={cardImg(c.slug, 'h')} width="960" height="1200" alt="" decoding="async" onLoad={(e) => e.currentTarget.classList.add('ready')} />
                     </span>
                     
                   </Link>
                 </Fragment>
               ) : (
-                <div key={c.slug} className="bd-card" aria-hidden="true"><span className="bd-tilt"><img className="bd-thumb" src={cardImg(c.slug, 't')} width="320" height="400" alt="" decoding="async" fetchPriority="low" /></span></div>
+                <div key={c.slug} className="bd-card" aria-hidden="true"><span className="bd-tilt"><img className="bd-thumb" src={cardImg(c.slug, 't')} width="320" height="400" alt="" decoding="async" loading="lazy" /></span></div>
               );
             })}
           </div>

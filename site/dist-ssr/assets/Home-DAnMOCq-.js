@@ -1,4 +1,4 @@
-import { C as useLightMotion, D as inicioTextos, E as CHAPTERS, M as Fragment$1, N as jsx, O as textoFase, P as jsxs, c as Arrow, f as Picture, h as Reveal, l as Button, n as photos, o as rawTours, r as tours, t as articles, u as Eyebrow } from "../entry-server.js";
+import { A as SocialIcon, C as useMedia, D as textoFase, E as inicioTextos, F as company, I as whatsapp, M as Fragment$1, N as jsx, P as jsxs, S as useLightMotion, T as CHAPTERS, c as Arrow, f as Picture, l as Button, n as photos, o as rawTours, r as tours, t as articles, u as Eyebrow } from "../entry-server.js";
 import { t as Reviews } from "./Reviews-CZkkVS5X.js";
 /* empty css                       */
 import { Link } from "react-router-dom";
@@ -162,26 +162,24 @@ function buildDims(W, H, mobile, frame) {
 	const pad = clamp$1(W * .05, 22, 88);
 	let Bh, Hd, deck, focus, m = null;
 	if (mobile) {
-		const A = H - 200, line = clamp$1(Math.min(W * .13, (W - 44) / 7.8), 38, 64) * .95, short = A < 480;
-		const t1Top = short ? 12 : 40, microH = short ? 0 : 44, gapT = 16, gapB = 14, pb = 12;
+		const A = H - 200, line = clamp$1((W - 44) / 10.5, 28, 40) * 1.05 * 2, short = A < 480;
+		const t1Top = short ? 12 : 40, gapT = 16, pb = 12;
 		const rotAllow = (hd) => hd * .4 * Math.sin(6.5 * Math.PI / 180) + 8;
-		Hd = clamp$1(A - (t1Top + line + gapT + gapB + line + (short ? 0 : 10 + microH) + pb) - 2 * rotAllow(300), 150, 300);
+		Hd = clamp$1(A - (t1Top + line + gapT + pb) - 2 * rotAllow(300), 150, 300);
 		const al = rotAllow(Hd);
 		const deckTop = t1Top + line + gapT + al;
+		const free = H - 164 - (deckTop + Hd + al);
 		deck = {
 			x: W / 2,
-			y: deckTop + Hd / 2
+			y: deckTop + Hd / 2 + Math.max(0, free / 2)
 		};
 		Bh = Math.min(Math.min(W - 56, 340) * 1.25, H - 320);
 		focus = {
 			x: W / 2,
 			y: (H - 280) / 2
 		};
-		const t2Top = deck.y + Hd / 2 + al + gapB;
 		m = {
 			t1Top,
-			t2Top,
-			microTop: t2Top + line + 10,
 			short,
 			A
 		};
@@ -447,7 +445,7 @@ function CartaLista({ card }) {
 		]
 	});
 }
-function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId, summary }) {
+function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary }) {
 	const root = useRef(null), track = useRef(null), stage = useRef(null), canvas = useRef(null), skipRef = useRef(null), media = useRef(null);
 	const floatRef = useRef(null), deckRef = useRef(null), mqRef = useRef(null), titleRef = useRef(null), stripRef = useRef(null), stackRef = useRef(null);
 	const api = useRef({
@@ -471,19 +469,6 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 		setReady(true);
 	}, []);
 	const osNow = ready && osReduce();
-	useEffect(() => {
-		let r2 = 0;
-		const r1 = requestAnimationFrame(() => {
-			r2 = requestAnimationFrame(() => {
-				document.getElementById("boot")?.remove();
-				document.documentElement.classList.remove("boot-scrub");
-			});
-		});
-		return () => {
-			cancelAnimationFrame(r1);
-			cancelAnimationFrame(r2);
-		};
-	}, []);
 	useEffect(() => {
 		const queries = [REDUCE_QUERY, LOW_HEIGHT_QUERY].map((q) => window.matchMedia(q));
 		const size = window.matchMedia(MOBILE_QUERY);
@@ -593,8 +578,6 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 			stageEl.style.setProperty("--stage-h", `${stageEl.clientHeight}px`);
 			if (dims.m) {
 				stageEl.style.setProperty("--m-t1", `${dims.m.t1Top}px`);
-				stageEl.style.setProperty("--m-t2", `${dims.m.t2Top}px`);
-				stageEl.style.setProperty("--m-micro", `${dims.m.microTop}px`);
 				stageEl.dataset.short = dims.m.short ? "1" : "0";
 			}
 			stageEl.style.setProperty("--deck-top", `${dims.deck.y - dims.Hd / 2}px`);
@@ -925,13 +908,27 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 		window.addEventListener("resize", onScroll, { passive: true });
 		document.addEventListener("visibilitychange", onVisibility);
 		schedule();
-		load();
+		let started = false;
+		const start = () => {
+			if (started || destroyed) return;
+			started = true;
+			for (const el of [...floatEls, ...stripEl ? stripEl.querySelectorAll("i[data-bg]") : []]) if (el.dataset.bg) el.style.backgroundImage = `url(${el.dataset.bg})`;
+			load();
+		};
+		const near = new IntersectionObserver(([entry]) => {
+			if (entry.isIntersecting) {
+				start();
+				near.disconnect();
+			}
+		}, { rootMargin: "100% 0px" });
+		near.observe(section);
 		return () => {
 			destroyed = true;
 			controller.abort();
 			cancelAnimationFrame(raf);
 			observer.disconnect();
 			resize.disconnect();
+			near.disconnect();
 			window.removeEventListener("scroll", onScroll);
 			window.removeEventListener("resize", onScroll);
 			document.removeEventListener("visibilitychange", onVisibility);
@@ -970,8 +967,6 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 				"--bh",
 				"--stage-h",
 				"--m-t1",
-				"--m-t2",
-				"--m-micro",
 				"--deck-top",
 				"--deck-bottom"
 			]) stageEl.style.removeProperty(k);
@@ -1031,7 +1026,7 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 		ref: root,
 		className: `scrub-hero ${staticMode ? "is-static" : ""}`,
 		"data-hydrated": ready ? "true" : "false",
-		"aria-label": "Apertura: Medellín, a otro nivel",
+		"aria-label": "Elige tu próximo recuerdo",
 		children: [
 			/* @__PURE__ */ jsx("div", {
 				ref: track,
@@ -1086,8 +1081,7 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 										width: "1600",
 										height: "900",
 										alt: "Vista de Medellín desde la ladera de la Comuna 13",
-										loading: "eager",
-										fetchPriority: "high",
+										loading: "lazy",
 										decoding: "async"
 									})
 								]
@@ -1100,37 +1094,15 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 						/* @__PURE__ */ jsxs("div", {
 							ref: titleRef,
 							className: "scrub-title",
-							children: [
-								/* @__PURE__ */ jsx("p", {
-									className: "eyebrow scrub-lema",
-									"data-fx": "0",
-									children: t.lema
-								}),
-								/* @__PURE__ */ jsxs("h1", { children: [
-									/* @__PURE__ */ jsx("span", {
-										className: "scrub-t1",
-										"data-fx": "-1",
-										children: /* @__PURE__ */ jsx("i", {
-											className: "ln",
-											children: t.titular[0]
-										})
-									}),
-									" ",
-									/* @__PURE__ */ jsx("span", {
-										className: "scrub-t2",
-										"data-fx": "1",
-										children: /* @__PURE__ */ jsx("i", {
-											className: "ln",
-											children: t.titular[1]
-										})
-									})
-								] }),
-								/* @__PURE__ */ jsx("p", {
-									className: "scrub-micro",
-									"data-fx": "0",
-									children: t.confianza
-								})
-							]
+							children: [/* @__PURE__ */ jsx("p", {
+								className: "eyebrow scrub-lema",
+								"data-fx": "0",
+								children: "Experiencias"
+							}), /* @__PURE__ */ jsx("h2", {
+								className: "scrub-t1",
+								"data-fx": "-1",
+								children: t.eleccion
+							})]
 						}),
 						/* @__PURE__ */ jsxs("div", {
 							className: "scrub-panel",
@@ -1158,9 +1130,9 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 									className: "scrub-segs",
 									children: CHAPTERS.map((id, i) => /* @__PURE__ */ jsx("i", { "data-for": i + 1 }, id))
 								})]
-							}), /* @__PURE__ */ jsxs("div", {
+							}), /* @__PURE__ */ jsx("div", {
 								className: "scrub-text",
-								children: [/* @__PURE__ */ jsxs("div", {
+								children: /* @__PURE__ */ jsxs("div", {
 									ref: stackRef,
 									className: "scrub-stack",
 									children: [
@@ -1220,10 +1192,7 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 											}, c.slug);
 										})
 									]
-								}), /* @__PURE__ */ jsx("div", {
-									className: "scrub-actions",
-									children: actions
-								})]
+								})
 							})]
 						}),
 						animated && !mobile && /* @__PURE__ */ jsx("div", {
@@ -1250,7 +1219,7 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 							ref: stripRef,
 							className: "scrub-strip scrub-strip--m",
 							"aria-hidden": "true",
-							children: cards.map((c) => /* @__PURE__ */ jsx("i", { style: { backgroundImage: `url(${cardImg(c.slug, "t")})` } }, c.slug))
+							children: cards.map((c) => /* @__PURE__ */ jsx("i", { "data-bg": cardImg(c.slug, "t") }, c.slug))
 						}),
 						/* @__PURE__ */ jsxs("div", {
 							className: "scrub-ctl",
@@ -1279,10 +1248,10 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 								"data-fy": fy,
 								"data-dp": dp,
 								"data-rot": rot,
+								"data-bg": cardImg(cards[ci].slug, "t"),
 								style: {
 									width: w,
-									height: w * 1.25,
-									backgroundImage: `url(${cardImg(cards[ci].slug, "t")})`
+									height: w * 1.25
 								}
 							}, k))
 						}),
@@ -1308,7 +1277,7 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 											height: "400",
 											alt: "",
 											decoding: "async",
-											fetchPriority: "low"
+											loading: "lazy"
 										}), /* @__PURE__ */ jsx("img", {
 											className: "bd-full",
 											"data-src": cardImg(c.slug, "h"),
@@ -1331,7 +1300,7 @@ function ScrubHero({ actions, cards, skipLabel = "Saltar introducción", nextId,
 											height: "400",
 											alt: "",
 											decoding: "async",
-											fetchPriority: "low"
+											loading: "lazy"
 										})
 									})
 								}, c.slug);
@@ -1741,54 +1710,367 @@ function ExperienceExplorer() {
 //#endregion
 //#region src/BlogBook.jsx
 var two = (n) => String(n).padStart(2, "0");
+var EASE = "cubic-bezier(.77,0,.175,1)";
+var ANGLE_B = [
+	[0, 0],
+	[.4, -14],
+	[.75, 6],
+	[1, 0]
+];
+var SPLIT = .3;
+function PagePhoto({ item, link }) {
+	const image = /* @__PURE__ */ jsx(Picture, {
+		photo: item.image,
+		alt: "",
+		sizes: "(max-width:799px) 90vw, 42vw"
+	});
+	return link ? /* @__PURE__ */ jsx(Link, {
+		className: "ft-media",
+		to: `/blog/${link.slug}`,
+		"aria-label": link.title,
+		children: image
+	}) : /* @__PURE__ */ jsx("span", {
+		className: "ft-media",
+		children: image
+	});
+}
+function PageText({ item, live }) {
+	return /* @__PURE__ */ jsxs("div", {
+		className: "bk-text",
+		children: [
+			/* @__PURE__ */ jsx("p", {
+				className: "eyebrow book-tag",
+				children: item.tag
+			}),
+			/* @__PURE__ */ jsx("h3", {
+				className: "ft-name",
+				children: item.title
+			}),
+			/* @__PURE__ */ jsx("p", {
+				className: "ft-line",
+				children: item.intro
+			}),
+			live ? /* @__PURE__ */ jsxs(Link, {
+				className: "ft-plan",
+				to: `/blog/${item.slug}`,
+				"aria-label": `Leer la nota: ${item.title}`,
+				children: ["Leer la nota ", /* @__PURE__ */ jsx("span", {
+					"aria-hidden": "true",
+					children: "↗"
+				})]
+			}) : /* @__PURE__ */ jsxs("span", {
+				className: "ft-plan",
+				children: ["Leer la nota ", /* @__PURE__ */ jsx("span", {
+					"aria-hidden": "true",
+					children: "↗"
+				})]
+			})
+		]
+	});
+}
+var photoPage = (item) => /* @__PURE__ */ jsx("div", {
+	className: "bk-page bk-page--photo",
+	children: /* @__PURE__ */ jsx(PagePhoto, { item })
+});
+var textPage = (item) => /* @__PURE__ */ jsx("div", {
+	className: "bk-page bk-page--text",
+	children: /* @__PURE__ */ jsx(PageText, { item })
+});
+var faceContent = (kind, item) => kind === "photo" ? photoPage(item) : kind === "text" ? textPage(item) : /* @__PURE__ */ jsxs(Fragment$1, { children: [photoPage(item), textPage(item)] });
+function Face({ kind, item, side, spine, segment, split }) {
+	const w = segment === "a" ? SPLIT : .7;
+	const inner = split ? `${(100 / w).toFixed(4)}%` : "100%";
+	let left = 0;
+	if (split) left = spine === "left" === (segment === "a") ? 0 : -((1 - w) / w) * 100;
+	return /* @__PURE__ */ jsx("div", {
+		className: `bk-face bk-face--${side}`,
+		children: /* @__PURE__ */ jsxs("div", {
+			className: `bk-face-in bk-paper--${kind === "photo" ? "back" : "front"}`,
+			"data-kind": kind,
+			style: {
+				width: inner,
+				left: `${left}%`
+			},
+			"data-spine": spine,
+			children: [
+				faceContent(kind, item),
+				/* @__PURE__ */ jsx("i", { className: "bk-shade" }),
+				/* @__PURE__ */ jsx("i", { className: "bk-gloss" })
+			]
+		})
+	});
+}
+function Leaf({ turn, cards, split, mobileSingle }) {
+	const fw = turn.forward;
+	const from = cards[turn.from], to = cards[turn.to];
+	const front = mobileSingle ? {
+		kind: "both",
+		item: fw ? from : to,
+		spine: "left"
+	} : fw ? {
+		kind: "text",
+		item: from,
+		spine: "left"
+	} : {
+		kind: "photo",
+		item: from,
+		spine: "right"
+	};
+	const back = mobileSingle ? {
+		kind: "both",
+		item: fw ? to : from,
+		spine: "right"
+	} : fw ? {
+		kind: "photo",
+		item: to,
+		spine: "right"
+	} : {
+		kind: "text",
+		item: to,
+		spine: "left"
+	};
+	return /* @__PURE__ */ jsx("div", {
+		className: "ft-leaf",
+		"data-direction": fw ? "next" : "previous",
+		"data-single": mobileSingle || void 0,
+		children: (split ? ["a", "b"] : ["a"]).map((s) => /* @__PURE__ */ jsxs("div", {
+			className: `bk-seg bk-seg--${s}`,
+			"data-seg": s,
+			children: [/* @__PURE__ */ jsx(Face, {
+				side: "front",
+				kind: front.kind,
+				item: front.item,
+				spine: front.spine,
+				segment: s,
+				split
+			}), /* @__PURE__ */ jsx(Face, {
+				side: "back",
+				kind: back.kind,
+				item: back.item,
+				spine: back.spine,
+				segment: s,
+				split
+			})]
+		}, s))
+	});
+}
 function BlogBook() {
-	const cards = articles, reduce = useLightMotion();
+	const cards = articles, light = useLightMotion(), mobile = useMedia("(max-width: 799px)");
 	const [sel, setSel] = useState(0);
+	const [view, setView] = useState({
+		l: 0,
+		r: 0
+	});
 	const [turn, setTurn] = useState(null);
-	const leafRef = useRef(null), selected = useRef(0), serial = useRef(0);
-	const card = cards[sel];
+	const windowRef = useRef(null), selected = useRef(0), serial = useRef(0), touch = useRef(null), wasLight = useRef(light);
+	const canAnimate = () => !light && typeof Element.prototype.animate === "function";
+	const rootRef = useRef(null);
 	useEffect(() => {
-		const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-		const cancelReducedTurn = () => {
-			if (query.matches) setTurn(null);
-		};
-		query.addEventListener("change", cancelReducedTurn);
-		return () => query.removeEventListener("change", cancelReducedTurn);
-	}, []);
-	useEffect(() => {
-		if (reduce) setTurn(null);
-	}, [reduce]);
+		const observer = new IntersectionObserver(([entry]) => {
+			if (entry.isIntersecting) {
+				cards.forEach((c) => {
+					const img = new Image();
+					img.srcset = c.image.srcset || "";
+					img.sizes = "(max-width:799px) 90vw, 42vw";
+					img.src = c.image.src;
+				});
+				observer.disconnect();
+			}
+		}, { rootMargin: "50% 0px" });
+		observer.observe(rootRef.current);
+		return () => observer.disconnect();
+	}, [cards]);
+	const settle = (to) => {
+		setView((v) => v.l === to && v.r === to ? v : {
+			l: to,
+			r: to
+		});
+		setTurn(null);
+	};
 	const choose = (i) => {
 		i = Math.min(cards.length - 1, Math.max(0, i));
-		const previous = selected.current;
-		if (i === previous) return;
+		const from = selected.current;
+		if (i === from) return;
 		selected.current = i;
 		setSel(i);
-		setTurn(reduce ? null : {
-			from: previous,
+		if (!canAnimate()) {
+			settle(i);
+			return;
+		}
+		const forward = i > from;
+		setView(mobile ? {
+			l: forward ? i : from,
+			r: forward ? i : from
+		} : forward ? {
+			l: from,
+			r: i
+		} : {
+			l: i,
+			r: from
+		});
+		setTurn({
+			from,
 			to: i,
-			forward: i > previous,
+			forward,
 			id: ++serial.current
 		});
 	};
+	const mounted = useRef(false);
 	useLayoutEffect(() => {
-		if (!turn) return;
-		const el = leafRef.current;
-		if (!el?.animate || reduce) {
-			setTurn(null);
+		if (!mounted.current) {
+			mounted.current = true;
 			return;
 		}
-		const animation = el.animate([{ transform: `rotateY(${turn.forward ? 0 : 180}deg)` }, { transform: `rotateY(${turn.forward ? 180 : 0}deg)` }], {
-			duration: 600,
-			easing: "cubic-bezier(.32,.72,0,1)",
+		if (light) rootRef.current?.querySelectorAll(".bk-fade").forEach((el) => el.animate?.([{ opacity: 0 }, { opacity: 1 }], {
+			duration: 150,
+			easing: "ease"
+		}));
+	}, [view.l, view.r]);
+	useEffect(() => {
+		if (light && !wasLight.current) settle(selected.current);
+		wasLight.current = light;
+	}, [light]);
+	useEffect(() => {
+		settle(selected.current);
+	}, [mobile]);
+	useLayoutEffect(() => {
+		if (!turn) return void 0;
+		const root = windowRef.current;
+		if (!root) return void 0;
+		const fw = turn.forward, opt = {
+			duration: mobile ? 700 : 850,
+			easing: EASE,
 			fill: "both"
-		});
-		animation.onfinish = () => setTurn((current) => current?.id === turn.id ? null : current);
-		return () => {
-			animation.onfinish = null;
-			animation.cancel();
 		};
-	}, [turn, reduce]);
+		const anims = [];
+		const play = (el, frames) => {
+			if (el) anims.push(el.animate(frames, opt));
+		};
+		const leaf = root.querySelector(".ft-leaf");
+		const single = mobile;
+		const dir = fw ? -1 : 1;
+		const rot = (a, z) => `translateZ(${z}px) rotateY(${a}deg)`;
+		if (single && !fw) play(leaf, [
+			{
+				transform: rot(-180, 0),
+				offset: 0
+			},
+			{
+				transform: rot(-90, 24),
+				offset: .5
+			},
+			{
+				transform: rot(0, 0),
+				offset: 1
+			}
+		]);
+		else play(leaf, [
+			{
+				transform: rot(0, 0),
+				offset: 0
+			},
+			{
+				transform: rot(90 * dir, 24),
+				offset: .5
+			},
+			{
+				transform: rot(180 * dir, 0),
+				offset: 1
+			}
+		]);
+		if (single) play(leaf, fw ? [
+			{
+				opacity: 1,
+				offset: 0
+			},
+			{
+				opacity: 1,
+				offset: 100 / 180
+			},
+			{
+				opacity: 0,
+				offset: 160 / 180
+			},
+			{
+				opacity: 0,
+				offset: 1
+			}
+		] : [
+			{
+				opacity: 0,
+				offset: 0
+			},
+			{
+				opacity: 0,
+				offset: 20 / 180
+			},
+			{
+				opacity: 1,
+				offset: 80 / 180
+			},
+			{
+				opacity: 1,
+				offset: 1
+			}
+		]);
+		else play(root.querySelector(".bk-seg--b"), ANGLE_B.map(([offset, a]) => ({
+			transform: `rotateY(${fw ? a : -a}deg)`,
+			offset
+		})));
+		root.querySelectorAll(".bk-shade").forEach((el) => play(el, [
+			{
+				opacity: 0,
+				offset: 0
+			},
+			{
+				opacity: .4,
+				offset: .5
+			},
+			{
+				opacity: 0,
+				offset: 1
+			}
+		]));
+		root.querySelectorAll(".bk-gloss").forEach((el) => play(el, [{
+			transform: "translateX(-100%)",
+			opacity: 1
+		}, {
+			transform: "translateX(733%)",
+			opacity: 1
+		}]));
+		play(root.querySelector(".bk-cast"), [
+			{
+				opacity: 0,
+				offset: 0
+			},
+			{
+				opacity: 1,
+				offset: 1 / 3
+			},
+			{
+				opacity: 1,
+				offset: 2 / 3
+			},
+			{
+				opacity: 0,
+				offset: 1
+			}
+		]);
+		const main = anims[0];
+		if (main) main.onfinish = () => {
+			setView({
+				l: turn.to,
+				r: turn.to
+			});
+			setTurn((current) => current?.id === turn.id ? null : current);
+		};
+		return () => {
+			anims.forEach((a) => {
+				a.onfinish = null;
+				a.cancel();
+			});
+		};
+	}, [turn, mobile]);
 	const onKey = (e, i) => {
 		const n = e.key === "ArrowRight" ? i + 1 : e.key === "ArrowLeft" ? i - 1 : e.key === "Home" ? 0 : e.key === "End" ? cards.length - 1 : null;
 		if (n === null || n < 0 || n >= cards.length) return;
@@ -1802,12 +2084,24 @@ function BlogBook() {
 			else if (item.right > viewport.right - 4) strip.scrollLeft += item.right - viewport.right + 4;
 		}
 	};
-	const pageImage = (item) => /* @__PURE__ */ jsx(Picture, {
-		photo: item.image,
-		alt: "",
-		sizes: "(max-width:799px) 90vw, 42vw"
-	});
+	const onTouchStart = (e) => {
+		const t = e.touches[0];
+		touch.current = {
+			x: t.clientX,
+			y: t.clientY
+		};
+	};
+	const onTouchEnd = (e) => {
+		const start = touch.current;
+		touch.current = null;
+		if (!start || !mobile) return;
+		const t = e.changedTouches[0], dx = t.clientX - start.x, dy = t.clientY - start.y;
+		if (Math.abs(dx) >= 48 && Math.abs(dx) > Math.abs(dy) * 1.2) choose(selected.current + (dx < 0 ? 1 : -1));
+	};
+	const card = cards[sel], left = cards[view.l], right = cards[view.r];
+	const fw = turn?.forward;
 	return /* @__PURE__ */ jsxs("section", {
+		ref: rootRef,
 		className: "blog-book wrap section",
 		"aria-labelledby": "blog-book-title",
 		children: [/* @__PURE__ */ jsxs("div", {
@@ -1830,141 +2124,523 @@ function BlogBook() {
 			})]
 		}), /* @__PURE__ */ jsxs("div", {
 			className: "ft ft-book",
-			"data-turning": Boolean(turn) && !reduce,
-			children: [/* @__PURE__ */ jsxs("div", {
+			"data-turning": Boolean(turn),
+			"data-mobile": mobile || void 0,
+			children: [/* @__PURE__ */ jsx("div", {
 				className: "ft-main",
-				children: [
-					/* @__PURE__ */ jsx("div", {
-						className: "ft-card",
-						children: /* @__PURE__ */ jsx(Link, {
-							className: "ft-media",
-							to: `/blog/${card.slug}`,
-							"aria-label": card.title,
-							children: pageImage(card)
+				onTouchStart,
+				onTouchEnd,
+				children: /* @__PURE__ */ jsxs("div", {
+					className: "bk-spread",
+					children: [
+						/* @__PURE__ */ jsx("div", {
+							className: "bk-page bk-page--photo",
+							children: /* @__PURE__ */ jsx("div", {
+								className: "bk-fade",
+								children: /* @__PURE__ */ jsx(PagePhoto, {
+									item: left,
+									link: card
+								})
+							}, view.l)
+						}),
+						/* @__PURE__ */ jsx("div", {
+							className: "bk-page bk-page--text",
+							children: /* @__PURE__ */ jsx("div", {
+								className: "bk-fade",
+								children: /* @__PURE__ */ jsx(PageText, {
+									item: right,
+									live: true
+								})
+							}, view.r)
+						}),
+						/* @__PURE__ */ jsx("span", {
+							className: "bk-spine",
+							"aria-hidden": "true"
+						}),
+						turn && /* @__PURE__ */ jsxs("div", {
+							ref: windowRef,
+							className: "ft-turn-window",
+							"aria-hidden": "true",
+							inert: true,
+							"data-direction": fw ? "next" : "previous",
+							children: [/* @__PURE__ */ jsx("i", { className: "bk-cast" }), /* @__PURE__ */ jsx(Leaf, {
+								turn,
+								cards,
+								split: !mobile,
+								mobileSingle: mobile
+							}, turn.id)]
 						})
-					}),
-					/* @__PURE__ */ jsxs("div", {
-						className: "ft-side",
+					]
+				})
+			}), /* @__PURE__ */ jsxs("div", {
+				className: "bk-footer",
+				children: [/* @__PURE__ */ jsx("div", {
+					className: "ft-strip",
+					role: "group",
+					"aria-label": "Elegir nota",
+					children: cards.map((x, i) => /* @__PURE__ */ jsxs("button", {
+						type: "button",
+						className: "ft-thumb",
+						"aria-pressed": i === sel,
+						"aria-label": x.title,
+						onClick: () => choose(i),
+						onKeyDown: (e) => onKey(e, i),
+						children: [/* @__PURE__ */ jsx("span", {
+							className: "book-index",
+							children: two(i + 1)
+						}), /* @__PURE__ */ jsx("span", { children: x.tag })]
+					}, x.slug))
+				}), /* @__PURE__ */ jsxs("div", {
+					className: "bk-ctl",
+					children: [/* @__PURE__ */ jsxs("p", {
+						className: "ft-count",
+						role: "status",
+						"aria-live": "polite",
 						children: [
-							/* @__PURE__ */ jsxs("p", {
-								className: "ft-count",
-								role: "status",
-								"aria-live": "polite",
-								children: [
-									two(sel + 1),
-									" / ",
-									cards.length
-								]
+							two(sel + 1),
+							" / ",
+							two(cards.length)
+						]
+					}), /* @__PURE__ */ jsxs("div", {
+						className: "ft-nav",
+						children: [/* @__PURE__ */ jsx("button", {
+							type: "button",
+							"aria-label": "Nota anterior",
+							disabled: sel === 0,
+							onClick: () => choose(selected.current - 1),
+							children: "←"
+						}), /* @__PURE__ */ jsx("button", {
+							type: "button",
+							"aria-label": "Nota siguiente",
+							disabled: sel === cards.length - 1,
+							onClick: () => choose(selected.current + 1),
+							children: "→"
+						})]
+					})]
+				})]
+			})]
+		})]
+	});
+}
+//#endregion
+//#region src/inicio-videos.js
+var inicioVideos = {
+	hero: {
+		src: null,
+		poster: null
+	},
+	historia: {
+		src: null,
+		poster: null,
+		captions: null
+	}
+};
+var perfil = company.instagram;
+var instagram = {
+	profile: {
+		name: "Transporte y Turismo Medellín",
+		handle: "@transporteenmedellin",
+		url: company.instagram,
+		stats: null
+	},
+	tiktok: {
+		handle: "@tytmedellin",
+		url: company.tiktok
+	},
+	posts: [
+		{
+			url: perfil,
+			image: null,
+			type: "reel",
+			alt: ""
+		},
+		{
+			url: perfil,
+			image: null,
+			type: "carousel",
+			alt: ""
+		},
+		{
+			url: perfil,
+			image: null,
+			type: "reel",
+			alt: ""
+		},
+		{
+			url: perfil,
+			image: null,
+			type: "photo",
+			alt: ""
+		},
+		{
+			url: perfil,
+			image: null,
+			type: "carousel",
+			alt: ""
+		},
+		{
+			url: perfil,
+			image: null,
+			type: "reel",
+			alt: ""
+		},
+		{
+			url: perfil,
+			image: null,
+			type: "photo",
+			alt: ""
+		},
+		{
+			url: perfil,
+			image: null,
+			type: "reel",
+			alt: ""
+		}
+	]
+};
+//#endregion
+//#region src/HomeVideos.jsx
+var Provisional = () => /* @__PURE__ */ jsx("span", {
+	className: "vlabel",
+	children: "Video próximamente"
+});
+function useHeroPlayback(ref, light, enabled) {
+	const [playing, setPlaying] = useState(false);
+	const manual = useRef(false);
+	useEffect(() => {
+		const el = ref.current;
+		if (!enabled || !el) return void 0;
+		const sync = () => setPlaying(!el.paused);
+		el.addEventListener("play", sync);
+		el.addEventListener("pause", sync);
+		if (light) el.pause();
+		else el.play().catch(() => {});
+		const observer = new IntersectionObserver(([entry]) => {
+			if (light || manual.current) return;
+			if (entry.isIntersecting) el.play().catch(() => {});
+			else el.pause();
+		});
+		observer.observe(el);
+		return () => {
+			observer.disconnect();
+			el.removeEventListener("play", sync);
+			el.removeEventListener("pause", sync);
+		};
+	}, [
+		ref,
+		light,
+		enabled
+	]);
+	const toggle = () => {
+		const el = ref.current;
+		if (!el) return;
+		manual.current = true;
+		if (el.paused) el.play().catch(() => {});
+		else el.pause();
+	};
+	return [playing, toggle];
+}
+function HomeHero() {
+	const v = inicioVideos.hero, light = useLightMotion(), video = useRef(null), section = useRef(null);
+	const [playing, toggle] = useHeroPlayback(video, light, Boolean(v.src));
+	useEffect(() => {
+		const html = document.documentElement, header = document.querySelector(".site-header")?.offsetHeight || 92;
+		const observer = new IntersectionObserver(([entry]) => {
+			html.dataset.hero = entry.isIntersecting ? "over" : "past";
+		}, { rootMargin: `-${header}px 0px 0px 0px` });
+		observer.observe(section.current);
+		return () => {
+			observer.disconnect();
+			delete html.dataset.hero;
+		};
+	}, []);
+	const t = inicioTextos;
+	return /* @__PURE__ */ jsxs("section", {
+		ref: section,
+		className: "home-hero",
+		"data-hero": true,
+		"data-video": v.src ? "on" : "off",
+		"aria-labelledby": "hero-titulo",
+		children: [
+			/* @__PURE__ */ jsx("div", {
+				className: "hero-media",
+				"aria-hidden": "true",
+				children: v.src && /* @__PURE__ */ jsx("video", {
+					ref: video,
+					src: v.src,
+					poster: v.poster || void 0,
+					muted: true,
+					loop: true,
+					playsInline: true,
+					autoPlay: !light,
+					preload: "metadata",
+					tabIndex: -1
+				})
+			}),
+			v.src && /* @__PURE__ */ jsx("div", {
+				className: "hero-shade",
+				"aria-hidden": "true"
+			}),
+			/* @__PURE__ */ jsxs("div", {
+				className: "hero-copy",
+				children: [
+					/* @__PURE__ */ jsx("p", {
+						className: "eyebrow hero-eyebrow",
+						children: t.lema
+					}),
+					/* @__PURE__ */ jsxs("h1", {
+						id: "hero-titulo",
+						children: [
+							/* @__PURE__ */ jsx("span", {
+								className: "hero-l1",
+								children: t.titular[0]
 							}),
-							/* @__PURE__ */ jsx("p", {
-								className: "eyebrow book-tag",
-								children: card.tag
-							}),
-							/* @__PURE__ */ jsx("h3", {
-								className: "ft-name",
-								children: card.title
-							}),
-							/* @__PURE__ */ jsx("p", {
-								className: "ft-line",
-								children: card.intro
-							}),
-							/* @__PURE__ */ jsxs(Link, {
-								className: "ft-plan",
-								to: `/blog/${card.slug}`,
-								"aria-label": `Leer la nota: ${card.title}`,
-								children: ["Leer la nota ", /* @__PURE__ */ jsx("span", {
-									"aria-hidden": "true",
-									children: "↗"
-								})]
-							}),
-							/* @__PURE__ */ jsxs("div", {
-								className: "ft-nav",
-								children: [/* @__PURE__ */ jsx("button", {
-									type: "button",
-									"aria-label": "Nota anterior",
-									disabled: sel === 0,
-									onClick: () => choose(selected.current - 1),
-									children: "←"
-								}), /* @__PURE__ */ jsx("button", {
-									type: "button",
-									"aria-label": "Nota siguiente",
-									disabled: sel === cards.length - 1,
-									onClick: () => choose(selected.current + 1),
-									children: "→"
-								})]
+							" ",
+							/* @__PURE__ */ jsx("span", {
+								className: "hero-l2",
+								children: t.titular[1]
 							})
 						]
 					}),
-					turn && !reduce && /* @__PURE__ */ jsx("div", {
-						className: "ft-turn-window",
-						"aria-hidden": "true",
-						inert: true,
-						children: /* @__PURE__ */ jsxs("div", {
-							ref: leafRef,
-							className: "ft-leaf",
-							"data-direction": turn.forward ? "next" : "previous",
-							children: [/* @__PURE__ */ jsx("div", {
-								className: "ft-leaf-front",
-								children: pageImage(cards[turn.forward ? turn.from : turn.to])
-							}), /* @__PURE__ */ jsx("div", {
-								className: "ft-leaf-back",
-								children: /* @__PURE__ */ jsx("span", { children: two(turn.forward ? turn.to + 1 : turn.from + 1) })
-							})]
-						}, turn.id)
+					/* @__PURE__ */ jsx("p", {
+						className: "hero-support",
+						children: t.confianza
+					}),
+					/* @__PURE__ */ jsxs("div", {
+						className: "hero-actions",
+						children: [/* @__PURE__ */ jsxs(Link, {
+							className: "button hero-btn hero-btn--explore",
+							to: "/experiencias",
+							children: ["Explorar experiencias", /* @__PURE__ */ jsx(Arrow, {})]
+						}), /* @__PURE__ */ jsxs(Link, {
+							className: "button hero-btn hero-btn--quote",
+							to: "/cotizar",
+							children: ["Planeemos tu viaje", /* @__PURE__ */ jsx(Arrow, {})]
+						})]
 					})
 				]
-			}), /* @__PURE__ */ jsx("div", {
-				className: "ft-strip",
-				role: "group",
-				"aria-label": "Elegir nota",
-				children: cards.map((x, i) => /* @__PURE__ */ jsxs("button", {
-					type: "button",
-					className: "ft-thumb",
-					"aria-pressed": i === sel,
-					"aria-label": x.title,
-					onClick: () => choose(i),
-					onKeyDown: (e) => onKey(e, i),
-					children: [/* @__PURE__ */ jsx("span", {
-						className: "book-index",
-						children: two(i + 1)
-					}), /* @__PURE__ */ jsx("span", { children: x.tag })]
-				}, x.slug))
-			})]
+			}),
+			v.src && /* @__PURE__ */ jsx("button", {
+				type: "button",
+				className: "hero-pause",
+				onClick: toggle,
+				"aria-label": playing ? "Pausar video" : "Reproducir video",
+				children: /* @__PURE__ */ jsx("span", {
+					"aria-hidden": "true",
+					children: playing ? "❚❚" : "▶"
+				})
+			})
+		]
+	});
+}
+function HomeStory() {
+	const v = inicioVideos.historia;
+	return /* @__PURE__ */ jsxs("section", {
+		className: "home-story wrap",
+		id: "historia",
+		"aria-labelledby": "historia-titulo",
+		children: [/* @__PURE__ */ jsx("div", {
+			className: "vframe vframe--story",
+			children: v.src ? /* @__PURE__ */ jsx("video", {
+				src: v.src,
+				poster: v.poster || void 0,
+				controls: true,
+				playsInline: true,
+				preload: "none",
+				"aria-label": "Video de presentación de T&T Medellín",
+				children: v.captions && /* @__PURE__ */ jsx("track", {
+					kind: "captions",
+					srcLang: "es",
+					label: "Español",
+					src: v.captions,
+					default: true
+				})
+			}) : /* @__PURE__ */ jsx(Provisional, {})
+		}), /* @__PURE__ */ jsxs("div", {
+			className: "story-copy",
+			children: [
+				/* @__PURE__ */ jsx(Eyebrow, { children: "Más que llegar" }),
+				/* @__PURE__ */ jsxs("h2", {
+					id: "historia-titulo",
+					children: [
+						"Hay una Medellín que se mira.",
+						/* @__PURE__ */ jsx("br", {}),
+						"Y otra que se ",
+						/* @__PURE__ */ jsx("em", { children: "vive." })
+					]
+				}),
+				/* @__PURE__ */ jsx("p", { children: "La encuentras en una conversación, en el color de una calle y en la curva que abre un nuevo paisaje. Queremos acompañarte a descubrirla con el cuidado de un equipo local." }),
+				/* @__PURE__ */ jsxs(Link, {
+					className: "button secondary",
+					to: "/nosotros",
+					children: ["Conoce al equipo", /* @__PURE__ */ jsx(Arrow, {})]
+				})
+			]
 		})]
+	});
+}
+function HomeClose() {
+	const f = inicioTextos.fases.final;
+	return /* @__PURE__ */ jsx("section", {
+		className: "home-close section",
+		"aria-labelledby": "cierre-titulo",
+		children: /* @__PURE__ */ jsxs("div", {
+			className: "wrap",
+			children: [
+				/* @__PURE__ */ jsxs("h2", {
+					id: "cierre-titulo",
+					children: [
+						"Tu viaje, tus tiempos,",
+						/* @__PURE__ */ jsx("br", {}),
+						"tu ",
+						/* @__PURE__ */ jsx("em", { children: "experiencia." })
+					]
+				}),
+				/* @__PURE__ */ jsx("p", { children: f.subtitulo }),
+				/* @__PURE__ */ jsxs("div", {
+					className: "close-actions",
+					children: [/* @__PURE__ */ jsxs(Link, {
+						className: "button",
+						to: "/cotizar",
+						children: ["Planeemos tu viaje", /* @__PURE__ */ jsx(Arrow, {})]
+					}), /* @__PURE__ */ jsxs("a", {
+						className: "button secondary",
+						href: whatsapp(),
+						target: "_blank",
+						rel: "noopener noreferrer",
+						children: ["Escríbenos por WhatsApp", /* @__PURE__ */ jsx(Arrow, {})]
+					})]
+				})
+			]
+		})
+	});
+}
+var TYPE_LABEL = {
+	reel: "Reel",
+	carousel: "Carrusel",
+	photo: "Publicación"
+};
+var REEL = "M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Zm0 5h16M9 3l3 5m3-5 3 5M10 12.5v5l4.5-2.5-4.5-2.5Z";
+var CAROUSEL = "M7 7h11a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Zm2-3h9a3 3 0 0 1 3 3v9";
+function HomeSocial() {
+	const { profile, tiktok, posts } = instagram, st = profile.stats;
+	const stats = st ? [
+		["Publicaciones", st.posts],
+		["Seguidores", st.followers],
+		["Siguiendo", st.following]
+	].filter(([, v]) => v) : [];
+	return /* @__PURE__ */ jsxs("section", {
+		className: "home-social wrap section",
+		"aria-labelledby": "redes-titulo",
+		children: [
+			/* @__PURE__ */ jsx("h2", {
+				id: "redes-titulo",
+				children: "Síguenos en redes"
+			}),
+			/* @__PURE__ */ jsxs("div", {
+				className: "ig-head",
+				children: [
+					/* @__PURE__ */ jsx("img", {
+						className: "ig-avatar",
+						src: "/media/marca/logo/logo-112.webp",
+						srcSet: "/media/marca/logo/logo-112.webp 112w, /media/marca/logo/logo-168.webp 168w, /media/marca/logo/logo-224.webp 224w",
+						sizes: "112px",
+						width: "112",
+						height: "112",
+						alt: "",
+						loading: "lazy",
+						decoding: "async"
+					}),
+					/* @__PURE__ */ jsx("p", {
+						className: "ig-name",
+						children: profile.name
+					}),
+					/* @__PURE__ */ jsx("p", {
+						className: "ig-handle",
+						children: profile.handle
+					}),
+					stats.length > 0 && /* @__PURE__ */ jsx("dl", {
+						className: "ig-stats",
+						children: stats.map(([label, value]) => /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("dt", { children: label }), /* @__PURE__ */ jsx("dd", { children: value })] }, label))
+					}),
+					/* @__PURE__ */ jsxs("a", {
+						className: "ig-follow",
+						href: profile.url,
+						target: "_blank",
+						rel: "noopener noreferrer",
+						"aria-label": `Seguir a ${profile.handle} en Instagram (se abre en una pestaña nueva)`,
+						children: [/* @__PURE__ */ jsx(SocialIcon, {
+							id: "instagram",
+							size: 20
+						}), "Seguir"]
+					})
+				]
+			}),
+			/* @__PURE__ */ jsx("ul", {
+				className: "ig-grid",
+				role: "list",
+				children: posts.map((post, i) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsxs("a", {
+					className: "ig-tile",
+					href: post.url,
+					target: "_blank",
+					rel: "noopener noreferrer",
+					"aria-label": `${post.alt || `${TYPE_LABEL[post.type] || "Publicación"} ${i + 1} de Instagram`} (se abre en una pestaña nueva)`,
+					children: [post.image && /* @__PURE__ */ jsx("img", {
+						src: post.image,
+						alt: "",
+						width: "640",
+						height: "640",
+						loading: "lazy",
+						decoding: "async"
+					}), (post.type === "reel" || post.type === "carousel") && /* @__PURE__ */ jsx("svg", {
+						className: "ig-type",
+						viewBox: "0 0 24 24",
+						width: "24",
+						height: "24",
+						fill: "none",
+						stroke: "currentColor",
+						strokeWidth: "1.8",
+						strokeLinecap: "round",
+						strokeLinejoin: "round",
+						"aria-hidden": "true",
+						focusable: "false",
+						children: /* @__PURE__ */ jsx("path", { d: post.type === "reel" ? REEL : CAROUSEL })
+					})]
+				}) }, i))
+			}),
+			/* @__PURE__ */ jsxs("a", {
+				className: "text-link ig-tiktok",
+				href: tiktok.url,
+				target: "_blank",
+				rel: "noopener noreferrer",
+				"aria-label": `También en TikTok ${tiktok.handle} (se abre en una pestaña nueva)`,
+				children: [
+					"También en TikTok ",
+					tiktok.handle,
+					" ",
+					/* @__PURE__ */ jsx("span", {
+						"aria-hidden": "true",
+						children: "↗"
+					})
+				]
+			})
+		]
 	});
 }
 //#endregion
 //#region src/pages/Home.jsx
 function Home() {
 	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
+		/* @__PURE__ */ jsx(HomeHero, {}),
+		/* @__PURE__ */ jsx(HomeStory, {}),
 		/* @__PURE__ */ jsx(ScrubHero, {
-			nextId: "descubrir",
+			nextId: "formas-de-viajar",
 			cards: tours.map((t, i) => ({
 				slug: t.slug,
 				name: t.name,
 				n: i + 1
 			})),
-			actions: /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsxs(Link, {
-				className: "button scrub-btn scrub-btn--explore",
-				to: "/experiencias",
-				children: ["Explorar experiencias", /* @__PURE__ */ jsx(Arrow, {})]
-			}), /* @__PURE__ */ jsxs(Link, {
-				className: "button scrub-btn scrub-btn--quote",
-				to: "/cotizar",
-				children: ["Planeemos tu viaje", /* @__PURE__ */ jsx(Arrow, {})]
-			})] }),
 			summary: "Apertura: una baraja de doce experiencias. La carta superior se abre en una transición cinematográfica sobre Medellín que termina en la Plaza Botero y luego se despliegan las doce experiencias, cada una con su enlace."
-		}),
-		/* @__PURE__ */ jsxs("section", {
-			className: "intro wrap",
-			id: "descubrir",
-			tabIndex: -1,
-			children: [/* @__PURE__ */ jsx(Eyebrow, { children: "Más que llegar" }), /* @__PURE__ */ jsxs(Reveal, { children: [/* @__PURE__ */ jsxs("h2", { children: [
-				"Hay una Medellín que se mira.",
-				/* @__PURE__ */ jsx("br", {}),
-				"Y otra que se ",
-				/* @__PURE__ */ jsx("em", { children: "vive." })
-			] }), /* @__PURE__ */ jsx("p", { children: "La encuentras en una conversación, en el color de una calle y en la curva que abre un nuevo paisaje. Queremos acompañarte a descubrirla con el cuidado de un equipo local." })] })]
 		}),
 		/* @__PURE__ */ jsx(ExperienceExplorer, {}),
 		/* @__PURE__ */ jsxs("section", {
@@ -2027,7 +2703,9 @@ function Home() {
 				})
 			] })]
 		}),
-		/* @__PURE__ */ jsx(BlogBook, {})
+		/* @__PURE__ */ jsx(BlogBook, {}),
+		/* @__PURE__ */ jsx(HomeClose, {}),
+		/* @__PURE__ */ jsx(HomeSocial, {})
 	] });
 }
 //#endregion

@@ -82,22 +82,23 @@ export function buildDims(W, H, mobile, frame) {
   const pad = clamp(W * 0.05, 22, 88);
   let Bh, Hd, deck, focus, m = null;
   if (mobile) {
-    // Móvil: encima de la banda de texto (BAND_M) cabe «Medellín,» / baraja / «a otro nivel.» / confianza, sin solapes:
-    // el borde superior de la baraja (con su rotación) queda ≥ 16 px bajo «Medellín,» y la baraja mide ≤ 300 px de alto.
-    const A = H - BAND_M, fs = clamp(Math.min(W * 0.13, (W - 44) / 7.8), 38, 64), line = fs * 0.95, short = A < 480;
-    const t1Top = short ? 12 : 40, microH = short ? 0 : 44, gapT = 16, gapB = 14, pb = 12;
+    // Móvil (Spec 03 §J1): encima de la banda de texto (BAND_M) cabe el título «Elige tu próximo recuerdo» (2 líneas, mismo tamaño que el CSS)
+    // y la baraja; el borde superior de la baraja (con su rotación) queda ≥ 16 px bajo el título y la baraja mide ≤ 300 px de alto.
+    const A = H - BAND_M, fs = clamp((W - 44) / 10.5, 28, 40), line = fs * 1.05 * 2, short = A < 480;
+    const t1Top = short ? 12 : 40, gapT = 16, pb = 12;
     const rotAllow = (hd) => hd * 0.4 * Math.sin(6.5 * Math.PI / 180) + 8; // media anchura × sen(rotación máx.) + desplazamiento
-    const fixed = t1Top + line + gapT + gapB + line + (short ? 0 : 10 + microH) + pb;
+    const fixed = t1Top + line + gapT + pb;
     Hd = clamp((A - fixed) - 2 * rotAllow(300), 150, 300);
     const al = rotAllow(Hd);
     const deckTop = t1Top + line + gapT + al;
-    deck = { x: W / 2, y: deckTop + Hd / 2 };
+    // El espacio libre (sin segunda línea de titular ni confianza) se reparte: la baraja se centra entre el título y la tira de miniaturas (≈148 px sobre el borde inferior).
+    const free = (H - 164) - (deckTop + Hd + al);
+    deck = { x: W / 2, y: deckTop + Hd / 2 + Math.max(0, free / 2) };
     // Las cartas enfocadas llenan el ancho útil; la altura se adapta al teléfono.
     // Reservar 280 px para nombre, frase y controles, incluso en 360×640.
     Bh = Math.min(Math.min(W - 56, 340) * 1.25, H - 320);
     focus = { x: W / 2, y: (H - 280) / 2 };
-    const bottomEdge = deck.y + Hd / 2 + al, t2Top = bottomEdge + gapB;
-    m = { t1Top, t2Top, microTop: t2Top + line + 10, short, A };
+    m = { t1Top, short, A };
   } else {
     Bh = clamp(H * 0.64, 280, 640);
     Hd = clamp(H * 0.31, 220, 360);

@@ -1,66 +1,81 @@
-/* Spec 03: álbum de experiencias. Hoja física 600 ms; controles fuera de la capa decorativa. */
-.ft-book .ft-main{position:relative;isolation:isolate;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;align-items:stretch;padding:12px;background:#eeece7;border:1px solid #d4d2cb;border-radius:8px 16px 16px 8px;box-shadow:0 3px 0 #fff,0 5px 0 #d4d2cb,0 8px 0 #fff,0 10px 0 #d4d2cb,0 26px 48px #3c3f3b24}
-.ft-book .ft-main::after{content:"";position:absolute;inset:12px auto 12px 50%;width:22px;transform:translateX(-50%);background:linear-gradient(90deg,transparent,#3c3f3b18 45%,#fff9 52%,transparent);pointer-events:none;z-index:4}
-.ft-book .ft-card{min-width:0;display:flex;border:0;border-radius:3px 0 0 3px;box-shadow:none;background:#fff;padding:22px}
-.ft-book .ft-media{width:100%;height:100%;max-height:none;aspect-ratio:4/5;align-content:center}
-.ft-book .ft-media picture{height:100%;min-height:0}
-.ft-book .ft-media img{object-fit:contain}
-.ft-book .ft-side{min-width:0;display:flex;flex-direction:column;justify-content:center;padding:clamp(22px,3vw,54px);background:#fffefa;border-radius:0 3px 3px 0}
-.ft-book .ft-count{display:block!important;margin-bottom:24px}
-.ft-book .ft-name{font-size:clamp(28px,3.2vw,48px);min-height:0;max-width:16ch;display:block}
-.ft-book .ft-line{min-height:4.8em}
-.ft-book .ft-plan{align-self:flex-start;max-width:100%;padding:12px 20px}
-.ft-book .ft-nav{margin-top:24px}
-.ft-book .ft-plan,.ft-book .ft-nav{position:relative;z-index:5;background:#fff}
-.ft-book .ft-nav{align-self:flex-start;border-radius:28px}
-.ft-book .ft-nav button:disabled{opacity:.35;cursor:default;transform:none}
-.ft-book .ft-turn-window{position:absolute;inset:12px;perspective:1800px;pointer-events:none;z-index:3}
-.ft-book .ft-leaf{position:absolute;inset:0 50% 0 0;transform-origin:100% 50%;transform-style:preserve-3d}
-.ft-book .ft-leaf-front,.ft-book .ft-leaf-back{position:absolute;inset:0;backface-visibility:hidden;background:#fff;padding:22px;box-shadow:0 4px 24px #3c3f3b24}
-.ft-book .ft-leaf-front picture,.ft-book .ft-leaf-front img{display:block;width:100%;height:100%;object-fit:contain}
-.ft-book .ft-leaf-back{transform:rotateY(180deg);background:linear-gradient(90deg,#eae8e1,#fffefa 14%);display:flex;align-items:flex-end;justify-content:flex-end;color:var(--text);font-size:13px}
-@media(min-width:900px){.ft-book .ft-media{aspect-ratio:5/4;min-height:0;height:clamp(460px,38vw,560px)}}
-@media(max-width:799px){
- .ft-book .ft-main{display:block;padding:8px;overflow:hidden}
- .ft-book .ft-main::after{inset:8px auto auto 8px;width:12px;height:calc((100vw - 2 * var(--pad) - 18px) * 1.25);transform:none}
- .ft-book .ft-card{padding:14px;aspect-ratio:4/5}
- .ft-book .ft-side{padding:24px 18px;border-top:1px solid #eeece7}
- .ft-book .ft-name{font-size:clamp(28px,7.2vw,40px)}
- .ft-book .ft-line{min-height:3em}
- .ft-book .ft-turn-window{inset:8px 8px auto;aspect-ratio:4/5;perspective:1200px}
- .ft-book .ft-leaf{inset:0;transform-origin:0 50%}
- .ft-book .ft-leaf-front,.ft-book .ft-leaf-back{padding:14px}
- .ft-book .ft-strip{margin-inline:0;padding-inline:2px;scroll-padding-inline:2px}
-}
-/* Spec 03 — cuaderno editorial al final; índice de notas, no miniaturas de tours. */
+/* Libro «Ideas para viajar con más sentido» — Spec 03 §J4. Materiales claro/oscuro, hoja con dos segmentos, sombras y controles fuera de las páginas. */
 .blog-book{padding-top:80px}
-.blog-book .ft{margin-top:40px}
-.blog-book .ft-main{padding:14px;background:var(--ink,#3C3F3B);border-color:var(--ink,#3C3F3B);border-radius:6px 18px 18px 6px}
-.blog-book .ft-card{padding:20px 24px 20px 20px;background:#fffefa}
-.blog-book .ft-side{padding:clamp(24px,4vw,60px)}
-.blog-book .ft-media{height:clamp(380px,38vw,520px)}
-.blog-book .ft-media img{object-fit:cover;border-radius:2px}
-.blog-book .ft-count{font:600 12px var(--font);letter-spacing:.16em}
-.blog-book .book-tag{margin-bottom:16px;font-size:12px}
-.blog-book .ft-name{font-size:clamp(28px,3vw,44px);min-height:3.2em}
-.blog-book .ft-line{font-size:16px;min-height:6.6em;margin-top:20px}
-.blog-book .ft-plan{display:inline-flex;align-items:center;gap:24px;min-height:44px;margin-top:24px;border:0;border-bottom:1px solid var(--line-strong);border-radius:0;padding:4px 0;background:none;font-weight:600}
-.blog-book .ft-nav{display:flex;gap:12px;background:none}
-.blog-book .ft-nav button{width:44px;height:44px;border:1px solid var(--line-strong);background:none}
-.blog-book .ft-strip{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;overflow:visible}
-.blog-book .ft-thumb{display:flex;flex:0 1 auto;align-items:center;gap:12px;aspect-ratio:auto;padding:10px 16px;min-height:44px;border-radius:999px;font-size:14px;opacity:1;background:var(--bg)}
-.blog-book .book-index{font-size:12px;font-variant-numeric:tabular-nums;color:var(--text-muted)}
+.blog-book .ft{margin-top:40px;max-width:1440px}
+.ft-book{--bk-cover:#1E201D;--bk-page:#FFFEFA;--bk-back:#F7F5EF;--bk-edge:#D4D2CB;--bk-cast:rgba(30,32,29,.35);--bk-spine:linear-gradient(90deg,transparent,rgba(30,32,29,.16) 45%,rgba(255,255,255,.55) 52%,transparent);--bk-shadow:0 26px 48px rgba(30,32,29,.24);--bk-persp:2400px;--bk-ink:#1E201D;--bk-ink-2:#3C3F3B}
+html[data-theme="dark"] .ft-book{--bk-cover:#101311;--bk-page:#1F2421;--bk-back:#1A1E1B;--bk-edge:#3A423C;--bk-cast:rgba(0,0,0,.55);--bk-spine:linear-gradient(90deg,transparent,rgba(0,0,0,.45) 45%,rgba(245,245,240,.06) 52%,transparent);--bk-shadow:0 26px 56px rgba(0,0,0,.55);--bk-ink:#F5F5F0;--bk-ink-2:#DEDFD8}
+
+/* Cubierta y páginas */
+.ft-book .ft-main{position:relative;display:block;padding:14px;background:var(--bk-cover);border:1px solid var(--bk-cover);border-radius:6px 18px 18px 6px;box-shadow:var(--bk-shadow);touch-action:pan-y}
+.bk-spread{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);height:clamp(440px,36vw,540px);background:var(--bk-page);border-radius:2px 8px 8px 2px;box-shadow:0 1px 0 var(--bk-edge),0 3px 0 var(--bk-page),0 4px 0 var(--bk-edge),0 6px 0 var(--bk-page),0 7px 0 var(--bk-edge)}
+.bk-page{position:relative;min-width:0;min-height:0;overflow:hidden}
+.bk-page--photo{padding:22px;background:var(--bk-back)}
+.bk-page--text{background:var(--bk-page)}
+.bk-fade{height:100%}
+.ft-book .ft-media{display:block;width:100%;height:100%;color:inherit;aspect-ratio:auto;max-height:none}
+.ft-book .ft-media img{display:block;width:100%;height:100%;object-fit:cover;border-radius:2px}
+.bk-text{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:clamp(24px,3.4vw,56px)}
+.bk-text .book-tag{margin:0 0 16px;color:var(--bk-ink-2)}
+.ft-book .ft-name{display:block;min-height:0;margin:0;max-width:16ch;color:var(--bk-ink);font:700 clamp(26px,2.8vw,40px)/1.05 var(--heading,Montserrat,Arial,sans-serif);letter-spacing:-.03em}
+.ft-book .ft-line{min-height:0;max-width:34ch;margin:20px 0 0;color:var(--bk-ink-2);font:400 16px/1.6 var(--font,Inter,Arial,sans-serif)}
+.ft-book .ft-plan{display:inline-flex;align-items:center;gap:20px;min-height:44px;margin-top:28px;padding:4px 0;border:0;border-bottom:1.5px solid var(--bk-ink);border-radius:0;background:none;color:var(--bk-ink);font:600 15px/1.3 var(--font,Inter,Arial,sans-serif)}
+.bk-spine{position:absolute;z-index:2;top:0;bottom:0;left:50%;width:28px;transform:translateX(-50%);background:var(--bk-spine);pointer-events:none}
+
+/* Controles bajo el libro: índice a la izquierda, contador y flechas a la derecha */
+.bk-footer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px 32px;margin-top:28px}
+.ft-book .ft-strip{display:flex;flex-wrap:wrap;gap:12px;margin:0;padding:0;overflow:visible}
+.ft-book .ft-thumb{display:flex;flex:0 1 auto;align-items:center;gap:12px;aspect-ratio:auto;min-height:44px;padding:10px 16px;border:1px solid var(--line-strong);border-radius:999px;background:var(--bg);color:var(--text-strong);font-size:14px;opacity:1}
+.ft-book .ft-thumb[aria-pressed=true]{border-color:var(--text-strong);box-shadow:inset 0 0 0 1px var(--text-strong)}
+.book-index{font-size:13px;font-variant-numeric:tabular-nums;color:var(--text-muted)}
+.bk-ctl{display:flex;align-items:center;gap:20px;margin-left:auto}
+.ft-book .ft-count{margin:0;font:600 13px/1 var(--font,Inter,Arial,sans-serif);letter-spacing:.12em;font-variant-numeric:tabular-nums;color:var(--text)}
+.ft-book .ft-nav{display:flex;gap:12px;margin:0}
+.ft-book .ft-nav button{width:44px;height:44px;padding:0;border:1.5px solid var(--text-strong);border-radius:50%;background:var(--surface);color:var(--text-strong);font:600 18px/1 var(--font,Inter,Arial,sans-serif)}
+.ft-book .ft-nav button:disabled{opacity:1;color:var(--text-muted);border-color:var(--line-strong);cursor:default}
+html[data-theme="dark"] .ft-book .ft-nav button:disabled{border-color:rgba(245,245,240,.24)}
+@media(hover:hover) and (pointer:fine){.ft-book .ft-nav button:not(:disabled):hover,.ft-book .ft-thumb:hover{background:var(--surface-2)}}
+
+/* Hoja que gira (decorativa) */
+.ft-turn-window{position:absolute;inset:0;z-index:3;perspective:var(--bk-persp);perspective-origin:50% 50%;overflow:hidden;pointer-events:none}
+.ft-leaf{position:absolute;top:0;bottom:0;width:50%;transform-style:preserve-3d;will-change:transform}
+.ft-leaf[data-direction=next]{left:50%;transform-origin:0 50%}
+.ft-leaf[data-direction=previous]{left:0;transform-origin:100% 50%}
+.bk-seg{position:absolute;top:0;bottom:0;transform-style:preserve-3d;will-change:transform}
+.ft-leaf[data-direction=next] .bk-seg--a{left:0;width:30%}
+.ft-leaf[data-direction=next] .bk-seg--b{left:30%;width:70%;transform-origin:0 50%}
+.ft-leaf[data-direction=previous] .bk-seg--a{right:0;width:30%}
+.ft-leaf[data-direction=previous] .bk-seg--b{left:0;width:70%;transform-origin:100% 50%}
+.ft-leaf[data-single]{inset:0;left:0;width:100%;transform-origin:0 50%}
+.ft-leaf[data-single] .bk-seg--a{left:0;width:100%}
+.bk-face{position:absolute;inset:0;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk-face--back{transform:rotateY(180deg)}
+.bk-face-in{position:absolute;top:0;height:100%}
+.bk-paper--front{background:var(--bk-page)}
+.bk-paper--back{background:var(--bk-back)}
+.bk-face-in>.bk-page{height:100%}
+.bk-face-in[data-kind=both]{display:flex;flex-direction:column}
+.bk-face-in[data-kind=both]>.bk-page{height:auto}
+.bk-face-in[data-kind=both]>.bk-page--text{flex:1 1 auto}
+.bk-shade,.bk-gloss{position:absolute;pointer-events:none;opacity:0}
+.bk-shade{inset:0;background:linear-gradient(90deg,rgba(15,17,15,.55),rgba(15,17,15,0) 75%)}
+.bk-face-in[data-spine=right] .bk-shade{background:linear-gradient(270deg,rgba(15,17,15,.55),rgba(15,17,15,0) 75%)}
+.bk-gloss{top:0;bottom:0;left:0;width:12%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent)}
+.bk-cast{position:absolute;top:0;bottom:0;width:50%;opacity:0;pointer-events:none}
+.ft-turn-window[data-direction=next] .bk-cast{left:50%;background:linear-gradient(90deg,var(--bk-cast),transparent 70%)}
+.ft-turn-window[data-direction=previous] .bk-cast{left:0;background:linear-gradient(270deg,var(--bk-cast),transparent 70%)}
+
+/* Reducido / ahorro de datos / sin WAAPI: sin 3D; el fundido cruzado de 150 ms lo hace BlogBook.jsx (WAAPI) */
+@media(prefers-reduced-motion:reduce){.ft-turn-window{display:none}}
+
+/* Móvil: una sola página (foto arriba, texto debajo) */
 @media(max-width:799px){
- .blog-book .ft-main{padding:8px}
- .blog-book .ft-card{padding:14px 14px 0;aspect-ratio:auto}
- .blog-book .ft-media{height:auto;aspect-ratio:3/2}
- .blog-book .ft-main::after{height:100%;width:10px}
- .blog-book .ft-side{padding:24px 20px 28px;border:0}
- .blog-book .ft-count{margin-bottom:16px}
- .blog-book .ft-name{font-size:clamp(26px,6.6vw,36px);min-height:3.3em}
- .blog-book .ft-line{min-height:6.6em}
- .blog-book .ft-turn-window{inset:22px 22px auto;aspect-ratio:3/2}
- .blog-book .ft-leaf-front,.blog-book .ft-leaf-back{padding:0}
- .blog-book .ft-leaf-front img{object-fit:cover}
+ .ft-book{--bk-persp:1400px}
+ .ft-book .ft-main{padding:8px;border-radius:4px 14px 14px 4px}
+ .bk-spread{display:flex;flex-direction:column;height:auto}
+ .bk-page--photo{padding:14px 14px 0}
+ .ft-book .ft-media{aspect-ratio:3/2;height:auto}
+ .bk-text{padding:24px 20px 28px}
+ .ft-book .ft-name{font-size:clamp(26px,6.6vw,36px)}
+ .bk-spine{display:none}
+ .ft-book[data-mobile] .bk-cast{left:0;width:100%;background:linear-gradient(90deg,var(--bk-cast),transparent 60%)}
+ .bk-ctl{width:100%;justify-content:space-between;margin-left:0}
 }
-@media(prefers-reduced-motion:reduce){.ft-book .ft-turn-window{display:none}}

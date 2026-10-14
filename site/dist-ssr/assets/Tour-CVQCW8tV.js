@@ -1,6 +1,6 @@
-import { A as usePageMeta, C as useLightMotion, D as inicioTextos, I as whatsapp, N as jsx, P as jsxs, T as useMounted, b as Marquee, c as Arrow, f as Picture, g as TourCard, m as Rail, p as QuoteSection, r as tours, u as Eyebrow, v as EditorialMotion, w as useMedia, x as Trust } from "../entry-server.js";
-import NotFound from "./NotFound-DHo54wv4.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-3UgMS-5V.js";
+import { C as useMedia, E as inicioTextos, I as whatsapp, N as jsx, P as jsxs, S as useLightMotion, _ as EditorialMotion, b as Trust, c as Arrow, f as Picture, h as TourCard, k as usePageMeta, m as Rail, p as QuoteSection, r as tours, u as Eyebrow, w as useMounted, y as Marquee } from "../entry-server.js";
+import NotFound from "./NotFound-D0uRj_7U.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-C4tRee2w.js";
 import { t as Reviews } from "./Reviews-CZkkVS5X.js";
 /* empty css                       */
 import { Link, useParams } from "react-router-dom";

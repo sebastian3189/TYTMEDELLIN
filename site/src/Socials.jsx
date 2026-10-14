@@ -13,6 +13,10 @@ const SOCIALS = () => [
   { id: 'tiktok', label: 'Síguenos en TikTok', url: company.tiktok, color: 'currentColor' },
   { id: 'whatsapp', label: 'Escríbenos por WhatsApp', url: whatsapp(), color: '#128C7E' },
 ];
+// Icono suelto (misma ruta que la tira de redes). `color` omitido = hereda currentColor.
+export function SocialIcon({ id, size = 24, color, className = '' }) {
+  return <svg className={className} viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true" focusable="false" style={color ? { color } : undefined}><path d={PATHS[id]} /></svg>;
+}
 export default function Socials({ className = '' }) {
   return <ul role="list" className={`socials ${className}`}>{SOCIALS().map(s => <li key={s.id}><a href={s.url} target="_blank" rel="noopener noreferrer" aria-label={`${s.label} (se abre en una pestaña nueva)`}><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style={{ color: s.color }}><path d={PATHS[s.id]} /></svg></a></li>)}</ul>;
 }

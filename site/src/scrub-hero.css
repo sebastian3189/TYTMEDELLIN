@@ -24,18 +24,11 @@
 .scrub-canvas{opacity:0}
 .scrub-hero[data-ready=true] .scrub-canvas{opacity:1}
 
-/* ---------- Titular partido, lema y confianza (P1) ---------- */
+/* ---------- Título de la sección (Spec 03 §J1 fila 3): «Elige tu próximo recuerdo» sustituye al titular gigante ---------- */
 .scrub-title{position:absolute;inset:0;z-index:5;pointer-events:none}
-.scrub-title .eyebrow,.scrub-title .scrub-micro{margin:0;color:var(--text);font:600 13px/1.3 var(--font,Inter,Arial,sans-serif);letter-spacing:.12em;text-transform:uppercase}
+.scrub-title .eyebrow{margin:0;color:var(--text);font:600 13px/1.3 var(--font,Inter,Arial,sans-serif);letter-spacing:.12em;text-transform:uppercase}
 .scrub-lema{position:absolute;left:var(--pad);top:clamp(14px,3vh,32px)}
-.scrub-title h1{margin:0;font:800 clamp(64px,min(11vw,15svh),184px)/.88 var(--heading,Montserrat,Arial,sans-serif);letter-spacing:-.05em;color:var(--text-strong)}
-.scrub-t1,.scrub-t2{position:absolute;display:block;white-space:nowrap}
-.scrub-t1{left:var(--pad);top:clamp(40px,7.5vh,80px)}
-.scrub-t2{right:var(--pad);bottom:calc(clamp(16px,3vh,28px) + 60px + clamp(10px,2vh,20px))}
-.scrub-micro{position:absolute;left:var(--pad);top:calc(clamp(40px,7.5vh,80px) + min(11vw,15svh)*.88 + 18px);width:min(380px,30vw);text-wrap:balance;letter-spacing:.1em!important;line-height:1.6!important}
-.ln{display:block;font-style:normal;animation:rise .6s var(--ease-out-strong) both}
-.scrub-t2 .ln{animation-delay:var(--stagger)}
-@keyframes rise{from{transform:translate3d(0,40px,0)}to{transform:none}}
+.scrub-title .scrub-t1{position:absolute;display:block;left:var(--pad);top:clamp(40px,7.5vh,80px);margin:0;white-space:nowrap;color:var(--text-strong);font:700 clamp(36px,min(4.8vw,8svh),72px)/1.02 var(--heading,Montserrat,Arial,sans-serif);letter-spacing:-.035em}
 
 /* Tira de miniaturas (índice de la baraja, 48 px). Botones fuera del orden de tabulación; las cartas son los enlaces. */
 .scrub-strip{position:absolute;z-index:250;right:var(--pad);bottom:clamp(16px,3vh,28px);display:flex;gap:6px;padding:6px;margin:-6px;border-radius:16px;background:var(--bg)}
@@ -199,9 +192,8 @@
 .scrub-hero.is-static .scrub-stage{position:relative;top:auto;height:auto;display:flex;flex-direction:column;overflow:visible}
 .scrub-hero.is-static .scrub-media{position:relative;inset:auto;z-index:0;width:100%;height:min(54svh,520px);order:0}
 .scrub-hero.is-static .scrub-title{position:relative;inset:auto;z-index:1;order:1;pointer-events:auto;padding:clamp(28px,5vh,48px) var(--pad) 0}
-.scrub-hero.is-static .scrub-lema,.scrub-hero.is-static .scrub-t1,.scrub-hero.is-static .scrub-t2,.scrub-hero.is-static .scrub-micro{position:static;display:block;width:auto}
-.scrub-hero.is-static .scrub-title h1{font-size:clamp(64px,9vw,140px);margin:14px 0 18px}
-.scrub-hero.is-static .scrub-micro{margin:0;max-width:60ch}
+.scrub-hero.is-static .scrub-lema,.scrub-hero.is-static .scrub-title .scrub-t1{position:static;display:block;width:auto}
+.scrub-hero.is-static .scrub-title .scrub-t1{font-size:var(--fs-h2,clamp(36px,4.8vw,72px));margin:14px 0 18px;white-space:normal}
 .scrub-hero.is-static .scrub-panel{position:relative;inset:auto;z-index:1;order:2;pointer-events:auto}
 .scrub-hero.is-static .scrub-text{position:relative;left:auto;bottom:auto;padding:22px var(--pad) clamp(32px,5vh,56px);width:min(720px,100%)}
 .scrub-hero.is-static .scrub-stack{display:block}
@@ -215,12 +207,8 @@
 @media(max-width:799px){
  .scrub-stage{--band:200px;--m-pad:clamp(16px,5vw,22px)}
  .scrub-lema{left:0;right:0;top:12px;text-align:center}
- .scrub-title h1{font-size:clamp(38px,min(13vw,calc((100vw - 44px) / 7.8)),64px);line-height:.95}
- .scrub-t1,.scrub-t2{left:var(--m-pad);right:var(--m-pad);text-align:center}
- .scrub-t1{top:var(--m-t1,40px)}
- .scrub-t2{bottom:auto;top:var(--m-t2,400px)}
- .scrub-micro{left:var(--m-pad);right:var(--m-pad);width:auto;top:var(--m-micro,460px);text-align:center;font-size:13px;letter-spacing:.06em!important}
- .scrub-stage[data-short="1"] .scrub-lema,.scrub-stage[data-short="1"] .scrub-micro,.scrub-stage[data-short="1"] .scrub-strip--m{display:none}
+ .scrub-title .scrub-t1{left:var(--m-pad);right:var(--m-pad);top:var(--m-t1,40px);text-align:center;white-space:normal;text-wrap:balance;font-size:clamp(28px,calc((100vw - 44px) / 10.5),40px);line-height:1.05}
+ .scrub-stage[data-short="1"] .scrub-lema,.scrub-stage[data-short="1"] .scrub-strip--m{display:none}
  .scrub-panel{position:absolute;inset:auto 0 0 0;height:var(--band);display:flex;flex-direction:column;gap:8px;padding:10px var(--m-pad) calc(60px + env(safe-area-inset-bottom))}
  .scrub-index{position:relative;left:auto;top:auto;flex-direction:row;align-items:center;justify-content:space-between;gap:12px;margin:0;min-height:16px}
  .scrub-text{position:relative;left:auto;bottom:auto;width:100%;flex:1;min-height:0;gap:0}
@@ -252,8 +240,8 @@
  .scrub-hero .scrub-btn span{display:none}
  .scrub-hero.is-static .scrub-media{position:relative;inset:auto;width:100%;aspect-ratio:4/3;height:auto;max-height:none;margin:0}
  .scrub-hero.is-static .scrub-title{padding:22px var(--pad) 0}
- .scrub-hero.is-static .scrub-lema,.scrub-hero.is-static .scrub-t1,.scrub-hero.is-static .scrub-t2,.scrub-hero.is-static .scrub-micro{text-align:left;display:block}
- .scrub-hero.is-static .scrub-title h1{font-size:clamp(36px,min(14vw,calc((100vw - 40px) / 7.8)),72px)}
+ .scrub-hero.is-static .scrub-lema,.scrub-hero.is-static .scrub-title .scrub-t1{text-align:left;display:block}
+ .scrub-hero.is-static .scrub-title .scrub-t1{font-size:clamp(32px,9vw,48px)}
  .scrub-hero.is-static .scrub-panel{position:relative;inset:auto;height:auto;padding:0;gap:0}
  .scrub-hero.is-static .scrub-ctl{left:auto;right:auto;bottom:auto;padding:0 var(--pad) 28px}
  .scrub-hero.is-static .scrub-skip,.scrub-hero.is-static .scrub-motion{flex:0 0 auto}
@@ -268,7 +256,6 @@
 }
 @keyframes mobile-card-enter{from{opacity:.4;transform:translateY(var(--card-enter,22px))}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){
- .ln{animation:none}
  .scrub-intro,.scrub-cap,.scrub-ch,.scrub-index,.scrub-segs i::before,.scrub-segs i::after{transition-duration:150ms!important;transition-delay:0s!important;transform:none!important}
  .scrub-hero .scrub-btn,.scrub-skip,.scrub-motion{transition:none}
  .scrub-ctl{animation:none}

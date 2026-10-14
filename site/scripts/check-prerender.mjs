@@ -1,9 +1,13 @@
 // Prerender (Spec 04/05): cada ruta devuelve su HTML (un h1, título propio, contenido y enlaces) SIN JavaScript, y con JavaScript se hidrata sin
 // errores de consola ni desajustes de hidratación (React los reporta con console.error, error #418/#423/#425). Las rutas desconocidas dan 404 real.
-// Uso: npm run build && npx vite preview --port <libre>; TYT_TEST_URL=http://127.0.0.1:<puerto> node scripts/check-prerender.mjs
+// Uso: npm run build && node scripts/serve-static.mjs dist <puerto> (servidor estático tipo producción); TYT_TEST_URL=http://127.0.0.1:<puerto> node scripts/check-prerender.mjs
+// Además: canonical absoluto único por ruta, sitemap.xml y robots.txt, y despliegue con reescritura SPA (todo → index.html; se levanta serve-static en modo `spa`
+// en TYT_SPA_PORT, por defecto 4418): ninguna ruta debe dar errores de hidratación (React #418) ni mostrar el contenido de otra.
 import { chromium } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
+import { spawn } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 
 const base = process.env.TYT_TEST_URL || 'http://127.0.0.1:4402';
 const content = await readFile(new URL('../src/tours-text.js', import.meta.url), 'utf8');
@@ -21,14 +25,15 @@ try {
     const response = await page.goto(base + path, { waitUntil: 'load' });
     const data = await page.evaluate(() => ({
       status: 0, title: document.title, h1: [...document.querySelectorAll('h1')].map((h) => h.textContent.trim()), main: document.querySelector('main')?.innerText.length || 0,
-      links: document.querySelectorAll('a[href]').length, boot: getComputedStyle(document.querySelector('#boot') || document.body).display, root: document.querySelector('#root')?.children.length || 0,
+      links: document.querySelectorAll('a[href]').length, root: document.querySelector('#root')?.children.length || 0,
+      canonical: [...document.querySelectorAll('link[rel=canonical]')].map((l) => l.getAttribute('href')),
     }));
     soft(response.status() === 200, `${path}: estado ${response.status()}`);
     soft(data.h1.length === 1, `${path}: h1 = ${JSON.stringify(data.h1)}`);
     soft(/\| T&T Medellín$/.test(data.title), `${path}: título «${data.title}»`);
     soft(data.main > (path === '/cotizar' ? 40 : 200), `${path}: main casi vacío (${data.main})`);
     soft(data.links > 8, `${path}: enlaces reales en el HTML sin JS: ${data.links}`);
-    soft(data.boot === 'none' || !(path === '/'), `${path}: el póster de arranque tapa el HTML sin JS`);
+    soft(data.canonical.length === 1 && /^https?:\/\/[^/]+\//.test(data.canonical[0] + '/') && new URL(data.canonical[0]).pathname.replace(/\/$/, '') === path.replace(/\/$/, ''), `${path}: canonical ${JSON.stringify(data.canonical)}`);
     rows.push(`${path} h1=«${data.h1[0]?.slice(0, 30)}» main=${data.main}ch enlaces=${data.links}`);
     await page.close();
   }
@@ -66,6 +71,27 @@ try {
   soft(/Este recorrido/.test(await notFound.locator('h1').innerText()), '404: el cliente pinta la página «Este recorrido no está aquí»');
   for (const p of ['/site', '/flota']) { const q = await nav.newPage(); await q.goto(base + p, { waitUntil: 'load' }); await q.waitForTimeout(800); soft(new URL(q.url()).pathname === (p === '/site' ? '/' : '/vehiculos'), `${p} redirige a ${new URL(q.url()).pathname}`); await q.close(); }
   await nav.close();
+  // 4) sitemap.xml y robots.txt.
+  const sitemap = await (await fetch(base + '/sitemap.xml')).text(), robots = await (await fetch(base + '/robots.txt')).text();
+  soft((sitemap.match(/<url>/g) || []).length === paths.length * 2, `sitemap: ${(sitemap.match(/<url>/g) || []).length} URLs (se esperaban ${paths.length * 2}: es + en)`);
+  soft(!/\/(site|flota|404)</.test(sitemap), 'sitemap incluye /site, /flota o 404');
+  soft(/^User-agent: \*/m.test(robots) && /Sitemap: /.test(robots), 'robots.txt sin User-agent o Sitemap');
+  // 5) Reescritura SPA: cualquier ruta devuelve el mismo HTML; el cliente no debe hidratar el HTML de otra ruta (React #418).
+  const spaPort = process.env.TYT_SPA_PORT || '4418', dist = fileURLToPath(new URL('../dist', import.meta.url)), server = spawn(process.execPath, [fileURLToPath(new URL('./serve-static.mjs', import.meta.url)), dist, spaPort, 'spa'], { stdio: 'ignore' });
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 900));
+    const spa = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    for (const [path, h1] of [['/contacto', /escuchemos|plan/i], ['/experiencias/hacienda-napoles', /Hacienda N/], ['/cotizar', /tiempos/], ['/en/contacto', /./], ['/experiencias', /historia/i], ['/', /nivel/]]) {
+      const page = await spa.newPage(), errors = [];
+      page.on('pageerror', (e) => errors.push(e.message.slice(0, 120))); page.on('console', (m) => { if (['error', 'warning'].includes(m.type()) && !/Failed to load resource/.test(m.text())) errors.push(m.text().slice(0, 160)); });
+      await page.goto(`http://127.0.0.1:${spaPort}${path}`, { waitUntil: 'load' }); await page.waitForTimeout(1400);
+      const state = await page.evaluate(() => ({ h1: [...document.querySelectorAll('h1')].map((x) => x.textContent) }));
+      soft(errors.length === 0, `SPA ${path}: ${errors.slice(0, 2).join(' | ')}`);
+      soft(state.h1.length === 1 && h1.test(state.h1[0]), `SPA ${path}: h1 ${JSON.stringify(state.h1)}`);
+      await page.close();
+    }
+    await spa.close();
+  } finally { server.kill(); }
   console.log(rows.join('\n'));
   if (findings.length) { console.log('\nHALLAZGOS:\n- ' + findings.join('\n- ')); process.exitCode = 1; } else console.log(`\nPASS check-prerender (${paths.length} rutas sin JS y con JS; 404 real)`);
 } finally { await browser.close(); }

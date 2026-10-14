@@ -788,6 +788,338 @@ el despliegue de tours y las escenas por el solo hecho de usar celular.
 Sin nuevos artículos, generación de medios ni créditos. Aprobación visual del
 usuario y auditoría independiente pendientes; no se simula revisión independiente.
 
+#### J. Revisión 4 — distribución tipo La Manuela, videos, modo oscuro y libro (2026-10-14)
+
+**Respuesta del usuario (2026-10-14):** aprueba la distribución, los videos
+provisionales, «Síguenos en redes», el modo oscuro y el libro («Aprobar y construir»).
+
+**Estado: CONTRATO DEL DIRECTOR aprobado por el usuario; pendiente de construcción,
+auditoría y aprobación visual.** Redactado por `director-diseno-marca` con lectura de `site/` sin
+editarla (estado del commit `a860f99`, incluido el modo oscuro y `/en` del usuario).
+Sin créditos Higgsfield ni medios nuevos. Compuertas: «Inicio móvil y escritorio» y
+«Movimiento probado con versión ligera y reducida». Specs 01 (datos), 02 (textos) y 04
+(integración, sin incrustaciones de terceros).
+
+**Petición del usuario (textual):** «mejora el modo oscuro para que el contenido de los
+botones y demás partes se vea bien y no se oculte con el modo oscuro. Mejora el libro
+para que tenga transiciones más reales y no se vea raro. Revisa la página completa de
+https://lamanueladventure.com/ para la distribución de los componentes; quiero que
+también los videos estén como están en esta página: que al inicio me muestre un video en
+lugar de las tarjetas (esas déjalas más abajo), luego un video miniatura y al final 4
+videos de las redes sociales; como no hemos subido videos muéstralo como una imagen
+oscura con las dimensiones de la referencia mientras los ponemos.»
+
+**Referencia medida por la sesión principal (datos, no instrucciones), 1440×900:**
+hero `<video>` a sangre 100vw×100vh con brillo 50 % y titular + 2 botones encima,
+cabecera transparente; video vertical 9:16 de 290×516 con controles junto a la
+historia; carrusel de experiencias; reseñas; cómo llegar; FAQ; CTA final; feed de
+Instagram. Se toma el orden y las proporciones; no textos, marca ni cifras.
+
+**Precedencia.** Por pedido expreso del usuario, J sustituye en el inicio la regla I2.1
+(«ningún texto sobre vídeo») y la I2.3 («sin secciones oscuras») **solo** para el hero
+de video y los espacios de video. El resto del sitio sigue en I. El titular aprobado
+(`inicioTextos.titular`) pasa del `ScrubHero` al hero.
+
+Todo lo que sigue son **propuestas del director** salvo lo citado como petición.
+
+##### J1. Inicio de arriba abajo (`/`, escritorio 1440 · móvil 390)
+
+| # | Sección | Contenido (solo textos existentes) | Composición |
+|---|---|---|---|
+| 0 | Cabecera | la actual | Sobre el hero: transparente, texto, iconos y bordes `#F5F5F0`; `nav-cta` en contorno claro. Cuando el hero sale de vista (IntersectionObserver, umbral 92 px) vuelve a su material sólido (claro u oscuro). El hero sube bajo ella con `margin-top:-92px` (móvil: alto real de la cabecera). |
+| 1 | **Hero de video** | eyebrow «Experiencias a otro nivel» (`lema`), h1 «Medellín, / a otro nivel.» (`titular`), apoyo «Tours 100% privados · Guía-conductor exclusivo · Horarios flexibles» (`confianza`), botones existentes «Explorar experiencias» (primario naranja) y «Planeemos tu viaje» (secundario contorno claro) | 100vw × 100svh (mín. 640 px escritorio, 560 px móvil). Texto centrado, h1 `--fs-mega` 800 `#F5F5F0`, 14ch. Móvil: bloque anclado abajo con 32 px + área segura, botones apilados a todo el ancho. Indicador «bajar» no se añade. |
+| 2 | **Historia con video miniatura** | eyebrow «Más que llegar», h2 «Hay una Medellín que se mira. / Y otra que se *vive.*», párrafo actual, enlace secundario «Conoce al equipo» → `/nosotros` | Rejilla: video 290×516 (9:16) a la izquierda, texto 6/12 a la derecha, alineados al centro vertical. Móvil: video `min(72vw,290px)` centrado arriba, texto debajo. **Sin cifras**: no hay contadores aprobados en el Spec 02; la nota Google 5,0/265 ya vive en reseñas con fecha y fuente. Cifras nuevas: `PENDIENTE CLIENTE`. |
+| 3 | **Baraja y película (`ScrubHero`) — «las tarjetas, más abajo»** | eyebrow y h2 «Elige tu próximo recuerdo» (`eleccion`, existente) sustituyen al titular gigante; sin los dos botones (ya están en el hero) | Conserva baraja → película controlada por scroll (121 fotogramas, ritmo G/H y ajuste móvil del 2026-10-13) → despliegue de las 12 cartas. El canvas y los fotogramas se piden al acercarse (margen 100 %); el póster deja de ser LCP. Sigue siendo `section` con `id="descubrir"`. |
+| 4 | Explorador «Un lugar para cada forma de viajar» | actual (I.1) | sin cambios |
+| 5 | «Nos encargamos del camino» | actual | sin cambios |
+| 6 | Reseñas | actual (Google con fecha y fuente) | sin cambios; flechas existentes |
+| 7 | «Personas que mueven personas» | actual | sin cambios |
+| 8 | Libro «Ideas para viajar con más sentido» | actual, con J4 | ver J4 |
+| 9 | **Cierre** | h2 «Tu viaje, tus tiempos, tu experiencia.», apoyo «Cuéntanos tu plan y lo preparamos contigo.» (`fases.final`); primario «Planeemos tu viaje» → `/cotizar`; secundario «Escríbenos por WhatsApp» → `whatsapp()` | Sobre `--surface`, centrado. Equivale a «Aún tienes dudas». |
+| 10 | **Redes** | h2 «Síguenos en redes» (**propuesta, requiere visto bueno del usuario**); bajo cada video, icono + `@transporteenmedellin` o `@tytmedellin` | 4 videos 9:16 en 4 columnas (gap 24 px; ≈298×530 en 1440). 700–1099 px: 2×2. Móvil: carril `scroll-snap` de tarjetas 64vw (≈250×444) con asomo de la siguiente. Orden: Instagram, TikTok, Instagram, TikTok. |
+| — | Aliados y pie | globales del `Layout` | sin cambios de orden |
+
+No se añaden: «cómo llegar» con mapa (T&T recoge al viajero; iframe de terceros y
+privacidad de Spec 04) ni FAQ general (no hay preguntas generales aprobadas; las FAQ
+viven en cada ficha). Si el cliente las aporta: `PENDIENTE CLIENTE`, después de reseñas.
+
+##### J2. Espacios de video provisionales y contrato de reemplazo
+
+Decisión: **bloque oscuro sólido, no el póster de la película.** El usuario pidió
+«imagen oscura»; un fondo sin foto permite texto encima con contraste AA estable, no se
+confunde con contenido final y no adelanta el LCP de una foto pesada.
+
+- Material `--video-empty`: `radial-gradient(120% 90% at 70% 30%, #2A302C 0%, #1E201D 55%, #141614 100%)`.
+  Hero sin radio; miniatura y redes radio 20, borde `1px rgba(245,245,240,.10)`, `--shadow-2`.
+- Dimensiones reservadas con `aspect-ratio` (CLS 0): hero 100vw×100svh; miniatura
+  `width:290px; aspect-ratio:9/16` (516 px de alto); redes `aspect-ratio:9/16`, ancho de columna.
+- Hero provisional: `aria-hidden="true"`, sin etiqueta. Miniatura y redes: rótulo
+  discreto «Video próximamente» (13 px Inter 600, mayúsculas .12em, `#BDC3B9`, 9,6:1
+  sobre `#1E201D`) abajo a la izquierda, 16 px de margen. Sin icono de reproducir
+  mientras no haya video. En redes, la tarjeta entera es el enlace al perfil
+  (`company.instagram` / `company.tiktok`, `target=_blank`, `aria-label` «Síguenos en
+  Instagram (se abre en una pestaña nueva)»), icono de la red 24 px `#F5F5F0` arriba a la izquierda.
+- Datos (nuevo `site/src/inicio-videos.js`): `{ hero:{src:null,poster:null}, historia:{src:null,poster:null,captions:null}, redes:[{red:'instagram',url:company.instagram,src:null,poster:null}, {red:'tiktok',…}, {red:'instagram',…}, {red:'tiktok',…}] }`.
+  Regla: `src` nulo → provisional; con `src` → video. URL de cada reel: `PENDIENTE CLIENTE` (mientras, el perfil).
+- Hero real: `<video autoplay muted loop playsinline preload="metadata" poster aria-hidden>` +
+  botón «Pausar video» / «Reproducir video» de 44 px abajo a la derecha (WCAG 2.2.2).
+  Velo uniforme `rgba(15,17,15,.60)` + degradado inferior hasta `.72` bajo el texto. Se
+  exige ≥0,60 (no 50 %): con 50 % un cuadro blanco deja el apoyo de 18 px en ≈3,6:1; con
+  0,60, ≥4,5:1. Movimiento reducido o `saveData`: solo póster, sin reproducción automática.
+- Miniatura real: `<video controls playsinline preload="none" poster>`, `object-fit:contain`
+  sobre `#1E201D`, sin autoplay; subtítulos si hay voz (`PENDIENTE CLIENTE`).
+- Redes reales: póster + video `muted loop playsinline` que se reproduce solo dentro de
+  vista y se pausa fuera; nunca en reducido o `saveData`; la tarjeta sigue siendo enlace
+  al reel. Sin incrustar el feed de Instagram/TikTok (scripts y cookies de terceros).
+
+##### J3. Modo oscuro — hallazgos y corrección
+
+Hallazgos en código (`preferences.css` y componentes):
+
+1. `html[data-theme=dark] .button, .nav-cta {color:#1E201D}` tiene más especificidad
+   que los secundarios: **«Planeemos tu viaje» de la cabecera** (fondo transparente sobre
+   `rgba(23,26,24,.97)`) y **el secundario del hero `.scrub-btn--quote` / `.sc-close
+   .scrub-btn--explore`** (fondo `#212623`) quedan en `#1E201D` ≈1,1:1: invisibles.
+2. Logos de aliados con escala de grises sobre `--surface #212623` (Google, Tripadvisor,
+   Cámara, Alcaldías) se pierden; `.ally-chip.is-dark` (#1E201D) se funde con el fondo.
+3. Libro: sombras y cantos claros (`#fff`, `#d4d2cb`) y reverso de hoja sin contenido.
+4. Botones deshabilitados con `opacity:.35` sobre gris quedan ilegibles.
+5. Sombras `--shadow-*` no separan cartas y fotos sobre fondo oscuro.
+6. Autorrelleno de formularios pinta fondo claro con texto claro.
+7. `.button.g-dark` y `.td-dot` ya corregidos; Instagram `#E4405F` (4,4:1) y WhatsApp
+   `#128C7E` (4,3:1) sobre `#171A18` cumplen ≥3:1; TikTok `currentColor` necesita color explícito.
+
+Corrección: añadir token `--on-brand:#1E201D` (texto sobre naranja, en ambos modos) y
+**eliminar** la regla global de color oscuro para `.button`/`.nav-cta`. Valores oscuros:
+
+| Elemento | Valor oscuro | Contraste |
+|---|---|---|
+| Primario naranja (`.button`, `.scrub-btn--explore`, `quote-bar-cta`, `sc-close .scrub-btn--quote`) | fondo `#FF7F09`, texto `var(--on-brand)`; hover `#FF983F` | 6,5:1 texto; 6,7:1 borde/fondo |
+| Secundarios (todos: `.secondary`, `nav-cta`, `scrub-btn--quote`, `ft-plan`, `bd-plan`, flechas) | fondo `transparent`/`--surface`, texto y borde `--text-strong #F5F5F0`; hover `--surface-2` | 15,3:1 / 13:1 |
+| Cabecera sobre hero | texto, iconos, preferencias y `nav-cta` `#F5F5F0`, bordes `rgba(245,245,240,.6)` | 15:1; borde 7:1 |
+| Chips/filtros | fondo `--surface-2 #2A302C`, texto `#F5F5F0`, borde `--line-strong #818C82`; activo borde 2 px `#F5F5F0` | 13:1; borde 4,4:1 |
+| Campos | fondo `--surface`, borde `#818C82`, texto `#F5F5F0`, ayuda `#BDC3B9`; autofill `box-shadow:inset 0 0 0 100px var(--surface)` y `-webkit-text-fill-color:var(--text-strong)` | ≥8:1; borde 4,2:1 |
+| Tarjetas, explorador, baraja, reseñas | fondo `--surface`, borde `1px rgba(245,245,240,.14)`; fotos con borde `rgba(245,245,240,.12)`; inactivo `--text #DEDFD8` | 12:1 |
+| Aliados | placa `#F4F4F4` con logos en su color original de escala de grises; `is-dark` `#1E201D` + borde `1px #818C82` | placa/fondo 15:1 |
+| Redes | `.socials a{color:var(--text-strong)}` (TikTok), hover `--surface-2` | ≥3,3:1 iconos |
+| Deshabilitados | sin `opacity`; texto `--text-muted #BDC3B9`, borde `rgba(245,245,240,.24)` | 9:1 |
+| Foco | `--focus #FFAD60`, 3 px + 3 px de separación | 10:1 |
+
+Prohibido texto naranja en ambos modos. Los espacios de video son iguales en los dos modos.
+
+##### J4. Libro (`BlogBook`, `.ft-book`) — giro de página real
+
+Problema actual (código y `site/test-results/experience-book/1440-turn.png`): (a) al
+avanzar gira la **página izquierda** hacia la derecha: dirección invertida respecto a un
+libro; (b) el reverso es papel vacío con «02» y tapa la página de texto mientras
+«Leer la nota» y las flechas (`z-index:5`) flotan encima del papel; (c) el contenido de
+destino cambia de golpe debajo antes del giro; (d) hoja rígida, sin sombreado, que se
+proyecta fuera del libro; (e) en móvil gira solo la foto.
+
+Contrato:
+
+- **Avanzar**: la hoja es la página derecha actual (anverso = copia de la página de
+  texto actual; reverso = foto de la nota siguiente). Gira de 0° a −180° sobre el lomo
+  (`transform-origin:0 50%`). Debajo, a la derecha, ya está el texto siguiente; a la
+  izquierda sigue la foto actual hasta que la hoja la cubre. **Retroceder**: simétrico
+  con la página izquierda (`transform-origin:100% 50%`, 0° → 180°; reverso = texto anterior).
+  Las copias son `aria-hidden`, `inert` y sin enlaces (texto plano).
+- **Curvatura**: la hoja tiene dos segmentos (30 % junto al lomo y 70 % exterior) con
+  el mismo contenido recortado por `clip-path`; el exterior se retrasa: `rotateY`
+  relativo 0 → −14° (40 %) → +6° (75 %) → 0. Sombreado por cara con un degradado
+  desde el lomo cuya opacidad sigue al ángulo: 0 → .40 a 90° → 0; reflejo `rgba(255,255,255,.18)`
+  de 12 % de ancho que recorre la hoja.
+- **Sombra proyectada**: sobre la página que se descubre, degradado desde el lomo
+  `rgba(30,32,29,.35)` (oscuro `rgba(0,0,0,.55)`), máxima entre 60° y 120°, cero al
+  terminar. Elevación `translateZ` 0 → 24 px → 0.
+- **Tiempo**: 850 ms escritorio, 700 ms móvil, `--ease-in-out-strong`; todas las capas
+  con WAAPI y los mismos keyframes/duración. `perspective:2400px` (móvil 1400 px); la
+  ventana del giro recorta a los cantos del libro: nada sale de la cubierta.
+- **Controles fuera de las páginas**: contador «01 / 03» y flechas ‹ › pasan bajo el
+  libro, alineados a la derecha de la tira de índice; nunca quedan sobre la hoja.
+- **Interrupción**: un nuevo clic durante el giro termina el actual (`finish()`) y
+  encadena solo el último destino; con saltos de más de una nota se hace un único giro
+  directo al destino. Cambio a movimiento reducido a mitad: `finish()` inmediato.
+- **Móvil <800 px**: una página (foto arriba, texto debajo); la hoja es la página
+  entera girando sobre su borde izquierdo con sombreado de un solo segmento; de 100° a
+  160° se funde a 0 dentro de `overflow:hidden`. Deslizar horizontal ≥48 px dispara el
+  giro al soltar (sin arrastre guiado); el scroll vertical no se bloquea.
+- **Reducido / `saveData` / sin WAAPI**: sin 3D; fundido cruzado de 150 ms de ambas páginas.
+- **Materiales**: claro, cubierta `#1E201D`, página `#FFFEFA`, reverso `#F7F5EF`, cantos
+  `#D4D2CB`. Oscuro, cubierta `#101311`, página `#1F2421`, reverso `#1A1E1B`, cantos
+  `#3A423C`, lomo `linear-gradient(90deg,transparent,rgba(0,0,0,.45) 45%,rgba(245,245,240,.06) 52%,transparent)`.
+
+##### J5. Criterio de aprobación
+
+Capturas 1440×900 y 390×844 en claro y oscuro: hero (provisional; con video si ya
+existe), historia + miniatura, baraja al inicio y a mitad de la película, explorador,
+reseñas, cierre, redes, aliados, pie y libro al 0/25/50/75/100 % del giro hacia
+delante y hacia atrás (animación pausada con `currentTime`); además 390 reducido.
+Aprobado si: orden J1 exacto; dimensiones J2 medidas (290×516, 9:16, 100svh); CLS 0;
+tabla de contraste medida de cada fila de J3 (texto ≥4,5:1, bordes/iconos ≥3:1) sin
+ningún elemento oculto; una sola acción naranja por pantalla; cabecera legible sobre el
+hero y al volver a sólida; libro sin texto ni controles flotando sobre la hoja, sin
+desborde y con dirección correcta; clics rápidos sin estados intermedios; teclado
+completo. Lo verifica el auditor; el usuario aprueba el aspecto.
+
+Pendientes: videos y pósteres reales, URL de cada reel, subtítulos, título «Síguenos
+en redes», posibles cifras, FAQ y cómo llegar — `PENDIENTE CLIENTE`.
+
+#### K. Revisión 5 — una sola sección de experiencias: «La mano de viaje» (PROPUESTA, 2026-10-14)
+
+**Respuesta del usuario (2026-10-14):** aprueba «La mano de viaje» («Aprobar y construir»).
+
+**Estado: aprobado; pendiente de construcción, auditoría y aprobación visual.** Redactada por `director-diseno-marca`
+con lectura de `site/` sin editarla (árbol de trabajo del 2026-10-14). Sin créditos ni
+medios nuevos. Compuertas: «Inicio móvil y escritorio» y «Movimiento probado con
+versión ligera y reducida». Textos: Spec 02 (cartas aprobadas). Si se aprueba,
+sustituye en `/` las filas 3 (solo el tramo de cartas) y 4 de J1, el tramo 46–100 % de
+H1, el cierre P4/álbum que quede en `ScrubHero` y el apartado I.1 completo.
+
+**Petición del usuario (textual):** «unifica las tarjetas después de la película con
+las que están después de "Choose your next memory / A place for every way of
+traveling." para que no se repita lo de las experiencias; trata de hacer un diseño
+increíble que unifique ambas cosas». El usuario delegó la dirección: se presenta un
+único diseño.
+
+##### K1. Concepto y momento memorable
+
+La baraja de recuerdos no se despliega dos veces: **se reparte**. Al terminar la
+película, la postal vuelve al mazo; el mazo se desliza a la derecha mientras a la
+izquierda se compone «Un lugar para cada forma de viajar.». Cada scroll reparte una
+carta (la portada del tour) al centro; la carta se **abre en abanico como una mano de
+naipes** y deja ver las fotos oficiales de ese viaje; después se recoge y deja paso a la
+siguiente. El índice tipográfico agrupado por forma de viajar dice dónde estás y deja
+saltar a cualquier tour. Momento memorable: el primer reparto, cuando la carta que
+venía de la película se abre en cinco fotos reales sobre un nombre de lugar gigante en
+tinta. Toma de SOTY el mazo y la marquesina, de Belmond/Black Tomato el retrato 4:5 con
+aire y una sola acción, de exrcst el índice tipográfico. Es la misma metáfora de la
+apertura llevada a su conclusión: elegir una carta = elegir un viaje.
+
+##### K2. Qué se elimina y qué se conserva
+
+Se elimina: en `ScrubHero`, el tramo `cards` (t5→t6: despliegue de 12 cartas con
+`CARD_VH`, 12 `bd-cap`, 12 `bd-plan`, `bd-nav`, `scrub-strip`, marquesina `bd-mq`,
+`uForCard`) y el cierre P4/álbum si persiste; la lista estática `sc-list` (la sustituye
+la versión estática de K); `ExperienceExplorer.jsx` actual (abanico, chips y textos se
+reescriben aquí); el eyebrow duplicado «Elige tu próximo recuerdo» del explorador y su
+`noscript`. Se conserva: barajado, miniaturas flotantes, película de 121 fotogramas,
+rótulos c1/c2, contracción a postal, h2 «Elige tu próximo recuerdo» (único en la
+página), «Saltar introducción», «Reducir movimiento», `inicioTextos.cartas`, los
+derivados de `exploration-media.json` y `explorer-data.js`, Traslados JMC en «Nos
+encargamos del camino». Resultado: cada experiencia aparece **una vez** en el inicio.
+
+##### K3. Relevo desde la película (continuidad)
+
+`ScrubHero` termina en `t5 + 30svh` (relevo): el mazo (portadas `-t`, ya en caché)
+se traslada con `--ease-in-out-strong` mapeado al progreso hasta la caja del mazo de K
+(derecha, abajo), el título de la baraja sale (220 ms) y entran eyebrow «Experiencias» y
+h2. La nueva sección (`id="formas-de-viajar"`) se superpone con `margin-top:-100svh`; su
+escenario fijo arranca en el **mismo fotograma de relevo**, calculado por una función
+compartida en `baraja-geometria.js` (misma caja, rotaciones y orden). En los últimos
+4svh el escenario de `ScrubHero` funde a 0 sobre uno idéntico: el visitante no ve
+corte. Un solo bucle activo a la vez. Al subir, simétrico. Sin Flip entre componentes.
+
+##### K4. Escritorio ≥1100 px (1440×900)
+
+Escenario fijo 100svh sobre `--bg`, tres columnas:
+
+| Zona | Contenido |
+|---|---|
+| 3/12 izquierda | eyebrow «Experiencias»; h2 «Un lugar para cada / *forma de viajar.*» `clamp(28px,2.6vw,40px)`; índice `tablist` vertical: rótulos de grupo (Ciudad, Pueblos, Naturaleza, Noche, Familia; `--fs-label`, no enfocables) y 11 nombres Montserrat 700 22 px, número `01–11` tabular; inactivo `--text`, activo `--text-strong` + barra naranja 6 px. |
+| 6/12 centro | la mano: portada 4:5 de alto `min(64svh,620px)`, radio 20, `--shadow-3`; detrás, hasta 4 fotos al 88 % que se abren en abanico con pivote bajo la carta (`transform-origin:50% 140%`, −14°, −7°, +7°, +14°). Detrás de todo, marquesina P2 con `cartas[slug].lugar`, tinta sólida, `aria-hidden` (la única de la página). Debajo: pie «{tour.name} · fotografía 01 de 05» y ‹ › de 44 px. Mazo de las cartas pendientes (≤5 portadas `-t` apiladas, `aria-hidden`) abajo a la derecha. |
+| 3/12 derecha | panel de altura reservada: «03 / 11» + categoría, h3 `tour.name`, **emoción:** frase (Spec 02), «Ver experiencia ↗» (texto) y «Planea esta experiencia ↗» (única acción naranja). |
+
+Bajo el escenario, fuera del pin: «Ver las 12 experiencias ↗». 900–1099 px: misma
+composición en dos columnas (índice y panel apilados a la izquierda), pin solo si cabe.
+
+##### K5. Scroll, selección y teclado
+
+Pista: relevo 30svh + 11 tramos de 30svh + salida 20svh ≈ 380svh (antes: 408svh de
+cartas + 220vh del explorador). Cada tramo: 0–15 % la carta llega desde el mazo
+(y 40→0, rotación del mazo → 0); 15–35 % portada sola, entra el texto; 35–75 % la mano
+se abre; 75–90 % se recoge; 90–100 % sale arriba a la izquierda (−8°, `opacity`→0)
+mientras llega la siguiente. Progreso con suavizado τ 60 ms; saltos >0,12 se igualan.
+Sin `preventDefault` en rueda, teclado ni gesto.
+
+Selección: clic o Enter en un nombre del índice salta (sin animar el viaje) a la meseta
+de ese tour con la mano abierta; clic en una foto del abanico o ‹ › la traen al frente
+(Flip 600 ms) y la anterior vuelve a su hueco; la elección manual se mantiene hasta que
+el scroll se mueve >24 px. Teclado: índice `tablist` con `tabindex` itinerante
+(↑/↓, Inicio/Fin); mano `region` «carrusel» con ←/→; `aria-live="polite"` solo ante
+acciones del usuario («Foto 2 de 5, Jardín»), nunca por scroll; foco 3 px `--focus`.
+Enlace «Saltar experiencias» (propuesta de microcopy) visible al recibir foco y junto a
+‹ ›, lleva a «Nos encargamos del camino». El índice cambia `aria-selected` con el scroll
+sin mover el foco.
+
+##### K6. Fotos por tour
+
+Portada = la misma carta de la baraja (`-t` como reserva inmediata; `-d` 640w o `-h`
+960w con `devicePixelRatio` ≥1,5), luego las de `explorer-data.js` (satélite 360×450
+en reposo, `main` 720×900 al frente). 10 tours con portada + 4; Compras con portada + 2
+(se excluye su portada de la selección para no repetirla). Fotos horizontales: recorte
+4:5 en el abanico; al frente el marco pasa a 4:3 (Flip de `clip-path`). Revisión foto a
+foto de recortes y caras: pendiente del director antes de aprobar.
+
+##### K7. Móvil <900 px (390×844)
+
+Pin solo si el escenario medido cabe (≥680 px útiles); tramos de 24svh. Arriba, chips
+horizontales con `scroll-snap` (44 px, 15 px, separador-rótulo por grupo; el activo se
+centra dentro del carril sin mover la página). Centro, la mano a 84vw (4:5) con las
+fotos asomando ±6°. Abajo, banda reservada de 200 px: contador, h3, emoción + frase,
+«Ver experiencia» y botón naranja a todo el ancho. Deslizar horizontal ≥48 px en la
+mano cambia de foto (`touch-action:pan-y`; el scroll vertical nunca se bloquea).
+360×640 o si no cabe: sin pin; chips + carrusel nativo de las fotos del tour + texto
+(selección por chips), con entrada única de la mano (0→±2°, 600 ms).
+
+##### K8. Movimiento, reducido, oscuro y fallos
+
+Valores de I1 y `movimiento-apple.md`: llegada/salida y apertura ligadas al progreso
+(solo `transform`/`opacity`/`clip-path`); texto del panel por fases 420/220 ms
+`--ease-out-strong`, y 8 px, escalonado 60 ms, simétrico; Flip 600 ms
+`--ease-in-out-strong`; marquesina −25 % del ancho por tramo, sin bucle; hover fino:
+foto del abanico −8 px + `--shadow-2` en 200 ms; pulsación `scale(.97)` 140 ms.
+
+Reducido, `saveData` o altura ≤560 px: sin pin, reparto, rotación ni marquesina;
+índice + rejilla 2×2 (portada + 3) del tour activo + panel; fundidos ≤150 ms. Sin JS y
+prerender: lista de 11 enlaces con nombre, emoción y frase. Foto fallida: hueco
+`--surface-2`, se descuenta del contador; sin fotos: texto + «Ver experiencia».
+Oscuro (J3): fondo y panel con tokens oscuros, fotos con borde `rgba(245,245,240,.12)`
+y sombra `rgba(0,0,0,.45)`, marquesina sólida `#DEDFD8`, inactivos `#DEDFD8`, foco
+`#FFAD60`; el botón naranja conserva texto `--on-brand`.
+
+##### K9. Rendimiento
+
+Motor actual (opción B, rAF + FLIP propio); un bucle, detenido fuera de vista o con la
+pestaña oculta; escrituras en `style`, nunca en estado de React por cuadro.
+`explorer-data.js` se importa en reposo cuando empieza la película. Llegada: portada +
+4 satélites del tour activo ≈ ≤310 KB escritorio y ≤130 KB móvil; se precarga solo el
+tour siguiente. Esto queda por debajo de la llegada actual (portadas `-h` vecinas del
+despliegue + 300 KB del explorador) y elimina la carga de las 12 `-h` (2,67 MB) del
+tramo de cartas. CLS 0 (huecos reservados); el LCP no cambia.
+
+##### K10. Accesibilidad y legibilidad
+
+Ningún texto sobre foto, vídeo o velo; la marquesina es decorativa y queda detrás de
+las fotos. Una acción naranja por pantalla (la cabecera sigue secundaria). Contrastes
+de I1/J3. Enlaces reales en orden lógico: índice → mano → panel. Copias decorativas y
+mazo con `aria-hidden` e `inert`. Áreas táctiles ≥44 px.
+
+##### K11. Criterio de aprobación
+
+Capturas 1440×900, 390×844 y 360×640, claro y oscuro: postal final de la película;
+relevo al 0/50/100 %; tour 1 con portada sola; mano abierta; tras ‹ ›; tras elegir
+Jardín en el índice; último tour y salida; 390 reducido; sin JS. Aprobado si: cada
+experiencia aparece una sola vez en el inicio; el fotograma de relevo de `ScrubHero` y
+de K difiere ≤1 % de píxeles; simetría al subir; ningún texto sobre foto; una acción
+naranja; teclado completo sin trampas; sin bloqueo de scroll en teléfono real de gama
+media; CLS 0; pesos medidos ≤K9; pista ≤380svh. Lo verifica el auditor; el usuario
+aprueba el aspecto.
+
+Pendientes: aprobación del usuario; microcopy «Saltar experiencias» y traducción EN
+de los textos ya existentes (verificar en `locales/en.json`); más fotos de Compras y
+revisión foto a foto — `PENDIENTE CLIENTE` donde corresponda.
+
 ## Compuerta
 
 - [ ] Brand board y un concepto aprobados.

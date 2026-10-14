@@ -1,0 +1,90 @@
+/* Inicio — Spec 03 §J1–J2 (aprobado por el usuario el 2026-10-14): hero de video, historia con video miniatura, cierre y redes.
+   Los espacios de video son iguales en claro y en oscuro (§J2). Contraste del hero medido sobre #1E201D / velo ≥ 0,60. */
+:root{--video-empty:radial-gradient(120% 90% at 70% 30%,#2A302C 0%,#1E201D 55%,#141614 100%);--hero-h:92px}
+@media(max-width:1099px){:root{--hero-h:76px}}
+
+/* ---------- Cabecera transparente sobre el hero (§J1 fila 0) ---------- */
+.site-header{transition:background-color 200ms ease,border-color 200ms ease}
+html:not([data-hero="past"]) .site-header.is-home:not(.menu-open){background:transparent;backdrop-filter:none;border-bottom-color:transparent;color:#F5F5F0}
+html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) :focus-visible{outline-color:#FFAD60}
+html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .menu-toggle,
+html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .site-preferences button,
+html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .site-preferences a{background:transparent;border-color:rgba(245,245,240,.6);color:#F5F5F0}
+html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .nav-cta{border-color:rgba(245,245,240,.6);color:#F5F5F0}
+html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .socials a{color:#F5F5F0}
+@media(hover:hover) and (pointer:fine){html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .nav-cta:hover,html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .site-preferences button:hover,html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .site-preferences a:hover,html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .socials a:hover{background:rgba(245,245,240,.14)}}
+
+/* ---------- 1 · Hero de video a sangre ---------- */
+.home-hero{position:relative;isolation:isolate;margin-top:calc(var(--hero-h) * -1);height:100svh;min-height:640px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--video-empty);color:#F5F5F0;text-align:center}
+.hero-media{position:absolute;inset:0;z-index:0}
+.hero-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(15,17,15,.28) 0%,rgba(15,17,15,0) 50%),rgba(15,17,15,.6)}
+.hero-copy{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;width:100%;max-width:1440px;padding:calc(var(--hero-h) + 24px) var(--pad) 56px}
+.home-hero .hero-eyebrow{margin:0 0 clamp(16px,3svh,28px);color:#F5F5F0}
+.home-hero h1{margin:0;color:#F5F5F0;font:800 clamp(64px,min(11vw,17svh),184px)/.88 var(--heading);letter-spacing:-.05em;max-width:14ch}
+.hero-l1,.hero-l2{display:block;white-space:nowrap;animation:hero-rise .6s var(--ease-out-strong) both}
+.hero-l2{animation-delay:60ms}
+@keyframes hero-rise{from{transform:translate3d(0,40px,0)}to{transform:none}}
+.hero-support{margin:clamp(20px,3.5svh,32px) 0 0;max-width:70ch;color:#F5F5F0;font:500 clamp(16px,1.4vw,18px)/1.5 var(--font);letter-spacing:.01em;text-wrap:balance}
+.hero-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:clamp(28px,5svh,44px)}
+.hero-btn{min-width:44px;padding:14px 26px}
+.hero-btn--explore:hover{background:#FF983F}
+.hero-btn--quote{background:transparent;color:#F5F5F0;border-color:rgba(245,245,240,.7)}
+.hero-btn--quote:hover{background:rgba(245,245,240,.14)}
+.home-hero :focus-visible{outline-color:#FFAD60}
+.hero-pause{position:absolute;z-index:3;right:var(--pad);bottom:32px;width:44px;height:44px;padding:0;border:1.5px solid rgba(245,245,240,.7);border-radius:50%;background:rgba(15,17,15,.6);color:#F5F5F0;font-size:13px;line-height:1}
+.hero-pause:hover{background:rgba(245,245,240,.2)}
+@media(max-width:799px){
+ .home-hero{min-height:560px;align-items:flex-end}
+ .hero-copy{padding:calc(var(--hero-h) + 16px) var(--pad) calc(32px + env(safe-area-inset-bottom))}
+ .home-hero h1{font-size:clamp(38px,min(13.5vw,calc((100vw - 40px) / 7.3)),64px)}
+ .hero-actions{flex-direction:column;align-items:stretch;width:100%}
+ .hero-btn{width:100%;justify-content:center;gap:14px;min-height:48px}
+ .hero-pause{top:calc(var(--hero-h) + 8px);bottom:auto}
+}
+
+/* ---------- 2 · Historia con video miniatura 9:16 (290 × 516) ---------- */
+.vframe{position:relative;display:block;overflow:hidden;background:var(--video-empty);border:1px solid rgba(245,245,240,.10);border-radius:20px;box-shadow:var(--shadow-2)}
+.vframe video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#1E201D}
+.vframe--story video{object-fit:contain}
+.vlabel{position:absolute;left:16px;bottom:16px;font:600 13px/1.2 var(--font);letter-spacing:.12em;text-transform:uppercase;color:#BDC3B9}
+.home-story{display:grid;grid-template-columns:290px minmax(0,648px);justify-content:center;align-items:center;gap:clamp(48px,8vw,128px);padding-block:clamp(96px,12vw,176px)}
+.vframe--story{width:290px;aspect-ratio:9/16}
+.story-copy h2{max-width:none;text-wrap:balance;font-size:clamp(32px,3.6vw,52px)}
+.story-copy p:not(.eyebrow){max-width:56ch;margin:28px 0 36px;font-size:var(--fs-lead)}
+@media(max-width:899px){
+ .home-story{grid-template-columns:minmax(0,1fr);gap:40px;padding-block:80px}
+ .vframe--story{width:min(72vw,290px);justify-self:center}
+}
+
+/* ---------- 9 · Cierre ---------- */
+.home-close{background:var(--surface);text-align:center}
+.home-close h2{max-width:16ch;margin-inline:auto}
+.home-close p{max-width:46ch;margin:24px auto 0;font-size:var(--fs-lead)}
+.close-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:40px}
+@media(max-width:699px){.close-actions{flex-direction:column;align-items:stretch}.close-actions .button{justify-content:center}}
+
+/* ---------- 10 · Síguenos en redes: perfil + cuadrícula 4×2 de publicaciones 1:1 (sin gaps, como Instagram) ---------- */
+.home-social h2{max-width:none;text-align:center}
+.ig-head{display:flex;flex-direction:column;align-items:center;text-align:center;margin-top:40px}
+.ig-avatar{width:112px;height:112px;border-radius:50%;object-fit:cover;border:1px solid var(--line)}
+.ig-name{margin:20px 0 0;font:700 20px/1.2 var(--heading);color:var(--text-strong)}
+.ig-handle{margin:4px 0 0;font-size:15px;color:var(--text)}
+.ig-stats{display:flex;gap:clamp(24px,5vw,48px);margin:20px 0 0;padding:0}
+.ig-stats div{display:flex;flex-direction:column-reverse;align-items:center}
+.ig-stats dt{font-size:13px;color:var(--text)}.ig-stats dd{margin:0;font:700 18px/1.2 var(--heading);color:var(--text-strong)}
+.ig-follow{display:inline-flex;align-items:center;gap:10px;min-height:44px;margin-top:24px;padding:0 28px;border-radius:8px;background:#0A5FC9;color:#fff;font:600 15px/1 var(--font)}
+.ig-follow:hover{background:#0B4FA6}
+.ig-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;list-style:none;margin:48px 0 0;padding:0}
+.ig-tile{position:relative;display:block;aspect-ratio:1/1;overflow:hidden;background:var(--video-empty);color:#fff;outline-offset:-3px}
+.ig-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ig-type{position:absolute;top:10px;right:10px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.65)) drop-shadow(0 0 1px rgba(0,0,0,.5))}
+.ig-tile:focus-visible{outline:3px solid #FFAD60}
+@media(hover:hover) and (pointer:fine){.ig-tile::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,0);transition:background-color 200ms ease}.ig-tile:hover::after{background:rgba(255,255,255,.12)}}
+.ig-tiktok{display:flex;justify-content:center;margin-top:28px}
+@media(max-width:699px){.ig-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.ig-grid>li:nth-child(n+7){display:none}.ig-type{top:6px;right:6px;width:18px;height:18px}}
+
+/* Rendimiento (Spec 05): secciones bajo el pliegue no se maquetan hasta acercarse. Se excluyen las que miden scroll (baraja, explorador). */
+.service-band,.reviews-g,.about-preview,.blog-book,.home-close,.home-social,.site-footer,.allies{content-visibility:auto;contain-intrinsic-size:auto 720px}
+.allies{contain-intrinsic-size:auto 160px}
+@media(prefers-reduced-motion:reduce){.hero-l1,.hero-l2{animation:none}.vframe--social{transition:none}}
