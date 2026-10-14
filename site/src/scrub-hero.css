@@ -259,3 +259,35 @@
  .scrub-ctl{animation:none}
  .sc-img img,.bd-tilt,.sc-card{transition:none}
 }
+
+/* ---------- Baraja previa a la película, escritorio (pedido del usuario 2026-10-14): cartas +18 % y más detalle visual aditivo ----------
+   Todo es decorativo (aria-hidden), sin puntos ni líneas de ruta, y se escala con --inv para que el detalle mida lo mismo con la carta reducida.
+   Solo transform/opacity se animan; el rótulo y el halo se desvanecen con la baraja (D) desde JS. */
+.bd-stamp,.bd-label,.bd-halo{display:none}
+@media(min-width:800px){
+ .bd-tilt{border:calc(1.5px*var(--inv,1)) solid rgba(255,255,255,.85);
+  box-shadow:0 calc(1px*var(--inv,1)) calc(1px*var(--inv,1)) rgba(30,32,29,.22),0 calc(3px*var(--inv,1)) calc(6px*var(--inv,1)) rgba(30,32,29,.14),0 calc(12px*var(--inv,1)) calc(22px*var(--inv,1)) rgba(30,32,29,.14),0 calc(28px*var(--inv,1)) calc(44px*var(--inv,1)) calc(-10px*var(--inv,1)) rgba(30,32,29,.22)}
+ /* Marco de postal: filo interior blanco más marcado y brillo en el borde */
+ .bd-tilt::before{content:"";position:absolute;z-index:2;inset:calc(10px*var(--inv,1));border:calc(1.5px*var(--inv,1)) solid rgba(255,255,255,.88);border-radius:calc(11px*var(--inv,1));pointer-events:none}
+ .bd-tilt::after{content:"";position:absolute;z-index:3;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(118deg,rgba(255,255,255,.40) 0%,rgba(255,255,255,0) 24%,rgba(255,255,255,0) 76%,rgba(255,255,255,.16) 100%);box-shadow:inset 0 calc(1px*var(--inv,1)) 0 rgba(255,255,255,.8),inset 0 0 0 calc(1px*var(--inv,1)) rgba(255,255,255,.30)}
+ /* Sello del lugar: matasellos gráfico (sin texto) en la esquina superior derecha */
+ .bd-stamp{display:block;position:absolute;z-index:4;right:calc(20px*var(--inv,1));top:calc(20px*var(--inv,1));width:calc(56px*var(--inv,1));height:calc(56px*var(--inv,1));border-radius:50%;color:rgba(255,255,255,.94);background:rgba(20,22,20,.34);transform:rotate(-14deg);pointer-events:none}
+ .bd-stamp svg{display:block;width:100%;height:100%}
+ /* Rótulo del lugar bajo cada carta (nunca sobre la foto) */
+ .bd-label{display:block;position:absolute;left:50%;top:100%;margin-top:calc(12px*var(--inv,1));transform:translateX(-50%) scale(var(--inv,1));transform-origin:50% 0;white-space:nowrap;font:700 13px/1 var(--heading,Montserrat,Arial,sans-serif);letter-spacing:.16em;text-transform:uppercase;color:var(--text-strong);opacity:0;pointer-events:none}
+ /* Halo cálido detrás del mazo */
+ .bd-halo{display:block;position:absolute;left:calc(var(--deck-x,50%) - var(--deck-h,300px)*1.15);top:calc(var(--deck-y,50%) - var(--deck-h,300px)*1.15);width:calc(var(--deck-h,300px)*2.3);height:calc(var(--deck-h,300px)*2.3);border-radius:50%;background:radial-gradient(closest-side,var(--brand-glow) 0%,rgba(255,127,9,.05) 58%,transparent 100%);opacity:0;pointer-events:none}
+ html[data-theme="dark"] .bd-tilt{border-color:rgba(245,245,240,.5);box-shadow:0 calc(1px*var(--inv,1)) calc(1px*var(--inv,1)) rgba(0,0,0,.6),0 calc(6px*var(--inv,1)) calc(12px*var(--inv,1)) rgba(0,0,0,.4),0 calc(24px*var(--inv,1)) calc(40px*var(--inv,1)) rgba(0,0,0,.45)}
+ html[data-theme="dark"] .bd-tilt::before{border-color:rgba(245,245,240,.55)}
+}
+@media(min-width:800px){
+ /* Detalle postal de la carta de arriba (la capa del clip): sigue la ventana del Flip con --ix/--iy/--s y se desvanece con --deco */
+ .md-deco{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:var(--deco,1)}
+ .md-frame{position:absolute;inset:calc(var(--iy,0)*1px + 10px/var(--s,1)) calc(var(--ix,0)*1px + 10px/var(--s,1));border:calc(1.5px/var(--s,1)) solid rgba(255,255,255,.88);border-radius:calc(11px/var(--s,1))}
+ .md-sheen{position:absolute;inset:calc(var(--iy,0)*1px) calc(var(--ix,0)*1px);border-radius:calc(18px/var(--s,1));background:linear-gradient(118deg,rgba(255,255,255,.40) 0%,rgba(255,255,255,0) 24%,rgba(255,255,255,0) 76%,rgba(255,255,255,.16) 100%);box-shadow:inset 0 calc(1px/var(--s,1)) 0 rgba(255,255,255,.8),inset 0 0 0 calc(1.5px/var(--s,1)) rgba(255,255,255,.55)}
+ .md-stamp{position:absolute;right:calc(var(--ix,0)*1px + 20px/var(--s,1));top:calc(var(--iy,0)*1px + 20px/var(--s,1));width:calc(56px/var(--s,1));height:calc(56px/var(--s,1));border-radius:50%;color:rgba(255,255,255,.94);background:rgba(20,22,20,.34);transform:rotate(-14deg)}
+ .md-stamp svg{display:block;width:100%;height:100%}
+ .bd-label{margin-top:calc(22px*var(--inv,1))}
+ html[data-theme="dark"] .md-frame{border-color:rgba(245,245,240,.55)}
+}
+@media(max-width:799px){.md-deco{display:none}}

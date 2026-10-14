@@ -16,6 +16,29 @@ export const inicioVideos = {
   historia: { src: null, poster: null, captions: null },
 };
 /*
+ * Video de cabecera de CADA ficha de experiencia (Spec 03 §M, pedido del usuario 2026-10-14): mismo espacio y mismas dimensiones que el hero del inicio
+ * (100vw × 100svh, componente compartido Hero.jsx). Con `src: null` la ficha muestra, MIENTRAS tanto, un diaporama de fotos oficiales del tour (fundido
+ * cruzado + Ken Burns). Para reemplazarlo basta pegar la ruta del archivo (en site/public/media/videos/tours/):
+ *   'city-tour-comuna-13': { src: '/media/videos/tours/city-tour-comuna-13.mp4', poster: '/media/videos/tours/city-tour-comuna-13.webp' }
+ * Formato: MP4 (H.264) 16:9, sin audio útil (se reproduce silenciado), ≤ 8 MB; el póster es lo único que se ve con movimiento reducido o ahorro de datos.
+ * La clave es el `slug` de la ficha. PENDIENTE CLIENTE: los videos y pósteres reales de cada experiencia.
+ */
+export const toursVideos = {
+  'city-tour-comuna-13': { src: null, poster: null },
+  'guatape-piedra-del-penol': { src: null, poster: null },
+  'tour-nocturno-medellin': { src: null, poster: null },
+  'vuelta-a-oriente': { src: null, poster: null },
+  'tour-del-cafe-medellin': { src: null, poster: null },
+  'hacienda-napoles': { src: null, poster: null },
+  'salto-del-buey': { src: null, poster: null },
+  'santa-fe-de-antioquia': { src: null, poster: null },
+  'jardin-antioquia': { src: null, poster: null },
+  'tour-de-compras': { src: null, poster: null },
+  'tour-miradores': { src: null, poster: null },
+  'traslados-aeropuerto-jmc': { src: null, poster: null },
+};
+export const videoDeTour = (slug) => toursVideos[slug] || { src: null, poster: null };
+/*
  * «Síguenos en redes» (Spec 03 §J, cambio del usuario 2026-10-14): perfil + cuadrícula 4×2 de publicaciones cuadradas, todo estático y local
  * (sin scripts, iframes ni widgets de Instagram). Para publicar un post basta pegar `url` e `image` (WebP/JPG cuadrado ≥ 640 px en public/media/instagram/).
  *   type: 'reel' | 'carousel' | 'photo' (reel y carrusel muestran su icono arriba a la derecha). Sin `image` el cuadro es el bloque oscuro provisional.

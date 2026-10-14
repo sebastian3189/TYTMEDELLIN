@@ -111,11 +111,9 @@ html[data-theme="dark"] .th-photo,html[data-theme="dark"] .th-deck img,html[data
 html[data-theme="dark"] .th-photo{box-shadow:0 18px 40px rgba(0,0,0,.45)}
 @media(prefers-reduced-motion:reduce){.th-index [role=tab],.th-card{transition:none}}
 
-/* Móvil: puntos de foto, snap suave entre experiencias (proximity, sin secuestrar el scroll) y gesto horizontal contenido */
+/* Móvil: puntos de foto y gesto horizontal contenido (el scroll recorre la información de UN tour; sin snap entre experiencias) */
 .th-dots{display:none}
-.th-snap{position:absolute;left:0;width:1px;height:1px;pointer-events:none;scroll-snap-align:start;scroll-margin-top:calc(var(--th-top) - 110px)}
 @media(max-width:1099px){
- html:has(.th[data-layout=compact][data-hydrated=true]){scroll-snap-type:y proximity}
  .th-hand{overscroll-behavior-x:contain}
  .th-cap{display:none}
  .th-foot{justify-content:space-between}

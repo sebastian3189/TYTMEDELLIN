@@ -14,14 +14,14 @@ export const SLOTS = [
 
 /**
  * Coloca las fotos de un tour. `local` = progreso del tour (<0 antes de llegar, 0–1 durante, >1 al salir); `f` = índice de la foto delantera;
- * `RW × RH` = región de la mano; `shrink` = factor de tamaño de las casillas; `mob` = móvil <768 px (foto central ≈ 70 % del ancho, satélites proporcionales).
+ * `RW × RH` = región de la mano; `shrink` = factor de tamaño de las casillas; `mob` = móvil <768 px (foto central = 70 % de su tamaño anterior por pedido del usuario 2026-10-14; los satélites no cambian).
  * Devuelve los datos de la carta delantera (para el nombre del lugar bajo ella).
  */
 export function placePhotos(imgs, f, local, RW, RH, shrink, mob, keep) {
   const ls = clamp(local, 0, 1); let fr = null;
   imgs.forEach((img, k) => {
     const slotIdx = k === f ? 0 : k < f ? k + 1 : k, slot = SLOTS[slotIdx % SLOTS.length];
-    const h = mob ? (slot.h / 0.76) * Math.min(RH * 0.97, RW * 0.91) * (slotIdx === 0 ? 1 : 0.6) : slot.h * RH * shrink, w = h * 0.8;
+    const h = mob ? (slot.h / 0.76) * Math.min(RH * 0.97, RW * 0.91) * (slotIdx === 0 ? 0.7 : 0.6) : slot.h * RH * shrink, w = h * 0.8;
     if (img._w !== w) { img.style.width = `${w}px`; img.style.height = `${h}px`; img._w = w; }
     const front = slotIdx === 0;
     const tIn = front ? 0 : 0.14 + 0.055 * (slotIdx - 1), eIn = local < 0 ? 0 : front ? smooth(ls / 0.15) : smooth((ls - tIn) / 0.22);

@@ -55,7 +55,7 @@ const two = (n) => String(n).padStart(2, '0');
 
 export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', nextId, summary }) {
   const root = useRef(null), track = useRef(null), stage = useRef(null), canvas = useRef(null), skipRef = useRef(null), media = useRef(null);
-  const floatRef = useRef(null), deckRef = useRef(null), titleRef = useRef(null), stackRef = useRef(null);
+  const haloRef = useRef(null), floatRef = useRef(null), deckRef = useRef(null), titleRef = useRef(null), stackRef = useRef(null);
   // Prerender (Spec 04): el servidor y la primera pasada de hidratación son el modo estático (HTML legible, enlaces reales, sin JS); un efecto de
   // diseño lee el entorno (preferencias, tamaño, red) y pasa al modo animado antes del primer pintado, así no hay desajuste de hidratación.
   const [ready, setReady] = useState(false);
@@ -116,6 +116,7 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
     const cardEls = deckRef.current ? [...deckRef.current.querySelectorAll('.bd-card')] : [];
     const fxEls = titleRef.current ? [...titleRef.current.querySelectorAll('[data-fx]')] : [];
     const floatEls = floatRef.current ? [...floatRef.current.querySelectorAll('.bd-float')] : [];
+    const haloEl = haloRef.current, labelEls = cardEls.map((el) => el.querySelector('.bd-label'));
 
 
     const track2 = (delta, size) => {
@@ -152,6 +153,7 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
         stageEl.style.setProperty('--m-t1', `${dims.m.t1Top}px`);
         stageEl.dataset.short = dims.m.short ? '1' : '0';
       }
+      stageEl.style.setProperty('--deck-x', `${dims.deck.x}px`); stageEl.style.setProperty('--deck-y', `${dims.deck.y}px`); stageEl.style.setProperty('--deck-h', `${dims.Hd}px`);
       stageEl.style.setProperty('--deck-top', `${dims.deck.y - dims.Hd / 2}px`); stageEl.style.setProperty('--deck-bottom', `${dims.deck.y + dims.Hd / 2}px`);
       lastCard.fill(''); Object.keys(lastFx).forEach((k) => delete lastFx[k]);
       lastKey = '';
@@ -207,26 +209,34 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
       // Marco del clip (Flip): transform + clip-path de la capa de tamaño natural; la carta superior y el lienzo son la misma capa.
       frameWindow(dims, st.w, fw, st.clipT);
       const fullFrame = st.w >= .999 && (!mobile || st.clipT <= .6);
-      const fkey = fullFrame ? 'full' : `${fw.tx.toFixed(1)}|${fw.ty.toFixed(1)}|${fw.rot.toFixed(2)}|${fw.s.toFixed(4)}|${fw.ix.toFixed(1)}|${fw.iy.toFixed(1)}|${fw.r.toFixed(2)}`;
+      const fkey = fullFrame ? 'full' : `${st.D.toFixed(2)}|${fw.tx.toFixed(1)}|${fw.ty.toFixed(1)}|${fw.rot.toFixed(2)}|${fw.s.toFixed(4)}|${fw.ix.toFixed(1)}|${fw.iy.toFixed(1)}|${fw.r.toFixed(2)}`;
       const fo = 1 - smooth(clamp(st.rel * 2.5)); // la postal se funde mientras el mazo viaja a su caja
       const mkey = `${fkey}|${fo.toFixed(3)}`;
       if (lastFx.media !== mkey) {
         lastFx.media = mkey;
         if (fullFrame) { mediaEl.style.transform = 'none'; mediaEl.style.clipPath = 'none'; }
         else { mediaEl.style.transform = `translate3d(${fw.tx}px,${fw.ty}px,0) rotate(${fw.rot}deg) scale(${fw.s})`; mediaEl.style.clipPath = `inset(${fw.iy}px ${fw.ix}px round ${fw.r}px)`; }
+        if (!mobile) { // detalle postal de la carta de arriba (marco, brillo y sello): sigue la ventana del Flip y se va en el primer cuarto
+          mediaEl.style.setProperty('--ix', fw.ix.toFixed(1)); mediaEl.style.setProperty('--iy', fw.iy.toFixed(1)); mediaEl.style.setProperty('--s', fw.s.toFixed(4));
+          mediaEl.style.setProperty('--deco', (st.w >= 0.3 ? 0 : (1 - smooth(st.w / 0.3)) * st.D).toFixed(3));
+        }
         mediaEl.style.opacity = String(fo); mediaEl.style.visibility = fo < 0.01 ? 'hidden' : 'visible';
       }
       // Baraja de cartas.
       for (let i = 0; i < cardEls.length; i++) {
         cardPlace(dims, st, i, cp);
-        const key = `${cp.x.toFixed(1)}|${cp.y.toFixed(1)}|${cp.r.toFixed(2)}|${cp.s.toFixed(4)}|${cp.o.toFixed(3)}|${cp.z}`;
+        // Rótulo del lugar bajo la carta (escritorio): visible en la carta de arriba y, mientras se barajan, en todas; se va con la baraja (D).
+        const lab = mobile ? 0 : Math.max(cp.z === 10 + N ? 1 : 0, smooth(clamp((Math.sin(Math.PI * st.sh) - 0.5) / 0.4))) * st.D;
+        const key = `${cp.x.toFixed(1)}|${cp.y.toFixed(1)}|${cp.r.toFixed(2)}|${cp.s.toFixed(4)}|${cp.o.toFixed(3)}|${cp.z}|${lab.toFixed(2)}`;
         if (key === lastCard[i]) continue;
         lastCard[i] = key;
         const el = cardEls[i];
         el.style.transform = `translate3d(${cp.x - dims.Bw / 2}px,${cp.y - dims.Bh / 2}px,0) rotate(${cp.r}deg) scale(${cp.s})`;
         el.style.opacity = cp.o.toFixed(3); el.style.zIndex = String(cp.z);
         el.style.setProperty('--inv', (1 / cp.s).toFixed(3));
+        if (labelEls[i]) labelEls[i].style.opacity = lab.toFixed(2);
       }
+      if (haloEl && !mobile) haloEl.style.opacity = (st.D * 0.9).toFixed(3);
       // «Baraja a la vista»: titular partido, lema, confianza y tira se van y vuelven con D.
       // Móvil: el texto se desvanece en la primera mitad del cambio y se desplaza poco, para no cruzarse con el lema, la confianza ni la banda.
       const dKey = st.D.toFixed(3), dOp = mobile ? clamp(st.D * 2 - 1) : st.D, dMove = mobile ? 0.035 : 0.05;
@@ -371,10 +381,10 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
       for (let i = 0; i < count; i++) { drop(full, i); drop(low, i); }
       blobs.fill(null);
       for (const k of ['ready', 'frame', 'loaded', 'progress', 'target', 'settled', 'u', 'bitmaps', 'bitmapsPeak', 'bitmapMb', 'bitmapMbPeak']) delete section.dataset[k];
-      for (const el of [mediaEl, ...floatEls, ...cardEls, ...fxEls]) { el?.removeAttribute('style'); }
+      for (const el of [mediaEl, haloEl, ...floatEls, ...cardEls, ...labelEls, ...fxEls]) { el?.removeAttribute('style'); }
       stageEl.style.opacity = ''; stageEl.style.pointerEvents = '';
       stageEl.dataset.ui = 'deck'; stageEl.dataset.cap = ''; stageEl.dataset.ch = '1';
-      for (const k of ['--bw', '--bh', '--stage-h', '--m-t1', '--deck-top', '--deck-bottom']) stageEl.style.removeProperty(k);
+      for (const k of ['--bw', '--bh', '--stage-h', '--m-t1', '--deck-top', '--deck-bottom', '--deck-x', '--deck-y', '--deck-h']) stageEl.style.removeProperty(k);
       delete stageEl.dataset.short;
       delete stageEl.dataset.phase;
     };
@@ -407,6 +417,7 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
               <img src={`${BASE}/poster-1600.webp`} srcSet={`${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`} sizes="100vw" width="1600" height="900" alt="Vista de Medellín desde la ladera de la Comuna 13" loading="lazy" decoding="async" />
             </picture>
             {animated && <canvas ref={canvas} className="scrub-canvas" aria-hidden="true" />}
+            {animated && !mobile && <span className="md-deco" aria-hidden="true"><i className="md-frame" /><i className="md-sheen" /><i className="md-stamp"><svg viewBox="0 0 48 48" focusable="false"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 2.6" /><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" strokeWidth="1.3" /><path d="M15 29l6-7 4 4 3-3 5 6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /><circle cx="30.5" cy="18.5" r="2" fill="currentColor" /></svg></i></span>}
           </div>
           <div ref={titleRef} className="scrub-title">
             <p className="eyebrow scrub-lema" data-fx="0">Experiencias</p>
@@ -451,8 +462,12 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
             </div>
           )}
           <div ref={deckRef} className="bd-deck">
+            {animated && !mobile && <i ref={haloRef} className="bd-halo" aria-hidden="true" />}
             {animated && cards.map((c) => (
-              <div key={c.slug} className="bd-card" aria-hidden="true"><span className="bd-tilt"><img className="bd-thumb" src={cardImg(c.slug, 't')} width="320" height="400" alt="" decoding="async" loading="lazy" /></span></div>
+              <div key={c.slug} className="bd-card" aria-hidden="true">
+                <span className="bd-tilt"><img className="bd-thumb" src={cardImg(c.slug, 't')} width="320" height="400" alt="" decoding="async" loading="lazy" /><i className="bd-stamp"><svg viewBox="0 0 48 48" focusable="false"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 2.6" /><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" strokeWidth="1.3" /><path d="M15 29l6-7 4 4 3-3 5 6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /><circle cx="30.5" cy="18.5" r="2" fill="currentColor" /></svg></i></span>
+                <span className="bd-label">{inicioTextos.cartas[c.slug]?.lugar}</span>
+              </div>
             ))}
           </div>
         </div>

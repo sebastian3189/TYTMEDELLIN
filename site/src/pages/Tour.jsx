@@ -5,6 +5,7 @@ import tourInfo from '../tour-info.json';
 import TourDetails from '../TourDetails';
 import TourArchive from '../TourArchive';
 import TourHero from '../TourHero';
+import { TourHeroVideo } from '../Hero';
 import { TourNav, TourRoute, useTourReveal } from '../TourChrome';
 import Faq from '../Faq';
 import Icon from '../icons';
@@ -30,6 +31,7 @@ export default function Tour(){const {slug}=useParams();const tour=tours.find(t=
  const faq=[ORGANIZAR,...(slug==='traslados-aeropuerto-jmc'?FAQ_TRANSFER:FAQ_TOUR)],duracion=DURACIONES[slug];
  return <div ref={page} className={`tour-page mood-${tour.mood}`}>
  <TourRoute/>
+ <TourHeroVideo tour={tour}/>
  <TourHero tour={tour}/>
  <Marquee text={tour.name.toLocaleUpperCase('es')}/>
  <TourNav/>

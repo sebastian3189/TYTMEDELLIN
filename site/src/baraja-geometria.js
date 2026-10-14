@@ -97,7 +97,7 @@ export function buildDims(W, H, mobile, frame) {
     m = { t1Top, short, A };
   } else {
     Bh = clamp(H * 0.64, 280, 640);
-    Hd = clamp(H * 0.31, 220, 360);
+    Hd = clamp(H * 0.366, 260, 425); // escritorio: cartas de la baraja previa a la película +18 % (pedido del usuario 2026-10-14); el Flip parte de Wd/Hd, así que sigue continuo
     deck = { x: W / 2, y: H * 0.49 };
     focus = { x: W * 0.6, y: H * 0.5 };
   }

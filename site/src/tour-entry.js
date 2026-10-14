@@ -7,6 +7,17 @@ import { inicioTextos } from './inicio-textos';
  */
 const CARDS = '/media/baraja';
 const MAX_PHOTOS = 8;
+/**
+ * Fotos del diaporama provisional del hero de la ficha (4–6 oficiales, ya sin la portada JMC con cartel porque `gallery` la excluye): primero la foto principal,
+ * luego las horizontales y por último el resto repartido de forma pareja. Si el tour tiene menos de 4 fotos oficiales (Compras 3, Traslados 2) salen todas.
+ */
+export function tourSlides(slug, max = 6) {
+  const t = tours.find((x) => x.slug === slug), pool = t.gallery, first = pool.find((p) => p.src === t.hero.src) || pool[0];
+  const rest = pool.filter((p) => p !== first), wide = rest.filter((p) => p.width > p.height), tall = rest.filter((p) => p.width <= p.height);
+  const out = [first, ...wide.slice(0, 2)], need = Math.min(max, pool.length) - out.length, step = tall.length / Math.max(1, need);
+  for (let k = 0; k < need && k < tall.length; k++) out.push(tall[Math.floor(k * step)]);
+  return out.filter(Boolean).slice(0, max);
+}
 export function tourEntry(slug) {
   const t = tours.find((x) => x.slug === slug), copy = inicioTextos.cartas[slug];
   const pool = t.gallery.filter((_, i) => i > 0 || slug === 'tour-de-compras');

@@ -23,6 +23,10 @@ const N = ORDER.length;
 const CARDS = '/media/baraja';
 const SEG = { wide: 30, compact: 80 }; // svh por experiencia (móvil: ≈0,8 pantallas por tour, sin tramos muertos)
 const EXIT = 20, RELAY = RELAY_SVH + FADE_SVH;
+// Compacto (móvil/tablet): el scroll recorre la información DE UN SOLO tour (llegada y abanico → una foto tras otra → salida); el tour solo cambia con los chips.
+const COMPACT_SVH = 232, COMPACT_END = 10, PH_A = 0.16, PH_C = 0.88;
+const totalFor = (wide) => (wide ? RELAY + N * SEG.wide + EXIT : RELAY + COMPACT_SVH + COMPACT_END);
+const mapLocal = (tl) => (tl < PH_A ? 0.62 * (tl / PH_A) : 0.62 + 0.18 * clamp((tl - PH_A) / (PH_C - PH_A))); // abanico abierto y deriva suave; la despedida es un fundido (sin recorrido que cruce el texto)
 const WIDE = '(min-width: 1100px)', SMALL = '(max-width: 799px)', REDUCE = '(prefers-reduced-motion: reduce)', LOW = '(max-height: 560px)', REDUCE_KEY = 'tyt-reducir-movimiento';
 const MAX_PHOTOS = 8;
 const two = (n) => String(n).padStart(2, '0');
@@ -123,12 +127,17 @@ export default function TravelHand() {
     return () => ro.disconnect();
   }, [animated, shown, layout]);
 
+  const flipOn = useCallback(() => { const el = handEl.current; if (el) { el.dataset.flip = 'true'; clearTimeout(st.current.flip); st.current.flip = setTimeout(() => { el.dataset.flip = 'false'; }, 650); } }, []);
+  // Antes de tocar un chip se decodifican las fotos de ese tour (la llegada nunca parpadea).
+  const warm = useCallback((gi) => { const e = ENTRIES[gi]; if (!e || navigator.connection?.saveData) return; e.photos.forEach((p, k) => { const im = new Image(); im.decoding = 'async'; im.sizes = k === 0 ? '(max-width: 799px) 84vw, 36vw' : '(max-width: 799px) 40vw, 18vw'; im.srcset = p.srcSet; im.src = p.src; im.decode?.().catch(() => {}); }); setFull((prev) => (prev.has(gi) ? prev : new Set(prev).add(gi))); }, []);
+
   useLayoutEffect(() => {
     if (!ready || !animated) return undefined;
     const trackEl = track.current, stageEl = stage.current, hand = handEl.current, mq = mqEl.current, deck = deckEl.current;
     const small = window.matchMedia(SMALL).matches, wide = layout === 'wide', seg = wide ? SEG.wide : SEG.compact, shrink = wide ? 1 : innerWidth < 768 ? 0.62 : 0.82, mob = innerWidth < 768; // compacto: fotos más pequeñas, dentro de su propia región (<768 px: ≈25 % menos que antes, excepción autorizada del usuario)
-    const total = RELAY + N * seg + EXIT;
+    const compact = !wide, total = totalFor(wide);
     let raf = 0, visible = true, destroyed = false, q = null, lastT = 0, stageTop = 92, span = 1, RW = 0, RH = 0, sw = 0, sh = 0;
+    let arrT = 0, leaving = null, curTl = 0, lastSf = -1; // compacto: arranque de la llegada tras elegir un chip, grupo que sale y progreso del tour
     let groupCache = null, trackTop = 0;
     const groups = () => groupCache || (groupCache = [...hand.querySelectorAll('.th-group')]);
     // Medidas del carril precalculadas (resize / ResizeObserver): el cuadro de scroll no lee layout.
@@ -148,25 +157,46 @@ export default function TravelHand() {
     };
     let lastKey = '', keep = null;
 
-    const apply = (P) => {
-      const idx = clamp(Math.floor(P), 0, N - 1), s = clamp(P - idx, 0, 1), P2 = clamp(P, 0, N);
-      if (idx !== st.current.active) { st.current.active = idx; setActive(idx); }
-      const key = `${P2.toFixed(4)}|${RW}x${RH}|${JSON.stringify(st.current.fronts)}`;
+    // Escritorio: P = posición en tours (0…N). Compacto: P = progreso 0…1 DENTRO del tour elegido con los chips (nunca cambia de tour solo).
+    const apply = (P, now) => {
+      let idx, eff, P2 = 0;
+      if (compact) {
+        idx = st.current.active; const ramp = arrT ? smooth(clamp((now - arrT) / 700)) : 1; eff = mapLocal(P) * ramp; // llegada del tour recién elegido: mismo gesto que el abanico
+        if (arrT && ramp >= 1) arrT = 0;
+        if (leaving && now > leaving.until) { leaving = null; lastKey = ''; }
+        // La foto delantera avanza con el scroll (una información tras otra); la elección manual manda hasta que el scroll se mueve > 24 px.
+        const n = ENTRIES[idx].photos.length, sf = clamp(Math.floor(clamp((P - PH_A) / (PH_C - PH_A)) * n), 0, n - 1);
+        if (st.current.manualY === null && sf !== lastSf) { lastSf = sf; if ((st.current.fronts[idx] || 0) !== sf) { setFronts(sf ? { [idx]: sf } : {}); flipOn(); } }
+      } else {
+        idx = clamp(Math.floor(P), 0, N - 1); P2 = clamp(P, 0, N);
+        if (idx !== st.current.active) { st.current.active = idx; setActive(idx); }
+        eff = clamp(P2 - idx, 0, 1);
+      }
+      const key = `${compact ? `${eff.toFixed(4)}|${idx}|${leaving ? leaving.gi : ''}|${P > PH_C ? P.toFixed(3) : ''}` : P2.toFixed(4)}|${RW}x${RH}|${JSON.stringify(st.current.fronts)}`;
       if (key === lastKey) return; lastKey = key;
       for (const g of groups()) {
-        const gi = Number(g.dataset.i), local = P2 - gi, f = st.current.fronts[gi] || 0;
-        const vis = local > -0.2 && local < 1.25; g.style.visibility = vis ? 'visible' : 'hidden';
-        if (!vis) continue;
-        const ls = clamp(local, 0, 1), before = local < 0 ? smooth(clamp(1 + local * 4)) : 0; // llega desde el mazo en el 0–15 % del tramo
+        const gi = Number(g.dataset.i), f = st.current.fronts[gi] || 0;
+        let local;
+        if (compact) {
+          if (gi !== idx) { // grupo que no está activo: el saliente se desvanece 220 ms, el resto queda oculto
+            const out = leaving && leaving.gi === gi;
+            g.style.visibility = out ? 'visible' : 'hidden'; g.style.transition = out ? 'opacity 220ms ease' : ''; g.style.opacity = out ? '0' : ''; g.style.transform = '';
+            continue;
+          }
+          local = eff; g.style.visibility = 'visible'; g.style.transition = ''; const bye = smooth((P - PH_C) / (1 - PH_C)); g.style.opacity = bye ? String((1 - bye).toFixed(3)) : ''; g.style.transform = bye ? `translate3d(0,${(bye * 28).toFixed(1)}px,0)` : ''; // al terminar la información del tour, las fotos se despiden y la página sigue
+        } else {
+          local = P2 - gi;
+          const vis = local > -0.2 && local < 1.25; g.style.visibility = vis ? 'visible' : 'hidden';
+          if (!vis) continue;
+        }
+        const ls = clamp(local, 0, 1);
         const fr = placePhotos([...g.querySelectorAll('.th-photo')], f, local, RW, RH, shrink, mob, keep);
         placeLugar(g.querySelector('.th-lugar'), fr, ls, RH);
       }
       // Marquesina decorativa del lugar: −25 % del ancho por tramo, sin bucle.
-      const ls0 = clamp(P2 - idx, 0, 1);
-      mq.style.transform = `translate3d(${(0.12 * sw - 0.25 * ls0 * sw).toFixed(1)}px,-50%,0)`;
+      mq.style.transform = `translate3d(${(0.12 * sw - 0.25 * eff * sw).toFixed(1)}px,-50%,0)`;
       // Mazo pendiente: cartas del siguiente al quinto; se desvanece al final.
-      deck.style.opacity = String(clamp(1 - (P2 - (N - 2)) * 1.2));
-
+      if (!compact) deck.style.opacity = String(clamp(1 - (P2 - (N - 2)) * 1.2));
     };
 
     const render = (now) => {
@@ -177,14 +207,15 @@ export default function TravelHand() {
       const fin = clamp((u - (RELAY - FADE_SVH)) / FADE_SVH);
       const cfin = wide ? fin : smooth(clamp(u / (RELAY - FADE_SVH)));
       if (stageEl._fin !== fin || stageEl._cfin !== cfin) { stageEl._fin = fin; stageEl._cfin = cfin; stageEl.style.setProperty('--cfin', cfin.toFixed(3)); stageEl.style.setProperty('--fin', fin.toFixed(3)); stageEl.style.pointerEvents = cfin < 1 ? 'none' : ''; stageEl.dataset.on = fin > 0 ? 'true' : 'false'; }
-      const target = clamp((u - RELAY) / seg, 0, N);
+      const target = compact ? clamp((u - RELAY) / COMPACT_SVH) : clamp((u - RELAY) / seg, 0, N);
+      curTl = compact ? target : 0;
       const dt = lastT ? Math.min(64, now - lastT) : 16; lastT = now;
-      if (q === null || Math.abs(target - q) > 0.12 * 3) q = target; else q += (target - q) * (1 - Math.exp(-dt / (wide ? 60 : 45))); // móvil: τ ≤ 50 ms, sin sensación elástica
+      if (q === null || Math.abs(target - q) > (compact ? 0.12 : 0.36)) q = target; else q += (target - q) * (1 - Math.exp(-dt / (wide ? 60 : 45))); // móvil: τ ≤ 50 ms, sin sensación elástica
       let moving = true; if (Math.abs(target - q) < 0.0004) { q = target; moving = false; }
       // La elección manual de foto se mantiene hasta que el scroll se mueve > 24 px.
-      if (st.current.manualY !== null && Math.abs(scrollY - st.current.manualY) > 24) { st.current.manualY = null; if (Object.keys(st.current.fronts).length) setFronts({}); }
-      apply(q);
-      if (moving) schedule(); else lastT = 0;
+      if (st.current.manualY !== null && Math.abs(scrollY - st.current.manualY) > 24) { st.current.manualY = null; lastSf = -1; if (Object.keys(st.current.fronts).length) setFronts({}); }
+      apply(q, now);
+      if (moving || arrT || leaving) schedule(); else lastT = 0;
     };
     const schedule = () => { if (!raf && !destroyed) raf = requestAnimationFrame(render); };
     const onScroll = () => schedule();
@@ -195,6 +226,15 @@ export default function TravelHand() {
       const u = RELAY + (i + s) * seg;
       window.scrollTo({ top: trackTop - stageTop + (u / total) * span, behavior: 'instant' }); schedule();
     };
+    // Compacto: un chip cambia de experiencia sin mover la página (salvo que el scroll esté en la despedida del tour: entonces vuelve a la zona del abanico).
+    st.current.choose = (i) => {
+      if (!compact) { st.current.jump(i); return; }
+      if (i === st.current.active) return;
+      leaving = { gi: st.current.active, until: performance.now() + 260 }; arrT = performance.now() + 120; lastSf = -1; lastKey = '';
+      st.current.manualY = null; st.current.active = i; setActive(i); setFronts({});
+      if (curTl > 0.8) window.scrollTo({ top: trackTop - stageTop + ((RELAY + 0.3 * COMPACT_SVH) / total) * span, behavior: 'instant' });
+      schedule();
+    };
     st.current.refresh = () => { groupCache = null; lastKey = ''; schedule(); };
     const bodyRO = new ResizeObserver(() => { measureTrack(); lastKey = ''; schedule(); }); bodyRO.observe(document.body);
     metrics(); observer.observe(root.current); resize.observe(hand); resize.observe(stageEl);
@@ -204,7 +244,7 @@ export default function TravelHand() {
     return () => {
       destroyed = true; cancelAnimationFrame(raf); observer.disconnect(); resize.disconnect(); bodyRO.disconnect();
       window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); document.removeEventListener('visibilitychange', onScroll);
-      st.current.jump = () => {}; st.current.refresh = () => {};
+      st.current.jump = () => {}; st.current.choose = () => {}; st.current.refresh = () => {};
       for (const img of hand.querySelectorAll('.th-photo')) { img.removeAttribute('style'); delete img._w; }
     };
   }, [ready, animated, layout]);
@@ -215,17 +255,17 @@ export default function TravelHand() {
   const select = useCallback((gi, next, announce) => {
     const n = ENTRIES[gi].photos.length, f = ((next % n) + n) % n;
     setFronts((p) => ({ ...p, [gi]: f })); st.current.manualY = scrollY;
-    const el = handEl.current; if (el) { el.dataset.flip = 'true'; clearTimeout(st.current.flip); st.current.flip = setTimeout(() => { el.dataset.flip = 'false'; }, 650); }
+    flipOn();
     if (announce) setLive(`Foto ${f + 1} de ${n}, ${ENTRIES[gi].name}`);
-  }, []);
+  }, [flipOn]);
   const onTabKey = (e, i) => {
     const next = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? (i + 1) % N : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? (i + N - 1) % N : e.key === 'Home' ? 0 : e.key === 'End' ? N - 1 : null;
-    if (next === null) return; e.preventDefault(); st.current.jump(next); tabs.current[next]?.focus({ preventScroll: true });
+    if (next === null) return; e.preventDefault(); st.current.choose(next); tabs.current[next]?.focus({ preventScroll: true });
   };
   useGlassPill(tabList, active, animated && layout === 'compact');
   const nowFront = fronts[active] || 0, entry = ENTRIES[shown];
   const t = inicioTextos, seg = layout === 'wide' ? SEG.wide : SEG.compact;
-  const trackStyle = animated ? { '--th-total': RELAY + N * seg + EXIT } : undefined;
+  const trackStyle = animated ? { '--th-total': totalFor(layout === 'wide') } : undefined;
 
   const header = (
     <div className="th-head">
@@ -274,7 +314,7 @@ export default function TravelHand() {
               {GROUPS.map((g) => (
                 <div className="th-group-tabs" key={g.name}>
                   {g.items.map((i) => (
-                    <button key={ENTRIES[i].slug} ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" id={`th-tab-${i}`} aria-controls="th-hand" aria-selected={active === i} tabIndex={active === i ? 0 : -1} onClick={() => st.current.jump(i)} onKeyDown={(e) => onTabKey(e, i)}><span>{two(i + 1)}</span>{ENTRIES[i].name}</button>
+                    <button key={ENTRIES[i].slug} ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" id={`th-tab-${i}`} aria-controls="th-hand" aria-selected={active === i} tabIndex={active === i ? 0 : -1} onClick={() => st.current.choose(i)} onPointerDown={() => warm(i)} onKeyDown={(e) => onTabKey(e, i)}><span>{two(i + 1)}</span>{ENTRIES[i].name}</button>
                   ))}
                 </div>
               ))}
@@ -320,7 +360,6 @@ export default function TravelHand() {
           <p className="sr-only" aria-live="polite">{live}</p>
         </div>
       </div>
-      {layout === 'compact' && ENTRIES.map((e, i) => <i key={e.slug} className="th-snap" aria-hidden="true" style={{ top: `calc(${RELAY + (i + 0.56) * seg} * 1svh)` }} />)}
       <div id="th-inicio" className="th-marker" tabIndex={-1} role="group" aria-label="Un lugar para cada forma de viajar" style={{ top: `calc(${RELAY} * 1svh)` }} />
       <p className="th-all"><Link className="text-link" to="/experiencias">Ver las 12 experiencias<Arrow /></Link></p>
     </section>

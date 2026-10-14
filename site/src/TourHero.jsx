@@ -62,7 +62,7 @@ export default function TourHero({ tour }) {
 
 
   const text = (
-    <div className="tour-hero-content tdk-text"><Link to="/experiencias" className="back-link"><Arrow dir="left" />Todas las experiencias</Link><Eyebrow>{tour.category} · Desde Medellín</Eyebrow><h1>{tour.name}</h1><p>{tour.title}</p><a className="button" id="cta-principal" href="#consulta">Planea esta experiencia <Arrow /></a></div>
+    <div className="tour-hero-content tdk-text"><Link to="/experiencias" className="back-link"><Arrow dir="left" />Todas las experiencias</Link><Eyebrow>{tour.category} · Desde Medellín</Eyebrow><h2>{tour.name}</h2><p>{tour.title}</p><a className="button" href="#consulta">Planea esta experiencia <Arrow /></a></div>
   );
   if (!animated) {
     return (

@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { watchScroll, docTop, clamp01 } from './scroll-bus';
 
 // Spec 03 I5: native scroll and one local rAF / FLIP choreography, no dependencies.
 // Prerender (Spec 04): el servidor y la primera pasada de hidratación usan el valor `false` (movimiento completo); `useSyncExternalStore` lo
@@ -16,7 +17,8 @@ export function useMedia(query, server = false) {
 }
 export function EditorialMotion({children,className=''}) {
  const ref=useRef(null),light=useLightMotion();
- useEffect(()=>{const node=ref.current;if(light)return;let frame=0;const update=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{const r=node.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight||document.hidden)return;const p=Math.min(1,Math.max(0,-r.top/r.height));node.style.setProperty('--editorial-shift',`${p*4}vw`);node.style.setProperty('--photo-shift',`${p*-24}px`)})};window.addEventListener('scroll',update,{passive:true});update();return()=>{window.removeEventListener('scroll',update);cancelAnimationFrame(frame);node.style.removeProperty('--editorial-shift');node.style.removeProperty('--photo-shift')}},[light]);
+ // Planificador único (scroll-bus): sin lecturas de layout en el scroll; solo escribe cuando el valor cambia (pasos de 0,5 %).
+ useEffect(()=>{const node=ref.current;if(light||!node)return;let top=0,h=1,last=-1;const stop=watchScroll({el:node,margin:0,measure:()=>{top=docTop(node);h=node.offsetHeight||1},update:y=>{const p=Math.round(clamp01((y-top)/h)*200)/200;if(p===last)return;last=p;node.style.setProperty('--editorial-shift',`${p*4}vw`);node.style.setProperty('--photo-shift',`${p*-24}px`)}});return()=>{stop();node.style.removeProperty('--editorial-shift');node.style.removeProperty('--photo-shift')}},[light]);
  return <section ref={ref} className={`editorial-motion ${className}`}>{children}</section>;
 }
 // Marquesina de lugar: el nombre COMPLETO cabe siempre en el ancho disponible. Tamaño = mín(128 px, 0,92 × ancho útil / ancho medido a 1 px),
@@ -34,7 +36,7 @@ function fitMarquee(host,text){
 export function Marquee({text}) {
  const ref=useRef(null),light=useLightMotion(),[fit,setFit]=useState({size:56,lines:[text]});
  useLayoutEffect(()=>{const node=ref.current;if(!node)return;let alive=true;const run=()=>{if(!alive)return;const f=fitMarquee(node,text);if(f)setFit(prev=>prev.size===f.size&&prev.lines.join('|')===f.lines.join('|')?prev:f)};run();document.fonts?.ready.then(run);const ro=new ResizeObserver(run);ro.observe(node);return()=>{alive=false;ro.disconnect()}},[text]);
- useEffect(()=>{const node=ref.current;if(light||!node)return;let frame=0;const update=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{const r=node.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight||document.hidden)return;node.style.setProperty('--mq-p',Math.min(1,Math.max(0,(innerHeight-r.top)/(innerHeight+r.height))).toFixed(4))})};window.addEventListener('scroll',update,{passive:true});window.addEventListener('resize',update);update();return()=>{window.removeEventListener('scroll',update);window.removeEventListener('resize',update);cancelAnimationFrame(frame);node.style.removeProperty('--mq-p')}},[light]);
+ useEffect(()=>{const node=ref.current;if(light||!node)return;let top=0,h=1,last=-1;const stop=watchScroll({el:node,margin:0,measure:()=>{top=docTop(node);h=node.offsetHeight||1},update:(y,vh)=>{const p=Math.round(clamp01((y+vh-top)/(vh+h))*500)/500;if(p===last)return;last=p;node.style.setProperty('--mq-p',p.toFixed(3))}});return()=>{stop();node.style.removeProperty('--mq-p')}},[light]);
  return <section ref={ref} className="place-marquee"><p aria-hidden="true" style={{fontSize:`${fit.size.toFixed(2)}px`}}>{fit.lines.map(l=><span key={l}>{l}</span>)}</p></section>}
 export function Manifesto({words}) {return <section className="manifesto wrap" aria-label={words.join(' ')}>{words.map(word=><EditorialMotion key={word}><p>{word}</p></EditorialMotion>)}</section>}
 export function Trust(){return <div className="trust wrap"><p>Tours 100% privados · Guía-conductor exclusivo · Horarios flexibles</p></div>}

@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { inicioTextos } from './inicio-textos';
 import { inicioVideos, instagram } from './inicio-videos';
 import { whatsapp } from './company';
 import { SocialIcon } from './Socials';
 import { Arrow, Eyebrow } from './shared';
-import { useLightMotion } from './PremiumMotion';
+import { HeroBlock } from './Hero';
 import './home.css';
 
 /*
@@ -15,63 +14,12 @@ import './home.css';
  */
 const Provisional = () => <span className="vlabel">Video próximamente</span>;
 
-/* Mantiene el estado de «Pausar / Reproducir» de un video y lo detiene fuera de vista (sin pisar la decisión de la persona). */
-function useHeroPlayback(ref, light, enabled) {
-  const [playing, setPlaying] = useState(false);
-  const manual = useRef(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!enabled || !el) return undefined;
-    const sync = () => setPlaying(!el.paused);
-    el.addEventListener('play', sync); el.addEventListener('pause', sync);
-    if (light) el.pause(); else el.play().catch(() => {});
-    const observer = new IntersectionObserver(([entry]) => {
-      if (light || manual.current) return;
-      if (entry.isIntersecting) el.play().catch(() => {}); else el.pause();
-    });
-    observer.observe(el);
-    return () => { observer.disconnect(); el.removeEventListener('play', sync); el.removeEventListener('pause', sync); };
-  }, [ref, light, enabled]);
-  const toggle = () => {
-    const el = ref.current; if (!el) return;
-    manual.current = true;
-    if (el.paused) el.play().catch(() => {}); else el.pause();
-  };
-  return [playing, toggle];
-}
-
 export function HomeHero() {
-  const v = inicioVideos.hero, light = useLightMotion(), video = useRef(null), section = useRef(null);
-  const [playing, toggle] = useHeroPlayback(video, light, Boolean(v.src));
-  // La cabecera es transparente sobre el hero y vuelve a su material sólido al salir de él (umbral = alto de la cabecera).
-  useEffect(() => {
-    const html = document.documentElement, header = document.querySelector('.site-header')?.offsetHeight || 92;
-    const observer = new IntersectionObserver(([entry]) => { html.dataset.hero = entry.isIntersecting ? 'over' : 'past'; }, { rootMargin: `-${header}px 0px 0px 0px` });
-    observer.observe(section.current);
-    return () => { observer.disconnect(); delete html.dataset.hero; };
-  }, []);
   const t = inicioTextos;
   return (
-    <section ref={section} className="home-hero" data-hero data-video={v.src ? 'on' : 'off'} aria-labelledby="hero-titulo">
-      <div className="hero-media" aria-hidden="true">
-        {v.src && <video ref={video} src={v.src} poster={v.poster || undefined} muted loop playsInline autoPlay={!light} preload="metadata" tabIndex={-1} />}
-      </div>
-      {v.src && <div className="hero-shade" aria-hidden="true" />}
-      <div className="hero-copy">
-        <p className="eyebrow hero-eyebrow">{t.lema}</p>
-        <h1 id="hero-titulo"><span className="hero-l1">{t.titular[0]}</span> <span className="hero-l2">{t.titular[1]}</span></h1>
-        <p className="hero-support">{t.confianza}</p>
-        <div className="hero-actions">
-          <Link className="button hero-btn hero-btn--explore" to="/experiencias">Explorar experiencias<Arrow /></Link>
-          <Link className="button hero-btn hero-btn--quote" to="/cotizar">Planeemos tu viaje<Arrow /></Link>
-        </div>
-      </div>
-      {v.src && (
-        <button type="button" className="hero-pause" onClick={toggle} aria-label={playing ? 'Pausar video' : 'Reproducir video'}>
-          <span aria-hidden="true">{playing ? '❚❚' : '▶'}</span>
-        </button>
-      )}
-    </section>
+    <HeroBlock video={inicioVideos.hero} eyebrow={t.lema} support={t.confianza}
+      title={<h1 id="hero-titulo"><span className="hero-l1">{t.titular[0]}</span> <span className="hero-l2">{t.titular[1]}</span></h1>}
+      actions={<><Link className="button hero-btn hero-btn--explore" to="/experiencias">Explorar experiencias<Arrow /></Link><Link className="button hero-btn hero-btn--quote" to="/cotizar">Planeemos tu viaje<Arrow /></Link></>} />
   );
 }
 
