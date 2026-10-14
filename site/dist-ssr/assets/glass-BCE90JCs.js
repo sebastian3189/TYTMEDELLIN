@@ -16,6 +16,10 @@ function useGlassPill(ref, signal, enabled = true) {
 			box.style.setProperty("--py", `${el.offsetTop}px`);
 			box.style.setProperty("--pw", `${el.offsetWidth}px`);
 			box.style.setProperty("--ph", `${el.offsetHeight}px`);
+			if (box.scrollWidth > box.clientWidth + 1) box.scrollTo({
+				left: el.offsetLeft - (box.clientWidth - el.offsetWidth) / 2,
+				behavior: box.classList.contains("is-ready") ? "smooth" : "instant"
+			});
 			if (!box.classList.contains("is-ready")) requestAnimationFrame(() => box.classList.add("is-ready"));
 		};
 		place();

@@ -1,5 +1,5 @@
 import { C as useMedia, E as textoFase, F as whatsapp, I as language, L as t, M as jsx, N as jsxs, P as company, S as useLightMotion, T as inicioTextos, c as Eyebrow, h as Arrow, j as Fragment, k as SocialIcon, n as photos, r as tours, s as Button, t as articles, u as Picture, w as CHAPTERS } from "../entry-server.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-6OtaoOcS.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-BCE90JCs.js";
 import { t as Reviews } from "./Reviews-D2E3dROS.js";
 /* empty css                       */
 import { Link } from "react-router-dom";

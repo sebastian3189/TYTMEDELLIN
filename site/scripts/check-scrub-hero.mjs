@@ -265,8 +265,8 @@ try {
   // «Saltar introducción».
   await goU(page, 0, TD, 200); await page.locator('.home-story .button').focus({ timeout: 5000 }); // último enfocable antes de la baraja
   for (let i = 0; i < 6; i++) { await page.keyboard.press('Tab'); if (await page.evaluate(() => document.activeElement?.classList.contains('scrub-skip'))) break; }
-  await page.keyboard.press('Enter'); await page.waitForFunction(() => document.activeElement?.id === 'formas-de-viajar');
-  checks.push('«Saltar introducción» (Enter) mueve foco y scroll a #formas-de-viajar');
+  await page.keyboard.press('Enter'); await page.waitForFunction(() => document.activeElement?.id === 'th-inicio');
+  checks.push('«Saltar introducción» (Enter) mueve foco y scroll al inicio de La mano de viaje (#th-inicio)');
 
   // 3) Botón «Reducir movimiento»: persistente.
   await goU(page, 0, TD, 200);
