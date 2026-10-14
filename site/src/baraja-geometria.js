@@ -84,7 +84,7 @@ export function buildDims(W, H, mobile, frame) {
     const t1Top = short ? 12 : 40, gapT = 16, pb = 12;
     const rotAllow = (hd) => hd * 0.4 * Math.sin(6.5 * Math.PI / 180) + 8; // media anchura × sen(rotación máx.) + desplazamiento
     const fixed = t1Top + line + gapT + pb;
-    Hd = clamp((A - fixed) - 2 * rotAllow(300), 150, 300);
+    Hd = clamp((A - fixed) - 2 * rotAllow(300), 150, 300) * 0.89; // móvil: cartas de la baraja ≈ 11 % más pequeñas (pedido del usuario); el Flip parte de d.Wd/d.Hd, así que sigue continuo
     const al = rotAllow(Hd);
     const deckTop = t1Top + line + gapT + al;
     // El espacio libre (sin segunda línea de titular ni confianza) se reparte: la baraja se centra entre el título y la tira de miniaturas (≈148 px sobre el borde inferior).
