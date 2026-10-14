@@ -1597,15 +1597,15 @@ function WhatsAppFab() {
 			const r = el.getBoundingClientRect();
 			let blocked = Boolean(document.querySelector(".menu-open, dialog[open]"));
 			if (!blocked) {
-				const pad = 6, xs = [
-					r.left - pad,
-					r.left + r.width / 2,
-					r.right + pad
-				], ys = [
-					r.top - pad,
-					r.top + r.height / 2,
-					r.bottom + pad
-				];
+				const pad = 8, line = (a, b) => [
+					0,
+					1,
+					2,
+					3,
+					4,
+					5,
+					6
+				].map((k) => a + (b - a) * k / 6), xs = line(r.left - pad, r.right + pad), ys = line(r.top - pad, r.bottom + pad);
 				outer: for (const x of xs) for (const y of ys) for (const hit of document.elementsFromPoint(x, y)) {
 					if (hit === el || el.contains(hit) || hit.closest(".wa-fab")) continue;
 					if (hit.closest(BLOCKERS)) {
