@@ -4,7 +4,7 @@
 .th--static{margin-top:0;z-index:auto}
 .th-track{position:relative;height:calc(var(--th-total,400) * 1svh + 100svh - var(--th-top));pointer-events:none}
 .th-stage{pointer-events:auto;position:sticky;top:var(--th-top);height:calc(100svh - var(--th-top));overflow:hidden;overflow:clip;background:var(--bg);opacity:var(--fin,0);
- display:grid;grid-template-columns:18% minmax(0,1fr) 15%;grid-template-rows:auto minmax(0,1fr) auto;column-gap:32px;row-gap:16px;padding:16px clamp(20px,3vw,48px) 20px}
+ display:grid;grid-template-columns:17% minmax(0,1fr) 15%;grid-template-rows:auto minmax(0,1fr) auto;column-gap:24px;row-gap:12px;padding:14px clamp(20px,3vw,48px) 14px}
 .th-marker{position:absolute;left:0;width:1px;height:1px;pointer-events:none}
 .th-all{position:absolute;left:0;right:0;bottom:12px;margin:0;text-align:center;pointer-events:none}
 .th-all a{pointer-events:auto}
@@ -19,7 +19,7 @@ html[data-theme="dark"] .th-mq{color:rgba(245,245,240,.06)}
 .th-head .eyebrow{margin:0 0 8px}
 .th-head h2{font-size:clamp(22px,1.9vw,30px);line-height:1.08;max-width:none}
 /* Título gigante por experiencia: tinta sólida, nunca sobre foto, nombre completo */
-.th-title-host{grid-area:1/2/2/4;position:relative;z-index:2;min-width:0;align-self:end;min-height:clamp(72px,12.5vh,120px);display:flex;align-items:flex-end;transition:opacity 420ms var(--ease-out-strong),transform 420ms var(--ease-out-strong)}
+.th-title-host{grid-area:1/2/2/4;position:relative;z-index:2;min-width:0;align-self:end;min-height:clamp(72px,11vh,110px);display:flex;align-items:flex-end;transition:opacity 420ms var(--ease-out-strong),transform 420ms var(--ease-out-strong)}
 .th-title{margin:0;font-family:var(--heading);font-weight:800;letter-spacing:-.04em;line-height:.92;color:var(--text-strong);white-space:nowrap}
 .th-title span{display:block}
 

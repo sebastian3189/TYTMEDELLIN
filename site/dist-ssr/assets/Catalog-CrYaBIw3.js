@@ -1,11 +1,13 @@
-import { A as Fragment, M as jsxs, b as useFlipGrid, j as jsx, l as PageTitle, p as TourCard, r as tours, v as Marquee, y as Trust } from "../entry-server.js";
+import { M as jsx, N as jsxs, b as Trust, j as Fragment, l as PageTitle, p as TourCard, r as tours, x as useFlipGrid, y as Marquee } from "../entry-server.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-6OtaoOcS.js";
 import { useRef, useState } from "react";
 //#region src/pages/Catalog.jsx
 function Catalog() {
 	const [filter, setFilter] = useState("Todos");
 	const [query, setQuery] = useState("");
 	const categories = ["Todos", ...new Set(tours.map((t) => t.category))];
-	const grid = useRef(null);
+	const grid = useRef(null), tabs = useRef(null);
+	useGlassPill(tabs, filter);
 	const list = tours.filter((t) => (filter === "Todos" || t.category === filter) && `${t.name} ${t.description}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()));
 	useFlipGrid(grid, list.map((t) => t.slug).join("|"));
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
@@ -27,14 +29,15 @@ function Catalog() {
 			children: [
 				/* @__PURE__ */ jsxs("div", {
 					className: "catalog-tools",
-					children: [/* @__PURE__ */ jsx("div", {
-						className: "filters",
+					children: [/* @__PURE__ */ jsxs("div", {
+						ref: tabs,
+						className: "filters glass-tabs",
 						"aria-label": "Filtrar experiencias",
-						children: categories.map((c) => /* @__PURE__ */ jsx("button", {
+						children: [/* @__PURE__ */ jsx(GlassPill, {}), categories.map((c) => /* @__PURE__ */ jsx("button", {
 							"aria-pressed": filter === c,
 							onClick: () => setFilter(c),
 							children: c
-						}, c))
+						}, c))]
 					}), /* @__PURE__ */ jsxs("label", {
 						className: "search",
 						children: ["Buscar experiencia", /* @__PURE__ */ jsx("input", {

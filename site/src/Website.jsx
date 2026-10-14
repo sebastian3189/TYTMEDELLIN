@@ -3,6 +3,7 @@ import { Link, NavLink, Navigate, Route, Routes, matchPath, useLocation } from '
 import './website.css';
 import './extras.css';
 import './forms-contact.css';
+import './glass.css';
 import { company } from './company';
 import Socials from './Socials';
 import Allies from './Allies';

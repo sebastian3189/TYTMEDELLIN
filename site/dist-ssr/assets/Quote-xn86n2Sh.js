@@ -1,4 +1,4 @@
-import { F as language, I as t, M as jsxs, N as company, P as whatsapp, h as QuoteCopy, j as jsx, m as Arrow, o as rawTours } from "../entry-server.js";
+import { F as whatsapp, I as language, L as t, M as jsx, N as jsxs, P as company, g as QuoteCopy, h as Arrow, o as rawTours } from "../entry-server.js";
 import { Link } from "react-router-dom";
 import { startTransition, useEffect, useRef, useState } from "react";
 //#region src/indicativos.json

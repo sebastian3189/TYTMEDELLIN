@@ -1,4 +1,4 @@
-import { A as Fragment, M as jsxs, a as vehicles, c as Eyebrow, j as jsx, l as PageTitle, s as Button, u as Picture } from "../entry-server.js";
+import { M as jsx, N as jsxs, a as vehicles, c as Eyebrow, j as Fragment, l as PageTitle, m as Icon, s as Button, u as Picture } from "../entry-server.js";
 //#region src/pages/Fleet.jsx
 function Fleet() {
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
@@ -32,11 +32,25 @@ function Fleet() {
 					}),
 					/* @__PURE__ */ jsxs("div", { children: [
 						/* @__PURE__ */ jsx("h2", { children: v.name }),
-						/* @__PURE__ */ jsxs("span", {
+						/* @__PURE__ */ jsxs("p", {
 							className: "capacity",
-							children: [v.capacity, " pasajeros"]
+							children: [/* @__PURE__ */ jsx(Icon, {
+								name: "users",
+								size: 16
+							}), /* @__PURE__ */ jsxs("span", { children: [v.capacity, " pasajeros"] })]
 						}),
-						/* @__PURE__ */ jsx("p", { children: v.use }),
+						/* @__PURE__ */ jsx("p", {
+							className: "vehicle-use",
+							children: v.use
+						}),
+						/* @__PURE__ */ jsx("ul", {
+							className: "vehicle-features",
+							role: "list",
+							children: v.features.map((f) => /* @__PURE__ */ jsxs("li", { children: [/* @__PURE__ */ jsx(Icon, {
+								name: f.icon,
+								size: 15
+							}), /* @__PURE__ */ jsx("span", { children: f.label })] }, f.key))
+						}),
 						/* @__PURE__ */ jsx(Button, {
 							to: `/cotizar?vehiculo=${encodeURIComponent(v.name)}`,
 							children: "Consultar este vehículo"

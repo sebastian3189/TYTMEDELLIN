@@ -1,5 +1,6 @@
-import { A as Fragment, C as CHAPTERS, F as language, I as t, M as jsxs, N as company, O as SocialIcon, P as whatsapp, S as useMedia, T as textoFase, c as Eyebrow, j as jsx, m as Arrow, n as photos, r as tours, s as Button, t as articles, u as Picture, w as inicioTextos, x as useLightMotion } from "../entry-server.js";
-import { t as Reviews } from "./Reviews-BCFLTl7X.js";
+import { C as useMedia, E as textoFase, F as whatsapp, I as language, L as t, M as jsx, N as jsxs, P as company, S as useLightMotion, T as inicioTextos, c as Eyebrow, h as Arrow, j as Fragment, k as SocialIcon, n as photos, r as tours, s as Button, t as articles, u as Picture, w as CHAPTERS } from "../entry-server.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-6OtaoOcS.js";
+import { t as Reviews } from "./Reviews-D2E3dROS.js";
 /* empty css                       */
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -1268,7 +1269,7 @@ function TravelHand() {
 		size: 64,
 		lines: [ENTRIES[0].name]
 	});
-	const root = useRef(null), track = useRef(null), stage = useRef(null), handEl = useRef(null), titleHost = useRef(null), mqEl = useRef(null), deckEl = useRef(null), tabs = useRef([]);
+	const tabList = useRef(null), root = useRef(null), track = useRef(null), stage = useRef(null), handEl = useRef(null), titleHost = useRef(null), mqEl = useRef(null), deckEl = useRef(null), tabs = useRef([]);
 	const st = useRef({
 		active: 0,
 		fronts: {},
@@ -1582,6 +1583,7 @@ function TravelHand() {
 		st.current.jump(next);
 		tabs.current[next]?.focus({ preventScroll: true });
 	};
+	useGlassPill(tabList, active, animated && layout === "compact");
 	const nowFront = fronts[active] || 0, entry = ENTRIES[shown];
 	const t$1 = inicioTextos, seg = layout === "wide" ? SEG.wide : SEG.compact;
 	const trackStyle = animated ? { "--th-total": RELAY + N * seg + EXIT } : void 0;
@@ -1695,10 +1697,12 @@ function TravelHand() {
 						/* @__PURE__ */ jsxs("nav", {
 							className: "th-index",
 							"aria-label": "Experiencias",
-							children: [/* @__PURE__ */ jsx("div", {
+							children: [/* @__PURE__ */ jsxs("div", {
+								ref: tabList,
 								role: "tablist",
+								className: layout === "compact" ? "glass-tabs" : "",
 								"aria-orientation": layout === "wide" ? "vertical" : "horizontal",
-								children: GROUPS.map((g) => /* @__PURE__ */ jsx("div", {
+								children: [layout === "compact" && /* @__PURE__ */ jsx(GlassPill, {}), GROUPS.map((g) => /* @__PURE__ */ jsx("div", {
 									className: "th-group-tabs",
 									children: g.items.map((i) => /* @__PURE__ */ jsxs("button", {
 										ref: (el) => {
@@ -1714,7 +1718,7 @@ function TravelHand() {
 										onKeyDown: (e) => onTabKey(e, i),
 										children: [/* @__PURE__ */ jsx("span", { children: two$1(i + 1) }), ENTRIES[i].name]
 									}, ENTRIES[i].slug))
-								}, g.name))
+								}, g.name))]
 							}), /* @__PURE__ */ jsx("a", {
 								className: "th-skip",
 								href: "#camino",

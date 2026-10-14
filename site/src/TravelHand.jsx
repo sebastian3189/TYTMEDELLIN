@@ -4,6 +4,7 @@ import { tours } from './content';
 import { inicioTextos } from './inicio-textos';
 import { relayDeck, deckPose, RELAY_SVH, FADE_SVH, smooth } from './baraja-geometria';
 import Arrow from './Arrow';
+import { GlassPill, useGlassPill } from './glass';
 import { t as tr, language } from './i18n';
 import './travel-hand.css';
 
@@ -72,7 +73,7 @@ export default function TravelHand() {
   const [active, setActive] = useState(0), [shown, setShown] = useState(0), [swap, setSwap] = useState(''); // swap: '' | 'out'
   const [full, setFull] = useState(() => new Set([0])), [fronts, setFronts] = useState({}), [live, setLive] = useState('');
   const [fit, setFit] = useState({ size: 64, lines: [ENTRIES[0].name] });
-  const root = useRef(null), track = useRef(null), stage = useRef(null), handEl = useRef(null), titleHost = useRef(null), mqEl = useRef(null), deckEl = useRef(null), tabs = useRef([]);
+  const tabList = useRef(null), root = useRef(null), track = useRef(null), stage = useRef(null), handEl = useRef(null), titleHost = useRef(null), mqEl = useRef(null), deckEl = useRef(null), tabs = useRef([]);
   const st = useRef({ active: 0, fronts: {}, manualY: null, jump: () => {}, flip: 0 });
   st.current.fronts = fronts;
   const animated = mode === 'scrub';
@@ -240,6 +241,7 @@ export default function TravelHand() {
     const next = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? (i + 1) % N : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? (i + N - 1) % N : e.key === 'Home' ? 0 : e.key === 'End' ? N - 1 : null;
     if (next === null) return; e.preventDefault(); st.current.jump(next); tabs.current[next]?.focus({ preventScroll: true });
   };
+  useGlassPill(tabList, active, animated && layout === 'compact');
   const nowFront = fronts[active] || 0, entry = ENTRIES[shown];
   const t = inicioTextos, seg = layout === 'wide' ? SEG.wide : SEG.compact;
   const trackStyle = animated ? { '--th-total': RELAY + N * seg + EXIT } : undefined;
@@ -282,7 +284,8 @@ export default function TravelHand() {
             <h3 className="th-title" style={{ fontSize: `${fit.size.toFixed(2)}px` }}>{fit.lines.map((l) => <span key={l}>{l}</span>)}</h3>
           </div>
           <nav className="th-index" aria-label="Experiencias">
-            <div role="tablist" aria-orientation={layout === 'wide' ? 'vertical' : 'horizontal'}>
+            <div ref={tabList} role="tablist" className={layout === 'compact' ? 'glass-tabs' : ''} aria-orientation={layout === 'wide' ? 'vertical' : 'horizontal'}>
+              {layout === 'compact' && <GlassPill />}
               {GROUPS.map((g) => (
                 <div className="th-group-tabs" key={g.name}>
                   {g.items.map((i) => (
