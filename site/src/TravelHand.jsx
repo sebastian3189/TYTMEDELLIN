@@ -44,9 +44,6 @@ const ENTRIES = ORDER.map((slug) => {
 });
 const GROUPS = ENTRIES.reduce((acc, e, i) => { const last = acc[acc.length - 1]; if (last && last.name === e.category) last.items.push(i); else acc.push({ name: e.category, items: [i] }); return acc; }, []);
 
-// Detalles aditivos (decorativos, aria-hidden): nombre de lugar en versalitas bajo la carta, glow, grano y marco postal. Solo transform/opacity.
-const smallCaps = (t) => t.toLocaleLowerCase('es').replace(/(^|[\s·(-])(\p{L})/gu, (m, a, b) => a + b.toLocaleUpperCase('es'));
-
 // Casillas de la mano (fracciones de la región: centro, alto, giro, profundidad de parallax). La 0 es la delantera.
 const SLOTS = [
   { cx: 0.5, cy: 0.54, h: 0.76, r: 0, d: 1 }, { cx: 0.2, cy: 0.33, h: 0.4, r: -7, d: 1.5 }, { cx: 0.83, cy: 0.3, h: 0.38, r: 6, d: 0.6 }, { cx: 0.13, cy: 0.79, h: 0.34, r: 5, d: 1.2 },
@@ -72,69 +69,12 @@ function Photo({ photo, entry, k, primary }) {
   return <img className="th-photo" data-k={k} src={photo.src} srcSet={photo.srcSet} sizes={primary ? '(max-width: 799px) 84vw, 36vw' : '(max-width: 799px) 40vw, 18vw'} width={photo.width} height={photo.height} alt={`${entry.name}, fotografía ${k + 1}`} loading={primary ? 'eager' : 'lazy'} fetchPriority={primary ? 'auto' : 'low'} decoding="async" draggable="false" />;
 }
 
-/* Móvil (<768 px): «La mano de viaje» en flujo natural. Texto, «Ver experiencia» y CTA ARRIBA; debajo, la composición a todo el ancho (foto central ≈ 88 % del ancho,
-   satélites proporcionales) que llega como carta con la misma curva del inicio; sin pin, sin solape por construcción. Tocar una foto o ‹ › la trae al frente. */
-function ThFlow() {
-  const root = useRef(null), chips = useRef(null);
-  const [fronts, setFronts] = useState({}), [active, setActive] = useState(0), [live, setLive] = useState('');
-  useEffect(() => {
-    const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.dataset.in = 'true'; } }), { rootMargin: '0px 0px -12% 0px' });
-    const act = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) setActive(Number(e.target.dataset.i)); }), { rootMargin: '-35% 0px -55% 0px' });
-    root.current.querySelectorAll('.thf').forEach((el) => { io.observe(el); act.observe(el); });
-    return () => { io.disconnect(); act.disconnect(); };
-  }, []);
-  useEffect(() => { const el = chips.current?.children[active], list = chips.current; if (el && list) list.scrollTo({ left: el.offsetLeft - (list.clientWidth - el.offsetWidth) / 2, behavior: 'instant' }); }, [active]);
-  const select = (gi, next) => { const n = ENTRIES[gi].photos.length, f = ((next % n) + n) % n; setFronts((p) => ({ ...p, [gi]: f })); setLive(`Foto ${f + 1} de ${n}, ${ENTRIES[gi].name}`); };
-  return (
-    <section ref={root} className="th th--flow" id="formas-de-viajar" tabIndex={-1} data-hydrated="true" data-layout="flow" aria-labelledby="th-titulo">
-      <div id="th-inicio" className="th-marker" tabIndex={-1} role="group" aria-label="Un lugar para cada forma de viajar" />
-      <div className="wrap thf-wrap">
-        <div className="th-head"><p className="eyebrow">{inicioTextos.eleccion}</p><h2 id="th-titulo">Un lugar para cada{' '}<em>forma de viajar.</em></h2></div>
-        <nav className="thf-chips" aria-label="Experiencias"><div ref={chips} className="thf-chips-in">{ENTRIES.map((e, i) => <a key={e.slug} href={`#th-f-${i}`} aria-current={active === i ? 'true' : undefined}>{e.name}</a>)}</div></nav>
-        {ENTRIES.map((e, i) => {
-          const f = fronts[i] || 0, n = e.photos.length;
-          return (
-            <article className="thf" id={`th-f-${i}`} data-i={i} key={e.slug} aria-labelledby={`thf-h-${i}`}>
-              <p className="thf-count">{two(i + 1)} / {two(N)} · {e.category}</p>
-              <h3 id={`thf-h-${i}`} className="thf-title">{e.name}</h3>
-              <p className="thf-line"><b>{e.emocion}:</b> {e.frase}</p>
-              <div className="thf-links">
-                <Link className="text-link" to={`/experiencias/${e.slug}`}>Ver experiencia<Arrow /></Link>
-                <Link className="button" to={`/experiencias/${e.slug}#consulta`}>Planea esta experiencia<Arrow /></Link>
-              </div>
-              <div className="thf-hand" role="region" aria-roledescription="carrusel" aria-label={`Fotografías de ${e.name}`} aria-hidden={undefined}>
-                <span className="thf-mq" aria-hidden="true">{e.lugar}</span>
-                {e.photos.map((p, k) => {
-                  const pos = (k - f + n) % n;
-                  return <img key={k} className="thf-p" data-pos={Math.min(pos, 5)} style={{ '--k': pos }} src={p.src} srcSet={p.srcSet} sizes={pos === 0 ? '88vw' : '40vw'} width={p.width} height={p.height} alt={`${e.name}, fotografía ${k + 1}`} loading={i < 2 && pos < 3 ? 'eager' : 'lazy'} decoding="async" draggable="false" onClick={() => pos !== 0 && select(i, k)} />;
-                })}
-              </div>
-              <p className="thf-lugar" aria-hidden="true"><b>{smallCaps(e.lugar)}</b><svg viewBox="0 0 32 32" width="26" height="26" focusable="false"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeDasharray="2 2.2" /><circle cx="16" cy="16" r="9" fill="none" stroke="currentColor" strokeWidth="1.2" /><path d="M11 17.5l3.2-3.2 2.3 2.3 4.5-4.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg></p>
-              <div className="thf-foot">
-                <div className="th-dots" role="group" aria-label="Fotografías" style={{ '--dotw': n > 6 ? '17px' : '24px' }}>
-                  {e.photos.map((_, k) => <button key={k} type="button" aria-label={`Foto ${k + 1} de ${n}`} aria-current={k === f ? 'true' : undefined} onClick={() => select(i, k)}><i /></button>)}
-                </div>
-                <div className="th-arrows">
-                  <button type="button" aria-label="Fotografía anterior" onClick={() => select(i, f - 1)}><Arrow dir="left" /></button>
-                  <button type="button" aria-label="Fotografía siguiente" onClick={() => select(i, f + 1)}><Arrow dir="right" /></button>
-                </div>
-              </div>
-            </article>
-          );
-        })}
-        <p className="th-all"><Link className="text-link" to="/experiencias">Ver las 12 experiencias<Arrow /></Link></p>
-        <p className="sr-only" aria-live="polite">{live}</p>
-      </div>
-    </section>
-  );
-}
-
 export default function TravelHand() {
   const [ready, setReady] = useState(false), [mode, setMode] = useState('static'), [layout, setLayout] = useState('wide');
   const [active, setActive] = useState(0), [shown, setShown] = useState(0), [swap, setSwap] = useState(''); // swap: '' | 'out'
   const [full, setFull] = useState(() => new Set([0])), [fronts, setFronts] = useState({}), [live, setLive] = useState('');
   const [fit, setFit] = useState({ size: 64, lines: [ENTRIES[0].name] });
-  const decoEl = useRef(null), tabList = useRef(null), root = useRef(null), track = useRef(null), stage = useRef(null), handEl = useRef(null), titleHost = useRef(null), mqEl = useRef(null), deckEl = useRef(null), tabs = useRef([]);
+  const tabList = useRef(null), root = useRef(null), track = useRef(null), stage = useRef(null), handEl = useRef(null), titleHost = useRef(null), mqEl = useRef(null), deckEl = useRef(null), tabs = useRef([]);
   const st = useRef({ active: 0, fronts: {}, manualY: null, jump: () => {}, flip: 0 });
   st.current.fronts = fronts;
   const animated = mode === 'scrub';
@@ -144,8 +84,7 @@ export default function TravelHand() {
     const decide = () => {
       const head = document.querySelector('.site-header')?.offsetHeight || 92, wide = window.matchMedia(WIDE).matches;
       const fits = window.innerHeight - head >= (wide ? 560 : 640);
-      const flow = window.innerWidth < 768 && !prefersStatic(); // móvil: la composición va a todo el ancho, con el texto y el CTA ARRIBA y scroll natural (sin pin)
-      setLayout(wide ? 'wide' : 'compact'); setMode(flow ? 'flow' : prefersStatic() || !fits ? 'static' : 'scrub');
+      setLayout(wide ? 'wide' : 'compact'); setMode(prefersStatic() || !fits ? 'static' : 'scrub');
     };
     decide(); setReady(true);
     // La barra de direcciones del móvil cambia la altura de la ventana: los cambios de alto < 120 px con el mismo ancho se ignoran (nada se recalcula).
@@ -196,7 +135,7 @@ export default function TravelHand() {
   useLayoutEffect(() => {
     if (!ready || !animated) return undefined;
     const trackEl = track.current, stageEl = stage.current, hand = handEl.current, mq = mqEl.current, deck = deckEl.current;
-    const small = window.matchMedia(SMALL).matches, wide = layout === 'wide', seg = wide ? SEG.wide : SEG.compact, shrink = wide ? 1 : innerWidth < 768 ? 0.5 : 0.82, cap = innerWidth < 768 ? 168 : 1e4; // compacto: fotos más pequeñas, dentro de su propia región (<768 px: ≈25 % menos que antes, excepción autorizada del usuario)
+    const small = window.matchMedia(SMALL).matches, wide = layout === 'wide', seg = wide ? SEG.wide : SEG.compact, shrink = wide ? 1 : innerWidth < 768 ? 0.62 : 0.82; // compacto: fotos más pequeñas, dentro de su propia región (<768 px: ≈25 % menos que antes, excepción autorizada del usuario)
     const total = RELAY + N * seg + EXIT;
     let raf = 0, visible = true, destroyed = false, q = null, lastT = 0, stageTop = 92, span = 1, RW = 0, RH = 0, sw = 0, sh = 0;
     let groupCache = null, trackTop = 0;
@@ -225,9 +164,9 @@ export default function TravelHand() {
         const vis = local > -0.2 && local < 1.25; g.style.visibility = vis ? 'visible' : 'hidden';
         if (!vis) continue;
         const ls = clamp(local, 0, 1), before = local < 0 ? smooth(clamp(1 + local * 4)) : 0; // llega desde el mazo en el 0–15 % del tramo
-        const imgs = [...g.querySelectorAll('.th-photo')], n = imgs.length; let fr = null;
+        const imgs = [...g.querySelectorAll('.th-photo')], n = imgs.length;
         imgs.forEach((img, k) => {
-          const slotIdx = k === f ? 0 : k < f ? k + 1 : k, slot = SLOTS[slotIdx % SLOTS.length], h = Math.min(cap, slot.h * RH * shrink), w = h * 0.8;
+          const slotIdx = k === f ? 0 : k < f ? k + 1 : k, slot = SLOTS[slotIdx % SLOTS.length], h = slot.h * RH * shrink, w = h * 0.8;
           if (img._w !== w) { img.style.width = `${w}px`; img.style.height = `${h}px`; img._w = w; }
           const front = slotIdx === 0;
           const tIn = front ? 0 : 0.14 + 0.055 * (slotIdx - 1), eIn = local < 0 ? 0 : front ? smooth(ls / 0.15) : smooth((ls - tIn) / 0.22);
@@ -241,19 +180,14 @@ export default function TravelHand() {
           const o = (front ? Math.max(0.0001, smooth(ls / 0.08) + (local < 0 ? 0 : 0)) : eIn) * (1 - eOut) * (local < 0 ? 0 : 1);
           img.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) rotate(${rot.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
           img.style.opacity = o.toFixed(3); img.style.zIndex = String(front ? 30 : 2 + Math.round(slot.d * 4));
-          if (front) fr = { x, y, w, h, sc, o, rot };
           img.style.pointerEvents = o > 0.6 && local >= 0 && local <= 1 ? 'auto' : 'none';
         });
-        // Nombre del lugar en versalitas bajo la carta delantera (tinta sólida, fuera de la foto).
-        const lg = g.querySelector('.th-lugar');
-        if (lg && fr) { const ly = fr.y + fr.h / 2 + (fr.h * fr.sc) / 2 + 7; lg.style.transform = `translate3d(${(fr.x + fr.w / 2).toFixed(1)}px,${ly.toFixed(1)}px,0) translateX(-50%)`; lg.style.opacity = (fr.o * smooth((ls - 0.22) / 0.1) * clamp((RH - 3 - (ly + 26)) / 8)).toFixed(3); }
       }
       // Marquesina decorativa del lugar: −25 % del ancho por tramo, sin bucle.
       const ls0 = clamp(P2 - idx, 0, 1);
       mq.style.transform = `translate3d(${(0.12 * sw - 0.25 * ls0 * sw).toFixed(1)}px,-50%,0)`;
       // Mazo pendiente: cartas del siguiente al quinto; se desvanece al final.
       deck.style.opacity = String(clamp(1 - (P2 - (N - 2)) * 1.2));
-
     };
 
     const render = (now) => {
@@ -315,12 +249,10 @@ export default function TravelHand() {
 
   const header = (
     <div className="th-head">
-      <p className="eyebrow">{t.eleccion}{animated && <span className="th-idx" aria-hidden="true">{two(shown + 1)} / {two(N)}</span>}</p>
+      <p className="eyebrow">{t.eleccion}</p>
       <h2 id="th-titulo">Un lugar para cada{' '}<br /><em>forma de viajar.</em></h2>
     </div>
   );
-
-  if (mode === 'flow') return <ThFlow />;
 
   if (!animated) {
     // Estático / sin JS / reducido: lista de las 11 experiencias con foto, nombre, emoción y frase (K8).
@@ -347,10 +279,6 @@ export default function TravelHand() {
     <section ref={root} className="th" id="formas-de-viajar" tabIndex={-1} data-hydrated="true" data-layout={layout} aria-labelledby="th-titulo">
       <div ref={track} className="th-track" style={trackStyle}>
         <div ref={stage} className="th-stage" data-on="false" data-swap={swap}>
-          <div className="th-bg" aria-hidden="true" />
-          <div ref={decoEl} className="th-deco" aria-hidden="true">
-            <i className="th-glow" />
-          </div>
           <div className="th-mq-clip" aria-hidden="true"><div ref={mqEl} className="th-mq"><span>{entry.lugar}</span></div></div>
           {header}
           <div ref={titleHost} className="th-title-host">
@@ -377,12 +305,12 @@ export default function TravelHand() {
             {ENTRIES.map((e, gi) => {
               const near = Math.abs(gi - active) <= 1, hasFull = full.has(gi);
               if (!near && !hasFull) return null;
-              return <div className="th-group" data-i={gi} key={e.slug} aria-hidden={gi === active ? undefined : 'true'}>{e.photos.map((p, k) => (k === 0 || hasFull) ? <Photo key={k} photo={p} entry={e} k={k} primary={gi === active || k === 0} /> : null)}<span className="th-lugar" aria-hidden="true"><b>{smallCaps(e.lugar)}</b><svg viewBox="0 0 32 32" width="26" height="26" focusable="false"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeDasharray="2 2.2" /><circle cx="16" cy="16" r="9" fill="none" stroke="currentColor" strokeWidth="1.2" /><path d="M11 17.5l3.2-3.2 2.3 2.3 4.5-4.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg></span></div>;
+              return <div className="th-group" data-i={gi} key={e.slug} aria-hidden={gi === active ? undefined : 'true'}>{e.photos.map((p, k) => (k === 0 || hasFull) ? <Photo key={k} photo={p} entry={e} k={k} primary={gi === active || k === 0} /> : null)}</div>;
             })}
           </div>
           <div className="th-foot">
             <p className="th-cap">{ENTRIES[active].name} · fotografía {two(nowFront + 1)} de {two(ENTRIES[active].photos.length)}</p>
-            <div className="th-dots" role="group" aria-label="Fotografías" style={{ '--dotw': ENTRIES[active].photos.length > 6 ? '17px' : '24px' }}>
+            <div className="th-dots" role="group" aria-label="Fotografías">
               {ENTRIES[active].photos.map((_, k) => <button key={k} type="button" aria-label={`Foto ${k + 1} de ${ENTRIES[active].photos.length}`} aria-current={k === nowFront ? 'true' : undefined} onClick={() => select(active, k, true)}><i /></button>)}
             </div>
             <div className="th-arrows">

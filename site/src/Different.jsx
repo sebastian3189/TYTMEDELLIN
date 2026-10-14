@@ -52,11 +52,15 @@ export default function Different() {
   useEffect(() => {
     const el = root.current, hostEl = host.current, s = svg.current;
     const base = s.querySelector('.df-route-base'), done = s.querySelector('.df-route-done'), dot = s.querySelector('.df-dot');
-    const discs = [...hostEl.querySelectorAll('.df-disc')], cards = [...hostEl.querySelectorAll('.df-card')], end = hostEl.querySelector('.df-end');
+    const discs = [...hostEl.querySelectorAll('.df-disc')], cards = [...hostEl.querySelectorAll('.df-card')], endD = hostEl.querySelector('.df-end'), endM = hostEl.querySelector('.df-end-m'), closeT = hostEl.querySelector('.df-close-text');
     let len = 1, y0 = 0, yEnd = 1, hostTop = 0, centers = [], raf = 0, visible = false, q = light ? 1 : 0, last = 0;
     const measure = () => {
       const hr = hostEl.getBoundingClientRect(); hostTop = hr.top + scrollY;
-      const pts = [...discs, end].map((d) => { const r = d.getBoundingClientRect(); return [r.left + r.width / 2 - hr.left, r.top + r.height / 2 - hr.top]; });
+      const wide = innerWidth >= 900, ctr = (d) => { const r = d.getBoundingClientRect(); return [r.left + r.width / 2 - hr.left, r.top + r.height / 2 - hr.top]; };
+      const pts = discs.map(ctr), e = ctr(wide ? endD : endM);
+      // Escritorio: la ruta baja por la derecha del cierre y llega a «camino.» desde el costado (sin cruzar el texto); móvil: baja por la línea izquierda.
+      if (wide) { const cr = closeT.getBoundingClientRect(); const xr = Math.min(hr.width - 12, cr.right - hr.left + 28); pts.push([xr, cr.top - hr.top - 24], [xr, e[1]]); }
+      pts.push(e);
       let d = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
       for (let i = 1; i < pts.length; i++) { const [x1, y1] = pts[i - 1], [x2, y2] = pts[i], m = (y2 - y1) / 2; d += ` C${x1.toFixed(1)} ${(y1 + m).toFixed(1)} ${x2.toFixed(1)} ${(y2 - m).toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`; }
       s.setAttribute('viewBox', `0 0 ${hr.width.toFixed(1)} ${hr.height.toFixed(1)}`); base.setAttribute('d', d); done.setAttribute('d', d);
@@ -65,7 +69,7 @@ export default function Different() {
       paint(true);
     };
     const paint = (force) => {
-      const vh = innerHeight, target = light ? 1 : clamp((scrollY + vh * 0.58 - hostTop - y0) / (yEnd - y0));
+      const vh = innerHeight, target = light ? 1 : clamp((scrollY + vh * 0.68 - hostTop - y0) / (yEnd - y0));
       if (force || Math.abs(target - q) > 0.12) q = target; else q += (target - q) * (1 - Math.exp(-16 / 80)); // τ 80 ms; saltos > 0,12 se igualan
       const p = Math.abs(target - q) < 0.0005 ? target : q; q = p;
       done.style.strokeDashoffset = `${(len * (1 - p)).toFixed(1)}`;
@@ -124,7 +128,7 @@ export default function Different() {
             <p className="df-close-eyebrow eyebrow" data-rv>Experiencias a otro nivel</p>
             <p className="df-close-text" data-rv>
               <span className="df-c1"><Words text="No es solamente a dónde te llevamos." step={40} /></span>{' '}
-              <span className="df-c2"><Words text="Es cómo te hacemos sentir durante todo el camino" from={7} step={40} /><span className="df-end-wrap">.<i className="df-end" aria-hidden="true" /></span></span>
+              <span className="df-c2"><Words text="Es cómo te hacemos sentir durante todo el camino" from={7} step={40} /><span className="df-end-wrap">.<i className="df-end" aria-hidden="true" /></span></span><i className="df-end-m" aria-hidden="true" />
             </p>
           </div>
         </div>
