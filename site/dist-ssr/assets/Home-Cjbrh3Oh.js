@@ -1,8 +1,8 @@
-import { A as Icon, C as useMedia, D as textoFase, E as inicioTextos, F as jsxs, I as company, L as whatsapp, N as Fragment, P as jsx, R as language, S as useLightMotion, T as CHAPTERS, c as Eyebrow, h as Arrow, j as SocialIcon, m as GoogleBadgeStatic, n as photos, r as tours, s as Button, t as articles, u as Picture, z as t } from "../entry-server.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-B-VmbEHR.js";
-import { t as Reviews } from "./Reviews-BEL79RCZ.js";
-import { a as FAQ_HOME, l as Faq } from "./faq-data-BxdktUz_.js";
-import { a as smooth$1, c as cardPlace, d as frameWindow, f as relayDeck, h as timeline, i as smallCaps, l as deckPose, m as stateAt, n as placeLugar, o as tourEntry, p as smooth, r as placePhotos, s as buildDims, u as filmOpening } from "./mobile-motion-ZzElizgX.js";
+import { B as t, D as inicioTextos, E as CHAPTERS, F as jsx, I as jsxs, M as SocialIcon, O as textoFase, P as Fragment, R as whatsapp, S as useMedia, c as Eyebrow, h as Arrow, j as Icon, m as GoogleBadgeStatic, n as photos, r as tours, s as Button, t as articles, u as Picture, x as useLightMotion, z as language } from "../entry-server.js";
+import { c as instagram, i as HeroBlock, n as useGlassPill, o as tourEntry, s as inicioVideos, t as GlassPill } from "./glass-ndxeIHtl.js";
+import { t as Reviews } from "./Reviews-Cp4j-Pnr.js";
+import { a as FAQ_HOME, l as Faq } from "./faq-data-DaJGWog5.js";
+import { a as smooth$1, r as placePhotos } from "./mobile-motion-o2zoinXe.js";
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 var inicio_frames_default = {
@@ -40,6 +40,247 @@ var inicio_frames_default = {
 		"quality": 74
 	}
 };
+var clamp$3 = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+var lerp = (a, b, t) => a + (b - a) * t;
+var smooth = (t) => {
+	t = clamp$3(t);
+	return t * t * (3 - 2 * t);
+};
+/** Límites del recorrido en svh. Fase del clip: 165 svh escritorio / 140 svh móvil (ajuste aprobado, se conserva). Tras la contracción (t4) solo queda el relevo (t4→t5) y el fundido final. */
+function timeline(mobile) {
+	if (mobile) {
+		const t0 = 24, t1 = 64, t2 = 204, t3 = 228, t4 = 276, t5 = 306;
+		return {
+			t0,
+			t1,
+			t2,
+			t3,
+			t4,
+			t5,
+			t6: t5,
+			total: 310,
+			clip: 140
+		};
+	}
+	const t0 = 30, t1 = 80, t2 = 245, t3 = 260, t4 = 305, t5 = 335;
+	return {
+		t0,
+		t1,
+		t2,
+		t3,
+		t4,
+		t5,
+		t6: t5,
+		total: 339,
+		clip: 165
+	};
+}
+var ROT = [
+	-5.2,
+	3.8,
+	-2.6,
+	5.9,
+	-4.1,
+	2.9,
+	-6,
+	4.6,
+	-3.3,
+	5.1,
+	-1.8,
+	3.2
+];
+var DX = [
+	-6,
+	7,
+	-3,
+	8,
+	-8,
+	4,
+	-5,
+	9,
+	-2,
+	6,
+	-7,
+	3
+];
+var DY = [
+	4,
+	-5,
+	7,
+	-3,
+	6,
+	-6,
+	3,
+	-4,
+	8,
+	-2,
+	5,
+	-7
+];
+var FRAME_ROT = -2.4;
+/** Estado derivado de u: fase de interfaz, ventana del marco y relevo. */
+function stateAt(u, T, mobile) {
+	let ui = "deck";
+	if (u >= T.t0) ui = "flip";
+	if (u >= T.t1) ui = "clip";
+	if (u >= T.t3) ui = "shrink";
+	if (u >= T.t4) ui = "relay";
+	let w = 0;
+	if (u >= T.t0 && u < T.t1) w = smooth((u - T.t0) / (T.t1 - T.t0));
+	else if (u >= T.t1 && u < T.t3) w = 1;
+	else if (u >= T.t3 && u < T.t4) w = 1 - smooth((u - T.t3) / (T.t4 - T.t3));
+	let D;
+	if (u < T.t1) D = 1 - smooth((u - T.t0) / (.45 * (T.t1 - T.t0)));
+	else if (u < T.t3) D = 0;
+	else if (u < T.t4) D = mobile ? 0 : smooth((u - T.t3 - .3 * (T.t4 - T.t3)) / (.7 * (T.t4 - T.t3)));
+	else D = mobile ? 0 : 1 - smooth((u - T.t4) / (.12 * (T.t5 - T.t4)));
+	const clipT = clamp$3((u - T.t1) / (T.t2 - T.t1));
+	const rel = smooth((u - T.t4) / (T.t5 - T.t4));
+	const fade = clamp$3((u - T.t5) / (T.total - T.t5));
+	const sh = clamp$3(u / T.t0);
+	return {
+		ui,
+		w,
+		D,
+		clipT,
+		rel,
+		fade,
+		sh
+	};
+}
+/**
+* Caja del mazo en «La mano de viaje» (Spec 03 §K3/K4): abajo a la derecha del escenario. La comparten ScrubHero (destino del relevo) y TravelHand
+* (posición del mazo de portadas pendientes): mismo centro, misma altura y las mismas rotaciones (`deckPose`).
+*/
+function relayDeck(W, H, mobile) {
+	const h = mobile ? 96 : 150;
+	return mobile ? {
+		x: W - 16 - h * .4,
+		y: H - 200 - h * .5 - 12,
+		h,
+		w: h * .8
+	} : {
+		x: W - clamp$3(W * .05, 22, 88) - h * .4 - 8,
+		y: H - h * .5 - 32,
+		h,
+		w: h * .8
+	};
+}
+var deckPose = (i) => ({
+	dx: DX[i % 12],
+	dy: DY[i % 12],
+	r: ROT[i % 12]
+});
+/**
+* Medidas del escenario. `frame` = rectángulo natural de la capa del clip (x, y, w, h) en coordenadas del escenario.
+* Devuelve tamaños base, centro de la baraja, centro de la carta enfocada y rejilla de cierre.
+*/
+function buildDims(W, H, mobile, frame) {
+	const pad = clamp$3(W * .05, 22, 88);
+	let Bh, Hd, deck, focus, m = null;
+	if (mobile) {
+		const A = H - 200, line = clamp$3((W - 44) / 10.5, 28, 40) * 1.05 * 2, short = A < 480;
+		const t1Top = short ? 12 : 40, gapT = 16, pb = 12;
+		const rotAllow = (hd) => hd * .4 * Math.sin(6.5 * Math.PI / 180) + 8;
+		Hd = clamp$3(A - (t1Top + line + gapT + pb) - 2 * rotAllow(300), 150, 300) * .89;
+		const al = rotAllow(Hd);
+		const deckTop = t1Top + line + gapT + al;
+		const free = H - 164 - (deckTop + Hd + al);
+		deck = {
+			x: W / 2,
+			y: deckTop + Hd / 2 + Math.max(0, free / 2)
+		};
+		Bh = Math.min(Math.min(W - 56, 340) * 1.25, H - 320);
+		focus = {
+			x: W / 2,
+			y: (H - 280) / 2
+		};
+		m = {
+			t1Top,
+			short,
+			A
+		};
+	} else {
+		Bh = clamp$3(H * .64, 280, 640);
+		Hd = clamp$3(H * .366, 260, 425);
+		deck = {
+			x: W / 2,
+			y: H * .49
+		};
+		focus = {
+			x: W * .6,
+			y: H * .5
+		};
+	}
+	return {
+		W,
+		H,
+		mobile,
+		pad,
+		Bw: mobile ? Math.min(W - 56, 340) : Bh * .8,
+		Bh,
+		sD: Hd / Bh,
+		Hd,
+		Wd: Hd * .8,
+		deck,
+		focus,
+		frame,
+		m,
+		relay: relayDeck(W, H, mobile)
+	};
+}
+/**
+* Ventana (marco) del clip. Devuelve la transformación y el clip-path de la capa de tamaño natural `frame`
+* para que se vea como una carta 4:5 (w=0) o a su tamaño completo (w=1).
+*/
+var filmOpening = (clipT) => smooth((clipT - .6) / .4);
+function frameWindow(d, w, out, clipT = 0) {
+	const { frame: F } = d;
+	const tail = d.mobile ? filmOpening(clipT) : 0;
+	const insetScale = 1 - tail * 32 / F.w;
+	const fullW = F.w * insetScale;
+	const fullH = lerp(F.h, F.w * 9 / 16, tail) * insetScale;
+	const cardW = lerp(d.Wd, Math.min(d.W - 56, 320), tail);
+	const cardH = lerp(d.Hd, Math.min(d.W - 56, 320) * 9 / 16, tail);
+	const cx0 = d.deck.x, cy0 = d.deck.y;
+	const wx = lerp(cardW, fullW, w), wh = lerp(cardH, fullH, w);
+	const cx = lerp(cx0, F.x + F.w / 2, w), cy = lerp(cy0, F.y + F.h / 2, w);
+	const rot = lerp(FRAME_ROT, 0, w);
+	const s = Math.max(wh / F.h, wx / F.w);
+	const ix = Math.max(0, (F.w - wx / s) / 2);
+	const iy = Math.max(0, (F.h - wh / s) / 2);
+	const radius = lerp(18, 18 * tail, w) / s;
+	out.tx = cx - (F.x + F.w / 2);
+	out.ty = cy - (F.y + F.h / 2);
+	out.rot = rot;
+	out.s = s;
+	out.ix = ix;
+	out.iy = iy;
+	out.r = radius;
+	return out;
+}
+/** Posición de la carta i: baraja → mazo del relevo (caja de «La mano de viaje»). Escribe en `out`. */
+function cardPlace(d, st, i, out) {
+	const { deck, mobile } = d;
+	const bump = Math.sin(Math.PI * st.sh), ang = i * 2.4 + st.sh * 3;
+	const rank = (i + Math.round(st.sh * 5)) % 12;
+	const dk = {
+		x: deck.x + DX[i] + Math.cos(ang) * d.Wd * (mobile ? .4 : .55) * bump,
+		y: deck.y + DY[i] + Math.sin(ang) * d.Hd * (mobile ? .1 : .2) * bump,
+		s: d.sD * .95,
+		r: ROT[i] + (i % 2 ? 1 : -1) * 22 * bump + st.sh * (i % 3 - 1) * 4,
+		o: mobile && i >= 5 && st.sh < .01 ? 0 : mobile && i >= 5 ? bump : 1,
+		z: 22 - rank
+	};
+	const a = st.rel, R = d.relay, ts = R.h / d.Bh, k = ts / dk.s;
+	out.x = lerp(dk.x, R.x + DX[i] * k, a);
+	out.y = lerp(dk.y, R.y + DY[i] * k, a);
+	out.s = lerp(dk.s, ts, a);
+	out.r = lerp(dk.r, ROT[i], a);
+	out.o = mobile ? dk.o * (1 - smooth(st.w / .2)) : st.w > .9 ? 0 : dk.o;
+	out.z = dk.z;
+	return out;
+}
 //#endregion
 //#region src/ScrubHero.jsx
 var BASE = "/media/inicio";
@@ -147,7 +388,7 @@ var cardImg = (slug, k) => `${CARDS}/${slug}-${k}.webp`;
 var two$3 = (n) => String(n).padStart(2, "0");
 function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary }) {
 	const root = useRef(null), track = useRef(null), stage = useRef(null), canvas = useRef(null), skipRef = useRef(null), media = useRef(null);
-	const floatRef = useRef(null), deckRef = useRef(null), titleRef = useRef(null), stackRef = useRef(null);
+	const haloRef = useRef(null), floatRef = useRef(null), deckRef = useRef(null), titleRef = useRef(null), stackRef = useRef(null);
 	const [ready, setReady] = useState(false);
 	const [reduce, setReduce] = useState(false);
 	const [mode, setMode] = useState("static");
@@ -214,6 +455,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 		const cardEls = deckRef.current ? [...deckRef.current.querySelectorAll(".bd-card")] : [];
 		const fxEls = titleRef.current ? [...titleRef.current.querySelectorAll("[data-fx]")] : [];
 		const floatEls = floatRef.current ? [...floatRef.current.querySelectorAll(".bd-float")] : [];
+		const haloEl = haloRef.current;
 		const track2 = (delta, size) => {
 			live += delta;
 			bytes += delta * size;
@@ -272,6 +514,9 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 				stageEl.style.setProperty("--m-t1", `${dims.m.t1Top}px`);
 				stageEl.dataset.short = dims.m.short ? "1" : "0";
 			}
+			stageEl.style.setProperty("--deck-x", `${dims.deck.x}px`);
+			stageEl.style.setProperty("--deck-y", `${dims.deck.y}px`);
+			stageEl.style.setProperty("--deck-h", `${dims.Hd}px`);
 			stageEl.style.setProperty("--deck-top", `${dims.deck.y - dims.Hd / 2}px`);
 			stageEl.style.setProperty("--deck-bottom", `${dims.deck.y + dims.Hd / 2}px`);
 			lastCard.fill("");
@@ -339,7 +584,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 		const place = (u, st) => {
 			frameWindow(dims, st.w, fw, st.clipT);
 			const fullFrame = st.w >= .999 && (!mobile || st.clipT <= .6);
-			const fkey = fullFrame ? "full" : `${fw.tx.toFixed(1)}|${fw.ty.toFixed(1)}|${fw.rot.toFixed(2)}|${fw.s.toFixed(4)}|${fw.ix.toFixed(1)}|${fw.iy.toFixed(1)}|${fw.r.toFixed(2)}`;
+			const fkey = fullFrame ? "full" : `${st.D.toFixed(2)}|${fw.tx.toFixed(1)}|${fw.ty.toFixed(1)}|${fw.rot.toFixed(2)}|${fw.s.toFixed(4)}|${fw.ix.toFixed(1)}|${fw.iy.toFixed(1)}|${fw.r.toFixed(2)}`;
 			const fo = 1 - smooth(clamp$2(st.rel * 2.5));
 			const mkey = `${fkey}|${fo.toFixed(3)}`;
 			if (lastFx.media !== mkey) {
@@ -350,6 +595,12 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 				} else {
 					mediaEl.style.transform = `translate3d(${fw.tx}px,${fw.ty}px,0) rotate(${fw.rot}deg) scale(${fw.s})`;
 					mediaEl.style.clipPath = `inset(${fw.iy}px ${fw.ix}px round ${fw.r}px)`;
+				}
+				if (!mobile) {
+					mediaEl.style.setProperty("--ix", fw.ix.toFixed(1));
+					mediaEl.style.setProperty("--iy", fw.iy.toFixed(1));
+					mediaEl.style.setProperty("--s", fw.s.toFixed(4));
+					mediaEl.style.setProperty("--deco", (st.w >= .3 ? 0 : (1 - smooth(st.w / .3)) * st.D).toFixed(3));
 				}
 				mediaEl.style.opacity = String(fo);
 				mediaEl.style.visibility = fo < .01 ? "hidden" : "visible";
@@ -365,6 +616,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 				el.style.zIndex = String(cp.z);
 				el.style.setProperty("--inv", (1 / cp.s).toFixed(3));
 			}
+			if (haloEl && !mobile) haloEl.style.opacity = (st.D * .9).toFixed(3);
 			const dKey = st.D.toFixed(3), dOp = mobile ? clamp$2(st.D * 2 - 1) : st.D, dMove = mobile ? .035 : .05;
 			if (lastFx.d !== dKey) {
 				lastFx.d = dKey;
@@ -586,6 +838,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 			]) delete section.dataset[k];
 			for (const el of [
 				mediaEl,
+				haloEl,
 				...floatEls,
 				...cardEls,
 				...fxEls
@@ -601,7 +854,10 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 				"--stage-h",
 				"--m-t1",
 				"--deck-top",
-				"--deck-bottom"
+				"--deck-bottom",
+				"--deck-x",
+				"--deck-y",
+				"--deck-h"
 			]) stageEl.style.removeProperty(k);
 			delete stageEl.dataset.short;
 			delete stageEl.dataset.phase;
@@ -664,40 +920,91 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 					/* @__PURE__ */ jsxs("div", {
 						ref: media,
 						className: "scrub-media",
-						children: [/* @__PURE__ */ jsxs("picture", {
-							className: "scrub-poster",
-							children: [
-								/* @__PURE__ */ jsx("source", {
-									media: MOBILE_QUERY,
-									type: "image/avif",
-									srcSet: `${BASE}/poster-m.avif`
-								}),
-								/* @__PURE__ */ jsx("source", {
-									media: MOBILE_QUERY,
-									type: "image/webp",
-									srcSet: `${BASE}/poster-m.webp`
-								}),
-								/* @__PURE__ */ jsx("source", {
-									type: "image/avif",
-									srcSet: `${BASE}/poster-1280.avif 1280w, ${BASE}/poster-1600.avif 1600w`,
-									sizes: "100vw"
-								}),
-								/* @__PURE__ */ jsx("img", {
-									src: `${BASE}/poster-1600.webp`,
-									srcSet: `${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`,
-									sizes: "100vw",
-									width: "1600",
-									height: "900",
-									alt: "Vista de Medellín desde la ladera de la Comuna 13",
-									loading: "lazy",
-									decoding: "async"
-								})
-							]
-						}), animated && /* @__PURE__ */ jsx("canvas", {
-							ref: canvas,
-							className: "scrub-canvas",
-							"aria-hidden": "true"
-						})]
+						children: [
+							/* @__PURE__ */ jsxs("picture", {
+								className: "scrub-poster",
+								children: [
+									/* @__PURE__ */ jsx("source", {
+										media: MOBILE_QUERY,
+										type: "image/avif",
+										srcSet: `${BASE}/poster-m.avif`
+									}),
+									/* @__PURE__ */ jsx("source", {
+										media: MOBILE_QUERY,
+										type: "image/webp",
+										srcSet: `${BASE}/poster-m.webp`
+									}),
+									/* @__PURE__ */ jsx("source", {
+										type: "image/avif",
+										srcSet: `${BASE}/poster-1280.avif 1280w, ${BASE}/poster-1600.avif 1600w`,
+										sizes: "100vw"
+									}),
+									/* @__PURE__ */ jsx("img", {
+										src: `${BASE}/poster-1600.webp`,
+										srcSet: `${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`,
+										sizes: "100vw",
+										width: "1600",
+										height: "900",
+										alt: "Vista de Medellín desde la ladera de la Comuna 13",
+										loading: "lazy",
+										decoding: "async"
+									})
+								]
+							}),
+							animated && /* @__PURE__ */ jsx("canvas", {
+								ref: canvas,
+								className: "scrub-canvas",
+								"aria-hidden": "true"
+							}),
+							animated && !mobile && /* @__PURE__ */ jsxs("span", {
+								className: "md-deco",
+								"aria-hidden": "true",
+								children: [
+									/* @__PURE__ */ jsx("i", { className: "md-frame" }),
+									/* @__PURE__ */ jsx("i", { className: "md-sheen" }),
+									/* @__PURE__ */ jsx("i", {
+										className: "md-stamp",
+										children: /* @__PURE__ */ jsxs("svg", {
+											viewBox: "0 0 48 48",
+											focusable: "false",
+											children: [
+												/* @__PURE__ */ jsx("circle", {
+													cx: "24",
+													cy: "24",
+													r: "21",
+													fill: "none",
+													stroke: "currentColor",
+													strokeWidth: "1.6",
+													strokeDasharray: "3 2.6"
+												}),
+												/* @__PURE__ */ jsx("circle", {
+													cx: "24",
+													cy: "24",
+													r: "15",
+													fill: "none",
+													stroke: "currentColor",
+													strokeWidth: "1.3"
+												}),
+												/* @__PURE__ */ jsx("path", {
+													d: "M15 29l6-7 4 4 3-3 5 6",
+													fill: "none",
+													stroke: "currentColor",
+													strokeWidth: "1.8",
+													strokeLinecap: "round",
+													strokeLinejoin: "round"
+												}),
+												/* @__PURE__ */ jsx("circle", {
+													cx: "30.5",
+													cy: "18.5",
+													r: "2",
+													fill: "currentColor"
+												})
+											]
+										})
+									})
+								]
+							})
+						]
 					}),
 					/* @__PURE__ */ jsxs("div", {
 						ref: titleRef,
@@ -801,15 +1108,19 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 							}
 						}, k))
 					}),
-					/* @__PURE__ */ jsx("div", {
+					/* @__PURE__ */ jsxs("div", {
 						ref: deckRef,
 						className: "bd-deck",
-						children: animated && cards.map((c) => /* @__PURE__ */ jsx("div", {
+						children: [animated && !mobile && /* @__PURE__ */ jsx("i", {
+							ref: haloRef,
+							className: "bd-halo",
+							"aria-hidden": "true"
+						}), animated && cards.map((c) => /* @__PURE__ */ jsx("div", {
 							className: "bd-card",
 							"aria-hidden": "true",
-							children: /* @__PURE__ */ jsx("span", {
+							children: /* @__PURE__ */ jsxs("span", {
 								className: "bd-tilt",
-								children: /* @__PURE__ */ jsx("img", {
+								children: [/* @__PURE__ */ jsx("img", {
 									className: "bd-thumb",
 									src: cardImg(c.slug, "t"),
 									width: "320",
@@ -817,9 +1128,48 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 									alt: "",
 									decoding: "async",
 									loading: "lazy"
-								})
+								}), /* @__PURE__ */ jsx("i", {
+									className: "bd-stamp",
+									children: /* @__PURE__ */ jsxs("svg", {
+										viewBox: "0 0 48 48",
+										focusable: "false",
+										children: [
+											/* @__PURE__ */ jsx("circle", {
+												cx: "24",
+												cy: "24",
+												r: "21",
+												fill: "none",
+												stroke: "currentColor",
+												strokeWidth: "1.6",
+												strokeDasharray: "3 2.6"
+											}),
+											/* @__PURE__ */ jsx("circle", {
+												cx: "24",
+												cy: "24",
+												r: "15",
+												fill: "none",
+												stroke: "currentColor",
+												strokeWidth: "1.3"
+											}),
+											/* @__PURE__ */ jsx("path", {
+												d: "M15 29l6-7 4 4 3-3 5 6",
+												fill: "none",
+												stroke: "currentColor",
+												strokeWidth: "1.8",
+												strokeLinecap: "round",
+												strokeLinejoin: "round"
+											}),
+											/* @__PURE__ */ jsx("circle", {
+												cx: "30.5",
+												cy: "18.5",
+												r: "2",
+												fill: "currentColor"
+											})
+										]
+									})
+								})]
 							})
-						}, c.slug))
+						}, c.slug))]
 					})
 				]
 			})
@@ -851,6 +1201,13 @@ var SEG = {
 };
 var EXIT = 20;
 var RELAY = 34;
+var REST = .48;
+var COMPACT_SVH = 232;
+var COMPACT_END = 10;
+var PH_A = .16;
+var PH_C = .88;
+var totalFor = (wide) => wide ? RELAY + N * SEG.wide + EXIT : RELAY + COMPACT_SVH + COMPACT_END;
+var mapLocal = (tl) => tl < PH_A ? .62 * (tl / PH_A) : .62 + .18 * clamp$1((tl - PH_A) / .72);
 var WIDE = "(min-width: 1100px)";
 var SMALL = "(max-width: 799px)";
 var REDUCE = "(prefers-reduced-motion: reduce)";
@@ -1053,12 +1410,35 @@ function TravelHand() {
 		shown,
 		layout
 	]);
+	const flipOn = useCallback(() => {
+		const el = handEl.current;
+		if (el) {
+			el.dataset.flip = "true";
+			clearTimeout(st.current.flip);
+			st.current.flip = setTimeout(() => {
+				el.dataset.flip = "false";
+			}, 650);
+		}
+	}, []);
+	const warm = useCallback((gi) => {
+		const e = ENTRIES[gi];
+		if (!e || navigator.connection?.saveData) return;
+		e.photos.forEach((p, k) => {
+			const im = new Image();
+			im.decoding = "async";
+			im.sizes = k === 0 ? "(max-width: 799px) 84vw, 36vw" : "(max-width: 799px) 40vw, 18vw";
+			im.srcset = p.srcSet;
+			im.src = p.src;
+			im.decode?.().catch(() => {});
+		});
+		setFull((prev) => prev.has(gi) ? prev : new Set(prev).add(gi));
+	}, []);
 	useLayoutEffect(() => {
 		if (!ready || !animated) return void 0;
 		const trackEl = track.current, stageEl = stage.current, hand = handEl.current, mq = mqEl.current, deck = deckEl.current;
 		const small = window.matchMedia(SMALL).matches, wide = layout === "wide", seg = wide ? SEG.wide : SEG.compact, shrink = wide ? 1 : innerWidth < 768 ? .62 : .82, mob = innerWidth < 768;
-		const total = RELAY + N * seg + EXIT;
-		let raf = 0, visible = true, destroyed = false, q = null, lastT = 0, stageTop = 92, span = 1, RW = 0, RH = 0, sw = 0, sh = 0;
+		const compact = !wide, total = totalFor(wide);
+		let raf = 0, visible = !compact, destroyed = false, q = null, lastT = 0, stageTop = 92, span = 1, RW = 0, RH = 0, sw = 0, sh = 0, arrT = compact ? performance.now() + 1e9 : 0, leaving = null;
 		let groupCache = null, trackTop = 0;
 		const groups = () => groupCache || (groupCache = [...hand.querySelectorAll(".th-group")]);
 		const measureTrack = () => {
@@ -1086,35 +1466,69 @@ function TravelHand() {
 			lastKey = "";
 		};
 		let lastKey = "", keep = null;
-		const apply = (P) => {
-			const idx = clamp$1(Math.floor(P), 0, N - 1);
-			P - idx;
-			const P2 = clamp$1(P, 0, N);
-			if (idx !== st.current.active) {
-				st.current.active = idx;
-				setActive(idx);
+		const apply = (P, now) => {
+			let idx, eff, P2 = 0;
+			if (compact) {
+				idx = st.current.active;
+				const ramp = arrT ? smooth$1(clamp$1((now - arrT) / 700)) : 1;
+				eff = mapLocal(P) * ramp;
+				if (arrT && ramp >= 1) arrT = 0;
+				if (leaving && now > leaving.until) {
+					leaving = null;
+					lastKey = "";
+				}
+				const n = ENTRIES[idx].photos.length;
+				Math.floor(clamp$1((P - PH_A) / .72) * n), n - 1;
+			} else {
+				idx = clamp$1(Math.floor(P), 0, N - 1);
+				P2 = clamp$1(P, 0, N);
+				if (idx !== st.current.active) {
+					st.current.active = idx;
+					setActive(idx);
+				}
+				eff = clamp$1(P2 - idx, 0, 1);
 			}
-			const key = `${P2.toFixed(4)}|${RW}x${RH}|${JSON.stringify(st.current.fronts)}`;
+			const key = `${compact ? `${eff.toFixed(4)}|${idx}|${leaving ? leaving.gi : ""}|${P > PH_C ? P.toFixed(3) : ""}` : P2.toFixed(4)}|${RW}x${RH}|${JSON.stringify(st.current.fronts)}`;
 			if (key === lastKey) return;
 			lastKey = key;
 			for (const g of groups()) {
-				const gi = Number(g.dataset.i), local = P2 - gi, f = st.current.fronts[gi] || 0;
-				const vis = local > -.2 && local < 1.25;
-				g.style.visibility = vis ? "visible" : "hidden";
-				if (!vis) continue;
-				const ls = clamp$1(local, 0, 1);
-				local < 0 && smooth$1(clamp$1(1 + local * 4));
-				const fr = placePhotos([...g.querySelectorAll(".th-photo")], f, local, RW, RH, shrink, mob, keep);
-				placeLugar(g.querySelector(".th-lugar"), fr, ls, RH);
+				const gi = Number(g.dataset.i), f = st.current.fronts[gi] || 0;
+				let local;
+				if (compact) {
+					if (gi !== idx) {
+						const out = leaving && leaving.gi === gi;
+						g.style.visibility = out ? "visible" : "hidden";
+						g.style.transition = out ? "opacity 220ms ease" : "";
+						g.style.opacity = out ? "0" : "";
+						g.style.transform = "";
+						continue;
+					}
+					local = eff;
+					g.style.visibility = "visible";
+					g.style.transition = "";
+					const bye = smooth$1((P - PH_C) / .12);
+					g.style.opacity = bye ? String((1 - bye).toFixed(3)) : "";
+					g.style.transform = bye ? `translate3d(0,${(bye * 28).toFixed(1)}px,0)` : "";
+				} else {
+					local = P2 - gi;
+					const vis = local > -.2 && local < 1.25;
+					g.style.visibility = vis ? "visible" : "hidden";
+					if (!vis) continue;
+				}
+				placePhotos([...g.querySelectorAll(".th-photo")], f, local, RW, RH, shrink, mob, keep);
 			}
-			const ls0 = clamp$1(P2 - idx, 0, 1);
-			mq.style.transform = `translate3d(${(.12 * sw - .25 * ls0 * sw).toFixed(1)}px,-50%,0)`;
-			deck.style.opacity = String(clamp$1(1 - (P2 - (N - 2)) * 1.2));
+			mq.style.transform = `translate3d(${(.12 * sw - .25 * eff * sw).toFixed(1)}px,-50%,0)`;
+			if (!compact) deck.style.opacity = String(clamp$1(1 - (P2 - (N - 2)) * 1.2));
 		};
 		const render = (now) => {
 			raf = 0;
 			if (destroyed || !visible || document.hidden) {
 				lastT = 0;
+				return;
+			}
+			if (compact) {
+				apply(REST, now);
+				if (arrT || leaving) schedule();
 				return;
 			}
 			const u = clamp$1((scrollY + stageTop - trackTop) / span) * total;
@@ -1128,10 +1542,10 @@ function TravelHand() {
 				stageEl.style.pointerEvents = cfin < 1 ? "none" : "";
 				stageEl.dataset.on = fin > 0 ? "true" : "false";
 			}
-			const target = clamp$1((u - RELAY) / seg, 0, N);
+			const target = compact ? clamp$1((u - RELAY) / COMPACT_SVH) : clamp$1((u - RELAY) / seg, 0, N);
 			const dt = lastT ? Math.min(64, now - lastT) : 16;
 			lastT = now;
-			if (q === null || Math.abs(target - q) > .36) q = target;
+			if (q === null || Math.abs(target - q) > (compact ? .12 : .36)) q = target;
 			else q += (target - q) * (1 - Math.exp(-dt / (wide ? 60 : 45)));
 			let moving = true;
 			if (Math.abs(target - q) < 4e-4) {
@@ -1142,8 +1556,8 @@ function TravelHand() {
 				st.current.manualY = null;
 				if (Object.keys(st.current.fronts).length) setFronts({});
 			}
-			apply(q);
-			if (moving) schedule();
+			apply(q, now);
+			if (moving || arrT || leaving) schedule();
 			else lastT = 0;
 		};
 		const schedule = () => {
@@ -1153,6 +1567,7 @@ function TravelHand() {
 		const observer = new IntersectionObserver(([e]) => {
 			visible = e.isIntersecting;
 			if (visible) {
+				if (compact && arrT > performance.now() + 1e8) arrT = performance.now();
 				lastT = 0;
 				lastKey = "";
 				schedule();
@@ -1173,6 +1588,24 @@ function TravelHand() {
 			});
 			schedule();
 		};
+		st.current.choose = (i) => {
+			if (!compact) {
+				st.current.jump(i);
+				return;
+			}
+			if (i === st.current.active) return;
+			leaving = {
+				gi: st.current.active,
+				until: performance.now() + 260
+			};
+			arrT = performance.now() + 120;
+			lastKey = "";
+			st.current.manualY = null;
+			st.current.active = i;
+			setActive(i);
+			setFronts({});
+			schedule();
+		};
 		st.current.refresh = () => {
 			groupCache = null;
 			lastKey = "";
@@ -1188,8 +1621,14 @@ function TravelHand() {
 		observer.observe(root.current);
 		resize.observe(hand);
 		resize.observe(stageEl);
-		window.addEventListener("scroll", onScroll, { passive: true });
+		if (!compact) window.addEventListener("scroll", onScroll, { passive: true });
 		window.addEventListener("resize", onScroll, { passive: true });
+		if (compact) {
+			stageEl.style.setProperty("--cfin", "1");
+			stageEl.style.setProperty("--fin", "1");
+			stageEl.style.pointerEvents = "";
+			stageEl.dataset.on = "true";
+		}
 		document.addEventListener("visibilitychange", onScroll);
 		schedule();
 		return () => {
@@ -1202,6 +1641,7 @@ function TravelHand() {
 			window.removeEventListener("resize", onScroll);
 			document.removeEventListener("visibilitychange", onScroll);
 			st.current.jump = () => {};
+			st.current.choose = () => {};
 			st.current.refresh = () => {};
 			for (const img of hand.querySelectorAll(".th-photo")) {
 				img.removeAttribute("style");
@@ -1227,27 +1667,20 @@ function TravelHand() {
 			[gi]: f
 		}));
 		st.current.manualY = scrollY;
-		const el = handEl.current;
-		if (el) {
-			el.dataset.flip = "true";
-			clearTimeout(st.current.flip);
-			st.current.flip = setTimeout(() => {
-				el.dataset.flip = "false";
-			}, 650);
-		}
+		flipOn();
 		if (announce) setLive(`Foto ${f + 1} de ${n}, ${ENTRIES[gi].name}`);
-	}, []);
+	}, [flipOn]);
 	const onTabKey = (e, i) => {
 		const next = e.key === "ArrowDown" || e.key === "ArrowRight" ? (i + 1) % N : e.key === "ArrowUp" || e.key === "ArrowLeft" ? (i + N - 1) % N : e.key === "Home" ? 0 : e.key === "End" ? N - 1 : null;
 		if (next === null) return;
 		e.preventDefault();
-		st.current.jump(next);
+		st.current.choose(next);
 		tabs.current[next]?.focus({ preventScroll: true });
 	};
 	useGlassPill(tabList, active, animated && layout === "compact");
-	const nowFront = fronts[active] || 0, entry = ENTRIES[shown];
-	const t$1 = inicioTextos, seg = layout === "wide" ? SEG.wide : SEG.compact;
-	const trackStyle = animated ? { "--th-total": RELAY + N * seg + EXIT } : void 0;
+	const nowFront = fronts[active] || 0, entry = ENTRIES[shown], t$1 = inicioTextos;
+	layout === "wide" ? SEG.wide : SEG.compact;
+	const trackStyle = animated ? { "--th-total": totalFor(layout === "wide") } : void 0;
 	const header = /* @__PURE__ */ jsxs("div", {
 		className: "th-head",
 		children: [/* @__PURE__ */ jsxs("p", {
@@ -1393,7 +1826,8 @@ function TravelHand() {
 										"aria-controls": "th-hand",
 										"aria-selected": active === i,
 										tabIndex: active === i ? 0 : -1,
-										onClick: () => st.current.jump(i),
+										onClick: () => st.current.choose(i),
+										onPointerDown: () => warm(i),
 										onKeyDown: (e) => onTabKey(e, i),
 										children: [/* @__PURE__ */ jsx("span", { children: two$2(i + 1) }), ENTRIES[i].name]
 									}, ENTRIES[i].slug))
@@ -1433,52 +1867,16 @@ function TravelHand() {
 							children: ENTRIES.map((e, gi) => {
 								const near = Math.abs(gi - active) <= 1, hasFull = full.has(gi);
 								if (!near && !hasFull) return null;
-								return /* @__PURE__ */ jsxs("div", {
+								return /* @__PURE__ */ jsx("div", {
 									className: "th-group",
 									"data-i": gi,
 									"aria-hidden": gi === active ? void 0 : "true",
-									children: [e.photos.map((p, k) => k === 0 || hasFull ? /* @__PURE__ */ jsx(Photo, {
+									children: e.photos.map((p, k) => k === 0 || hasFull ? /* @__PURE__ */ jsx(Photo, {
 										photo: p,
 										entry: e,
 										k,
 										primary: gi === active || k === 0
-									}, k) : null), /* @__PURE__ */ jsxs("span", {
-										className: "th-lugar",
-										"aria-hidden": "true",
-										children: [/* @__PURE__ */ jsx("b", { children: smallCaps(e.lugar) }), /* @__PURE__ */ jsxs("svg", {
-											viewBox: "0 0 32 32",
-											width: "26",
-											height: "26",
-											focusable: "false",
-											children: [
-												/* @__PURE__ */ jsx("circle", {
-													cx: "16",
-													cy: "16",
-													r: "14",
-													fill: "none",
-													stroke: "currentColor",
-													strokeWidth: "1.4",
-													strokeDasharray: "2 2.2"
-												}),
-												/* @__PURE__ */ jsx("circle", {
-													cx: "16",
-													cy: "16",
-													r: "9",
-													fill: "none",
-													stroke: "currentColor",
-													strokeWidth: "1.2"
-												}),
-												/* @__PURE__ */ jsx("path", {
-													d: "M11 17.5l3.2-3.2 2.3 2.3 4.5-4.5",
-													fill: "none",
-													stroke: "currentColor",
-													strokeWidth: "1.4",
-													strokeLinecap: "round",
-													strokeLinejoin: "round"
-												})
-											]
-										})]
-									})]
+									}, k) : null)
 								}, e.slug);
 							})
 						}),
@@ -1601,11 +1999,6 @@ function TravelHand() {
 					]
 				})
 			}),
-			layout === "compact" && ENTRIES.map((e, i) => /* @__PURE__ */ jsx("i", {
-				className: "th-snap",
-				"aria-hidden": "true",
-				style: { top: `calc(${RELAY + (i + .56) * seg} * 1svh)` }
-			}, e.slug)),
 			/* @__PURE__ */ jsx("div", {
 				id: "th-inicio",
 				className: "th-marker",
@@ -2623,214 +3016,40 @@ function Different() {
 	});
 }
 //#endregion
-//#region src/inicio-videos.js
-var inicioVideos = {
-	hero: {
-		src: null,
-		poster: null
-	},
-	historia: {
-		src: null,
-		poster: null,
-		captions: null
-	}
-};
-var perfil = company.instagram;
-var instagram = {
-	profile: {
-		name: "Transporte y Turismo Medellín",
-		handle: "@transporteenmedellin",
-		url: company.instagram,
-		stats: null
-	},
-	tiktok: {
-		handle: "@tytmedellin",
-		url: company.tiktok
-	},
-	posts: [
-		{
-			url: perfil,
-			image: null,
-			type: "reel",
-			alt: ""
-		},
-		{
-			url: perfil,
-			image: null,
-			type: "carousel",
-			alt: ""
-		},
-		{
-			url: perfil,
-			image: null,
-			type: "reel",
-			alt: ""
-		},
-		{
-			url: perfil,
-			image: null,
-			type: "photo",
-			alt: ""
-		},
-		{
-			url: perfil,
-			image: null,
-			type: "carousel",
-			alt: ""
-		},
-		{
-			url: perfil,
-			image: null,
-			type: "reel",
-			alt: ""
-		},
-		{
-			url: perfil,
-			image: null,
-			type: "photo",
-			alt: ""
-		},
-		{
-			url: perfil,
-			image: null,
-			type: "reel",
-			alt: ""
-		}
-	]
-};
-//#endregion
 //#region src/HomeVideos.jsx
 var Provisional = () => /* @__PURE__ */ jsx("span", {
 	className: "vlabel",
 	children: "Video próximamente"
 });
-function useHeroPlayback(ref, light, enabled) {
-	const [playing, setPlaying] = useState(false);
-	const manual = useRef(false);
-	useEffect(() => {
-		const el = ref.current;
-		if (!enabled || !el) return void 0;
-		const sync = () => setPlaying(!el.paused);
-		el.addEventListener("play", sync);
-		el.addEventListener("pause", sync);
-		if (light) el.pause();
-		else el.play().catch(() => {});
-		const observer = new IntersectionObserver(([entry]) => {
-			if (light || manual.current) return;
-			if (entry.isIntersecting) el.play().catch(() => {});
-			else el.pause();
-		});
-		observer.observe(el);
-		return () => {
-			observer.disconnect();
-			el.removeEventListener("play", sync);
-			el.removeEventListener("pause", sync);
-		};
-	}, [
-		ref,
-		light,
-		enabled
-	]);
-	const toggle = () => {
-		const el = ref.current;
-		if (!el) return;
-		manual.current = true;
-		if (el.paused) el.play().catch(() => {});
-		else el.pause();
-	};
-	return [playing, toggle];
-}
 function HomeHero() {
-	const v = inicioVideos.hero, light = useLightMotion(), video = useRef(null), section = useRef(null);
-	const [playing, toggle] = useHeroPlayback(video, light, Boolean(v.src));
-	useEffect(() => {
-		const html = document.documentElement, header = document.querySelector(".site-header")?.offsetHeight || 92;
-		const observer = new IntersectionObserver(([entry]) => {
-			html.dataset.hero = entry.isIntersecting ? "over" : "past";
-		}, { rootMargin: `-${header}px 0px 0px 0px` });
-		observer.observe(section.current);
-		return () => {
-			observer.disconnect();
-			delete html.dataset.hero;
-		};
-	}, []);
 	const t = inicioTextos;
-	return /* @__PURE__ */ jsxs("section", {
-		ref: section,
-		className: "home-hero",
-		"data-hero": true,
-		"data-video": v.src ? "on" : "off",
-		"aria-labelledby": "hero-titulo",
-		children: [
-			/* @__PURE__ */ jsx("div", {
-				className: "hero-media",
-				"aria-hidden": "true",
-				children: v.src && /* @__PURE__ */ jsx("video", {
-					ref: video,
-					src: v.src,
-					poster: v.poster || void 0,
-					muted: true,
-					loop: true,
-					playsInline: true,
-					autoPlay: !light,
-					preload: "metadata",
-					tabIndex: -1
+	return /* @__PURE__ */ jsx(HeroBlock, {
+		video: inicioVideos.hero,
+		eyebrow: t.lema,
+		support: t.confianza,
+		title: /* @__PURE__ */ jsxs("h1", {
+			id: "hero-titulo",
+			children: [
+				/* @__PURE__ */ jsx("span", {
+					className: "hero-l1",
+					children: t.titular[0]
+				}),
+				" ",
+				/* @__PURE__ */ jsx("span", {
+					className: "hero-l2",
+					children: t.titular[1]
 				})
-			}),
-			v.src && /* @__PURE__ */ jsx("div", {
-				className: "hero-shade",
-				"aria-hidden": "true"
-			}),
-			/* @__PURE__ */ jsxs("div", {
-				className: "hero-copy",
-				children: [
-					/* @__PURE__ */ jsx("p", {
-						className: "eyebrow hero-eyebrow",
-						children: t.lema
-					}),
-					/* @__PURE__ */ jsxs("h1", {
-						id: "hero-titulo",
-						children: [
-							/* @__PURE__ */ jsx("span", {
-								className: "hero-l1",
-								children: t.titular[0]
-							}),
-							" ",
-							/* @__PURE__ */ jsx("span", {
-								className: "hero-l2",
-								children: t.titular[1]
-							})
-						]
-					}),
-					/* @__PURE__ */ jsx("p", {
-						className: "hero-support",
-						children: t.confianza
-					}),
-					/* @__PURE__ */ jsxs("div", {
-						className: "hero-actions",
-						children: [/* @__PURE__ */ jsxs(Link, {
-							className: "button hero-btn hero-btn--explore",
-							to: "/experiencias",
-							children: ["Explorar experiencias", /* @__PURE__ */ jsx(Arrow, {})]
-						}), /* @__PURE__ */ jsxs(Link, {
-							className: "button hero-btn hero-btn--quote",
-							to: "/cotizar",
-							children: ["Planeemos tu viaje", /* @__PURE__ */ jsx(Arrow, {})]
-						})]
-					})
-				]
-			}),
-			v.src && /* @__PURE__ */ jsx("button", {
-				type: "button",
-				className: "hero-pause",
-				onClick: toggle,
-				"aria-label": playing ? "Pausar video" : "Reproducir video",
-				children: /* @__PURE__ */ jsx("span", {
-					"aria-hidden": "true",
-					children: playing ? "❚❚" : "▶"
-				})
-			})
-		]
+			]
+		}),
+		actions: /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsxs(Link, {
+			className: "button hero-btn hero-btn--explore",
+			to: "/experiencias",
+			children: ["Explorar experiencias", /* @__PURE__ */ jsx(Arrow, {})]
+		}), /* @__PURE__ */ jsxs(Link, {
+			className: "button hero-btn hero-btn--quote",
+			to: "/cotizar",
+			children: ["Planeemos tu viaje", /* @__PURE__ */ jsx(Arrow, {})]
+		})] })
 	});
 }
 function HomeStory() {

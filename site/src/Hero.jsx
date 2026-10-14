@@ -45,6 +45,8 @@ function HeroSlides({ slides, paused, still }) {
   const [cur, setCur] = useState(0), [prev, setPrev] = useState(-1), [reach, setReach] = useState(1);
   const box = useRef(null), curRef = useRef(0), imgs = useRef([]);
   const n = slides.length;
+  // Fuera de vista el Ken Burns se detiene (sin trabajo de compositor mientras se lee el resto de la página).
+  useEffect(() => { const io = new IntersectionObserver(([e]) => { box.current.dataset.off = e.isIntersecting ? 'false' : 'true'; }); io.observe(box.current); return () => io.disconnect(); }, []);
   useEffect(() => {
     if (still || paused || n < 2) return undefined;
     let visible = true, busy = false;

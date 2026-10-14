@@ -99,7 +99,7 @@ html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .socials a{col
 .hs-img.is-on,.hs-img.is-prev{animation:hs-kb-a 7.4s linear forwards}
 .hs-img.hs-b.is-on,.hs-img.hs-b.is-prev{animation-name:hs-kb-b}
 .hs-img.is-prev{opacity:0}
-.hero-slides[data-paused=true] .hs-img{animation-play-state:paused}
+.hero-slides[data-paused=true] .hs-img,.hero-slides[data-off=true] .hs-img{animation-play-state:paused}
 @keyframes hs-kb-a{from{transform:scale(1) translate3d(0,0,0)}to{transform:scale(1.09) translate3d(-1.2%,-.8%,0)}}
 @keyframes hs-kb-b{from{transform:scale(1.09) translate3d(1.2%,.8%,0)}to{transform:scale(1) translate3d(0,0,0)}}
 .hero-slides[data-still=true] .hs-img{animation:none;transition:none}

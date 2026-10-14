@@ -1,5 +1,5 @@
-import { F as jsxs, N as Fragment, P as jsx, b as Trust, l as PageTitle, p as TourCard, r as tours, x as useFlipGrid, y as Marquee } from "../entry-server.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-B-VmbEHR.js";
+import { F as jsx, I as jsxs, P as Fragment, b as useFlipGrid, p as TourCard, r as tours, v as Marquee, y as Trust } from "../entry-server.js";
+import { n as useGlassPill, r as CatalogHero, t as GlassPill } from "./glass-ndxeIHtl.js";
 import { useRef, useState } from "react";
 //#region src/pages/Catalog.jsx
 function Catalog() {
@@ -11,21 +11,11 @@ function Catalog() {
 	const list = tours.filter((t) => (filter === "Todos" || t.category === filter) && `${t.name} ${t.description}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()));
 	useFlipGrid(grid, list.map((t) => t.slug).join("|"));
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
-		/* @__PURE__ */ jsx(PageTitle, {
-			photo: tours[1].images[0],
-			floating: [tours[0].images[0], tours[4].images[0]],
-			tag: "La colección T&T",
-			title: /* @__PURE__ */ jsxs(Fragment, { children: [
-				"¿Qué historia",
-				/* @__PURE__ */ jsx("br", {}),
-				"quieres ",
-				/* @__PURE__ */ jsx("em", { children: "vivir?" })
-			] }),
-			text: "Doce maneras de empezar. Medellín y los recorridos por Antioquia que nacen desde nuestra ciudad."
-		}),
+		/* @__PURE__ */ jsx(CatalogHero, {}),
 		/* @__PURE__ */ jsx(Trust, {}),
 		/* @__PURE__ */ jsxs("section", {
 			className: "wrap catalog",
+			id: "catalogo",
 			children: [
 				/* @__PURE__ */ jsxs("div", {
 					className: "catalog-tools",

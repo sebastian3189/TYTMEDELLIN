@@ -1,11 +1,11 @@
-import { A as Icon$1, C as useMedia, F as jsxs, L as whatsapp, N as Fragment, P as jsx, S as useLightMotion, _ as EditorialMotion, b as Trust, c as Eyebrow, d as QuoteSection, f as Rail, h as Arrow, k as usePageMeta, p as TourCard, r as tours, u as Picture, w as useMounted, y as Marquee } from "../entry-server.js";
-import NotFound from "./NotFound-AZG3jjbu.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-B-VmbEHR.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-BrgMZdFO.js";
-import { t as Reviews } from "./Reviews-BEL79RCZ.js";
-import { l as Faq, o as FAQ_TOUR, s as FAQ_TRANSFER, t as DURACIONES } from "./faq-data-BxdktUz_.js";
-import { a as smooth, i as smallCaps, l as deckPose, n as placeLugar, o as tourEntry, r as placePhotos, t as clamp } from "./mobile-motion-ZzElizgX.js";
-import { Link, useParams } from "react-router-dom";
+import { A as usePageMeta, C as useMounted, F as jsx, I as jsxs, P as Fragment, R as whatsapp, S as useMedia, T as watchScroll, c as Eyebrow, d as QuoteSection, f as Rail, h as Arrow, j as Icon$1, p as TourCard, r as tours, u as Picture, v as Marquee, w as docTop, x as useLightMotion, y as Trust } from "../entry-server.js";
+import NotFound from "./NotFound-DTLybyfR.js";
+import { a as TourHeroVideo, n as useGlassPill, o as tourEntry, t as GlassPill } from "./glass-ndxeIHtl.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-v6rDM-IO.js";
+import { t as Reviews } from "./Reviews-Cp4j-Pnr.js";
+import { l as Faq, o as FAQ_TOUR, s as FAQ_TRANSFER, t as DURACIONES } from "./faq-data-DaJGWog5.js";
+import { i as smallCaps, n as placeLugar, r as placePhotos, t as clamp } from "./mobile-motion-o2zoinXe.js";
+import { useParams } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 //#region src/tour-info.json
 var tour_info_default = {
@@ -286,26 +286,31 @@ function TourDetails({ slug }) {
 	useEffect(() => {
 		const node = list.current;
 		if (!node || light) return;
-		let frame = 0;
-		const update = () => {
-			cancelAnimationFrame(frame);
-			frame = requestAnimationFrame(() => {
-				const r = node.getBoundingClientRect();
-				if (r.bottom < 0 || r.top > innerHeight) return;
-				const p = Math.min(1, Math.max(0, (innerHeight * .7 - r.top) / r.height));
+		const items = [...node.querySelectorAll("li")];
+		let top = 0, h = 1, last = -1, lit = -1;
+		const stop = watchScroll({
+			el: node,
+			margin: 0,
+			measure: () => {
+				top = docTop(node);
+				h = node.offsetHeight || 1;
+			},
+			update: (y, vh) => {
+				const p = Math.round(Math.min(1, Math.max(0, (y + vh * .7 - top) / h)) * 500) / 500;
+				if (p === last) return;
+				last = p;
 				node.style.setProperty("--rp", p.toFixed(3));
-				node.querySelectorAll("li").forEach((li, i, all) => li.toggleAttribute("data-on", p >= i / all.length - .02));
-			});
-		};
-		window.addEventListener("scroll", update, { passive: true });
-		window.addEventListener("resize", update);
-		update();
+				const n = items.filter((_, i, all) => p >= i / all.length - .02).length;
+				if (n !== lit) {
+					lit = n;
+					items.forEach((li, i) => li.toggleAttribute("data-on", i < n));
+				}
+			}
+		});
 		return () => {
-			window.removeEventListener("scroll", update);
-			window.removeEventListener("resize", update);
-			cancelAnimationFrame(frame);
+			stop();
 			node.style.removeProperty("--rp");
-			node.querySelectorAll("li").forEach((li) => li.removeAttribute("data-on"));
+			items.forEach((li) => li.removeAttribute("data-on"));
 		};
 	}, [light, slug]);
 	if (!d) return null;
@@ -631,165 +636,359 @@ function TourArchive({ tour }) {
 }
 //#endregion
 //#region src/TourHero.jsx
-var MAX_CARDS = 5;
+var VISIBLE = 4;
+var MAX = 12;
+var ROT = [
+	-1,
+	2.6,
+	-2.4,
+	3.4
+];
+var pose = (k) => {
+	const j = Math.min(k, 3);
+	return `translate3d(${j * 12}px,${-j * 14}px,0) rotate(${ROT[j]}deg) scale(${(1 - j * .05).toFixed(3)})`;
+};
+var two = (n) => String(n).padStart(2, "0");
 function TourHero({ tour }) {
-	const light = useLightMotion(), wide = useMedia("(min-width: 1100px)"), tall = useMedia("(min-height: 640px)");
-	const animated = useMounted() && wide && tall && !light;
-	const track = useRef(null), stage = useRef(null), region = useRef(null);
-	const cards = [tour.hero, ...tour.gallery.filter((g) => g.src !== tour.hero.src)].slice(0, MAX_CARDS);
-	useLayoutEffect(() => {
-		if (!animated) return void 0;
-		const trackEl = track.current, stageEl = stage.current, reg = region.current, els = [...reg.querySelectorAll(".tdk-card")], n = els.length;
-		let raf = 0, visible = true, q = null, last = 0, RW = 0, RH = 0, bw = 0, bh = 0, trackTop = 0, span = 1, head = 92;
-		const measure = () => {
-			head = document.querySelector(".site-header")?.offsetHeight || 92;
-			RW = reg.clientWidth;
-			RH = reg.clientHeight;
-			bw = Math.min(RW * .96, RH * .9 * .8);
-			bh = bw * 1.25;
-			trackTop = trackEl.getBoundingClientRect().top + scrollY;
-			span = Math.max(1, trackEl.offsetHeight - stageEl.offsetHeight);
-			els.forEach((el) => {
-				el.style.width = `${bw}px`;
-				el.style.height = `${bh}px`;
-			});
-		};
-		const s0 = .46;
-		const apply = (p) => {
-			const sh = smooth(clamp(p / .4)), bump = Math.sin(Math.PI * sh), g = smooth(clamp((p - .45) / .5));
-			els.forEach((el, i) => {
-				const pose = deckPose(i), ang = i * 2.4 + sh * 3, side = i % 2 ? 1 : -1;
-				const dx = pose.dx + Math.cos(ang) * bw * s0 * .9 * bump, dy = pose.dy + Math.sin(ang) * bh * s0 * .25 * bump;
-				const r0 = pose.r + side * 22 * bump + sh * (i % 3 - 1) * 4;
-				const rank = (i + Math.round(bump * 3)) % n;
-				let x, y, s, rot, o, z;
-				if (i === 0) {
-					x = dx * (1 - g);
-					y = dy * (1 - g);
-					s = s0 * .95 + (1 - s0 * .95) * g;
-					rot = r0 * (1 - g) + -3 * g;
-					o = 1;
-					z = g > .02 ? 60 : 10 + n - rank;
-				} else {
-					x = dx * (1 - g) + side * bw * .18 * g;
-					y = dy * (1 - g) - bh * .06 * g;
-					s = s0 * .95 * (1 - g) + .8 * g;
-					rot = r0 + side * 8 * g;
-					o = 1 - smooth(g / .8);
-					z = 10 + n - rank;
-				}
-				el.style.transform = `translate3d(${(RW / 2 - bw / 2 + x).toFixed(1)}px,${(RH / 2 - bh / 2 + y).toFixed(1)}px,0) rotate(${rot.toFixed(2)}deg) scale(${s.toFixed(4)})`;
-				el.style.opacity = o.toFixed(3);
-				el.style.zIndex = String(z);
-			});
-		};
-		const render = (now) => {
-			raf = 0;
-			if (!visible || document.hidden) {
-				last = 0;
-				return;
-			}
-			const target = clamp((scrollY + head - trackTop) / span), dt = last ? Math.min(64, now - last) : 16;
-			last = now;
-			if (q === null || Math.abs(target - q) > .12) q = target;
-			else q += (target - q) * (1 - Math.exp(-dt / 60));
-			let moving = true;
-			if (Math.abs(target - q) < 4e-4) {
-				q = target;
-				moving = false;
-			}
-			apply(q);
-			if (moving) schedule();
-			else last = 0;
-		};
-		const schedule = () => {
-			if (!raf) raf = requestAnimationFrame(render);
-		};
-		const io = new IntersectionObserver(([e]) => {
-			visible = e.isIntersecting;
-			if (visible) {
-				last = 0;
-				schedule();
-			}
-		}, { rootMargin: "200px 0px" });
-		io.observe(trackEl);
-		const ro = new ResizeObserver(() => {
-			measure();
-			schedule();
+	const light = useLightMotion();
+	const photos = [tour.hero, ...tour.gallery.filter((g) => g.src !== tour.hero.src)].slice(0, MAX), n = photos.length;
+	const [cur, setCur] = useState(0), [flying, setFlying] = useState(-1), [live, setLive] = useState(""), [viewer, setViewer] = useState(false);
+	const stage = useRef(null), els = useRef([]), dlg = useRef(null), busy = useRef(false), drag = useRef(null), raf = useRef(0), tilt = useRef(0), side = useRef(1), moved = useRef(false), curRef = useRef(0);
+	curRef.current = cur;
+	useEffect(() => {
+		[
+			1,
+			2,
+			3
+		].forEach((d) => {
+			const p = photos[(cur + d) % n];
+			if (!p) return;
+			const im = new Image();
+			im.decoding = "async";
+			im.srcset = p.srcset || `${p.small} 640w, ${p.src} ${p.width}w`;
+			im.sizes = "440px";
+			im.src = p.src;
+			im.decode?.().catch(() => {});
 		});
-		ro.observe(reg);
-		measure();
-		apply(0);
-		schedule();
-		addEventListener("scroll", schedule, { passive: true });
-		addEventListener("resize", schedule, { passive: true });
-		return () => {
-			cancelAnimationFrame(raf);
-			io.disconnect();
-			ro.disconnect();
-			removeEventListener("scroll", schedule);
-			removeEventListener("resize", schedule);
-			els.forEach((el) => el.removeAttribute("style"));
+	}, [cur, n]);
+	const go = useCallback((dir, from, sd) => {
+		if (busy.current || n < 2) return;
+		const c = curRef.current, announce = (i) => setLive(`Foto ${i + 1} de ${n}, ${tour.name}`);
+		if (light || !stage.current?.animate) {
+			const i = (c + dir + n) % n;
+			setCur(i);
+			announce(i);
+			return;
+		}
+		busy.current = true;
+		const W = stage.current.offsetWidth || 360, s = sd || (side.current = -side.current);
+		const flown = `translate3d(${s * W * .85}px,-34px,0) rotateZ(${s * 17}deg) rotateY(${-s * 18}deg)`;
+		if (dir > 0) {
+			const el = els.current[c], next = (c + 1) % n, fromT = from || getComputedStyle(el).transform;
+			setFlying(c);
+			setCur(next);
+			announce(next);
+			const a1 = el.animate([{
+				transform: fromT,
+				opacity: 1
+			}, {
+				transform: flown,
+				opacity: .92
+			}], {
+				duration: 430,
+				easing: "cubic-bezier(.25,.7,.3,1)",
+				fill: "forwards"
+			});
+			a1.finished.then(() => {
+				setFlying(-1);
+				const k = n - 1;
+				const a2 = el.animate([{
+					transform: flown,
+					opacity: .92
+				}, {
+					transform: pose(k),
+					opacity: k < VISIBLE ? 1 : 0
+				}], {
+					duration: 480,
+					easing: "cubic-bezier(.34,1.3,.5,1)",
+					fill: "forwards"
+				});
+				return a2.finished.then(() => {
+					a1.cancel();
+					a2.cancel();
+					busy.current = false;
+				});
+			}).catch(() => {
+				busy.current = false;
+			});
+		} else {
+			const prev = (c - 1 + n) % n, el = els.current[prev];
+			setFlying(prev);
+			setCur(prev);
+			announce(prev);
+			const a = el.animate([{
+				transform: from || flown,
+				opacity: .92
+			}, {
+				transform: pose(0),
+				opacity: 1
+			}], {
+				duration: 520,
+				easing: "cubic-bezier(.34,1.25,.5,1)",
+				fill: "forwards"
+			});
+			a.finished.then(() => {
+				a.cancel();
+				setFlying(-1);
+				busy.current = false;
+			}).catch(() => {
+				busy.current = false;
+			});
+		}
+	}, [
+		light,
+		n,
+		tour.name
+	]);
+	const paintDrag = () => {
+		raf.current = 0;
+		const d = drag.current, el = els.current[curRef.current];
+		if (!d || !el) return;
+		el.style.transition = "none";
+		el.style.transform = `translate3d(${d.dx}px,${(d.dy * .25).toFixed(1)}px,0) rotate(${(-1 + d.dx * .06).toFixed(2)}deg) rotateY(${(-d.dx * .05).toFixed(2)}deg)`;
+	};
+	const onDown = (e) => {
+		if (busy.current || e.pointerType === "mouse" && e.button !== 0) return;
+		drag.current = {
+			x: e.clientX,
+			y: e.clientY,
+			dx: 0,
+			dy: 0,
+			vx: 0,
+			lx: e.clientX,
+			lt: performance.now()
 		};
-	}, [animated, tour.slug]);
-	const text = /* @__PURE__ */ jsxs("div", {
-		className: "tour-hero-content tdk-text",
+		moved.current = false;
+		e.currentTarget.setPointerCapture?.(e.pointerId);
+	};
+	const onMove = (e) => {
+		const d = drag.current;
+		if (!d) return;
+		d.dx = e.clientX - d.x;
+		d.dy = e.clientY - d.y;
+		const now = performance.now();
+		if (now - d.lt > 16) {
+			d.vx = (e.clientX - d.lx) / (now - d.lt);
+			d.lx = e.clientX;
+			d.lt = now;
+		}
+		if (Math.abs(d.dx) > 6) moved.current = true;
+		if (!raf.current) raf.current = requestAnimationFrame(paintDrag);
+	};
+	const onUp = (e) => {
+		const d = drag.current;
+		drag.current = null;
+		cancelAnimationFrame(raf.current);
+		raf.current = 0;
+		if (!d) return;
+		const el = els.current[curRef.current];
+		if (moved.current && el) {
+			if (Math.abs(d.dx) > 80 || Math.abs(d.vx) > .55) {
+				const sd = (d.dx || d.vx) > 0 ? 1 : -1;
+				side.current = -sd;
+				go(1, getComputedStyle(el).transform, sd);
+			} else {
+				el.style.transition = "";
+				el.style.transform = pose(0);
+			}
+		}
+		e.currentTarget.releasePointerCapture?.(e.pointerId);
+	};
+	const onHover = (e) => {
+		if (light || e.pointerType !== "mouse" || drag.current || !stage.current) return;
+		const r = stage.current.getBoundingClientRect(), px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5;
+		cancelAnimationFrame(tilt.current);
+		tilt.current = requestAnimationFrame(() => {
+			if (stage.current) stage.current.style.transform = `perspective(1100px) rotateX(${(-py * 4).toFixed(2)}deg) rotateY(${(px * 5).toFixed(2)}deg)`;
+		});
+	};
+	const onLeave = () => {
+		cancelAnimationFrame(tilt.current);
+		if (stage.current) stage.current.style.transform = "";
+	};
+	const open = () => {
+		setViewer(true);
+		requestAnimationFrame(() => dlg.current?.showModal());
+	};
+	const onKey = (e) => {
+		if (e.key === "ArrowRight") {
+			e.preventDefault();
+			go(1);
+		} else if (e.key === "ArrowLeft") {
+			e.preventDefault();
+			go(-1);
+		} else if (e.key === "Enter") {
+			e.preventDefault();
+			open();
+		}
+	};
+	return /* @__PURE__ */ jsxs("section", {
+		className: "cs wrap",
+		"aria-label": tour.name,
 		children: [
-			/* @__PURE__ */ jsxs(Link, {
-				to: "/experiencias",
-				className: "back-link",
-				children: [/* @__PURE__ */ jsx(Arrow, { dir: "left" }), "Todas las experiencias"]
+			/* @__PURE__ */ jsxs("div", {
+				className: "cs-text",
+				children: [
+					/* @__PURE__ */ jsxs(Eyebrow, { children: [tour.category, " · Desde Medellín"] }),
+					/* @__PURE__ */ jsx("h2", { children: tour.name }),
+					/* @__PURE__ */ jsx("p", { children: tour.title }),
+					/* @__PURE__ */ jsxs("a", {
+						className: "button",
+						href: "#consulta",
+						children: ["Planea esta experiencia ", /* @__PURE__ */ jsx(Arrow, {})]
+					})
+				]
 			}),
-			/* @__PURE__ */ jsxs(Eyebrow, { children: [tour.category, " · Desde Medellín"] }),
-			/* @__PURE__ */ jsx("h1", { children: tour.name }),
-			/* @__PURE__ */ jsx("p", { children: tour.title }),
-			/* @__PURE__ */ jsxs("a", {
-				className: "button",
-				id: "cta-principal",
-				href: "#consulta",
-				children: ["Planea esta experiencia ", /* @__PURE__ */ jsx(Arrow, {})]
+			/* @__PURE__ */ jsxs("div", {
+				className: "cs-wrap",
+				children: [
+					/* @__PURE__ */ jsx("div", {
+						className: "cs-region",
+						role: "region",
+						"aria-roledescription": "carrusel",
+						"aria-label": `Fotografías de ${tour.name}`,
+						tabIndex: 0,
+						onKeyDown: onKey,
+						onPointerMove: onHover,
+						onPointerLeave: onLeave,
+						children: /* @__PURE__ */ jsx("div", {
+							ref: stage,
+							className: "cs-stage",
+							"data-light": light ? "true" : "false",
+							children: photos.map((p, i) => {
+								const k = (i - cur + n) % n, top = k === 0;
+								return /* @__PURE__ */ jsx("div", {
+									ref: (el) => {
+										els.current[i] = el;
+									},
+									className: `cs-card${top ? " is-top" : ""}`,
+									"aria-hidden": top ? void 0 : "true",
+									style: {
+										transform: pose(k),
+										opacity: light ? top ? 1 : 0 : k < VISIBLE ? 1 : 0,
+										zIndex: i === flying ? 40 : 30 - k,
+										transitionDelay: `${Math.min(k, 4) * 45}ms`
+									},
+									onPointerDown: top ? onDown : void 0,
+									onPointerMove: top ? onMove : void 0,
+									onPointerUp: top ? onUp : void 0,
+									onPointerCancel: top ? onUp : void 0,
+									onClick: top ? () => {
+										if (moved.current) {
+											moved.current = false;
+											return;
+										}
+										go(1);
+									} : void 0,
+									onDoubleClick: top ? open : void 0,
+									children: /* @__PURE__ */ jsx(Picture, {
+										photo: p,
+										alt: top ? `${tour.name}, fotografía ${i + 1} de ${n}` : "",
+										priority: false,
+										sizes: "(max-width: 700px) 72vw, 440px"
+									})
+								}, p.src);
+							})
+						})
+					}),
+					/* @__PURE__ */ jsxs("div", {
+						className: "cs-foot",
+						children: [
+							/* @__PURE__ */ jsxs("p", {
+								className: "cs-count",
+								"aria-hidden": "true",
+								children: [
+									two(cur + 1),
+									" / ",
+									two(n)
+								]
+							}),
+							/* @__PURE__ */ jsx("div", {
+								className: "cs-bar",
+								"aria-hidden": "true",
+								children: /* @__PURE__ */ jsx("i", { style: { transform: `scaleX(${(cur + 1) / n})` } })
+							}),
+							/* @__PURE__ */ jsxs("div", {
+								className: "cs-btns",
+								children: [
+									/* @__PURE__ */ jsx("button", {
+										type: "button",
+										"aria-label": "Fotografía anterior",
+										onClick: () => go(-1),
+										children: /* @__PURE__ */ jsx(Arrow, { dir: "left" })
+									}),
+									/* @__PURE__ */ jsx("button", {
+										type: "button",
+										"aria-label": "Fotografía siguiente",
+										onClick: () => go(1),
+										children: /* @__PURE__ */ jsx(Arrow, { dir: "right" })
+									}),
+									/* @__PURE__ */ jsx("button", {
+										type: "button",
+										className: "cs-zoom",
+										onClick: open,
+										children: "Ampliar"
+									})
+								]
+							})
+						]
+					}),
+					/* @__PURE__ */ jsx("p", {
+						className: "sr-only",
+						"aria-live": "polite",
+						children: live
+					})
+				]
+			}),
+			viewer && /* @__PURE__ */ jsxs("dialog", {
+				ref: dlg,
+				className: "gallery-dialog ta-dialog",
+				"aria-label": `Galería ampliada de ${tour.name}`,
+				onClose: () => setViewer(false),
+				onClick: (e) => {
+					if (e.target === dlg.current) dlg.current.close();
+				},
+				children: [
+					/* @__PURE__ */ jsx("button", {
+						type: "button",
+						className: "ta-close",
+						"aria-label": "Cerrar",
+						onClick: () => dlg.current.close(),
+						children: "×"
+					}),
+					/* @__PURE__ */ jsx("img", {
+						src: photos[cur].src,
+						srcSet: photos[cur].srcset || `${photos[cur].small} 640w, ${photos[cur].src} ${photos[cur].width}w`,
+						sizes: "90vw",
+						alt: `${tour.name}, fotografía ${cur + 1}`
+					}),
+					/* @__PURE__ */ jsxs("div", {
+						className: "ta-dlg-nav",
+						children: [/* @__PURE__ */ jsx("button", {
+							type: "button",
+							"aria-label": "Fotografía anterior",
+							onClick: () => setCur((c) => (c - 1 + n) % n),
+							children: /* @__PURE__ */ jsx(Arrow, { dir: "left" })
+						}), /* @__PURE__ */ jsx("button", {
+							type: "button",
+							"aria-label": "Fotografía siguiente",
+							onClick: () => setCur((c) => (c + 1) % n),
+							children: /* @__PURE__ */ jsx(Arrow, { dir: "right" })
+						})]
+					})
+				]
 			})
 		]
-	});
-	if (!animated) return /* @__PURE__ */ jsxs(EditorialMotion, {
-		className: "tour-hero wrap tdk-static",
-		children: [text, /* @__PURE__ */ jsxs("figure", {
-			className: "editorial-photo",
-			children: [/* @__PURE__ */ jsx(Picture, {
-				photo: tour.hero,
-				alt: tour.name,
-				priority: true,
-				sizes: "(max-width: 700px) 72vw, 400px"
-			}), /* @__PURE__ */ jsxs("figcaption", { children: [tour.name, " · Archivo T&T"] })]
-		})]
-	});
-	return /* @__PURE__ */ jsx("section", {
-		className: "tdk",
-		"aria-label": tour.name,
-		children: /* @__PURE__ */ jsx("div", {
-			ref: track,
-			className: "tdk-track",
-			children: /* @__PURE__ */ jsxs("div", {
-				ref: stage,
-				className: "tdk-stage wrap",
-				children: [text, /* @__PURE__ */ jsxs("figure", {
-					className: "tdk-fig",
-					children: [/* @__PURE__ */ jsx("div", {
-						ref: region,
-						className: "tdk-region",
-						children: cards.map((c, i) => /* @__PURE__ */ jsx("div", {
-							className: "tdk-card",
-							children: /* @__PURE__ */ jsx(Picture, {
-								photo: c,
-								alt: i === 0 ? tour.name : "",
-								priority: i === 0,
-								sizes: "440px"
-							})
-						}, c.src))
-					}), /* @__PURE__ */ jsxs("figcaption", { children: [tour.name, " · Archivo T&T"] })]
-				})]
-			})
-		})
 	});
 }
 //#endregion
@@ -840,25 +1039,26 @@ function TourNav() {
 			bar.current?.style.setProperty("--tp", "1");
 			return;
 		}
-		let raf = 0;
-		const update = () => {
-			raf = 0;
-			const end = document.getElementById("consulta");
-			if (!end) return;
-			const start = sentinel.current.getBoundingClientRect().top + scrollY, stop = end.getBoundingClientRect().top + scrollY;
-			bar.current?.style.setProperty("--tp", clamp((scrollY + innerHeight * .5 - start) / Math.max(1, stop - start)).toFixed(4));
-		};
-		const kick = () => {
-			if (!raf) raf = requestAnimationFrame(update);
-		};
-		addEventListener("scroll", kick, { passive: true });
-		addEventListener("resize", kick, { passive: true });
-		update();
-		return () => {
-			cancelAnimationFrame(raf);
-			removeEventListener("scroll", kick);
-			removeEventListener("resize", kick);
-		};
+		let start = 0, end = 1, last = -1, bw = 0;
+		const fill = bar.current?.firstElementChild, dot = bar.current?.lastElementChild;
+		return watchScroll({
+			measure: () => {
+				const stop = document.getElementById("consulta");
+				if (stop && sentinel.current) {
+					start = docTop(sentinel.current);
+					end = docTop(stop);
+				}
+				bw = bar.current?.clientWidth || 0;
+				last = -1;
+			},
+			update: (y, vh) => {
+				const p = Math.round(clamp((y + vh * .5 - start) / Math.max(1, end - start)) * 500) / 500;
+				if (p === last) return;
+				last = p;
+				if (fill) fill.style.transform = `scaleX(${p})`;
+				if (dot) dot.style.transform = `translate3d(${(p * (bw - 6)).toFixed(1)}px,0,0)`;
+			}
+		});
 	}, [light]);
 	return /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx("i", {
 		ref: sentinel,
@@ -893,46 +1093,40 @@ function TourRoute() {
 	const el = useRef(null), light = useLightMotion();
 	useLayoutEffect(() => {
 		const route = el.current, page = route.parentElement;
-		let raf = 0, top = 0, len = 1;
+		const done = route.querySelector(".tr-done"), dot = route.querySelector(".tr-dot");
+		let pageTop = 0, top = 0, len = 1, last = -1;
 		const measure = () => {
-			const nav = document.querySelector(".tn"), end = document.getElementById("consulta");
-			if (!nav || !end) return;
-			const pr = page.getBoundingClientRect();
-			top = nav.getBoundingClientRect().bottom - pr.top + (nav.offsetHeight ? 0 : 0);
-			len = Math.max(1, end.getBoundingClientRect().top - pr.top - top);
+			const sent = document.querySelector(".tn-sentinel"), nav = document.querySelector(".tn"), end = document.getElementById("consulta");
+			if (!sent || !nav || !end) return;
+			pageTop = docTop(page);
+			top = docTop(sent) + 1 + nav.offsetHeight - pageTop;
+			len = Math.max(1, docTop(end) - pageTop - top);
 			route.style.top = `${top}px`;
 			route.style.height = `${len}px`;
+			last = -1;
 		};
-		const update = () => {
-			raf = 0;
-			const pr = page.getBoundingClientRect(), p = light ? 1 : clamp((innerHeight * .55 - (pr.top + top)) / len);
-			route.style.setProperty("--rp", p.toFixed(4));
+		const paint = (p) => {
+			done.style.transform = `scaleY(${p.toFixed(4)})`;
+			dot.style.transform = `translate3d(0,${(p * (len - 10)).toFixed(1)}px,0)`;
 			route.dataset.end = p > .995 ? "true" : "false";
 		};
-		const kick = () => {
-			if (!raf) raf = requestAnimationFrame(update);
-		};
-		const ro = new ResizeObserver(() => {
+		if (light) {
 			measure();
-			kick();
-		});
-		ro.observe(page);
-		document.fonts?.ready.then(() => {
-			measure();
-			kick();
-		});
-		measure();
-		update();
-		if (!light) {
-			addEventListener("scroll", kick, { passive: true });
-			addEventListener("resize", kick, { passive: true });
+			route.style.setProperty("--rp", "1");
+			route.dataset.end = "true";
+			const ro0 = new ResizeObserver(measure);
+			ro0.observe(page);
+			return () => ro0.disconnect();
 		}
-		return () => {
-			cancelAnimationFrame(raf);
-			ro.disconnect();
-			removeEventListener("scroll", kick);
-			removeEventListener("resize", kick);
-		};
+		return watchScroll({
+			measure,
+			update: (y, vh) => {
+				const p = Math.round(clamp((y + vh * .55 - pageTop - top) / len) * 1e3) / 1e3;
+				if (p === last) return;
+				last = p;
+				paint(p);
+			}
+		});
 	}, [light]);
 	return /* @__PURE__ */ jsxs("div", {
 		ref: el,
@@ -984,9 +1178,11 @@ function TourBar({ name }) {
 	useEffect(() => {
 		if (!mobile) return void 0;
 		const html = document.documentElement;
-		let last = scrollY, timer = 0, formVisible = false;
+		let last = scrollY, timer = 0, formVisible = false, shown = false;
 		html.dataset.tourpage = "1";
 		const set = (value) => {
+			if (value === shown) return;
+			shown = value;
 			setShow(value);
 			html.dataset.tourbar = value ? "on" : "off";
 		};
@@ -996,21 +1192,23 @@ function TourBar({ name }) {
 			if (formVisible) set(false);
 		}, { rootMargin: "0px 0px -10% 0px" });
 		if (form) io.observe(form);
-		const onScroll = () => {
-			const y = scrollY, dy = y - last;
+		const onScroll = (y) => {
+			const dy = y - last;
 			last = y;
-			clearTimeout(timer);
 			if (formVisible) {
 				set(false);
 				return;
 			}
 			if (dy > 8 && y > 240) set(true);
 			else if (dy < -8) set(false);
-			timer = setTimeout(() => set(false), 1400);
+			if (shown) {
+				clearTimeout(timer);
+				timer = setTimeout(() => set(false), 1400);
+			}
 		};
-		window.addEventListener("scroll", onScroll, { passive: true });
+		const stop = watchScroll({ update: onScroll });
 		return () => {
-			window.removeEventListener("scroll", onScroll);
+			stop();
 			io.disconnect();
 			clearTimeout(timer);
 			delete html.dataset.tourbar;
@@ -1042,27 +1240,29 @@ function Story({ tour }) {
 	const short = useMedia("(max-height: 600px)", true), light = useLightMotion(), staticMode = short || light;
 	useEffect(() => {
 		if (staticMode) return;
-		let frame = 0;
-		const update = () => {
-			cancelAnimationFrame(frame);
-			frame = requestAnimationFrame(() => {
-				const el = ref.current;
-				if (!el) return;
-				const r = el.getBoundingClientRect();
-				const top = parseFloat(getComputedStyle(el.querySelector(".story-inner")).top) || 0;
-				const p = Math.max(0, Math.min(.999, (top - r.top) / (el.offsetHeight - el.querySelector(".story-inner").offsetHeight)));
-				setActive(Math.floor(p * 3));
-				el.style.setProperty("--story-progress", p);
-			});
-		};
-		window.addEventListener("scroll", update, { passive: true });
-		window.addEventListener("resize", update);
-		update();
-		return () => {
-			window.removeEventListener("scroll", update);
-			window.removeEventListener("resize", update);
-			cancelAnimationFrame(frame);
-		};
+		const el = ref.current, inner = el.querySelector(".story-inner"), meter = el.querySelector(".story-meter i");
+		let top = 0, total = 1, stick = 0, cur = -1, last = -1;
+		return watchScroll({
+			el,
+			margin: 0,
+			measure: () => {
+				top = docTop(el);
+				total = Math.max(1, el.offsetHeight - inner.offsetHeight);
+				stick = parseFloat(getComputedStyle(inner).top) || 0;
+			},
+			update: (y) => {
+				const p = Math.max(0, Math.min(.999, (stick - (top - y)) / total)), idx = Math.floor(p * 3);
+				if (idx !== cur) {
+					cur = idx;
+					setActive(idx);
+				}
+				const q = Math.round(p * 1e3) / 1e3;
+				if (q !== last) {
+					last = q;
+					if (meter) meter.style.transform = `scaleX(${q})`;
+				}
+			}
+		});
 	}, [staticMode]);
 	return /* @__PURE__ */ jsx("section", {
 		ref,
@@ -1152,6 +1352,7 @@ function Tour() {
 		className: `tour-page mood-${tour.mood}`,
 		children: [
 			/* @__PURE__ */ jsx(TourRoute, {}),
+			/* @__PURE__ */ jsx(TourHeroVideo, { tour }),
 			/* @__PURE__ */ jsx(TourHero, { tour }),
 			/* @__PURE__ */ jsx(Marquee, { text: tour.name.toLocaleUpperCase("es") }),
 			/* @__PURE__ */ jsx(TourNav, {}),

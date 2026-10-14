@@ -1,89 +1,132 @@
-import { useLayoutEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { EditorialMotion, useLightMotion, useMedia, useMounted } from './PremiumMotion';
-import { deckPose } from './baraja-geometria';
-import { smooth, clamp } from './hand-geometria';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useLightMotion } from './PremiumMotion';
 import { Picture, Arrow, Eyebrow } from './shared';
-import './tour-motion.css';
+import './card-stack.css';
 
 /*
- * Portada de la ficha — Spec 03 §M1/M3.1 («La ruta se juega carta a carta»). Reutiliza la baraja del inicio: las mismas rotaciones (deckPose), la misma curva
- * (smooth) y la misma coreografía de barajado → la carta superior (la foto principal del tour) crece (Flip por progreso, simétrico al subir) hasta ser la foto
- * principal. Un solo progreso de scroll nativo, nunca interceptado; escrituras solo en `style` (transform/opacity). Móvil, tablet, reducido y sin JS: la figura
- * estática de siempre (scroll natural, sin pin) con una entrada única.
+ * Baraja interactiva de la ficha (pedido del usuario 2026-10-14; sustituye a la baraja decorativa): TODAS las cartas son fotos reales del tour y todas se usan.
+ * Pila desplazada (3–4 cartas visibles, giro y profundidad leves). La carta de arriba se arrastra/desliza: sale volando girando en 3D (rotateY/rotateZ ≤ 18°) y
+ * se desliza al fondo mientras las demás suben un nivel con resorte escalonado; también con clic/toque, ‹ ›, ←/→. Doble clic o «Ampliar» abre el visor.
+ * Distinta de la baraja del inicio. Solo transform/opacity, un único rAF para el arrastre, imágenes decodificadas con decode(); touch-action:pan-y (el scroll
+ * vertical nunca se bloquea). Movimiento reducido: fundido cruzado sin vuelo. Región «carrusel» con aria-live al actuar.
  */
-const MAX_CARDS = 5;
+const VISIBLE = 4, MAX = 12;
+const ROT = [-1, 2.6, -2.4, 3.4];
+const pose = (k) => { const j = Math.min(k, VISIBLE - 1); return `translate3d(${j * 12}px,${-j * 14}px,0) rotate(${ROT[j]}deg) scale(${(1 - j * 0.05).toFixed(3)})`; };
+const two = (n) => String(n).padStart(2, '0');
+
 export default function TourHero({ tour }) {
-  const light = useLightMotion(), wide = useMedia('(min-width: 1100px)'), tall = useMedia('(min-height: 640px)'), mounted = useMounted();
-  const animated = mounted && wide && tall && !light;
-  const track = useRef(null), stage = useRef(null), region = useRef(null);
-  // Baraja: la foto principal arriba + fotos distintas del mismo tour.
-  const cards = [tour.hero, ...tour.gallery.filter((g) => g.src !== tour.hero.src)].slice(0, MAX_CARDS);
+  const light = useLightMotion();
+  const photos = [tour.hero, ...tour.gallery.filter((g) => g.src !== tour.hero.src)].slice(0, MAX), n = photos.length;
+  const [cur, setCur] = useState(0), [flying, setFlying] = useState(-1), [live, setLive] = useState(''), [viewer, setViewer] = useState(false);
+  const stage = useRef(null), els = useRef([]), dlg = useRef(null), busy = useRef(false), drag = useRef(null), raf = useRef(0), tilt = useRef(0), side = useRef(1), moved = useRef(false), curRef = useRef(0);
+  curRef.current = cur;
 
-  useLayoutEffect(() => {
-    if (!animated) return undefined;
-    const trackEl = track.current, stageEl = stage.current, reg = region.current, els = [...reg.querySelectorAll('.tdk-card')], n = els.length;
-    let raf = 0, visible = true, q = null, last = 0, RW = 0, RH = 0, bw = 0, bh = 0, trackTop = 0, span = 1, head = 92;
-    const measure = () => {
-      head = document.querySelector('.site-header')?.offsetHeight || 92;
-      RW = reg.clientWidth; RH = reg.clientHeight; bw = Math.min(RW * 0.96, RH * 0.9 * 0.8); bh = bw * 1.25;
-      trackTop = trackEl.getBoundingClientRect().top + scrollY; span = Math.max(1, trackEl.offsetHeight - stageEl.offsetHeight);
-      els.forEach((el) => { el.style.width = `${bw}px`; el.style.height = `${bh}px`; });
-    };
-    const s0 = 0.46;
-    const apply = (p) => {
-      const sh = smooth(clamp(p / 0.4)), bump = Math.sin(Math.PI * sh), g = smooth(clamp((p - 0.45) / 0.5));
-      els.forEach((el, i) => {
-        const pose = deckPose(i), ang = i * 2.4 + sh * 3, side = i % 2 ? 1 : -1;
-        const dx = pose.dx + Math.cos(ang) * bw * s0 * 0.9 * bump, dy = pose.dy + Math.sin(ang) * bh * s0 * 0.25 * bump;
-        const r0 = pose.r + side * 22 * bump + sh * ((i % 3) - 1) * 4;
-        const rank = (i + Math.round(bump * 3)) % n;
-        let x, y, s, rot, o, z;
-        if (i === 0) { x = dx * (1 - g); y = dy * (1 - g); s = s0 * 0.95 + (1 - s0 * 0.95) * g; rot = r0 * (1 - g) + -3 * g; o = 1; z = g > 0.02 ? 60 : 10 + n - rank; }
-        else { x = dx * (1 - g) + side * bw * 0.18 * g; y = dy * (1 - g) - bh * 0.06 * g; s = (s0 * 0.95) * (1 - g) + 0.8 * g; rot = r0 + side * 8 * g; o = 1 - smooth(g / 0.8); z = 10 + n - rank; }
-        el.style.transform = `translate3d(${(RW / 2 - bw / 2 + x).toFixed(1)}px,${(RH / 2 - bh / 2 + y).toFixed(1)}px,0) rotate(${rot.toFixed(2)}deg) scale(${s.toFixed(4)})`;
-        el.style.opacity = o.toFixed(3); el.style.zIndex = String(z);
-      });
-    };
-    const render = (now) => {
-      raf = 0; if (!visible || document.hidden) { last = 0; return; }
-      const target = clamp((scrollY + head - trackTop) / span), dt = last ? Math.min(64, now - last) : 16; last = now;
-      if (q === null || Math.abs(target - q) > 0.12) q = target; else q += (target - q) * (1 - Math.exp(-dt / 60));
-      let moving = true; if (Math.abs(target - q) < 0.0004) { q = target; moving = false; }
-      apply(q); if (moving) schedule(); else last = 0;
-    };
-    const schedule = () => { if (!raf) raf = requestAnimationFrame(render); };
-    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) { last = 0; schedule(); } }, { rootMargin: '200px 0px' }); io.observe(trackEl);
-    const ro = new ResizeObserver(() => { measure(); schedule(); }); ro.observe(reg);
-    measure(); apply(0); schedule();
-    addEventListener('scroll', schedule, { passive: true }); addEventListener('resize', schedule, { passive: true });
-    return () => { cancelAnimationFrame(raf); io.disconnect(); ro.disconnect(); removeEventListener('scroll', schedule); removeEventListener('resize', schedule); els.forEach((el) => el.removeAttribute('style')); };
-  }, [animated, tour.slug]);
+  // Las tres siguientes fotos se decodifican antes de subir de nivel (sin parpadeo).
+  useEffect(() => { [1, 2, 3].forEach((d) => { const p = photos[(cur + d) % n]; if (!p) return; const im = new Image(); im.decoding = 'async'; im.srcset = p.srcset || `${p.small} 640w, ${p.src} ${p.width}w`; im.sizes = '440px'; im.src = p.src; im.decode?.().catch(() => {}); }); }, [cur, n]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const go = useCallback((dir, from, sd) => {
+    if (busy.current || n < 2) return;
+    const c = curRef.current, announce = (i) => setLive(`Foto ${i + 1} de ${n}, ${tour.name}`);
+    if (light || !stage.current?.animate) { const i = (c + dir + n) % n; setCur(i); announce(i); return; }
+    busy.current = true;
+    const W = stage.current.offsetWidth || 360, s = sd || (side.current = -side.current);
+    const flown = `translate3d(${s * W * 0.85}px,-34px,0) rotateZ(${s * 17}deg) rotateY(${-s * 18}deg)`;
+    if (dir > 0) {
+      const el = els.current[c], next = (c + 1) % n, fromT = from || getComputedStyle(el).transform;
+      setFlying(c); setCur(next); announce(next);
+      const a1 = el.animate([{ transform: fromT, opacity: 1 }, { transform: flown, opacity: 0.92 }], { duration: 430, easing: 'cubic-bezier(.25,.7,.3,1)', fill: 'forwards' });
+      a1.finished.then(() => {
+        setFlying(-1); const k = n - 1;
+        const a2 = el.animate([{ transform: flown, opacity: 0.92 }, { transform: pose(k), opacity: k < VISIBLE ? 1 : 0 }], { duration: 480, easing: 'cubic-bezier(.34,1.3,.5,1)', fill: 'forwards' });
+        return a2.finished.then(() => { a1.cancel(); a2.cancel(); busy.current = false; });
+      }).catch(() => { busy.current = false; });
+    } else {
+      const prev = (c - 1 + n) % n, el = els.current[prev];
+      setFlying(prev); setCur(prev); announce(prev);
+      const a = el.animate([{ transform: from || flown, opacity: 0.92 }, { transform: pose(0), opacity: 1 }], { duration: 520, easing: 'cubic-bezier(.34,1.25,.5,1)', fill: 'forwards' });
+      a.finished.then(() => { a.cancel(); setFlying(-1); busy.current = false; }).catch(() => { busy.current = false; });
+    }
+  }, [light, n, tour.name]);
 
-  const text = (
-    <div className="tour-hero-content tdk-text"><Link to="/experiencias" className="back-link"><Arrow dir="left" />Todas las experiencias</Link><Eyebrow>{tour.category} · Desde Medellín</Eyebrow><h2>{tour.name}</h2><p>{tour.title}</p><a className="button" href="#consulta">Planea esta experiencia <Arrow /></a></div>
-  );
-  if (!animated) {
-    return (
-      <EditorialMotion className="tour-hero wrap tdk-static">{text}
-        <figure className="editorial-photo"><Picture photo={tour.hero} alt={tour.name} priority sizes="(max-width: 700px) 72vw, 400px" /><figcaption>{tour.name} · Archivo T&T</figcaption></figure>
-      </EditorialMotion>
-    );
-  }
+  // Arrastre de la carta de arriba: un solo rAF escribe el transform; al soltar, vuelo (distancia o velocidad) o regreso con resorte.
+  const paintDrag = () => {
+    raf.current = 0; const d = drag.current, el = els.current[curRef.current]; if (!d || !el) return;
+    el.style.transition = 'none'; el.style.transform = `translate3d(${d.dx}px,${(d.dy * 0.25).toFixed(1)}px,0) rotate(${(-1 + d.dx * 0.06).toFixed(2)}deg) rotateY(${(-d.dx * 0.05).toFixed(2)}deg)`;
+  };
+  const onDown = (e) => {
+    if (busy.current || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    drag.current = { x: e.clientX, y: e.clientY, dx: 0, dy: 0, vx: 0, lx: e.clientX, lt: performance.now() }; moved.current = false;
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+  const onMove = (e) => {
+    const d = drag.current; if (!d) return;
+    d.dx = e.clientX - d.x; d.dy = e.clientY - d.y; const now = performance.now(); if (now - d.lt > 16) { d.vx = (e.clientX - d.lx) / (now - d.lt); d.lx = e.clientX; d.lt = now; }
+    if (Math.abs(d.dx) > 6) moved.current = true;
+    if (!raf.current) raf.current = requestAnimationFrame(paintDrag);
+  };
+  const onUp = (e) => {
+    const d = drag.current; drag.current = null; cancelAnimationFrame(raf.current); raf.current = 0; if (!d) return;
+    const el = els.current[curRef.current];
+    if (moved.current && el) {
+      if (Math.abs(d.dx) > 80 || Math.abs(d.vx) > 0.55) { const sd = (d.dx || d.vx) > 0 ? 1 : -1; side.current = -sd; go(1, getComputedStyle(el).transform, sd); }
+      else { el.style.transition = ''; el.style.transform = pose(0); }
+    }
+    e.currentTarget.releasePointerCapture?.(e.pointerId);
+  };
+  // Inclinación de paralaje sutil (solo puntero fino, sin reducido).
+  const onHover = (e) => {
+    if (light || e.pointerType !== 'mouse' || drag.current || !stage.current) return;
+    const r = stage.current.getBoundingClientRect(), px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+    cancelAnimationFrame(tilt.current);
+    tilt.current = requestAnimationFrame(() => { if (stage.current) stage.current.style.transform = `perspective(1100px) rotateX(${(-py * 4).toFixed(2)}deg) rotateY(${(px * 5).toFixed(2)}deg)`; });
+  };
+  const onLeave = () => { cancelAnimationFrame(tilt.current); if (stage.current) stage.current.style.transform = ''; };
+  const open = () => { setViewer(true); requestAnimationFrame(() => dlg.current?.showModal()); };
+  const onKey = (e) => { if (e.key === 'ArrowRight') { e.preventDefault(); go(1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); } else if (e.key === 'Enter') { e.preventDefault(); open(); } };
+
   return (
-    <section className="tdk" aria-label={tour.name}>
-      <div ref={track} className="tdk-track">
-        <div ref={stage} className="tdk-stage wrap">
-          {text}
-          <figure className="tdk-fig">
-            <div ref={region} className="tdk-region">
-              {cards.map((c, i) => <div className="tdk-card" key={c.src}><Picture photo={c} alt={i === 0 ? tour.name : ''} priority={i === 0} sizes="440px" /></div>)}
-            </div>
-            <figcaption>{tour.name} · Archivo T&T</figcaption>
-          </figure>
-        </div>
+    <section className="cs wrap" aria-label={tour.name}>
+      <div className="cs-text">
+        <Eyebrow>{tour.category} · Desde Medellín</Eyebrow>
+        <h2>{tour.name}</h2>
+        <p>{tour.title}</p>
+        <a className="button" href="#consulta">Planea esta experiencia <Arrow /></a>
       </div>
+      <div className="cs-wrap">
+        <div className="cs-region" role="region" aria-roledescription="carrusel" aria-label={`Fotografías de ${tour.name}`} tabIndex={0} onKeyDown={onKey} onPointerMove={onHover} onPointerLeave={onLeave}>
+          <div ref={stage} className="cs-stage" data-light={light ? 'true' : 'false'}>
+            {photos.map((p, i) => {
+              const k = (i - cur + n) % n, top = k === 0;
+              return (
+                <div key={p.src} ref={(el) => { els.current[i] = el; }} className={`cs-card${top ? ' is-top' : ''}`} aria-hidden={top ? undefined : 'true'}
+                  style={{ transform: pose(k), opacity: light ? (top ? 1 : 0) : k < VISIBLE ? 1 : 0, zIndex: i === flying ? 40 : 30 - k, transitionDelay: `${Math.min(k, 4) * 45}ms` }}
+                  onPointerDown={top ? onDown : undefined} onPointerMove={top ? onMove : undefined} onPointerUp={top ? onUp : undefined} onPointerCancel={top ? onUp : undefined}
+                  onClick={top ? () => { if (moved.current) { moved.current = false; return; } go(1); } : undefined} onDoubleClick={top ? open : undefined}>
+                  <Picture photo={p} alt={top ? `${tour.name}, fotografía ${i + 1} de ${n}` : ''} priority={false} sizes="(max-width: 700px) 72vw, 440px" />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div className="cs-foot">
+          <p className="cs-count" aria-hidden="true">{two(cur + 1)} / {two(n)}</p>
+          <div className="cs-bar" aria-hidden="true"><i style={{ transform: `scaleX(${(cur + 1) / n})` }} /></div>
+          <div className="cs-btns">
+            <button type="button" aria-label="Fotografía anterior" onClick={() => go(-1)}><Arrow dir="left" /></button>
+            <button type="button" aria-label="Fotografía siguiente" onClick={() => go(1)}><Arrow dir="right" /></button>
+            <button type="button" className="cs-zoom" onClick={open}>Ampliar</button>
+          </div>
+        </div>
+        <p className="sr-only" aria-live="polite">{live}</p>
+      </div>
+      {viewer && (
+        <dialog ref={dlg} className="gallery-dialog ta-dialog" aria-label={`Galería ampliada de ${tour.name}`} onClose={() => setViewer(false)} onClick={(e) => { if (e.target === dlg.current) dlg.current.close(); }}>
+          <button type="button" className="ta-close" aria-label="Cerrar" onClick={() => dlg.current.close()}>×</button>
+          <img src={photos[cur].src} srcSet={photos[cur].srcset || `${photos[cur].small} 640w, ${photos[cur].src} ${photos[cur].width}w`} sizes="90vw" alt={`${tour.name}, fotografía ${cur + 1}`} />
+          <div className="ta-dlg-nav"><button type="button" aria-label="Fotografía anterior" onClick={() => setCur((c) => (c - 1 + n) % n)}><Arrow dir="left" /></button><button type="button" aria-label="Fotografía siguiente" onClick={() => setCur((c) => (c + 1) % n)}><Arrow dir="right" /></button></div>
+        </dialog>
+      )}
     </section>
   );
 }

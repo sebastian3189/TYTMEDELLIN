@@ -1,0 +1,31 @@
+/* Baraja interactiva de la ficha (TourHero.jsx). Solo transform/opacity; touch-action:pan-y: el scroll vertical nunca se bloquea. */
+.cs{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(32px,5vw,80px);align-items:center;padding-block:clamp(56px,8vw,112px)}
+.cs-text{min-width:0}
+.cs-text h2{font-size:clamp(44px,5.8vw,92px);font-weight:800;letter-spacing:-.045em;line-height:.92;overflow-wrap:break-word}
+.cs-text p:not(.eyebrow){font-size:var(--fs-lead);margin:28px 0 32px;max-width:46ch}
+.cs-wrap{min-width:0;justify-self:center;width:min(100%,460px)}
+.cs-region{outline-offset:8px;padding:18px 40px 8px 6px}
+.cs-stage{position:relative;aspect-ratio:4/5;perspective:1200px;transition:transform 300ms var(--ease-out-strong)}
+.cs-card{position:absolute;inset:0;border-radius:20px;overflow:hidden;background:var(--surface-1);touch-action:pan-y;user-select:none;-webkit-user-select:none;transform-origin:50% 90%;
+ border:1.5px solid rgba(255,255,255,.85);box-shadow:0 1px 2px rgba(30,32,29,.2),0 10px 22px -6px rgba(30,32,29,.3),0 26px 40px -16px rgba(30,32,29,.28);
+ transition:transform 560ms cubic-bezier(.34,1.45,.5,1),opacity 300ms ease}
+.cs-card img{width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
+.cs-card.is-top{cursor:grab}
+.cs-card.is-top:active{cursor:grabbing}
+.cs-stage[data-light=true] .cs-card{transition:opacity 150ms ease}
+html[data-theme="dark"] .cs-card{border-color:rgba(245,245,240,.35);box-shadow:0 1px 2px rgba(0,0,0,.6),0 14px 30px rgba(0,0,0,.45)}
+.cs-foot{display:grid;grid-template-columns:auto 1fr;gap:10px 16px;align-items:center;margin-top:18px}
+.cs-count{margin:0;font:600 13px/1 var(--font);letter-spacing:.06em;font-variant-numeric:tabular-nums;color:var(--text-strong)}
+.cs-bar{height:2px;border-radius:2px;background:rgba(30,32,29,.18);overflow:hidden}
+html[data-theme="dark"] .cs-bar{background:rgba(245,245,240,.22)}
+.cs-bar i{display:block;height:100%;background:var(--text-strong);transform-origin:left;transition:transform 320ms var(--ease-out-strong)}
+.cs-btns{grid-column:1/-1;display:flex;align-items:center;gap:12px}
+.cs-btns button{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0;border:1.5px solid var(--text-strong);border-radius:50%;background:var(--surface-2);color:var(--text-strong)}
+.cs-btns button:active{transform:scale(.97)}
+.cs-btns .cs-zoom{margin-left:auto;padding:0 18px;border-radius:999px;font:600 14px/1 var(--font)}
+@media(max-width:899px){
+ .cs{grid-template-columns:minmax(0,1fr);gap:36px;padding-block:56px}
+ .cs-wrap{width:min(100%,360px)}
+ .cs-region{padding-right:28px}
+}
+@media(prefers-reduced-motion:reduce){.cs-card,.cs-bar i,.cs-stage{transition-duration:150ms!important}}

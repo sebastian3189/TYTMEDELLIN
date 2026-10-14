@@ -131,3 +131,5 @@ html[data-theme="dark"] .tr-line{background:rgba(245,245,240,.28)}
  .card-google,.card-share{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(255,255,255,.92)}
  html[data-theme="dark"] .card-google,html[data-theme="dark"] .card-share{background:rgba(23,26,24,.9)}
 }
+@media(max-width:899px){.tn-pill{overflow:visible}}
+@media(max-width:380px){.glass-tabs.tn-pill a{padding:0 9px;font-size:13px}.tn-pill{padding-inline:4px}}

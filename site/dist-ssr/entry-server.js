@@ -1389,6 +1389,107 @@ function textoFase(id) {
 	};
 }
 //#endregion
+//#region src/scroll-bus.js
+var subs = /* @__PURE__ */ new Set();
+var raf = 0;
+var bound = false;
+var dirty = false;
+var lastY = -1;
+var lastVH = -1;
+var ro = null;
+var frame = () => {
+	raf = 0;
+	if (document.hidden) return;
+	const y = window.scrollY, vh = window.innerHeight, force = vh !== lastVH;
+	let measured = false;
+	for (const s of subs) if (s.on && (s.needsMeasure || dirty)) {
+		s.measure?.();
+		s.needsMeasure = false;
+		measured = true;
+	}
+	dirty = false;
+	if (y === lastY && !force && !measured) {
+		for (const s of subs) if (s.on && s.fresh) {
+			s.update(y, vh);
+			s.fresh = false;
+		}
+		return;
+	}
+	lastY = y;
+	lastVH = vh;
+	for (const s of subs) if (s.on) {
+		s.update(y, vh);
+		s.fresh = false;
+	}
+};
+var kick = () => {
+	if (!raf) raf = requestAnimationFrame(frame);
+};
+var onResize = () => {
+	dirty = true;
+	kick();
+};
+var bind = () => {
+	if (bound) return;
+	bound = true;
+	window.addEventListener("scroll", kick, { passive: true });
+	window.addEventListener("resize", onResize);
+	document.addEventListener("visibilitychange", kick);
+	ro = new ResizeObserver(onResize);
+	ro.observe(document.body);
+	document.fonts?.ready.then(onResize);
+};
+var unbind = () => {
+	if (!bound || subs.size) return;
+	bound = false;
+	window.removeEventListener("scroll", kick);
+	window.removeEventListener("resize", onResize);
+	document.removeEventListener("visibilitychange", kick);
+	ro?.disconnect();
+	ro = null;
+	cancelAnimationFrame(raf);
+	raf = 0;
+	lastY = -1;
+};
+/** `el`: elemento que gobierna la visibilidad (o null = siempre activo); `margin`: px extra alrededor de la ventana. Devuelve la función que desregistra. */
+function watchScroll({ el = null, margin = 240, measure, update }) {
+	const s = {
+		on: !el,
+		needsMeasure: true,
+		fresh: true,
+		measure,
+		update
+	};
+	subs.add(s);
+	bind();
+	let io = null;
+	if (el) {
+		io = new IntersectionObserver(([e]) => {
+			const on = e.isIntersecting;
+			if (on && !s.on) {
+				s.needsMeasure = true;
+				s.fresh = true;
+			}
+			s.on = on;
+			if (on) {
+				lastY = -1;
+				kick();
+			}
+		}, { rootMargin: `${margin}px 0px` });
+		io.observe(el);
+	}
+	lastY = -1;
+	kick();
+	return () => {
+		io?.disconnect();
+		subs.delete(s);
+		unbind();
+	};
+}
+/** Coordenada de documento del borde superior de un elemento (lectura de layout: solo dentro de `measure`). */
+var docTop = (el) => el.getBoundingClientRect().top + window.scrollY;
+var clamp01 = (v) => v < 0 ? 0 : v > 1 ? 1 : v;
+//#endregion
 //#region src/PremiumMotion.jsx
 var reducedQuery = () => window.matchMedia("(prefers-reduced-motion: reduce)");
 var subscribeLight = (notify) => {
@@ -1419,23 +1520,25 @@ function EditorialMotion({ children, className = "" }) {
 	const ref = useRef(null), light = useLightMotion();
 	useEffect(() => {
 		const node = ref.current;
-		if (light) return;
-		let frame = 0;
-		const update = () => {
-			cancelAnimationFrame(frame);
-			frame = requestAnimationFrame(() => {
-				const r = node.getBoundingClientRect();
-				if (r.bottom < 0 || r.top > innerHeight || document.hidden) return;
-				const p = Math.min(1, Math.max(0, -r.top / r.height));
+		if (light || !node) return;
+		let top = 0, h = 1, last = -1;
+		const stop = watchScroll({
+			el: node,
+			margin: 0,
+			measure: () => {
+				top = docTop(node);
+				h = node.offsetHeight || 1;
+			},
+			update: (y) => {
+				const p = Math.round(clamp01((y - top) / h) * 200) / 200;
+				if (p === last) return;
+				last = p;
 				node.style.setProperty("--editorial-shift", `${p * 4}vw`);
 				node.style.setProperty("--photo-shift", `${p * -24}px`);
-			});
-		};
-		window.addEventListener("scroll", update, { passive: true });
-		update();
+			}
+		});
 		return () => {
-			window.removeEventListener("scroll", update);
-			cancelAnimationFrame(frame);
+			stop();
 			node.style.removeProperty("--editorial-shift");
 			node.style.removeProperty("--photo-shift");
 		};
@@ -1507,22 +1610,23 @@ function Marquee({ text }) {
 	useEffect(() => {
 		const node = ref.current;
 		if (light || !node) return;
-		let frame = 0;
-		const update = () => {
-			cancelAnimationFrame(frame);
-			frame = requestAnimationFrame(() => {
-				const r = node.getBoundingClientRect();
-				if (r.bottom < 0 || r.top > innerHeight || document.hidden) return;
-				node.style.setProperty("--mq-p", Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight + r.height))).toFixed(4));
-			});
-		};
-		window.addEventListener("scroll", update, { passive: true });
-		window.addEventListener("resize", update);
-		update();
+		let top = 0, h = 1, last = -1;
+		const stop = watchScroll({
+			el: node,
+			margin: 0,
+			measure: () => {
+				top = docTop(node);
+				h = node.offsetHeight || 1;
+			},
+			update: (y, vh) => {
+				const p = Math.round(clamp01((y + vh - top) / (vh + h)) * 500) / 500;
+				if (p === last) return;
+				last = p;
+				node.style.setProperty("--mq-p", p.toFixed(3));
+			}
+		});
 		return () => {
-			window.removeEventListener("scroll", update);
-			window.removeEventListener("resize", update);
-			cancelAnimationFrame(frame);
+			stop();
 			node.style.removeProperty("--mq-p");
 		};
 	}, [light]);
@@ -1956,7 +2060,7 @@ function ShareMenu({ name, path, className = "" }) {
 }
 //#endregion
 //#region src/shared.jsx
-var Quote = lazy(() => import("./assets/Quote-q559n7rV.js"));
+var Quote = lazy(() => import("./assets/Quote-A-bfdhMl.js"));
 var reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 function Picture({ photo, alt, priority = false, className = "", native = false, sizes = "(max-width: 700px) 100vw, 65vw" }) {
 	if (!photo) return null;
@@ -2230,7 +2334,8 @@ function WhatsAppFab() {
 	const ref = useRef(null);
 	useEffect(() => {
 		const el = ref.current;
-		let raf = 0, until = 0, lastRun = 0, box = null;
+		let timer0 = 0, lastRun = 0, box = null;
+		const touch = matchMedia("(pointer:coarse)").matches, GAP = touch ? 220 : 100, POINTS = touch ? 5 : 9;
 		const measureBox = () => {
 			const r = el.getBoundingClientRect();
 			box = {
@@ -2239,14 +2344,13 @@ function WhatsAppFab() {
 				r: r.width / 2 + 8
 			};
 		};
-		const check = (now) => {
-			raf = 0;
-			if (now < until) raf = requestAnimationFrame(check);
-			if (now - lastRun < 50) return;
-			lastRun = now;
+		const check = () => {
+			timer0 = 0;
+			if (document.hidden) return;
+			lastRun = performance.now();
 			let blocked = Boolean(document.querySelector(".menu-open, dialog[open]"));
-			if (!blocked) outer: for (let k = -1; k < 8; k++) {
-				const x = box.cx + (k < 0 ? 0 : box.r * Math.cos(k * Math.PI / 4)), y = box.cy + (k < 0 ? 0 : box.r * Math.sin(k * Math.PI / 4));
+			if (!blocked) outer: for (let k = -1; k < POINTS - 1; k++) {
+				const a = k * 2 * Math.PI / (POINTS - 1), x = box.cx + (k < 0 ? 0 : box.r * Math.cos(a)), y = box.cy + (k < 0 ? 0 : box.r * Math.sin(a));
 				for (const hit of document.elementsFromPoint(x, y)) {
 					if (hit.closest(".wa-fab")) continue;
 					if (hit.closest(BLOCKERS)) {
@@ -2259,8 +2363,7 @@ function WhatsAppFab() {
 			if (el.dataset.hidden !== value) el.dataset.hidden = value;
 		};
 		const schedule = () => {
-			until = performance.now() + 500;
-			if (!raf) raf = requestAnimationFrame(check);
+			if (!timer0) timer0 = setTimeout(check, Math.max(0, GAP - (performance.now() - lastRun)));
 		};
 		const onResize = () => {
 			measureBox();
@@ -2280,7 +2383,7 @@ function WhatsAppFab() {
 			el.classList.add("wa-pulse");
 			setTimeout(() => el.classList.remove("wa-pulse"), 1900);
 		}, 12e3);
-		const timer = setInterval(schedule, 800);
+		const timer = setInterval(schedule, 1500);
 		schedule();
 		return () => {
 			window.removeEventListener("scroll", schedule);
@@ -2288,7 +2391,7 @@ function WhatsAppFab() {
 			mo.disconnect();
 			clearInterval(timer);
 			clearInterval(pulse);
-			cancelAnimationFrame(raf);
+			clearTimeout(timer0);
 		};
 	}, []);
 	return /* @__PURE__ */ jsxs$1("a", {
@@ -2340,21 +2443,21 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-CjgEXKsk.js");
+var company_ = () => import("./assets/Company-DlDxi1Wn.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-D_b-PTxW.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-D8nx-Egv.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-Ib9yTS56.js").then((m) => m.default)),
-	fleet: lazyRoute(() => import("./assets/Fleet-CwFT0gPO.js").then((m) => m.default)),
-	blog: lazyRoute(pick(() => import("./assets/Blog-Dle6OM0g.js"), "Blog")),
-	article: lazyRoute(() => import("./assets/Blog-Dle6OM0g.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-Cjbrh3Oh.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-BzmNhryx.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-Dw6XXhgR.js").then((m) => m.default)),
+	fleet: lazyRoute(() => import("./assets/Fleet-BqOX0yS6.js").then((m) => m.default)),
+	blog: lazyRoute(pick(() => import("./assets/Blog-MHmkENqc.js"), "Blog")),
+	article: lazyRoute(() => import("./assets/Blog-MHmkENqc.js").then((m) => m.default)),
 	about: lazyRoute(pick(company_, "About")),
 	services: lazyRoute(pick(company_, "Services")),
 	contact: lazyRoute(pick(company_, "Contact")),
 	quote: lazyRoute(pick(company_, "QuotePage")),
 	privacy: lazyRoute(pick(company_, "Privacy")),
 	ratings: lazyRoute(pick(company_, "Ratings")),
-	notFound: lazyRoute(() => import("./assets/NotFound-AZG3jjbu.js").then((m) => m.default))
+	notFound: lazyRoute(() => import("./assets/NotFound-DTLybyfR.js").then((m) => m.default))
 };
 R.home, R.catalog, R.tour, R.fleet, R.blog, R.article, R.about, R.services, R.contact, R.quote, R.privacy, R.ratings;
 var preloadAllRoutes = () => Promise.all(Object.values(R).map((route) => route.preload()));
@@ -2403,8 +2506,9 @@ function Header() {
 		window.addEventListener("keydown", key);
 		return () => window.removeEventListener("keydown", key);
 	}, [open]);
+	const path = unprefix(location.pathname);
 	return /* @__PURE__ */ jsxs$1("header", {
-		className: `site-header${unprefix(location.pathname) === "/" ? " is-home" : ""}${open ? " menu-open" : ""}`,
+		className: `site-header${path === "/" || path === "/experiencias" || /^\/experiencias\/[^/]+\/?$/.test(path) ? " is-home" : ""}${open ? " menu-open" : ""}`,
 		children: [
 			/* @__PURE__ */ jsx$1(Link, {
 				to: "/",
@@ -4422,4 +4526,4 @@ async function render(url) {
 	}));
 }
 //#endregion
-export { Icon as A, useMedia as C, textoFase as D, inicioTextos as E, jsxs$1 as F, company as I, whatsapp as L, Socials as M, Fragment as N, NOT_FOUND as O, jsx$1 as P, language as R, useLightMotion as S, CHAPTERS as T, EditorialMotion as _, vehicles as a, Trust as b, Eyebrow as c, QuoteSection as d, Rail as f, QuoteCopy as g, Arrow as h, values as i, SocialIcon as j, usePageMeta as k, PageTitle as l, GoogleBadgeStatic as m, metaFor, photos as n, rawTours as o, TourCard as p, paths, tours as r, render, Button as s, articles as t, Picture as u, Manifesto as v, useMounted as w, useFlipGrid as x, Marquee as y, t as z };
+export { usePageMeta as A, t as B, useMounted as C, inicioTextos as D, CHAPTERS as E, jsx$1 as F, jsxs$1 as I, company as L, SocialIcon as M, Socials as N, textoFase as O, Fragment as P, whatsapp as R, useMedia as S, watchScroll as T, Manifesto as _, vehicles as a, useFlipGrid as b, Eyebrow as c, QuoteSection as d, Rail as f, QuoteCopy as g, Arrow as h, values as i, Icon as j, NOT_FOUND as k, PageTitle as l, GoogleBadgeStatic as m, metaFor, photos as n, rawTours as o, TourCard as p, paths, tours as r, render, Button as s, articles as t, Picture as u, Marquee as v, docTop as w, useLightMotion as x, Trust as y, language as z };

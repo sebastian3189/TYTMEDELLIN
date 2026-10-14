@@ -1,4 +1,4 @@
-import { F as jsxs, I as company, P as jsx, h as Arrow } from "../entry-server.js";
+import { F as jsx, I as jsxs, L as company, h as Arrow } from "../entry-server.js";
 import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
 //#region src/reviews.json
