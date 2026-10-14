@@ -1,4 +1,5 @@
-import { M as Fragment, N as jsx, P as jsxs, a as vehicles, c as Eyebrow, k as Icon, l as PageTitle, s as Button, u as Picture } from "../entry-server.js";
+import { A as Icon, F as jsxs, N as Fragment, P as jsx, a as vehicles, c as Eyebrow, l as PageTitle, s as Button, u as Picture } from "../entry-server.js";
+import { i as FAQ_FLEET, l as Faq } from "./faq-data-BxdktUz_.js";
 //#region src/pages/Fleet.jsx
 function Fleet() {
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
@@ -82,6 +83,14 @@ function Fleet() {
 					children: "Categorías del catálogo de la marca. Fotografías de referencia; la unidad asignada y su disponibilidad en Medellín se confirman en la propuesta."
 				})
 			]
+		}),
+		/* @__PURE__ */ jsx("section", {
+			className: "wrap section faq-page",
+			children: /* @__PURE__ */ jsx(Faq, {
+				items: FAQ_FLEET,
+				eyebrow: "Antes de elegir",
+				title: "Dudas sobre vehículos y grupos"
+			})
 		})
 	] });
 }

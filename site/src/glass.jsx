@@ -10,7 +10,7 @@ export function useGlassPill(ref, signal, enabled = true) {
     const box = ref.current;
     if (!enabled || !box) return undefined;
     const place = () => {
-      const el = box.querySelector('[aria-pressed="true"],[aria-selected="true"]');
+      const el = box.querySelector('[aria-pressed="true"],[aria-selected="true"],[aria-current="location"]');
       if (!el) return;
       box.style.setProperty('--px', `${el.offsetLeft}px`); box.style.setProperty('--py', `${el.offsetTop}px`);
       box.style.setProperty('--pw', `${el.offsetWidth}px`); box.style.setProperty('--ph', `${el.offsetHeight}px`);

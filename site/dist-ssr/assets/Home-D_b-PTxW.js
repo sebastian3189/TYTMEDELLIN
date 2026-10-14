@@ -1,7 +1,8 @@
-import { A as SocialIcon, C as useMedia, E as textoFase, F as company, I as whatsapp, L as language, M as Fragment, N as jsx, P as jsxs, R as t, S as useLightMotion, T as inicioTextos, c as Eyebrow, h as Arrow, m as GoogleBadgeStatic, n as photos, r as tours, s as Button, t as articles, u as Picture, w as CHAPTERS } from "../entry-server.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-CyzLLjUo.js";
-import { t as Reviews } from "./Reviews-B2hlDlCm.js";
-/* empty css                       */
+import { A as Icon, C as useMedia, D as textoFase, E as inicioTextos, F as jsxs, I as company, L as whatsapp, N as Fragment, P as jsx, R as language, S as useLightMotion, T as CHAPTERS, c as Eyebrow, h as Arrow, j as SocialIcon, m as GoogleBadgeStatic, n as photos, r as tours, s as Button, t as articles, u as Picture, z as t } from "../entry-server.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-B-VmbEHR.js";
+import { t as Reviews } from "./Reviews-BEL79RCZ.js";
+import { a as FAQ_HOME, l as Faq } from "./faq-data-BxdktUz_.js";
+import { a as smooth$1, c as cardPlace, d as frameWindow, f as relayDeck, h as timeline, i as smallCaps, l as deckPose, m as stateAt, n as placeLugar, o as tourEntry, p as smooth, r as placePhotos, s as buildDims, u as filmOpening } from "./mobile-motion-ZzElizgX.js";
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 var inicio_frames_default = {
@@ -39,251 +40,10 @@ var inicio_frames_default = {
 		"quality": 74
 	}
 };
-var clamp$2 = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
-var lerp = (a, b, t) => a + (b - a) * t;
-var smooth = (t) => {
-	t = clamp$2(t);
-	return t * t * (3 - 2 * t);
-};
-/** Límites del recorrido en svh. Fase del clip: 165 svh escritorio / 140 svh móvil (ajuste aprobado, se conserva). Tras la contracción (t4) solo queda el relevo (t4→t5) y el fundido final. */
-function timeline(mobile) {
-	if (mobile) {
-		const t0 = 24, t1 = 64, t2 = 204, t3 = 228, t4 = 276, t5 = 306;
-		return {
-			t0,
-			t1,
-			t2,
-			t3,
-			t4,
-			t5,
-			t6: t5,
-			total: 310,
-			clip: 140
-		};
-	}
-	const t0 = 30, t1 = 80, t2 = 245, t3 = 260, t4 = 305, t5 = 335;
-	return {
-		t0,
-		t1,
-		t2,
-		t3,
-		t4,
-		t5,
-		t6: t5,
-		total: 339,
-		clip: 165
-	};
-}
-var ROT = [
-	-5.2,
-	3.8,
-	-2.6,
-	5.9,
-	-4.1,
-	2.9,
-	-6,
-	4.6,
-	-3.3,
-	5.1,
-	-1.8,
-	3.2
-];
-var DX = [
-	-6,
-	7,
-	-3,
-	8,
-	-8,
-	4,
-	-5,
-	9,
-	-2,
-	6,
-	-7,
-	3
-];
-var DY = [
-	4,
-	-5,
-	7,
-	-3,
-	6,
-	-6,
-	3,
-	-4,
-	8,
-	-2,
-	5,
-	-7
-];
-var FRAME_ROT = -2.4;
-/** Estado derivado de u: fase de interfaz, ventana del marco y relevo. */
-function stateAt(u, T, mobile) {
-	let ui = "deck";
-	if (u >= T.t0) ui = "flip";
-	if (u >= T.t1) ui = "clip";
-	if (u >= T.t3) ui = "shrink";
-	if (u >= T.t4) ui = "relay";
-	let w = 0;
-	if (u >= T.t0 && u < T.t1) w = smooth((u - T.t0) / (T.t1 - T.t0));
-	else if (u >= T.t1 && u < T.t3) w = 1;
-	else if (u >= T.t3 && u < T.t4) w = 1 - smooth((u - T.t3) / (T.t4 - T.t3));
-	let D;
-	if (u < T.t1) D = 1 - smooth((u - T.t0) / (.45 * (T.t1 - T.t0)));
-	else if (u < T.t3) D = 0;
-	else if (u < T.t4) D = mobile ? 0 : smooth((u - T.t3 - .3 * (T.t4 - T.t3)) / (.7 * (T.t4 - T.t3)));
-	else D = mobile ? 0 : 1 - smooth((u - T.t4) / (.12 * (T.t5 - T.t4)));
-	const clipT = clamp$2((u - T.t1) / (T.t2 - T.t1));
-	const rel = smooth((u - T.t4) / (T.t5 - T.t4));
-	const fade = clamp$2((u - T.t5) / (T.total - T.t5));
-	const sh = clamp$2(u / T.t0);
-	return {
-		ui,
-		w,
-		D,
-		clipT,
-		rel,
-		fade,
-		sh
-	};
-}
-/**
-* Caja del mazo en «La mano de viaje» (Spec 03 §K3/K4): abajo a la derecha del escenario. La comparten ScrubHero (destino del relevo) y TravelHand
-* (posición del mazo de portadas pendientes): mismo centro, misma altura y las mismas rotaciones (`deckPose`).
-*/
-function relayDeck(W, H, mobile) {
-	const h = mobile ? 96 : 150;
-	return mobile ? {
-		x: W - 16 - h * .4,
-		y: H - 200 - h * .5 - 12,
-		h,
-		w: h * .8
-	} : {
-		x: W - clamp$2(W * .05, 22, 88) - h * .4 - 8,
-		y: H - h * .5 - 32,
-		h,
-		w: h * .8
-	};
-}
-var deckPose = (i) => ({
-	dx: DX[i % 12],
-	dy: DY[i % 12],
-	r: ROT[i % 12]
-});
-/**
-* Medidas del escenario. `frame` = rectángulo natural de la capa del clip (x, y, w, h) en coordenadas del escenario.
-* Devuelve tamaños base, centro de la baraja, centro de la carta enfocada y rejilla de cierre.
-*/
-function buildDims(W, H, mobile, frame) {
-	const pad = clamp$2(W * .05, 22, 88);
-	let Bh, Hd, deck, focus, m = null;
-	if (mobile) {
-		const A = H - 200, line = clamp$2((W - 44) / 10.5, 28, 40) * 1.05 * 2, short = A < 480;
-		const t1Top = short ? 12 : 40, gapT = 16, pb = 12;
-		const rotAllow = (hd) => hd * .4 * Math.sin(6.5 * Math.PI / 180) + 8;
-		Hd = clamp$2(A - (t1Top + line + gapT + pb) - 2 * rotAllow(300), 150, 300);
-		const al = rotAllow(Hd);
-		const deckTop = t1Top + line + gapT + al;
-		const free = H - 164 - (deckTop + Hd + al);
-		deck = {
-			x: W / 2,
-			y: deckTop + Hd / 2 + Math.max(0, free / 2)
-		};
-		Bh = Math.min(Math.min(W - 56, 340) * 1.25, H - 320);
-		focus = {
-			x: W / 2,
-			y: (H - 280) / 2
-		};
-		m = {
-			t1Top,
-			short,
-			A
-		};
-	} else {
-		Bh = clamp$2(H * .64, 280, 640);
-		Hd = clamp$2(H * .31, 220, 360);
-		deck = {
-			x: W / 2,
-			y: H * .49
-		};
-		focus = {
-			x: W * .6,
-			y: H * .5
-		};
-	}
-	return {
-		W,
-		H,
-		mobile,
-		pad,
-		Bw: mobile ? Math.min(W - 56, 340) : Bh * .8,
-		Bh,
-		sD: Hd / Bh,
-		Hd,
-		Wd: Hd * .8,
-		deck,
-		focus,
-		frame,
-		m,
-		relay: relayDeck(W, H, mobile)
-	};
-}
-/**
-* Ventana (marco) del clip. Devuelve la transformación y el clip-path de la capa de tamaño natural `frame`
-* para que se vea como una carta 4:5 (w=0) o a su tamaño completo (w=1).
-*/
-var filmOpening = (clipT) => smooth((clipT - .6) / .4);
-function frameWindow(d, w, out, clipT = 0) {
-	const { frame: F } = d;
-	const tail = d.mobile ? filmOpening(clipT) : 0;
-	const insetScale = 1 - tail * 32 / F.w;
-	const fullW = F.w * insetScale;
-	const fullH = lerp(F.h, F.w * 9 / 16, tail) * insetScale;
-	const cardW = lerp(d.Wd, Math.min(d.W - 56, 320), tail);
-	const cardH = lerp(d.Hd, Math.min(d.W - 56, 320) * 9 / 16, tail);
-	const cx0 = d.deck.x, cy0 = d.deck.y;
-	const wx = lerp(cardW, fullW, w), wh = lerp(cardH, fullH, w);
-	const cx = lerp(cx0, F.x + F.w / 2, w), cy = lerp(cy0, F.y + F.h / 2, w);
-	const rot = lerp(FRAME_ROT, 0, w);
-	const s = Math.max(wh / F.h, wx / F.w);
-	const ix = Math.max(0, (F.w - wx / s) / 2);
-	const iy = Math.max(0, (F.h - wh / s) / 2);
-	const radius = lerp(18, 18 * tail, w) / s;
-	out.tx = cx - (F.x + F.w / 2);
-	out.ty = cy - (F.y + F.h / 2);
-	out.rot = rot;
-	out.s = s;
-	out.ix = ix;
-	out.iy = iy;
-	out.r = radius;
-	return out;
-}
-/** Posición de la carta i: baraja → mazo del relevo (caja de «La mano de viaje»). Escribe en `out`. */
-function cardPlace(d, st, i, out) {
-	const { deck, mobile } = d;
-	const bump = Math.sin(Math.PI * st.sh), ang = i * 2.4 + st.sh * 3;
-	const rank = (i + Math.round(st.sh * 5)) % 12;
-	const dk = {
-		x: deck.x + DX[i] + Math.cos(ang) * d.Wd * (mobile ? .4 : .55) * bump,
-		y: deck.y + DY[i] + Math.sin(ang) * d.Hd * (mobile ? .1 : .2) * bump,
-		s: d.sD * .95,
-		r: ROT[i] + (i % 2 ? 1 : -1) * 22 * bump + st.sh * (i % 3 - 1) * 4,
-		o: mobile && i >= 5 && st.sh < .01 ? 0 : mobile && i >= 5 ? bump : 1,
-		z: 22 - rank
-	};
-	const a = st.rel, R = d.relay, ts = R.h / d.Bh, k = ts / dk.s;
-	out.x = lerp(dk.x, R.x + DX[i] * k, a);
-	out.y = lerp(dk.y, R.y + DY[i] * k, a);
-	out.s = lerp(dk.s, ts, a);
-	out.r = lerp(dk.r, ROT[i], a);
-	out.o = mobile ? dk.o * (1 - smooth(st.w / .2)) : st.w > .9 ? 0 : dk.o;
-	out.z = dk.z;
-	return out;
-}
 //#endregion
 //#region src/ScrubHero.jsx
 var BASE = "/media/inicio";
-var CARDS$1 = "/media/baraja";
+var CARDS = "/media/baraja";
 var MOBILE_QUERY = "(max-width: 799px)";
 var REDUCE_QUERY = "(prefers-reduced-motion: reduce)";
 var LOW_HEIGHT_QUERY = "(max-height: 560px)";
@@ -339,7 +99,7 @@ var FLOATS = [
 		-3
 	]
 ];
-var clamp$1 = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+var clamp$2 = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 var readReduce$1 = () => {
 	try {
 		return localStorage.getItem(REDUCE_KEY$1) === "1";
@@ -383,8 +143,8 @@ function frameOrder(count, mobile) {
 	if (!seen.has(count - 1)) order.splice(1, 0, count - 1);
 	return order;
 }
-var cardImg = (slug, k) => `${CARDS$1}/${slug}-${k}.webp`;
-var two$2 = (n) => String(n).padStart(2, "0");
+var cardImg = (slug, k) => `${CARDS}/${slug}-${k}.webp`;
+var two$3 = (n) => String(n).padStart(2, "0");
 function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary }) {
 	const root = useRef(null), track = useRef(null), stage = useRef(null), canvas = useRef(null), skipRef = useRef(null), media = useRef(null);
 	const floatRef = useRef(null), deckRef = useRef(null), titleRef = useRef(null), stackRef = useRef(null);
@@ -580,7 +340,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 			frameWindow(dims, st.w, fw, st.clipT);
 			const fullFrame = st.w >= .999 && (!mobile || st.clipT <= .6);
 			const fkey = fullFrame ? "full" : `${fw.tx.toFixed(1)}|${fw.ty.toFixed(1)}|${fw.rot.toFixed(2)}|${fw.s.toFixed(4)}|${fw.ix.toFixed(1)}|${fw.iy.toFixed(1)}|${fw.r.toFixed(2)}`;
-			const fo = 1 - smooth(clamp$1(st.rel * 2.5));
+			const fo = 1 - smooth(clamp$2(st.rel * 2.5));
 			const mkey = `${fkey}|${fo.toFixed(3)}`;
 			if (lastFx.media !== mkey) {
 				lastFx.media = mkey;
@@ -605,7 +365,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 				el.style.zIndex = String(cp.z);
 				el.style.setProperty("--inv", (1 / cp.s).toFixed(3));
 			}
-			const dKey = st.D.toFixed(3), dOp = mobile ? clamp$1(st.D * 2 - 1) : st.D, dMove = mobile ? .035 : .05;
+			const dKey = st.D.toFixed(3), dOp = mobile ? clamp$2(st.D * 2 - 1) : st.D, dMove = mobile ? .035 : .05;
 			if (lastFx.d !== dKey) {
 				lastFx.d = dKey;
 				for (const el of fxEls) {
@@ -615,7 +375,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 					el.style.visibility = dOp < .01 ? "hidden" : "visible";
 				}
 			}
-			const fp = clamp$1(u / T.t1), fk = `${fp.toFixed(3)}|${dKey}`;
+			const fp = clamp$2(u / T.t1), fk = `${fp.toFixed(3)}|${dKey}`;
 			if (floatEls.length && lastFx.f !== fk) {
 				lastFx.f = fk;
 				for (const el of floatEls) {
@@ -640,7 +400,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 			}
 			const rect = trackEl.getBoundingClientRect();
 			span = Math.max(1, trackEl.offsetHeight - stageEl.offsetHeight);
-			const target = clamp$1((stageTop - rect.top) / span);
+			const target = clamp$2((stageTop - rect.top) / span);
 			const dt = lastT ? Math.min(64, now - lastT) : 16;
 			lastT = now;
 			if (q === null || Math.abs(target - q) > JUMP) q = target;
@@ -763,7 +523,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 		});
 		measure();
 		if (dims) {
-			q = clamp$1((stageTop - trackEl.getBoundingClientRect().top) / Math.max(1, trackEl.offsetHeight - stageEl.offsetHeight));
+			q = clamp$2((stageTop - trackEl.getBoundingClientRect().top) / Math.max(1, trackEl.offsetHeight - stageEl.offsetHeight));
 			span = Math.max(1, trackEl.offsetHeight - stageEl.offsetHeight);
 			const st0 = stateAt(q * T.total, T, mobile);
 			stageEl.dataset.ui = ui = st0.ui;
@@ -965,9 +725,9 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 									children: [/* @__PURE__ */ jsxs("span", {
 										className: "scrub-count",
 										children: [
-											two$2(i + 1),
+											two$3(i + 1),
 											" / ",
-											two$2(CHAPTERS.length)
+											two$3(CHAPTERS.length)
 										]
 									}), /* @__PURE__ */ jsx("span", {
 										className: "scrub-place",
@@ -1001,10 +761,10 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 										children: [/* @__PURE__ */ jsx("p", {
 											className: "scrub-cap-title",
 											children: x.titular
-										}), /* @__PURE__ */ jsx("p", {
+										}), x.subtitulo ? /* @__PURE__ */ jsx("p", {
 											className: "scrub-cap-sub",
 											children: x.subtitulo
-										})]
+										}) : null]
 									}, id);
 								})]
 							})
@@ -1085,7 +845,6 @@ var ORDER = [
 	"hacienda-napoles"
 ];
 var N = ORDER.length;
-var CARDS = "/media/baraja";
 var SEG = {
 	wide: 30,
 	compact: 80
@@ -1097,8 +856,8 @@ var SMALL = "(max-width: 799px)";
 var REDUCE = "(prefers-reduced-motion: reduce)";
 var LOW = "(max-height: 560px)";
 var REDUCE_KEY = "tyt-reducir-movimiento";
-var two$1 = (n) => String(n).padStart(2, "0");
-var clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+var two$2 = (n) => String(n).padStart(2, "0");
+var clamp$1 = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 var readReduce = () => {
 	try {
 		return localStorage.getItem(REDUCE_KEY) === "1";
@@ -1116,33 +875,7 @@ var prefersStatic = () => {
 		"3g"
 	].includes(c.effectiveType)));
 };
-var ENTRIES = ORDER.map((slug) => {
-	const t = tours.find((x) => x.slug === slug), copy = inicioTextos.cartas[slug];
-	const pool = t.gallery.filter((_, i) => i > 0 || slug === "tour-de-compras");
-	const n = Math.min(7, pool.length), picked = Array.from({ length: n }, (_, k) => pool[Math.floor(k * pool.length / n)]);
-	const photosList = [{
-		src: `${CARDS}/${slug}-d.webp`,
-		srcSet: `${CARDS}/${slug}-m.webp 400w, ${CARDS}/${slug}-d.webp 640w, ${CARDS}/${slug}-h.webp 960w`,
-		width: 960,
-		height: 1200,
-		small: `${CARDS}/${slug}-t.webp`
-	}, ...picked.map((p) => ({
-		src: p.src,
-		srcSet: p.srcset || `${p.small} 640w, ${p.src} ${p.width}w`,
-		width: p.width,
-		height: p.height,
-		small: p.small || p.src
-	}))];
-	return {
-		slug,
-		name: t.name,
-		category: t.category,
-		emocion: copy.emocion,
-		frase: copy.frase,
-		lugar: copy.lugar,
-		photos: photosList
-	};
-});
+var ENTRIES = ORDER.map(tourEntry);
 var GROUPS = ENTRIES.reduce((acc, e, i) => {
 	const last = acc[acc.length - 1];
 	if (last && last.name === e.category) last.items.push(i);
@@ -1152,64 +885,6 @@ var GROUPS = ENTRIES.reduce((acc, e, i) => {
 	});
 	return acc;
 }, []);
-var SLOTS = [
-	{
-		cx: .5,
-		cy: .54,
-		h: .76,
-		r: 0,
-		d: 1
-	},
-	{
-		cx: .2,
-		cy: .33,
-		h: .4,
-		r: -7,
-		d: 1.5
-	},
-	{
-		cx: .83,
-		cy: .3,
-		h: .38,
-		r: 6,
-		d: .6
-	},
-	{
-		cx: .13,
-		cy: .79,
-		h: .34,
-		r: 5,
-		d: 1.2
-	},
-	{
-		cx: .88,
-		cy: .74,
-		h: .4,
-		r: -5,
-		d: 1.7
-	},
-	{
-		cx: .36,
-		cy: .16,
-		h: .27,
-		r: 4,
-		d: .5
-	},
-	{
-		cx: .68,
-		cy: .89,
-		h: .28,
-		r: -4,
-		d: .8
-	},
-	{
-		cx: .63,
-		cy: .15,
-		h: .26,
-		r: 7,
-		d: 1.1
-	}
-];
 function measure(host, text) {
 	const m = document.createElement("span");
 	m.textContent = text;
@@ -1269,7 +944,7 @@ function TravelHand() {
 		size: 64,
 		lines: [ENTRIES[0].name]
 	});
-	const tabList = useRef(null), root = useRef(null), track = useRef(null), stage = useRef(null), handEl = useRef(null), titleHost = useRef(null), mqEl = useRef(null), deckEl = useRef(null), tabs = useRef([]);
+	const decoEl = useRef(null), tabList = useRef(null), root = useRef(null), track = useRef(null), stage = useRef(null), handEl = useRef(null), titleHost = useRef(null), mqEl = useRef(null), deckEl = useRef(null), tabs = useRef([]);
 	const st = useRef({
 		active: 0,
 		fronts: {},
@@ -1381,7 +1056,7 @@ function TravelHand() {
 	useLayoutEffect(() => {
 		if (!ready || !animated) return void 0;
 		const trackEl = track.current, stageEl = stage.current, hand = handEl.current, mq = mqEl.current, deck = deckEl.current;
-		const small = window.matchMedia(SMALL).matches, wide = layout === "wide", seg = wide ? SEG.wide : SEG.compact, shrink = wide ? 1 : innerWidth < 768 ? .62 : .82;
+		const small = window.matchMedia(SMALL).matches, wide = layout === "wide", seg = wide ? SEG.wide : SEG.compact, shrink = wide ? 1 : innerWidth < 768 ? .62 : .82, mob = innerWidth < 768;
 		const total = RELAY + N * seg + EXIT;
 		let raf = 0, visible = true, destroyed = false, q = null, lastT = 0, stageTop = 92, span = 1, RW = 0, RH = 0, sw = 0, sh = 0;
 		let groupCache = null, trackTop = 0;
@@ -1403,13 +1078,18 @@ function TravelHand() {
 			deck.style.setProperty("--dh", `${R.h}px`);
 			deck.style.setProperty("--dx", `${R.x - R.w / 2}px`);
 			deck.style.setProperty("--dy", `${R.y - R.h / 2}px`);
+			const hr = hand.getBoundingClientRect(), sr = stageEl.getBoundingClientRect();
+			keep = mob ? {
+				l: innerWidth - 16 - 58 - 8 - (hr.left - sr.left),
+				t: innerHeight - 16 - 58 - 8 - stageTop - (hr.top - sr.top)
+			} : null;
 			lastKey = "";
 		};
-		let lastKey = "";
+		let lastKey = "", keep = null;
 		const apply = (P) => {
-			const idx = clamp(Math.floor(P), 0, N - 1);
+			const idx = clamp$1(Math.floor(P), 0, N - 1);
 			P - idx;
-			const P2 = clamp(P, 0, N);
+			const P2 = clamp$1(P, 0, N);
 			if (idx !== st.current.active) {
 				st.current.active = idx;
 				setActive(idx);
@@ -1422,36 +1102,14 @@ function TravelHand() {
 				const vis = local > -.2 && local < 1.25;
 				g.style.visibility = vis ? "visible" : "hidden";
 				if (!vis) continue;
-				const ls = clamp(local, 0, 1);
-				local < 0 && smooth(clamp(1 + local * 4));
-				const imgs = [...g.querySelectorAll(".th-photo")];
-				imgs.length;
-				imgs.forEach((img, k) => {
-					const slotIdx = k === f ? 0 : k < f ? k + 1 : k, slot = SLOTS[slotIdx % SLOTS.length], h = slot.h * RH * shrink, w = h * .8;
-					if (img._w !== w) {
-						img.style.width = `${w}px`;
-						img.style.height = `${h}px`;
-						img._w = w;
-					}
-					const front = slotIdx === 0;
-					const tIn = front ? 0 : .14 + .055 * (slotIdx - 1), eIn = local < 0 ? 0 : front ? smooth(ls / .15) : smooth((ls - tIn) / .22);
-					const eOut = smooth((ls - (.86 + .012 * slotIdx)) / .14);
-					const dirx = (slot.cx - .5) * 1.7, diry = (slot.cy - .5) * 1.7, inv = 1 - eIn;
-					const par = (.5 - ls) * slot.d * .16 * RH, parx = (ls - .5) * slot.d * .035 * RW;
-					const sc = (front ? .82 + .18 * eIn : .55 + .45 * eIn) * (1 + .04 * eOut) * (1 + .03 * (slot.d - 1) * (ls - .5));
-					const rot = front ? slot.r - 6 * inv - 8 * eOut : slot.r * (.4 + .6 * eIn) + 14 * inv * Math.sign(dirx || 1) - 8 * eOut;
-					const x = slot.cx * RW - w / 2 + (front ? 0 : dirx * RW * .5 * inv) + parx - eOut * RW * .3 * (.4 + slot.d * .3);
-					const y = slot.cy * RH - h / 2 + (front ? .28 * RH * inv : diry * RH * .5 * inv) + par - eOut * RH * .45 * (.5 + slot.d * .25);
-					const o = (front ? Math.max(1e-4, smooth(ls / .08) + (local < 0 ? 0 : 0)) : eIn) * (1 - eOut) * (local < 0 ? 0 : 1);
-					img.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) rotate(${rot.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
-					img.style.opacity = o.toFixed(3);
-					img.style.zIndex = String(front ? 30 : 2 + Math.round(slot.d * 4));
-					img.style.pointerEvents = o > .6 && local >= 0 && local <= 1 ? "auto" : "none";
-				});
+				const ls = clamp$1(local, 0, 1);
+				local < 0 && smooth$1(clamp$1(1 + local * 4));
+				const fr = placePhotos([...g.querySelectorAll(".th-photo")], f, local, RW, RH, shrink, mob, keep);
+				placeLugar(g.querySelector(".th-lugar"), fr, ls, RH);
 			}
-			const ls0 = clamp(P2 - idx, 0, 1);
+			const ls0 = clamp$1(P2 - idx, 0, 1);
 			mq.style.transform = `translate3d(${(.12 * sw - .25 * ls0 * sw).toFixed(1)}px,-50%,0)`;
-			deck.style.opacity = String(clamp(1 - (P2 - (N - 2)) * 1.2));
+			deck.style.opacity = String(clamp$1(1 - (P2 - (N - 2)) * 1.2));
 		};
 		const render = (now) => {
 			raf = 0;
@@ -1459,15 +1117,18 @@ function TravelHand() {
 				lastT = 0;
 				return;
 			}
-			const u = clamp((scrollY + stageTop - trackTop) / span) * total;
-			const fin = clamp((u - (RELAY - 4)) / 4);
-			if (stageEl._fin !== fin) {
+			const u = clamp$1((scrollY + stageTop - trackTop) / span) * total;
+			const fin = clamp$1((u - (RELAY - 4)) / 4);
+			const cfin = wide ? fin : smooth$1(clamp$1(u / (RELAY - 4)));
+			if (stageEl._fin !== fin || stageEl._cfin !== cfin) {
 				stageEl._fin = fin;
+				stageEl._cfin = cfin;
+				stageEl.style.setProperty("--cfin", cfin.toFixed(3));
 				stageEl.style.setProperty("--fin", fin.toFixed(3));
-				stageEl.style.pointerEvents = fin < 1 ? "none" : "";
+				stageEl.style.pointerEvents = cfin < 1 ? "none" : "";
 				stageEl.dataset.on = fin > 0 ? "true" : "false";
 			}
-			const target = clamp((u - RELAY) / seg, 0, N);
+			const target = clamp$1((u - RELAY) / seg, 0, N);
 			const dt = lastT ? Math.min(64, now - lastT) : 16;
 			lastT = now;
 			if (q === null || Math.abs(target - q) > .36) q = target;
@@ -1589,9 +1250,17 @@ function TravelHand() {
 	const trackStyle = animated ? { "--th-total": RELAY + N * seg + EXIT } : void 0;
 	const header = /* @__PURE__ */ jsxs("div", {
 		className: "th-head",
-		children: [/* @__PURE__ */ jsx("p", {
+		children: [/* @__PURE__ */ jsxs("p", {
 			className: "eyebrow",
-			children: t$1.eleccion
+			children: [t$1.eleccion, animated && /* @__PURE__ */ jsxs("span", {
+				className: "th-idx",
+				"aria-hidden": "true",
+				children: [
+					two$2(shown + 1),
+					" / ",
+					two$2(N)
+				]
+			})]
 		}), /* @__PURE__ */ jsxs("h2", {
 			id: "th-titulo",
 			children: [
@@ -1639,9 +1308,9 @@ function TravelHand() {
 					/* @__PURE__ */ jsxs("span", {
 						className: "th-card-count",
 						children: [
-							two$1(i + 1),
+							two$2(i + 1),
 							" / ",
-							two$1(N),
+							two$2(N),
 							" · ",
 							e.category
 						]
@@ -1675,6 +1344,16 @@ function TravelHand() {
 					"data-on": "false",
 					"data-swap": swap,
 					children: [
+						/* @__PURE__ */ jsx("div", {
+							className: "th-bg",
+							"aria-hidden": "true"
+						}),
+						/* @__PURE__ */ jsx("div", {
+							ref: decoEl,
+							className: "th-deco",
+							"aria-hidden": "true",
+							children: /* @__PURE__ */ jsx("i", { className: "th-glow" })
+						}),
 						/* @__PURE__ */ jsx("div", {
 							className: "th-mq-clip",
 							"aria-hidden": "true",
@@ -1716,7 +1395,7 @@ function TravelHand() {
 										tabIndex: active === i ? 0 : -1,
 										onClick: () => st.current.jump(i),
 										onKeyDown: (e) => onTabKey(e, i),
-										children: [/* @__PURE__ */ jsx("span", { children: two$1(i + 1) }), ENTRIES[i].name]
+										children: [/* @__PURE__ */ jsx("span", { children: two$2(i + 1) }), ENTRIES[i].name]
 									}, ENTRIES[i].slug))
 								}, g.name))]
 							}), /* @__PURE__ */ jsx("a", {
@@ -1754,16 +1433,52 @@ function TravelHand() {
 							children: ENTRIES.map((e, gi) => {
 								const near = Math.abs(gi - active) <= 1, hasFull = full.has(gi);
 								if (!near && !hasFull) return null;
-								return /* @__PURE__ */ jsx("div", {
+								return /* @__PURE__ */ jsxs("div", {
 									className: "th-group",
 									"data-i": gi,
 									"aria-hidden": gi === active ? void 0 : "true",
-									children: e.photos.map((p, k) => k === 0 || hasFull ? /* @__PURE__ */ jsx(Photo, {
+									children: [e.photos.map((p, k) => k === 0 || hasFull ? /* @__PURE__ */ jsx(Photo, {
 										photo: p,
 										entry: e,
 										k,
 										primary: gi === active || k === 0
-									}, k) : null)
+									}, k) : null), /* @__PURE__ */ jsxs("span", {
+										className: "th-lugar",
+										"aria-hidden": "true",
+										children: [/* @__PURE__ */ jsx("b", { children: smallCaps(e.lugar) }), /* @__PURE__ */ jsxs("svg", {
+											viewBox: "0 0 32 32",
+											width: "26",
+											height: "26",
+											focusable: "false",
+											children: [
+												/* @__PURE__ */ jsx("circle", {
+													cx: "16",
+													cy: "16",
+													r: "14",
+													fill: "none",
+													stroke: "currentColor",
+													strokeWidth: "1.4",
+													strokeDasharray: "2 2.2"
+												}),
+												/* @__PURE__ */ jsx("circle", {
+													cx: "16",
+													cy: "16",
+													r: "9",
+													fill: "none",
+													stroke: "currentColor",
+													strokeWidth: "1.2"
+												}),
+												/* @__PURE__ */ jsx("path", {
+													d: "M11 17.5l3.2-3.2 2.3 2.3 4.5-4.5",
+													fill: "none",
+													stroke: "currentColor",
+													strokeWidth: "1.4",
+													strokeLinecap: "round",
+													strokeLinejoin: "round"
+												})
+											]
+										})]
+									})]
 								}, e.slug);
 							})
 						}),
@@ -1775,15 +1490,16 @@ function TravelHand() {
 									children: [
 										ENTRIES[active].name,
 										" · fotografía ",
-										two$1(nowFront + 1),
+										two$2(nowFront + 1),
 										" de ",
-										two$1(ENTRIES[active].photos.length)
+										two$2(ENTRIES[active].photos.length)
 									]
 								}),
 								/* @__PURE__ */ jsx("div", {
 									className: "th-dots",
 									role: "group",
 									"aria-label": "Fotografías",
+									style: { "--dotw": ENTRIES[active].photos.length > 6 ? "17px" : "24px" },
 									children: ENTRIES[active].photos.map((_, k) => /* @__PURE__ */ jsx("button", {
 										type: "button",
 										"aria-label": `Foto ${k + 1} de ${ENTRIES[active].photos.length}`,
@@ -1815,9 +1531,9 @@ function TravelHand() {
 								/* @__PURE__ */ jsxs("p", {
 									className: "th-count",
 									children: [
-										two$1(shown + 1),
+										two$2(shown + 1),
 										" / ",
-										two$1(N),
+										two$2(N),
 										" · ",
 										entry.category
 									]
@@ -1830,10 +1546,26 @@ function TravelHand() {
 										entry.frase
 									]
 								}),
-								/* @__PURE__ */ jsxs(Link, {
-									className: "text-link",
-									to: `/experiencias/${entry.slug}`,
-									children: ["Ver experiencia", /* @__PURE__ */ jsx(Arrow, {})]
+								/* @__PURE__ */ jsxs("div", {
+									className: "th-row",
+									children: [/* @__PURE__ */ jsxs(Link, {
+										className: "text-link",
+										to: `/experiencias/${entry.slug}`,
+										children: ["Ver experiencia", /* @__PURE__ */ jsx(Arrow, {})]
+									}), /* @__PURE__ */ jsxs("div", {
+										className: "th-arrows th-arrows--in",
+										children: [/* @__PURE__ */ jsx("button", {
+											type: "button",
+											"aria-label": "Fotografía anterior",
+											onClick: () => select(active, nowFront - 1, true),
+											children: /* @__PURE__ */ jsx(Arrow, { dir: "left" })
+										}), /* @__PURE__ */ jsx("button", {
+											type: "button",
+											"aria-label": "Fotografía siguiente",
+											onClick: () => select(active, nowFront + 1, true),
+											children: /* @__PURE__ */ jsx(Arrow, { dir: "right" })
+										})]
+									})]
 								}),
 								/* @__PURE__ */ jsxs(Link, {
 									className: "button",
@@ -1895,7 +1627,7 @@ function TravelHand() {
 }
 //#endregion
 //#region src/BlogBook.jsx
-var two = (n) => String(n).padStart(2, "0");
+var two$1 = (n) => String(n).padStart(2, "0");
 var EASE = "cubic-bezier(.77,0,.175,1)";
 var ANGLE_B = [
 	[0, 0],
@@ -2493,7 +2225,7 @@ function BlogBook() {
 							onKeyDown: (e) => onKey(e, i),
 							children: [/* @__PURE__ */ jsx("span", {
 								className: "book-index",
-								children: two(i + 1)
+								children: two$1(i + 1)
 							}), /* @__PURE__ */ jsx("span", { children: x.tag })]
 						}, x.slug))
 					}), /* @__PURE__ */ jsxs("div", {
@@ -2503,9 +2235,9 @@ function BlogBook() {
 							role: "status",
 							"aria-live": "polite",
 							children: [
-								two(sel + 1),
+								two$1(sel + 1),
 								" / ",
-								two(cards.length)
+								two$1(cards.length)
 							]
 						}), /* @__PURE__ */ jsxs("div", {
 							className: "ft-nav",
@@ -2527,6 +2259,367 @@ function BlogBook() {
 				})
 			]
 		})]
+	});
+}
+//#endregion
+//#region src/Different.jsx
+var DIFERENTES = [
+	{
+		icon: "planeLanding",
+		t: "Monitoreamos tu vuelo.",
+		d: "Seguimos el estado de tu vuelo hasta su aterrizaje en Medellín para coordinar tu recogida y estar preparados ante posibles cambios de horario."
+	},
+	{
+		icon: "carFront",
+		t: "Flota propia y vehículos certificados.",
+		d: "Contamos con vehículos modernos, habilitados y en óptimas condiciones, con mantenimiento preventivo y documentación al día para ofrecerte comodidad y seguridad."
+	},
+	{
+		icon: "users",
+		t: "Un equipo que responde por ti.",
+		d: "Guías, conductores y personal logístico trabajan bajo nuestros estándares de servicio. Coordinamos directamente cada experiencia, sin intermediarios innecesarios, para garantizar el control de calidad."
+	},
+	{
+		icon: "droplet",
+		t: "Hidratación incluida.",
+		d: "Durante nuestras experiencias te ofrecemos agua e hidratación sin costo adicional. Porque los pequeños detalles también hacen grandes diferencias."
+	},
+	{
+		icon: "globe",
+		t: "Experiencias 100 % privadas.",
+		d: "Nada de grupos desconocidos ni recorridos masivos. Tu vehículo y tu experiencia son exclusivos para ti y tus acompañantes."
+	},
+	{
+		icon: "clock",
+		t: "Flexibilidad en tus horarios.",
+		d: "Adaptamos nuestros recorridos a tus intereses y necesidades. Queremos que disfrutes cada destino a tu ritmo."
+	},
+	{
+		icon: "camera",
+		t: "Recuerdos sin costo adicional.",
+		d: "Capturamos fotografías y videos durante tu experiencia para que te lleves recuerdos especiales de tu visita."
+	},
+	{
+		icon: "shieldCheck",
+		t: "Seguridad y respaldo legal.",
+		d: "Somos una empresa legalmente constituida, con Registro Nacional de Turismo (RNT 176384). Operamos con vehículos habilitados y las coberturas y pólizas aplicables a nuestros servicios."
+	},
+	{
+		icon: "messageCircle",
+		t: "Acompañamiento por WhatsApp 24/7.",
+		d: "Contamos con un canal de atención para ayudarte ante imprevistos, cambios de planes o cualquier situación relacionada con tu servicio."
+	},
+	{
+		icon: "heart",
+		t: "Atención desde el primer contacto.",
+		d: "No solo organizamos recorridos. Escuchamos tus necesidades, te asesoramos y diseñamos experiencias que se ajustan a lo que realmente buscas."
+	}
+];
+var two = (n) => String(n).padStart(2, "0");
+var clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+function Words({ text, from = 0, step = 60 }) {
+	return t(text).split(" ").map((w, i, all) => /* @__PURE__ */ jsxs("span", { children: [/* @__PURE__ */ jsx("span", {
+		className: "df-w",
+		children: /* @__PURE__ */ jsx("span", {
+			style: {
+				"--i": from + i,
+				"--st": `${step}ms`
+			},
+			children: w
+		})
+	}), i < all.length - 1 ? " " : null] }, i));
+}
+function Different() {
+	const root = useRef(null), host = useRef(null), svg = useRef(null);
+	const light = useLightMotion();
+	const [armed, setArmed] = useState(false), [active, setActive] = useState(0);
+	const activeRef = useRef(0);
+	useLayoutEffect(() => {
+		setArmed(!light);
+	}, [light]);
+	useEffect(() => {
+		if (!armed) return void 0;
+		const els = [...root.current.querySelectorAll("[data-rv]")];
+		const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+			if (e.isIntersecting) {
+				e.target.classList.add("is-in");
+				io.unobserve(e.target);
+			}
+		}), { rootMargin: "0px 0px -12% 0px" });
+		els.forEach((el) => io.observe(el));
+		return () => io.disconnect();
+	}, [armed]);
+	useEffect(() => {
+		const el = root.current, hostEl = host.current, s = svg.current;
+		const base = s.querySelector(".df-route-base"), done = s.querySelector(".df-route-done"), dot = s.querySelector(".df-dot");
+		const discs = [...hostEl.querySelectorAll(".df-disc")], cards = [...hostEl.querySelectorAll(".df-card")], endD = hostEl.querySelector(".df-end"), endM = hostEl.querySelector(".df-end-m"), closeT = hostEl.querySelector(".df-close-text");
+		let len = 1, y0 = 0, yEnd = 1, hostTop = 0, centers = [], raf = 0, visible = false, q = light ? 1 : 0;
+		const measure = () => {
+			const hr = hostEl.getBoundingClientRect();
+			hostTop = hr.top + scrollY;
+			const wide = innerWidth >= 900, ctr = (d) => {
+				const r = d.getBoundingClientRect();
+				return [r.left + r.width / 2 - hr.left, r.top + r.height / 2 - hr.top];
+			};
+			const pts = discs.map(ctr), e = ctr(wide ? endD : endM);
+			if (wide) {
+				const cr = closeT.getBoundingClientRect();
+				const xr = Math.min(hr.width - 12, cr.right - hr.left + 28);
+				pts.push([xr, cr.top - hr.top - 24], [xr, e[1]]);
+			}
+			pts.push(e);
+			let d = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
+			for (let i = 1; i < pts.length; i++) {
+				const [x1, y1] = pts[i - 1], [x2, y2] = pts[i], m = (y2 - y1) / 2;
+				d += ` C${x1.toFixed(1)} ${(y1 + m).toFixed(1)} ${x2.toFixed(1)} ${(y2 - m).toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+			}
+			s.setAttribute("viewBox", `0 0 ${hr.width.toFixed(1)} ${hr.height.toFixed(1)}`);
+			base.setAttribute("d", d);
+			done.setAttribute("d", d);
+			len = base.getTotalLength();
+			done.style.strokeDasharray = `${len}`;
+			y0 = pts[0][1];
+			yEnd = pts[pts.length - 1][1];
+			centers = cards.map((c) => {
+				const r = c.getBoundingClientRect();
+				return r.top + scrollY + r.height / 2;
+			});
+			paint(true);
+		};
+		const paint = (force) => {
+			const vh = innerHeight, target = light ? 1 : clamp((scrollY + vh * .68 - hostTop - y0) / (yEnd - y0));
+			if (force || Math.abs(target - q) > .12) q = target;
+			else q += (target - q) * (1 - Math.exp(-16 / 80));
+			const p = Math.abs(target - q) < 5e-4 ? target : q;
+			q = p;
+			done.style.strokeDashoffset = `${(len * (1 - p)).toFixed(1)}`;
+			const pt = base.getPointAtLength(len * p);
+			dot.style.transform = `translate(${pt.x.toFixed(1)}px,${pt.y.toFixed(1)}px)`;
+			dot.classList.toggle("is-end", p > .995);
+			if (!light && centers.length) {
+				const mid = scrollY + vh * .5;
+				let best = 0, bd = 1e9;
+				centers.forEach((c, i) => {
+					const dd = Math.abs(c - mid);
+					if (dd < bd) {
+						bd = dd;
+						best = i;
+					}
+				});
+				if (best !== activeRef.current) {
+					activeRef.current = best;
+					setActive(best);
+				}
+			}
+			return Math.abs(target - q) > 5e-4;
+		};
+		const tick = () => {
+			raf = 0;
+			if (!visible || document.hidden) return;
+			if (paint(false)) raf = requestAnimationFrame(tick);
+		};
+		const kick = () => {
+			if (!raf) raf = requestAnimationFrame(tick);
+		};
+		const io = new IntersectionObserver(([e]) => {
+			visible = e.isIntersecting;
+			if (visible) kick();
+		}, { rootMargin: "200px 0px" });
+		io.observe(el);
+		const ro = new ResizeObserver(() => {
+			measure();
+		});
+		ro.observe(hostEl);
+		document.fonts?.ready.then(measure);
+		if (!light) {
+			addEventListener("scroll", kick, { passive: true });
+			addEventListener("resize", kick, { passive: true });
+		}
+		measure();
+		return () => {
+			cancelAnimationFrame(raf);
+			io.disconnect();
+			ro.disconnect();
+			removeEventListener("scroll", kick);
+			removeEventListener("resize", kick);
+		};
+	}, [light]);
+	return /* @__PURE__ */ jsx("section", {
+		ref: root,
+		id: "diferentes",
+		className: `df${armed ? " df--armed" : ""}${light ? " df--static" : ""}`,
+		"aria-labelledby": "df-titulo",
+		children: /* @__PURE__ */ jsxs("div", {
+			className: "wrap",
+			children: [/* @__PURE__ */ jsxs("header", {
+				className: "df-head",
+				children: [
+					/* @__PURE__ */ jsx("p", {
+						className: "eyebrow df-eyebrow",
+						"data-rv": true,
+						children: "Transporte y Turismo Medellín"
+					}),
+					/* @__PURE__ */ jsxs("h2", {
+						id: "df-titulo",
+						className: "df-title",
+						"data-rv": true,
+						children: [
+							/* @__PURE__ */ jsx("span", {
+								className: "df-l1",
+								children: /* @__PURE__ */ jsx(Words, { text: "¿Qué nos hace" })
+							}),
+							" ",
+							/* @__PURE__ */ jsx("span", {
+								className: "df-l2",
+								children: /* @__PURE__ */ jsx(Words, {
+									text: "diferentes?",
+									from: 3
+								})
+							})
+						]
+					}),
+					/* @__PURE__ */ jsxs("div", {
+						className: "df-intro",
+						children: [/* @__PURE__ */ jsx("p", {
+							className: "df-lead",
+							"data-rv": true,
+							children: "No solo te llevamos a conocer Medellín. Nos encargamos de que vivas una experiencia a otro nivel."
+						}), /* @__PURE__ */ jsx("p", {
+							className: "df-para",
+							"data-rv": true,
+							style: { "--d": "60ms" },
+							children: "En Transporte y Turismo Medellín creemos que una experiencia extraordinaria comienza mucho antes de subir al vehículo. Por eso, cuidamos cada detalle de tu viaje, brindándote seguridad, comodidad, atención personalizada y el respaldo de un equipo comprometido contigo."
+						})]
+					})
+				]
+			}), /* @__PURE__ */ jsxs("div", {
+				ref: host,
+				className: "df-host",
+				children: [
+					/* @__PURE__ */ jsxs("svg", {
+						ref: svg,
+						className: "df-route",
+						"aria-hidden": "true",
+						focusable: "false",
+						preserveAspectRatio: "none",
+						children: [
+							/* @__PURE__ */ jsx("path", {
+								className: "df-route-base",
+								fill: "none"
+							}),
+							/* @__PURE__ */ jsx("path", {
+								className: "df-route-done",
+								fill: "none"
+							}),
+							/* @__PURE__ */ jsx("g", {
+								className: "df-dot",
+								children: /* @__PURE__ */ jsx("circle", {
+									className: "df-dot-c",
+									r: "5"
+								})
+							})
+						]
+					}),
+					/* @__PURE__ */ jsxs("div", {
+						className: "df-body",
+						children: [/* @__PURE__ */ jsx("div", {
+							className: "df-side",
+							"aria-hidden": "true",
+							children: /* @__PURE__ */ jsxs("div", {
+								className: "df-sticky",
+								children: [
+									/* @__PURE__ */ jsxs("p", {
+										className: "df-count",
+										children: [two(active + 1), /* @__PURE__ */ jsxs("span", { children: [" / ", two(DIFERENTES.length)] })]
+									}, `c${active}`),
+									/* @__PURE__ */ jsxs("div", {
+										className: "df-bigdisc",
+										children: [/* @__PURE__ */ jsx("i", { className: "df-aura" }), /* @__PURE__ */ jsx("span", {
+											className: "df-bigico",
+											children: /* @__PURE__ */ jsx(Icon, {
+												name: DIFERENTES[active].icon,
+												size: 96,
+												draw: true
+											})
+										}, `i${active}`)]
+									}),
+									/* @__PURE__ */ jsx("div", {
+										className: "df-bar",
+										children: /* @__PURE__ */ jsx("i", { style: { transform: `scaleX(${(active + 1) / DIFERENTES.length})` } })
+									})
+								]
+							})
+						}), /* @__PURE__ */ jsx("ol", {
+							className: "df-list",
+							children: DIFERENTES.map((x, i) => /* @__PURE__ */ jsxs("li", {
+								className: "df-card",
+								"data-rv": true,
+								"data-active": active === i ? "true" : "false",
+								style: { "--d": `${i % 2 * 80}ms` },
+								children: [
+									/* @__PURE__ */ jsxs("div", {
+										className: "df-top",
+										children: [/* @__PURE__ */ jsx("span", {
+											className: "df-disc",
+											children: /* @__PURE__ */ jsx(Icon, {
+												name: x.icon,
+												size: 28,
+												draw: true
+											})
+										}), /* @__PURE__ */ jsx("span", {
+											className: "df-num",
+											"aria-hidden": "true",
+											children: two(i + 1)
+										})]
+									}),
+									/* @__PURE__ */ jsx("h3", { children: x.t }),
+									/* @__PURE__ */ jsx("p", { children: x.d })
+								]
+							}, x.t))
+						})]
+					}),
+					/* @__PURE__ */ jsxs("div", {
+						className: "df-close",
+						children: [/* @__PURE__ */ jsx("p", {
+							className: "df-close-eyebrow eyebrow",
+							"data-rv": true,
+							children: "Experiencias a otro nivel"
+						}), /* @__PURE__ */ jsxs("p", {
+							className: "df-close-text",
+							"data-rv": true,
+							children: [
+								/* @__PURE__ */ jsx("span", {
+									className: "df-c1",
+									children: /* @__PURE__ */ jsx(Words, {
+										text: "No es solamente a dónde te llevamos.",
+										step: 40
+									})
+								}),
+								" ",
+								/* @__PURE__ */ jsxs("span", {
+									className: "df-c2",
+									children: [/* @__PURE__ */ jsx(Words, {
+										text: "Es cómo te hacemos sentir durante todo el camino",
+										from: 7,
+										step: 40
+									}), /* @__PURE__ */ jsxs("span", {
+										className: "df-end-wrap",
+										children: [".", /* @__PURE__ */ jsx("i", {
+											className: "df-end",
+											"aria-hidden": "true"
+										})]
+									})]
+								}),
+								/* @__PURE__ */ jsx("i", {
+									className: "df-end-m",
+									"aria-hidden": "true"
+								})
+							]
+						})]
+					})
+				]
+			})]
+		})
 	});
 }
 //#endregion
@@ -2988,6 +3081,7 @@ function Home() {
 				})
 			]
 		}),
+		/* @__PURE__ */ jsx(Different, {}),
 		/* @__PURE__ */ jsx(Reviews, {}),
 		/* @__PURE__ */ jsxs("section", {
 			className: "about-preview wrap section",
@@ -3010,6 +3104,13 @@ function Home() {
 			] })]
 		}),
 		/* @__PURE__ */ jsx(BlogBook, {}),
+		/* @__PURE__ */ jsx("section", {
+			className: "wrap section faq-page",
+			children: /* @__PURE__ */ jsx(Faq, {
+				items: FAQ_HOME,
+				eyebrow: "Antes de decidir"
+			})
+		}),
 		/* @__PURE__ */ jsx(HomeClose, {}),
 		/* @__PURE__ */ jsx(HomeSocial, {})
 	] });

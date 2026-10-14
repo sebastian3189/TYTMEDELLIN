@@ -152,3 +152,14 @@ html[data-theme="dark"] .th-photo{outline:1px solid rgba(245,245,240,.35);outlin
  .th-stage>*{opacity:var(--cfin,0)}
  .th-stage>.th-bg,.th-stage>.th-foot{opacity:var(--fin,0)}
 }
+
+/* Compacto: las flechas viven en la fila de «Ver experiencia» (más alto útil para la composición); la fila inferior desaparece */
+.th-row{display:contents}
+.th-arrows--in{display:none}
+@media(max-width:1099px){
+ .th-row{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%}
+ .th-arrows--in{display:flex;gap:10px}
+ .th-arrows--in button{width:44px;height:44px}
+ .th-foot{display:none}
+ .th-stage{grid-template-rows:auto auto auto auto minmax(0,1fr)}
+}

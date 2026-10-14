@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { tours } from './content';
 import { inicioTextos } from './inicio-textos';
+import { tourEntry } from './tour-entry';
 import { relayDeck, deckPose, RELAY_SVH, FADE_SVH } from './baraja-geometria';
 import { smooth, placePhotos, placeLugar, smallCaps } from './hand-geometria';
 import Arrow from './Arrow';
@@ -34,15 +34,8 @@ const prefersStatic = () => {
   const c = navigator.connection; return Boolean(c && (c.saveData || ['slow-2g', '2g', '3g'].includes(c.effectiveType)));
 };
 
-// Datos: portada de la baraja + hasta 7 fotos oficiales (galería oficial repartida de forma pareja; Traslados JMC no entra; Compras usa sus 3 oficiales).
-const ENTRIES = ORDER.map((slug) => {
-  const t = tours.find((x) => x.slug === slug), copy = inicioTextos.cartas[slug];
-  const pool = t.gallery.filter((_, i) => i > 0 || slug === 'tour-de-compras');
-  const n = Math.min(MAX_PHOTOS - 1, pool.length), picked = Array.from({ length: n }, (_, k) => pool[Math.floor((k * pool.length) / n)]);
-  const cover = { src: `${CARDS}/${slug}-d.webp`, srcSet: `${CARDS}/${slug}-m.webp 400w, ${CARDS}/${slug}-d.webp 640w, ${CARDS}/${slug}-h.webp 960w`, width: 960, height: 1200, small: `${CARDS}/${slug}-t.webp` };
-  const photosList = [cover, ...picked.map((p) => ({ src: p.src, srcSet: p.srcset || `${p.small} 640w, ${p.src} ${p.width}w`, width: p.width, height: p.height, small: p.small || p.src }))];
-  return { slug, name: t.name, category: t.category, emocion: copy.emocion, frase: copy.frase, lugar: copy.lugar, photos: photosList };
-});
+// Datos: portada de la baraja + hasta 7 fotos oficiales (tour-entry.js, compartido con las fichas).
+const ENTRIES = ORDER.map(tourEntry);
 const GROUPS = ENTRIES.reduce((acc, e, i) => { const last = acc[acc.length - 1]; if (last && last.name === e.category) last.items.push(i); else acc.push({ name: e.category, items: [i] }); return acc; }, []);
 
 // Detalles aditivos (decorativos, aria-hidden): nombre de lugar en versalitas bajo la carta, ruta punteada y glow. Solo transform/opacity/stroke-dashoffset.
@@ -148,9 +141,12 @@ export default function TravelHand() {
       // Mazo de portadas pendientes: misma caja y rotaciones que el relevo de la película.
       const R = relayDeck(sw, sh, small);
       deck.style.setProperty('--dw', `${R.w}px`); deck.style.setProperty('--dh', `${R.h}px`); deck.style.setProperty('--dx', `${R.x - R.w / 2}px`); deck.style.setProperty('--dy', `${R.y - R.h / 2}px`);
+      // Zona de exclusión del botón flotante de WhatsApp en coordenadas de la mano (solo móvil, con el escenario fijado).
+      const hr = hand.getBoundingClientRect(), sr = stageEl.getBoundingClientRect();
+      keep = mob ? { l: innerWidth - 16 - 58 - 8 - (hr.left - sr.left), t: innerHeight - 16 - 58 - 8 - stageTop - (hr.top - sr.top) } : null;
       lastKey = '';
     };
-    let lastKey = '';
+    let lastKey = '', keep = null;
 
     const apply = (P) => {
       const idx = clamp(Math.floor(P), 0, N - 1), s = clamp(P - idx, 0, 1), P2 = clamp(P, 0, N);
@@ -162,7 +158,7 @@ export default function TravelHand() {
         const vis = local > -0.2 && local < 1.25; g.style.visibility = vis ? 'visible' : 'hidden';
         if (!vis) continue;
         const ls = clamp(local, 0, 1), before = local < 0 ? smooth(clamp(1 + local * 4)) : 0; // llega desde el mazo en el 0–15 % del tramo
-        const fr = placePhotos([...g.querySelectorAll('.th-photo')], f, local, RW, RH, shrink, mob);
+        const fr = placePhotos([...g.querySelectorAll('.th-photo')], f, local, RW, RH, shrink, mob, keep);
         placeLugar(g.querySelector('.th-lugar'), fr, ls, RH);
       }
       // Marquesina decorativa del lugar: −25 % del ancho por tramo, sin bucle.
@@ -309,7 +305,13 @@ export default function TravelHand() {
           <aside className="th-panel" aria-label="Detalle de la experiencia">
             <p className="th-count">{two(shown + 1)} / {two(N)} · {entry.category}</p>
             <p className="th-line"><b>{entry.emocion}:</b> {entry.frase}</p>
-            <Link className="text-link" to={`/experiencias/${entry.slug}`}>Ver experiencia<Arrow /></Link>
+            <div className="th-row">
+              <Link className="text-link" to={`/experiencias/${entry.slug}`}>Ver experiencia<Arrow /></Link>
+              <div className="th-arrows th-arrows--in">
+                <button type="button" aria-label="Fotografía anterior" onClick={() => select(active, nowFront - 1, true)}><Arrow dir="left" /></button>
+                <button type="button" aria-label="Fotografía siguiente" onClick={() => select(active, nowFront + 1, true)}><Arrow dir="right" /></button>
+              </div>
+            </div>
             <Link className="button" to={`/experiencias/${entry.slug}#consulta`}>Planea esta experiencia<Arrow /></Link>
           </aside>
           <div ref={deckEl} className="th-deck" aria-hidden="true" inert>

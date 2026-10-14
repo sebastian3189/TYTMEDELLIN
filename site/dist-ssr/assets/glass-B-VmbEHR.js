@@ -1,4 +1,4 @@
-import { N as jsx } from "../entry-server.js";
+import { P as jsx } from "../entry-server.js";
 import { useLayoutEffect } from "react";
 //#region src/glass.jsx
 var GlassPill = () => /* @__PURE__ */ jsx("span", {
@@ -10,7 +10,7 @@ function useGlassPill(ref, signal, enabled = true) {
 		const box = ref.current;
 		if (!enabled || !box) return void 0;
 		const place = () => {
-			const el = box.querySelector("[aria-pressed=\"true\"],[aria-selected=\"true\"]");
+			const el = box.querySelector("[aria-pressed=\"true\"],[aria-selected=\"true\"],[aria-current=\"location\"]");
 			if (!el) return;
 			box.style.setProperty("--px", `${el.offsetLeft}px`);
 			box.style.setProperty("--py", `${el.offsetTop}px`);

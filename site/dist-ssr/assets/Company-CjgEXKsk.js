@@ -1,6 +1,7 @@
-import { F as company, I as whatsapp, M as Fragment, N as jsx, P as jsxs, c as Eyebrow, d as QuoteSection, h as Arrow, i as values, j as Socials, l as PageTitle, n as photos, s as Button, u as Picture, v as Manifesto } from "../entry-server.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-DAxK9jB-.js";
-import { t as Reviews } from "./Reviews-B2hlDlCm.js";
+import { F as jsxs, I as company, L as whatsapp, M as Socials, N as Fragment, P as jsx, c as Eyebrow, d as QuoteSection, h as Arrow, i as values, l as PageTitle, n as photos, s as Button, u as Picture, v as Manifesto } from "../entry-server.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-BrgMZdFO.js";
+import { t as Reviews } from "./Reviews-BEL79RCZ.js";
+import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-BxdktUz_.js";
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 //#region src/Contact.jsx
@@ -209,7 +210,18 @@ function About() {
 		/* @__PURE__ */ jsx(Gallery, { tour: {
 			name: "Nuestra historia",
 			images: photos("historia")
-		} })
+		} }),
+		/* @__PURE__ */ jsxs("section", {
+			className: "wrap section faq-page",
+			children: [/* @__PURE__ */ jsx("p", {
+				className: "legal-ids",
+				children: "Registro Nacional de Turismo RNT 176384 · NIT 901738550-6"
+			}), /* @__PURE__ */ jsx(Faq, {
+				items: FAQ_ABOUT,
+				eyebrow: "Confianza y respaldo",
+				title: "Lo que debes saber de nosotros"
+			})]
+		})
 	] });
 }
 function Services() {
@@ -321,21 +333,32 @@ function Contact() {
 			]
 		}),
 		/* @__PURE__ */ jsx(ContactPlace, {}),
-		/* @__PURE__ */ jsx(QuoteSection, { mode: "contacto" })
+		/* @__PURE__ */ jsx(QuoteSection, { mode: "contacto" }),
+		/* @__PURE__ */ jsx("section", {
+			className: "wrap section faq-page",
+			children: /* @__PURE__ */ jsx(Faq, { items: FAQ_CONTACT })
+		})
 	] });
 }
 function QuotePage() {
 	const { search } = useLocation();
 	const params = new URLSearchParams(search);
-	return /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(PageTitle, {
-		tag: "Planeemos el siguiente camino",
-		title: /* @__PURE__ */ jsxs(Fragment, { children: [
-			"Tu viaje, tus tiempos,",
-			/* @__PURE__ */ jsx("br", {}),
-			"tu ",
-			/* @__PURE__ */ jsx("em", { children: "experiencia." })
-		] })
-	}), /* @__PURE__ */ jsx(QuoteSection, { context: params.get("vehiculo") || params.get("servicio") || "Un recorrido a mi medida" })] });
+	return /* @__PURE__ */ jsxs(Fragment, { children: [
+		/* @__PURE__ */ jsx(PageTitle, {
+			tag: "Planeemos el siguiente camino",
+			title: /* @__PURE__ */ jsxs(Fragment, { children: [
+				"Tu viaje, tus tiempos,",
+				/* @__PURE__ */ jsx("br", {}),
+				"tu ",
+				/* @__PURE__ */ jsx("em", { children: "experiencia." })
+			] })
+		}),
+		/* @__PURE__ */ jsx(QuoteSection, { context: params.get("vehiculo") || params.get("servicio") || "Un recorrido a mi medida" }),
+		/* @__PURE__ */ jsx("section", {
+			className: "wrap section faq-page",
+			children: /* @__PURE__ */ jsx(Faq, { items: FAQ_CONTACT })
+		})
+	] });
 }
 function Privacy() {
 	return /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(PageTitle, {

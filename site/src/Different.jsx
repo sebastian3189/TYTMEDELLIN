@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Icon from './icons';
 import { useLightMotion } from './PremiumMotion';
+import { t as tr } from './i18n';
 import './different.css';
 
 /*
@@ -27,7 +28,7 @@ const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 
 // Revelado por palabras (máscara por palabra, translateY .6em→0 + opacidad, 700 ms, escalonado); el texto sigue siendo texto real.
 function Words({ text, from = 0, step = 60 }) {
-  return text.split(' ').map((w, i, all) => <span key={i}><span className="df-w"><span style={{ '--i': from + i, '--st': `${step}ms` }}>{w}</span></span>{i < all.length - 1 ? ' ' : null}</span>);
+  return tr(text).split(' ').map((w, i, all) => <span key={i}><span className="df-w"><span style={{ '--i': from + i, '--st': `${step}ms` }}>{w}</span></span>{i < all.length - 1 ? ' ' : null}</span>);
 }
 
 export default function Different() {

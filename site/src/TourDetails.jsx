@@ -13,7 +13,7 @@ const ICONS = {
   check: 'm5 12 4 4 10-10',
 };
 const iconFor = t => /transporte/i.test(t) ? 'car' : /veh[ií]culo/i.test(t) ? 'seat' : /conductor|gu[ií]a/i.test(t) ? 'guide' : /atenci/i.test(t) ? 'heart' : /foto|video/i.test(t) ? 'camera' : 'check';
-const Icon = ({ name }) => <svg className="td-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={ICONS[name]} /></svg>;
+const Icon = ({ name }) => <svg className="td-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={ICONS[name]} pathLength="1" /></svg>;
 
 export default function TourDetails({ slug }) {
   const d = info[slug], list = useRef(null), light = useLightMotion();
@@ -26,15 +26,15 @@ export default function TourDetails({ slug }) {
     return () => { window.removeEventListener('scroll', update); window.removeEventListener('resize', update); cancelAnimationFrame(frame); node.style.removeProperty('--rp'); node.querySelectorAll('li').forEach(li => li.removeAttribute('data-on')); };
   }, [light, slug]);
   if (!d) return null;
-  return <section className="tour-details wrap" id="detalles" aria-label="Detalles del recorrido">
-    <div className="td-lead">
+  return <section className="tour-details wrap" id="detalles" data-tn="0" aria-label="Detalles del recorrido">
+    <div className="td-lead" data-tr>
       <p>{d.descripcion}</p>
       {d.ampliada.map(p => <p key={p}>{p}</p>)}
       {d.destacados.length > 0 && <ul className="td-chips" role="list">{d.destacados.map(h => <li key={h}>{h}</li>)}</ul>}
     </div>
     <div className="td-grid">
-      {d.ruta && <div className="td-route"><h3>{d.ruta.titulo}</h3><ol ref={list} className="td-steps">{d.ruta.pasos.map((p, i) => <li key={p}><span className="td-dot" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span><span>{p}</span></li>)}</ol></div>}
-      <div className="td-incl">
+      {d.ruta && <div className="td-route" data-tr><h3>{d.ruta.titulo}</h3><ol ref={list} className="td-steps">{d.ruta.pasos.map((p, i) => <li key={p}><span className="td-dot" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span><span>{p}</span></li>)}</ol></div>}
+      <div className="td-incl" data-tr>
         <h3>Qué incluye</h3>
         <ul role="list">{d.incluye.map(t => <li key={t}><Icon name={iconFor(t)} /><span>{t}</span></li>)}</ul>
         {d.punto && <div className="td-meet"><h3>Punto de encuentro</h3><p>{d.punto}</p></div>}

@@ -4,6 +4,8 @@ import ScrubHero from '../ScrubHero';
 import TravelHand from '../TravelHand';
 import BlogBook from '../BlogBook';
 import Different from '../Different';
+import Faq from '../Faq';
+import { FAQ_HOME } from '../faq-data';
 import '../mobile-motion.css';
 import Reviews from '../Reviews';
 import { HomeHero, HomeStory, HomeClose, HomeSocial } from '../HomeVideos';
@@ -20,6 +22,7 @@ export default function Home(){return <>
 <Different/>
  <Reviews/><section className="about-preview wrap section"><Picture photo={photos('equipo')[0]} alt="Personas del equipo de T&T Medellín"/><div><Eyebrow>Una historia que nace aquí</Eyebrow><h2>Personas que<br/>mueven <em>personas.</em></h2><p>Desde los primeros traslados, aprendimos a escuchar. Esa cercanía sigue guiando nuestra forma de recibir y acompañar.</p><Button to="/nosotros">Conoce al equipo</Button></div></section>
  <BlogBook/>
+ <section className="wrap section faq-page"><Faq items={FAQ_HOME} eyebrow="Antes de decidir"/></section>
  <HomeClose/>
  <HomeSocial/>
  </>}

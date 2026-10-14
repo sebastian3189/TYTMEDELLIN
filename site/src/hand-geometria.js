@@ -17,11 +17,11 @@ export const SLOTS = [
  * `RW × RH` = región de la mano; `shrink` = factor de tamaño de las casillas; `mob` = móvil <768 px (foto central ≈ 70 % del ancho, satélites proporcionales).
  * Devuelve los datos de la carta delantera (para el nombre del lugar bajo ella).
  */
-export function placePhotos(imgs, f, local, RW, RH, shrink, mob) {
+export function placePhotos(imgs, f, local, RW, RH, shrink, mob, keep) {
   const ls = clamp(local, 0, 1); let fr = null;
   imgs.forEach((img, k) => {
     const slotIdx = k === f ? 0 : k < f ? k + 1 : k, slot = SLOTS[slotIdx % SLOTS.length];
-    const h = mob ? (slot.h / 0.76) * Math.min(RH * 0.86, RW * 0.7 * 1.25) * (slotIdx === 0 ? 1 : 0.6) : slot.h * RH * shrink, w = h * 0.8;
+    const h = mob ? (slot.h / 0.76) * Math.min(RH * 0.97, RW * 0.91) * (slotIdx === 0 ? 1 : 0.6) : slot.h * RH * shrink, w = h * 0.8;
     if (img._w !== w) { img.style.width = `${w}px`; img.style.height = `${h}px`; img._w = w; }
     const front = slotIdx === 0;
     const tIn = front ? 0 : 0.14 + 0.055 * (slotIdx - 1), eIn = local < 0 ? 0 : front ? smooth(ls / 0.15) : smooth((ls - tIn) / 0.22);
@@ -32,10 +32,16 @@ export function placePhotos(imgs, f, local, RW, RH, shrink, mob) {
     const rot = front ? slot.r - 6 * inv - 8 * eOut : slot.r * (0.4 + 0.6 * eIn) + 14 * inv * Math.sign(dirx || 1) - 8 * eOut;
     const x = slot.cx * RW - w / 2 + (front ? 0 : dirx * RW * 0.5 * inv) + parx - eOut * RW * 0.3 * (0.4 + slot.d * 0.3);
     const y = slot.cy * RH - h / 2 + (front ? 0.28 * RH * inv : diry * RH * 0.5 * inv) + par - eOut * RH * 0.45 * (0.5 + slot.d * 0.25);
+    // Móvil: zona de exclusión del botón de WhatsApp (esquina inferior derecha de la región): ninguna foto la toca.
+    let xx = x, yy = y;
+    if (mob && keep) {
+      const vw = w * sc, vh = h * sc, vl = xx + w / 2 - vw / 2, vt = yy + h / 2 - vh / 2;
+      if (vl + vw > keep.l && vt + vh > keep.t) { const up = vt + vh - keep.t, left = vl + vw - keep.l; if (front || left < up) xx -= left; else yy -= up; }
+    }
     const o = (front ? Math.max(0.0001, smooth(ls / 0.08) + (local < 0 ? 0 : 0)) : eIn) * (1 - eOut) * (local < 0 ? 0 : 1);
-    img.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) rotate(${rot.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
+    img.style.transform = `translate3d(${xx.toFixed(1)}px,${yy.toFixed(1)}px,0) rotate(${rot.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
     img.style.opacity = o.toFixed(3); img.style.zIndex = String(front ? 30 : 2 + Math.round(slot.d * 4));
-    if (front) fr = { x, y, w, h, sc, o, rot };
+    if (front) fr = { x: xx, y: yy, w, h, sc, o, rot };
     img.style.pointerEvents = o > 0.6 && local >= 0 && local <= 1 ? 'auto' : 'none';
   });
   return fr;

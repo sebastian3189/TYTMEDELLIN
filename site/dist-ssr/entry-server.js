@@ -702,7 +702,98 @@ var en_default = {
 	Nevera: "Cooler",
 	"Iluminación LED ambiental": "Ambient LED lighting",
 	"Sistema de entretenimiento": "Entertainment system",
-	"Control de clima dual": "Dual-zone climate control"
+	"Control de clima dual": "Dual-zone climate control",
+	"Transporte y Turismo Medellín": "Transporte y Turismo Medellín",
+	"¿Qué nos hace": "What makes us",
+	"diferentes?": "different?",
+	"No solo te llevamos a conocer Medellín. Nos encargamos de que vivas una experiencia a otro nivel.": "We don't just take you to see Medellín. We make sure you live an experience on another level.",
+	"En Transporte y Turismo Medellín creemos que una experiencia extraordinaria comienza mucho antes de subir al vehículo. Por eso, cuidamos cada detalle de tu viaje, brindándote seguridad, comodidad, atención personalizada y el respaldo de un equipo comprometido contigo.": "At Transporte y Turismo Medellín we believe an extraordinary experience begins long before you step into the vehicle. That is why we take care of every detail of your trip, giving you safety, comfort, personalized attention and the backing of a team committed to you.",
+	"Monitoreamos tu vuelo.": "We monitor your flight.",
+	"Seguimos el estado de tu vuelo hasta su aterrizaje en Medellín para coordinar tu recogida y estar preparados ante posibles cambios de horario.": "We follow your flight status until it lands in Medellín to coordinate your pickup and be ready for any schedule changes.",
+	"Flota propia y vehículos certificados.": "Our own fleet and certified vehicles.",
+	"Contamos con vehículos modernos, habilitados y en óptimas condiciones, con mantenimiento preventivo y documentación al día para ofrecerte comodidad y seguridad.": "We have modern, authorized vehicles in optimal condition, with preventive maintenance and up-to-date documentation to give you comfort and safety.",
+	"Un equipo que responde por ti.": "A team that stands behind you.",
+	"Guías, conductores y personal logístico trabajan bajo nuestros estándares de servicio. Coordinamos directamente cada experiencia, sin intermediarios innecesarios, para garantizar el control de calidad.": "Guides, drivers and logistics staff work under our service standards. We coordinate every experience directly, with no unnecessary intermediaries, to guarantee quality control.",
+	"Hidratación incluida.": "Hydration included.",
+	"Durante nuestras experiencias te ofrecemos agua e hidratación sin costo adicional. Porque los pequeños detalles también hacen grandes diferencias.": "During our experiences we offer you water and hydration at no extra cost. Because small details make big differences too.",
+	"Experiencias 100 % privadas.": "100% private experiences.",
+	"Nada de grupos desconocidos ni recorridos masivos. Tu vehículo y tu experiencia son exclusivos para ti y tus acompañantes.": "No strangers' groups or mass tours. Your vehicle and your experience are exclusive to you and your companions.",
+	"Flexibilidad en tus horarios.": "Flexible schedules.",
+	"Adaptamos nuestros recorridos a tus intereses y necesidades. Queremos que disfrutes cada destino a tu ritmo.": "We adapt our tours to your interests and needs. We want you to enjoy every destination at your own pace.",
+	"Recuerdos sin costo adicional.": "Memories at no extra cost.",
+	"Capturamos fotografías y videos durante tu experiencia para que te lleves recuerdos especiales de tu visita.": "We capture photos and videos during your experience so you take home special memories of your visit.",
+	"Seguridad y respaldo legal.": "Safety and legal backing.",
+	"Somos una empresa legalmente constituida, con Registro Nacional de Turismo (RNT 176384). Operamos con vehículos habilitados y las coberturas y pólizas aplicables a nuestros servicios.": "We are a legally incorporated company with a National Tourism Registry (RNT 176384). We operate with authorized vehicles and the coverage and policies applicable to our services.",
+	"Acompañamiento por WhatsApp 24/7.": "WhatsApp support 24/7.",
+	"Contamos con un canal de atención para ayudarte ante imprevistos, cambios de planes o cualquier situación relacionada con tu servicio.": "We have a support channel to help you with unexpected events, changes of plans or any situation related to your service.",
+	"Atención desde el primer contacto.": "Attention from the first contact.",
+	"No solo organizamos recorridos. Escuchamos tus necesidades, te asesoramos y diseñamos experiencias que se ajustan a lo que realmente buscas.": "We don't just organize tours. We listen to your needs, advise you and design experiences that fit what you are really looking for.",
+	"No es solamente a dónde te llevamos.": "It is not only where we take you.",
+	"Es cómo te hacemos sentir durante todo el camino": "It is how we make you feel all along the way",
+	"Preguntas frecuentes": "Frequently asked questions",
+	"Antes de decidir": "Before you decide",
+	"Resolvemos tus dudas": "We answer your questions",
+	"Confianza y respaldo": "Trust and backing",
+	"Lo que debes saber de nosotros": "What you should know about us",
+	"Dudas sobre vehículos y grupos": "Questions about vehicles and groups",
+	"¿Cómo cotizo mi viaje?": "How do I get a quote for my trip?",
+	"Cuéntanos fechas, número de personas, punto de salida y llegada, y equipaje. Puedes hacerlo desde el formulario de cotización o escribirnos por WhatsApp al +57 304 496 1698.": "Tell us the dates, number of people, departure and arrival points, and luggage. You can use the quote form or write to us on WhatsApp at +57 304 496 1698.",
+	"¿Cotizar es lo mismo que reservar?": "Is getting a quote the same as booking?",
+	"No. La cotización no confirma una reserva. Primero revisamos contigo la experiencia, las fechas y el número de viajeros; luego confirmas con el equipo.": "No. A quote does not confirm a booking. We first review the experience, dates and number of travelers with you; then you confirm with the team.",
+	"¿Los recorridos son privados?": "Are the tours private?",
+	"Sí, es nuestra propuesta: tours 100% privados, con guía-conductor exclusivo, vehículo privado y sin grupos masivos. Los horarios son flexibles; las condiciones de cada recorrido se confirman al cotizar.": "Yes, that is our proposal: 100% private tours, with an exclusive guide-driver, a private vehicle and no mass groups. Schedules are flexible; the conditions of each tour are confirmed when you request a quote.",
+	"¿Qué incluye una experiencia?": "What does an experience include?",
+	"En las fichas: transporte privado, vehículos cómodos, conductores y guías profesionales, atención personalizada, y fotos y videos del recorrido. Confirma paradas, entradas y alimentación en tu propuesta antes de reservar.": "On each tour page: private transport, comfortable vehicles, professional drivers and guides, personalized attention, and photos and videos of the tour. Confirm stops, tickets and meals in your proposal before booking.",
+	"¿Dónde empieza el recorrido?": "Where does the tour start?",
+	"En la mayoría de experiencias, con la recogida en tu hotel en Medellín. Dinos tu alojamiento o punto de salida y confirmaremos el lugar de encuentro y si hay costos adicionales.": "On most experiences, with pickup at your hotel in Medellín. Tell us your accommodation or departure point and we will confirm the meeting place and whether there are extra costs.",
+	"¿Puedo adaptar el recorrido a mi grupo?": "Can I adapt the tour to my group?",
+	"Sí, cuéntanos qué lugares quieres visitar, cuánto tiempo tienes y qué necesitas. Revisaremos contigo las opciones disponibles para que sea tu viaje, tus tiempos, tu experiencia.": "Yes, tell us which places you want to visit, how much time you have and what you need. We will review the available options with you so it is your trip, your timing, your experience.",
+	"¿Cómo elijo entre ciudad, pueblos o naturaleza?": "How do I choose between city, towns or nature?",
+	"Ciudad para historias y arte urbano; pueblos para cambiar de ritmo; naturaleza para mirar de cerca. Consulta los tiempos de traslado antes de llenar la agenda y cuéntanos tus preferencias.": "City for stories and street art; towns for a change of pace; nature to look up close. Check travel times before filling the schedule and tell us your preferences.",
+	"¿Cómo funciona el traslado desde el aeropuerto?": "How does the airport transfer work?",
+	"Coordinamos el traslado entre el Aeropuerto José María Córdova y tu alojamiento en Medellín, con seguimiento del vuelo. Comparte tu número de vuelo, dirección y número de pasajeros.": "We coordinate the transfer between José María Córdova Airport and your accommodation in Medellín, with flight tracking. Share your flight number, address and number of passengers.",
+	"¿Qué pasa si mi vuelo cambia de hora?": "What if my flight time changes?",
+	"El servicio incluye seguimiento del vuelo y ajustamos la recogida según tu número de vuelo. Las condiciones de espera y el punto de encuentro se confirman con el equipo.": "The service includes flight tracking and we adjust the pickup according to your flight number. Waiting conditions and the meeting point are confirmed with the team.",
+	"¿Qué vehículos tienen y para cuántas personas?": "What vehicles do you have and for how many people?",
+	"Sedán Ejecutivo (1–3), SUV Ejecutiva (1–4), Van Ejecutiva (1–8), Van Master (1–14), Van Sprinter (1–17) y buses (25–40). La unidad y su disponibilidad se confirman al cotizar.": "Executive Sedan (1–3), Executive SUV (1–4), Executive Van (1–8), Van Master (1–14), Van Sprinter (1–17) and buses (25–40). The unit and its availability are confirmed when you request a quote.",
+	"¿Atienden empresas y grupos?": "Do you serve companies and groups?",
+	"Sí: puedes consultar transporte para equipos de trabajo, eventos y grupos. Indica horarios, rutas y número de pasajeros para preparar la propuesta.": "Yes: you can ask about transport for work teams, events and groups. Share schedules, routes and number of passengers so we can prepare the proposal.",
+	"¿Qué debo confirmar antes de contratar?": "What should I confirm before booking?",
+	"Revisa el valor total, las inclusiones, el horario, el vehículo propuesto y las condiciones de pago y cancelación con el equipo que atiende tu solicitud.": "Review the total price, inclusions, schedule, proposed vehicle and the payment and cancellation terms with the team handling your request.",
+	"¿Qué debo preparar antes del recorrido?": "What should I prepare before the tour?",
+	"Ten a la mano fecha, punto de partida y, si llegas en avión, tu número de vuelo. Cada ficha trae recomendaciones propias, como calzado cómodo para los miradores o la cámara con espacio.": "Have your date, starting point and, if you arrive by plane, your flight number at hand. Each tour page has its own recommendations, such as comfortable shoes for the viewpoints or a camera with space.",
+	"¿Cuál es la política de cancelación, cambios y reembolsos?": "What is the cancellation, change and refund policy?",
+	"Entendemos que los planes pueden cambiar. Por eso, ofrecemos alternativas de reprogramación sujetas a disponibilidad. Para cancelaciones, manejamos las siguientes condiciones sobre el anticipo recibido: 15 días o más de anticipación: devolución del 60 %; entre 8 y 14 días: devolución del 20 %; con 7 días o menos: no aplica devolución. Las solicitudes de cambio de fecha están sujetas a disponibilidad y a las condiciones de la reserva.": "We understand plans can change. That is why we offer rescheduling alternatives subject to availability. For cancellations we apply the following terms on the deposit received: 15 days or more in advance: 60% refund; between 8 and 14 days: 20% refund; 7 days or less: no refund. Date change requests are subject to availability and to the booking conditions.",
+	"¿Cuáles son los medios de pago, el anticipo y la facturación?": "What are the payment methods, deposit and invoicing?",
+	"Para confirmar una experiencia solicitamos un anticipo del 30 % del valor total. El 70 % restante puede cancelarse durante o al finalizar la experiencia. Contamos con enlaces de pago electrónicos seguros y opciones de pago en pesos colombianos (COP). Para algunos servicios de traslado aeroportuario, el anticipo puede ser del 50 %. Emitimos certificados de reserva y contamos con facturación electrónica según los datos suministrados por el cliente.": "To confirm an experience we ask for a 30% deposit of the total price. The remaining 70% can be paid during or at the end of the experience. We have secure electronic payment links and payment options in Colombian pesos (COP). For some airport transfer services the deposit may be 50%. We issue booking certificates and provide electronic invoicing based on the data supplied by the customer.",
+	"¿En qué idiomas atienden los guías?": "Which languages do the guides speak?",
+	"Nuestros servicios se ofrecen principalmente en español. También contamos con guías bilingües en inglés y podemos coordinar acompañamiento en portugués u otros idiomas, previa solicitud y según disponibilidad.": "Our services are mainly offered in Spanish. We also have bilingual English-speaking guides and can arrange support in Portuguese or other languages on request and subject to availability.",
+	"¿Qué seguros y pólizas respaldan el servicio?": "What insurance and policies back the service?",
+	"Trabajamos con vehículos de servicio especial debidamente habilitados, documentación vigente y las coberturas reglamentarias correspondientes, incluyendo SOAT y seguros aplicables al transporte contratado. Contamos con el Registro Nacional de Turismo RNT 176384 y NIT 901738550-6.": "We work with properly authorized special-service vehicles, valid documentation and the corresponding mandatory coverage, including SOAT and insurance applicable to the contracted transport. We hold National Tourism Registry RNT 176384 and NIT 901738550-6.",
+	"Registro Nacional de Turismo RNT 176384 · NIT 901738550-6": "National Tourism Registry RNT 176384 · NIT 901738550-6",
+	"¿Qué no incluye una experiencia?": "What is not included in an experience?",
+	"Salvo que la cotización indique expresamente lo contrario, nuestros servicios no incluyen entradas a parques o atracciones, compras personales, propinas ni actividades adicionales. Cada propuesta comercial especifica claramente los servicios incluidos y los costos que corren por cuenta del viajero.": "Unless the quote expressly states otherwise, our services do not include tickets to parks or attractions, personal purchases, tips or additional activities. Each commercial proposal clearly specifies the included services and the costs borne by the traveler.",
+	"¿Pueden viajar niños, bebés o mascotas?": "Can children, babies or pets travel?",
+	"¡Las familias son bienvenidas! Los bebés pueden viajar sin costo adicional, de acuerdo con las condiciones de la reserva y la capacidad del vehículo. No manejamos una edad mínima general para las experiencias, aunque algunas atracciones pueden establecer restricciones particulares. También podemos recibir mascotas, coordinando previamente sus condiciones de transporte para garantizar comodidad y seguridad.": "Families are welcome! Babies can travel at no extra cost, according to the booking conditions and the vehicle capacity. We do not have a general minimum age for experiences, although some attractions may set their own restrictions. We can also take pets, arranging their transport conditions in advance to ensure comfort and safety.",
+	"¿Hay opciones de accesibilidad o para movilidad reducida?": "Are there accessibility or reduced-mobility options?",
+	"Buscamos adaptar nuestras experiencias a las necesidades de cada viajero. Si algún pasajero tiene movilidad reducida o requiere asistencia especial, recomendamos informarlo antes de reservar para verificar el vehículo apropiado, las condiciones del recorrido y la accesibilidad de los lugares que desea visitar.": "We aim to adapt our experiences to each traveler's needs. If a passenger has reduced mobility or needs special assistance, we recommend telling us before booking so we can check the right vehicle, the tour conditions and the accessibility of the places they want to visit.",
+	"¿Qué pasa si llueve?": "What if it rains?",
+	"¡La experiencia no tiene por qué detenerse! La mayoría de nuestros recorridos pueden realizarse con lluvia moderada. Cuando las condiciones climáticas afectan alguna actividad, buscamos ajustar el itinerario o proponer alternativas, priorizando siempre la seguridad de nuestros viajeros.": "The experience doesn't have to stop! Most of our tours can run in moderate rain. When weather conditions affect an activity, we look to adjust the itinerary or propose alternatives, always putting our travelers' safety first.",
+	"¿Cuánto esperan en el aeropuerto y cómo me identifico?": "How long do you wait at the airport and how do I recognize you?",
+	"Realizamos seguimiento a los vuelos para coordinar la llegada de nuestros pasajeros. Nuestro conductor se comunica previamente y comparte las instrucciones del punto de encuentro, así como sus datos y los del vehículo. En servicios previamente coordinados podemos ofrecer señalización personalizada con el nombre del pasajero o grupo. Entendemos que pueden presentarse demoras en migración, recogida de equipaje o vuelos, por lo que ofrecemos acompañamiento y flexibilidad en la espera.": "We track flights to coordinate our passengers' arrival. Our driver contacts you beforehand and shares the meeting point instructions, as well as their details and the vehicle's. For pre-arranged services we can offer a personalized sign with the passenger's or group's name. We understand there can be delays at immigration, baggage claim or with flights, so we offer support and flexibility while you wait.",
+	"¿Cuál es el horario de atención y en cuánto responden las cotizaciones?": "What are your support hours and how fast do you answer quote requests?",
+	"Nuestra operación de transporte cuenta con disponibilidad las 24 horas, mediante reserva previa. Brindamos asesoría personalizada por nuestros canales digitales y WhatsApp. Nos esforzamos por responder las solicitudes de cotización lo más pronto posible, teniendo en cuenta la disponibilidad de nuestro equipo comercial. Nuestro compromiso es acompañar al viajero desde la planeación hasta la finalización de su experiencia.": "Our transport operation is available 24 hours, with prior booking. We provide personalized advice through our digital channels and WhatsApp. We do our best to answer quote requests as soon as possible, depending on our sales team's availability. Our commitment is to accompany the traveler from planning to the end of their experience.",
+	"Duración y salida": "Duration and departure",
+	"Duración y salida:": "Duration and departure:",
+	"9 horas, desde las 9:00 a. m.": "9 hours, from 9:00 a.m.",
+	"10 horas aprox., desde las 8:30 a. m.": "About 10 hours, from 8:30 a.m.",
+	"4 a 5 horas, horario flexible": "4 to 5 hours, flexible schedule",
+	"Horario acordado con el cliente": "Schedule agreed with the customer",
+	"Día completo, desde las 5:00 a. m.": "Full day, from 5:00 a.m.",
+	"Según itinerario contratado": "According to the contracted itinerary",
+	"Según lugar de salida e itinerario": "Depending on departure point and itinerary",
+	"Los horarios pueden modificarse dependiendo del lugar de recogida, tráfico, condiciones climáticas e itinerario.": "Schedules may change depending on the pickup location, traffic, weather conditions and itinerary.",
+	"Toca la foto para ampliar": "Tap the photo to enlarge"
 };
 //#endregion
 //#region src/i18n.js
@@ -954,13 +1045,35 @@ var NODES = {
 	check: [P("M20 6 9 17l-5-5")],
 	mapPin: [P("M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"), C(12, 10, 3)],
 	phone: [P("M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384")],
+	planeLanding: [P("M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z")],
+	carFront: [
+		P("m21 8-2 2-1.5-3.7A2 2 0 0 0 15.646 5H8.4a2 2 0 0 0-1.903 1.257L5 10 3 8"),
+		P("M7 14h.01"),
+		P("M17 14h.01"),
+		R$1(3, 10, 18, 8, 2),
+		P("M5 18v2"),
+		P("M19 18v2")
+	],
+	droplet: [P("M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z")],
+	globe: [
+		C(12, 12, 10),
+		P("M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"),
+		P("M2 12h20")
+	],
+	clock: [C(12, 12, 10), P("M12 6v6l4 2")],
+	camera: [P("M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"), C(12, 13, 3)],
+	shieldCheck: [P("M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"), P("m9 12 2 2 4-4")],
+	messageCircle: [P("M7.9 20A9 9 0 1 0 4 16.1L2 22Z")],
+	heart: [P("M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5")],
+	plus: [P("M5 12h14"), P("M12 5v14")],
+	star: [P("M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z")],
 	more: [
 		C(12, 12, 1),
 		C(19, 12, 1),
 		C(5, 12, 1)
 	]
 };
-function Icon({ name, size = 16, className = "" }) {
+function Icon({ name, size = 16, className = "", draw = false }) {
 	return /* @__PURE__ */ jsx$1("svg", {
 		className: `ico ${className}`,
 		viewBox: "0 0 24 24",
@@ -974,7 +1087,10 @@ function Icon({ name, size = 16, className = "" }) {
 		"aria-hidden": "true",
 		focusable: "false",
 		children: NODES[name].map(([tag, attrs], i) => {
-			return /* @__PURE__ */ jsx$1(tag, { ...attrs }, i);
+			return /* @__PURE__ */ jsx$1(tag, {
+				...attrs,
+				...draw ? { pathLength: 1 } : null
+			}, i);
 		})
 	});
 }
@@ -1174,7 +1290,7 @@ var inicioTextos = {
 		c2: {
 			rotulo: "Plaza Botero",
 			titular: "La ciudad como punto de partida",
-			subtitulo: "Un grupo reunido frente al Palacio de la Cultura."
+			subtitulo: ""
 		},
 		final: {
 			rotulo: "Cierre",
@@ -1840,7 +1956,7 @@ function ShareMenu({ name, path, className = "" }) {
 }
 //#endregion
 //#region src/shared.jsx
-var Quote = lazy(() => import("./assets/Quote-CSzaIfVi.js"));
+var Quote = lazy(() => import("./assets/Quote-q559n7rV.js"));
 var reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 function Picture({ photo, alt, priority = false, className = "", native = false, sizes = "(max-width: 700px) 100vw, 65vw" }) {
 	if (!photo) return null;
@@ -2031,6 +2147,7 @@ function QuoteSection({ context, mode }) {
 	});
 	return /* @__PURE__ */ jsx$1("div", {
 		id: "consulta",
+		"data-tn": "3",
 		children: mounted ? /* @__PURE__ */ jsx$1(Suspense, {
 			fallback: frame,
 			children: /* @__PURE__ */ jsx$1(Quote, {
@@ -2223,21 +2340,21 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-Dv3EROpL.js");
+var company_ = () => import("./assets/Company-CjgEXKsk.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-B9VgQpHe.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-ALBB3_Xn.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-CFqEKnZF.js").then((m) => m.default)),
-	fleet: lazyRoute(() => import("./assets/Fleet-wUBzdOIg.js").then((m) => m.default)),
-	blog: lazyRoute(pick(() => import("./assets/Blog-CQ-TX4Ul.js"), "Blog")),
-	article: lazyRoute(() => import("./assets/Blog-CQ-TX4Ul.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-D_b-PTxW.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-D8nx-Egv.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-Ib9yTS56.js").then((m) => m.default)),
+	fleet: lazyRoute(() => import("./assets/Fleet-CwFT0gPO.js").then((m) => m.default)),
+	blog: lazyRoute(pick(() => import("./assets/Blog-Dle6OM0g.js"), "Blog")),
+	article: lazyRoute(() => import("./assets/Blog-Dle6OM0g.js").then((m) => m.default)),
 	about: lazyRoute(pick(company_, "About")),
 	services: lazyRoute(pick(company_, "Services")),
 	contact: lazyRoute(pick(company_, "Contact")),
 	quote: lazyRoute(pick(company_, "QuotePage")),
 	privacy: lazyRoute(pick(company_, "Privacy")),
 	ratings: lazyRoute(pick(company_, "Ratings")),
-	notFound: lazyRoute(() => import("./assets/NotFound-hdxCCg5R.js").then((m) => m.default))
+	notFound: lazyRoute(() => import("./assets/NotFound-AZG3jjbu.js").then((m) => m.default))
 };
 R.home, R.catalog, R.tour, R.fleet, R.blog, R.article, R.about, R.services, R.contact, R.quote, R.privacy, R.ratings;
 var preloadAllRoutes = () => Promise.all(Object.values(R).map((route) => route.preload()));
@@ -4305,4 +4422,4 @@ async function render(url) {
 	}));
 }
 //#endregion
-export { SocialIcon as A, useMedia as C, NOT_FOUND as D, textoFase as E, company as F, whatsapp as I, language as L, Fragment as M, jsx$1 as N, usePageMeta as O, jsxs$1 as P, t as R, useLightMotion as S, inicioTextos as T, EditorialMotion as _, vehicles as a, Trust as b, Eyebrow as c, QuoteSection as d, Rail as f, QuoteCopy as g, Arrow as h, values as i, Socials as j, Icon as k, PageTitle as l, GoogleBadgeStatic as m, metaFor, photos as n, rawTours as o, TourCard as p, paths, tours as r, render, Button as s, articles as t, Picture as u, Manifesto as v, CHAPTERS as w, useFlipGrid as x, Marquee as y };
+export { Icon as A, useMedia as C, textoFase as D, inicioTextos as E, jsxs$1 as F, company as I, whatsapp as L, Socials as M, Fragment as N, NOT_FOUND as O, jsx$1 as P, language as R, useLightMotion as S, CHAPTERS as T, EditorialMotion as _, vehicles as a, Trust as b, Eyebrow as c, QuoteSection as d, Rail as f, QuoteCopy as g, Arrow as h, values as i, SocialIcon as j, usePageMeta as k, PageTitle as l, GoogleBadgeStatic as m, metaFor, photos as n, rawTours as o, TourCard as p, paths, tours as r, render, Button as s, articles as t, Picture as u, Manifesto as v, useMounted as w, useFlipGrid as x, Marquee as y, t as z };
