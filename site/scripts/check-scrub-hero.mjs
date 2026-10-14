@@ -28,7 +28,7 @@ const ready = async (page) => { await page.waitForFunction(() => document.queryS
 const hero = (page) => page.locator('.scrub-hero');
 const attr = (page, name) => hero(page).getAttribute(`data-${name}`);
 // Límites del recorrido (svh), idénticos a timeline() de baraja-geometria.js.
-const TD = { t0: 30, t1: 80, t2: 245, t3: 260, t4: 305, t5: 335, t6: 743, total: 767 };
+const TD = timeline(false); // límites vivos de baraja-geometria.js (Spec 03 §K: tras la contracción solo queda el relevo)
 const TM = timeline(true);
 const cardU = (i) => TD.t5 + 34 * i + 34 * 0.2;
 const SLUGS = ['city-tour-comuna-13', 'guatape-piedra-del-penol', 'tour-nocturno-medellin', 'vuelta-a-oriente', 'tour-del-cafe-medellin', 'hacienda-napoles', 'salto-del-buey', 'santa-fe-de-antioquia', 'jardin-antioquia', 'tour-de-compras', 'tour-miradores', 'traslados-aeropuerto-jmc'];
@@ -218,36 +218,14 @@ try {
   assert.ok(band.capTop >= band.mediaBottom, `el titular queda bajo la imagen (${band.capTop} ≥ ${band.mediaBottom})`);
   checks.push(`clip: «No solo visites Medellín. Vívela.» (c1) y «La ciudad como punto de partida» (c2) en banda sólida bajo la imagen (${Math.round(band.mediaBottom)} ≤ ${Math.round(band.capTop)}); texto sobre fotos: 0`);
 
-  // Despliegue: 12 cartas, enfoque, marquesina por carta, enlaces correctos.
-  const hrefs = await page.locator('.bd-card').evaluateAll((els) => els.map((e) => new URL(e.href).pathname));
-  assert.deepEqual(hrefs, SLUGS.map((s) => `/experiencias/${s}`), 'enlaces de las 12 cartas');
-  const seenMq = [];
-  for (let i = 0; i < 12; i++) {
-    await goU(page, cardU(i), TD, 600);
-    assert.equal(await stageAttr(page, 'ui'), 'cards'); assert.equal(await stageAttr(page, 'card'), String(i));
-    const info = await page.evaluate((i) => {
-      const cap = document.querySelector('.bd-cap.is-on'), plans = [...document.querySelectorAll('.bd-plan.is-on')], mq = document.querySelectorAll('.bd-mq-item')[i];
-      const card = document.querySelectorAll('.bd-card')[i].getBoundingClientRect(), vp = { w: innerWidth, h: innerHeight };
-      return { name: cap?.querySelector('.bd-name')?.textContent, line: cap?.querySelector('.scrub-cap-sub')?.textContent, plans: plans.map((p) => new URL(p.href).pathname + new URL(p.href).hash), mq: mq.firstElementChild.textContent.replace(/\s+/g, ' ').replace(/ · $/, '').trim(), mqOp: Number(getComputedStyle(mq).opacity), cardIn: card.top >= 40 && card.bottom <= vp.h + 1 && card.left >= 0 && card.right <= vp.w, full: document.querySelectorAll('.bd-full')[i].classList.contains('ready') };
-    }, i);
-    assert.equal(info.name, NAMES[i]); assert.equal(info.line, LINES[i]);
-    assert.deepEqual(info.plans, [`/experiencias/${SLUGS[i]}#consulta`]);
-    assert.equal(info.mq, PLACES[i]); assert.ok(info.mqOp > 0.6, `marquesina visible carta ${i}`); assert.ok(info.cardIn, `carta ${i} enfocada dentro de la ventana`);
-    seenMq.push(info.mq);
-    if (i === 0 || i === 1 || i === 6) await page.screenshot({ path: `${out}/1440-carta-${String(i + 1).padStart(2, '0')}.png` });
-    if ([0, 5, 11].includes(i)) { assert.deepEqual(await textOverPhotos(page).then((l) => l.filter((x) => !x.includes('bd-card'))), [], `texto de la carta ${i} fuera de fotos del marco/flotantes`); }
-  }
-  checks.push(`despliegue: 12 cartas con enlaces correctos, texto «nombre + Emoción: frase» literal, «Planea esta experiencia» → #consulta, marquesina por carta (${seenMq.slice(0, 3).join(' | ')}…), carta enfocada dentro de la ventana`);
-  // Marquesina de lugar: el nombre se lee ENTERO dentro de la ventana, centrado y quieto en el 60 % central de su tramo.
-  const mqBox = async () => page.evaluate(() => { const el = document.querySelectorAll('.bd-mq-item')[6], r = el.firstElementChild.getBoundingClientRect(), card = [...document.querySelectorAll('.bd-card')].map((c) => c.getBoundingClientRect()).sort((p, q) => q.width - p.width)[0]; return { l: r.left, r: r.right, b: r.bottom, vw: innerWidth, cardTop: card.top, fs: parseFloat(getComputedStyle(el).fontSize) }; });
-  await goU(page, cardU(6), TD, 300); const m1 = await mqBox(); await goU(page, cardU(6) + 8, TD, 300); const m2 = await mqBox();
-  assert.ok(m1.l >= 0 && m1.r <= m1.vw && m1.fs <= 120, `marquesina entera y ≤120 px ${JSON.stringify(m1)}`);
-  assert.ok(Math.abs(m1.l - m2.l) <= 1, 'marquesina quieta en el 60 % central de su tramo');
-  assert.ok(m1.cardTop - m1.b >= 24 - 0.2 * m1.fs, `franja sobre la carta con separación ${m1.cardTop - m1.b}`);
-  // Fin del tramo fijado: la baraja termina en la última carta (el libro vive aparte, ver check-experience-book.mjs).
-  await goU(page, TD.total, TD, 500);
-  assert.equal(await stageAttr(page, 'card'), '11');
-  checks.push('fin del tramo fijado: última carta enfocada');
+  // Relevo (Spec 03 §K3): el mazo viaja a su caja, la película se funde al final del tramo y no queda ninguna carta enlazada.
+  await goU(page, TD.t4 + 2, TD, 400); const r0 = await page.evaluate(() => [...document.querySelectorAll('.bd-card')].map((c) => c.getBoundingClientRect()).map((r) => [Math.round(r.left + r.width / 2), Math.round(r.top + r.height / 2)]));
+  await goU(page, TD.t5 - 0.5, TD, 600); const r1 = await page.evaluate(() => [...document.querySelectorAll('.bd-card')].map((c) => c.getBoundingClientRect()).map((r) => [Math.round(r.left + r.width / 2), Math.round(r.top + r.height / 2), Math.round(r.width)]));
+  assert.ok(r1.every((c) => Math.abs(c[0] - r1[0][0]) < 30 && Math.abs(c[1] - r1[0][1]) < 30), `mazo recogido en su caja ${JSON.stringify(r1[0])}`);
+  assert.ok(r1[0][0] > 1100 && r1[0][1] > 600, 'caja del mazo abajo a la derecha'); assert.ok(r1[0][0] !== r0[0][0] || r1[0][1] !== r0[0][1], 'el mazo se desplaza durante el relevo');
+  await goU(page, TD.total - 0.5, TD, 600);
+  assert.ok(Number(await page.evaluate(() => getComputedStyle(document.querySelector('.scrub-stage')).opacity)) < 0.2, 'el escenario de la película se funde al final');
+  checks.push(`relevo: mazo a (${r1[0][0]}, ${r1[0][1]}) abajo a la derecha, película fundida al final; sin cartas enlazadas`);
 
   // Contraste por glifo y capturas en 10 puntos (1440).
   metrics.contrastWorst = { failPct: 0, minRatio: 99 };
@@ -277,54 +255,18 @@ try {
   assert.ok(metrics.clsDesktop < 0.1, `CLS ${metrics.clsDesktop} ${JSON.stringify(await page.evaluate(() => window.__clsSrc))}`);
   checks.push(`CLS escritorio con rueda real (ida y vuelta completa): ${metrics.clsDesktop.toFixed(4)} (< 0,1); sin preventDefault; ningún wheel/touch/tecla cancelado`);
 
-  // 2) Teclado completo con foco visible.
-  await goU(page, 0, TD, 200); await page.locator('.home-story .button').focus({ timeout: 5000 }); // último enfocable antes de la baraja
-  const order = [];
-  for (let i = 0; i < 40; i++) {
-    await page.keyboard.press('Tab'); await page.waitForTimeout(500); await page.waitForFunction(() => document.querySelector('.scrub-hero').dataset.settled === 'true', null, { timeout: 5000 }).catch(() => {}); await page.waitForTimeout(200);
-    const info = await page.evaluate(() => { const e = document.activeElement; if (!e || !e.closest('.scrub-hero')) return null; const cs = getComputedStyle(e), r = e.getBoundingClientRect(); return { cls: e.className, text: (e.getAttribute('aria-label') || e.textContent || '').trim().slice(0, 40), outline: cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) >= 1.5, rr: [Math.round(r.top), Math.round(r.bottom), Math.round(r.left), Math.round(r.right)], inView: r.top >= -1 && r.bottom <= innerHeight + 4 && r.left >= -1 && r.right <= innerWidth + 1, ui: document.querySelector('.scrub-stage').dataset.ui }; });
-    if (!info) { if (order.length) break; continue; }
-    order.push(info);
-    assert.ok(info.outline, `foco visible (contorno) en «${info.text}»`);
-    assert.ok(info.inView, `elemento enfocado dentro de la ventana: «${info.text}» (${info.ui}) ${JSON.stringify(info.rr)}`);
-  }
-  const kinds = order.map((o) => (/scrub-btn--explore/.test(o.cls) ? 'explore' : /scrub-btn--quote/.test(o.cls) ? 'quote' : /scrub-motion/.test(o.cls) ? 'motion' : /scrub-skip/.test(o.cls) ? 'skip' : /bd-card/.test(o.cls) ? 'card' : /bd-plan/.test(o.cls) ? 'plan' : /bd-arrow/.test(o.cls) ? 'arrow' : 'otro'));
-  for (const k of ['skip', 'motion']) assert.ok(kinds.includes(k), `Tab alcanza ${k}: ${kinds}`);
-  assert.equal(kinds.filter((k) => k === 'card').length, 12, `Tab alcanza las 12 cartas: ${kinds}`);
-  assert.ok(kinds.filter((k) => k === 'plan').length >= 1, `Tab alcanza «Planea esta experiencia»: ${kinds}`);
-  assert.ok(kinds.indexOf('card') > Math.max(kinds.indexOf('skip'), kinds.indexOf('motion')), 'controles antes que cartas');
-  const sb = await page.locator('.scrub-skip').evaluate(() => 0).catch(() => 0); void sb;
-  checks.push(`teclado: Tab recorre ${kinds.join(',')}; foco con contorno visible y dentro de la ventana en cada parada (el scroll salta a la carta enfocada); orden lógico acciones → cartas`);
-  // Flechas: ← / → mueven entre cartas sin cancelar el evento.
-  await page.locator('.bd-card').nth(3).focus(); await page.waitForTimeout(200);
-  await page.keyboard.press('ArrowRight'); await page.waitForTimeout(500);
-  assert.equal(await page.evaluate(() => [...document.querySelectorAll('.bd-card')].indexOf(document.activeElement)), 4, '→ enfoca la carta siguiente');
-  await page.keyboard.press('ArrowLeft'); await page.waitForTimeout(500);
-  assert.equal(await page.evaluate(() => [...document.querySelectorAll('.bd-card')].indexOf(document.activeElement)), 3, '← enfoca la carta anterior');
-  await page.getByRole('button', { name: 'Carta siguiente' }).click(); await page.waitForTimeout(600);
-  assert.equal(await stageAttr(page, 'card'), '4', 'botón «Carta siguiente»');
-  // Tira de miniaturas: salta a la carta (ratón).
-  await page.locator('.scrub-strip button').nth(8).click(); await page.waitForTimeout(700);
-  assert.equal(await stageAttr(page, 'card'), '8', 'la tira salta a la carta');
-  // Enlace de carta navega a la ficha.
-  await page.locator('.bd-card').nth(8).click(); await page.waitForURL('**/experiencias/jardin-antioquia');
-  await page.goBack(); await ready(page); await page.waitForTimeout(1200);
-  checks.push('flechas ←/→, botones anterior/siguiente, tira (clic) y clic en carta → ficha /experiencias/jardin-antioquia; volver restaura la apertura');
+  // 2) Teclado: Tab alcanza «Saltar introducción» y «Reducir movimiento» con foco visible (las cartas ya no son enlaces).
+  await goU(page, 0, TD, 200); await page.locator('.home-story .button').focus({ timeout: 5000 });
+  const kinds = [];
+  for (let i = 0; i < 4; i++) { await page.keyboard.press('Tab'); await page.waitForTimeout(300); const k = await page.evaluate(() => { const e = document.activeElement; return e?.closest('.scrub-hero') ? (e.className.match(/scrub-skip|scrub-motion/) || ['otro'])[0] : null; }); if (k) kinds.push(k); }
+  assert.deepEqual(kinds, ['scrub-skip', 'scrub-motion'], `Tab: ${kinds}`);
+  assert.equal(await page.locator('.bd-card').evaluateAll((els) => els.filter((e) => e.matches('a, [tabindex="0"]')).length), 0, 'las cartas del mazo no son enfocables');
+  checks.push('teclado: Tab alcanza Saltar y Reducir movimiento; el mazo es decorativo (aria-hidden)');
   // «Saltar introducción».
   await goU(page, 0, TD, 200); await page.locator('.home-story .button').focus({ timeout: 5000 }); // último enfocable antes de la baraja
   for (let i = 0; i < 6; i++) { await page.keyboard.press('Tab'); if (await page.evaluate(() => document.activeElement?.classList.contains('scrub-skip'))) break; }
   await page.keyboard.press('Enter'); await page.waitForFunction(() => document.activeElement?.id === 'formas-de-viajar');
   checks.push('«Saltar introducción» (Enter) mueve foco y scroll a #formas-de-viajar');
-
-  // Hover: inclinación ≤4° solo con puntero fino.
-  await goU(page, cardU(2), TD, 600);
-  const cr = await page.locator('.bd-card').nth(2).boundingBox();
-  await page.mouse.move(cr.x + cr.width * 0.9, cr.y + cr.height * 0.2); await page.waitForTimeout(400);
-  const tiltT = await page.locator('.bd-card').nth(2).locator('.bd-tilt').evaluate((e) => getComputedStyle(e).transform);
-  assert.notEqual(tiltT, 'none', 'hover inclina la carta (puntero fino)');
-  const tilt = await page.locator('.bd-card').nth(2).locator('.bd-tilt').evaluate((e) => ({ ry: e.style.getPropertyValue('--ry'), rx: e.style.getPropertyValue('--rx') }));
-  assert.ok(Math.abs(parseFloat(tilt.ry)) <= 4.01 && Math.abs(parseFloat(tilt.rx)) <= 4.01, `inclinación ≤4° ${JSON.stringify(tilt)}`);
-  checks.push(`hover con puntero fino: inclinación ${tilt.rx}/${tilt.ry} (≤4°)`);
 
   // 3) Botón «Reducir movimiento»: persistente.
   await goU(page, 0, TD, 200);

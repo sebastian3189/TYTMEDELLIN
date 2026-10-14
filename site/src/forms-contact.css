@@ -33,14 +33,8 @@
 .map-facade p{margin:0;max-width:28ch;font-size:17px}
 .map-facade small{font-size:13px;color:var(--text-muted)}
 .map-card figcaption{display:flex;flex-wrap:wrap;gap:8px 24px}
-.quote-bar{position:fixed;inset:auto 0 0 0;z-index:90;display:none;align-items:center;gap:12px;padding:12px max(16px,env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));background:rgba(255,255,255,.96);border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(30,32,29,.08);transform:translateY(100%);visibility:hidden;transition:transform 200ms var(--ease-out-strong),visibility 0s linear 200ms}
-.quote-bar.is-visible{transform:none;visibility:visible;transition-delay:0s}
-.quote-bar-name{flex:1;min-width:0;margin:0;font:700 15px/1.2 var(--heading);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.quote-bar-cta{flex:0 0 auto;min-height:44px;padding:10px 20px}
-.quote-bar-wa{flex:0 0 44px;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border:1.5px solid var(--text-strong);border-radius:50%;color:#128C7E}
-@media(max-width:899px){.quote-bar{display:flex}.contact-place{grid-template-columns:1fr;gap:32px;padding-bottom:64px}.contact-address h2{max-width:none}}
+@media(max-width:899px){.contact-place{grid-template-columns:1fr;gap:32px;padding-bottom:64px}.contact-address h2{max-width:none}}
 @media(max-width:699px){.form-grid{grid-template-columns:1fr}.phone-row{grid-template-columns:6.5rem minmax(0,1fr)}.summary-actions .button{width:100%}.map-frame{aspect-ratio:4/5;min-height:360px}}
-@media(prefers-reduced-motion:reduce){.quote-bar{transition:none}}
 .footer-brand{display:inline-flex;align-items:center;min-height:44px}
 /* Logo (aportado por el usuario, tal cual): cuadrado naranja completo; solo se enmascara con esquinas redondeadas ~20 %. */
 .logo-mark{display:block;width:56px;height:56px;border-radius:20%;object-fit:contain}

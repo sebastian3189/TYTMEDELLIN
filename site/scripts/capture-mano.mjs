@@ -20,7 +20,7 @@ for (const theme of ['light', 'dark']) for (const [w, h, dpr] of [[1440, 900, 1]
   await goto(u2y(T.t4 + 15)); await page.screenshot({ path: `${out}/mano-relevo-50-${tag}.png` });
   await goto(u2y(total - 0.5)); await page.screenshot({ path: `${out}/mano-relevo-100-${tag}.png` });
   const th = await page.evaluate(() => { const t = document.querySelector('.th-track'), s = document.querySelector('.th-stage'); return { top: t.getBoundingClientRect().top + scrollY, span: t.offsetHeight - s.offsetHeight, total: Number(getComputedStyle(t).getPropertyValue('--th-total')), hh: document.querySelector('.site-header').offsetHeight, layout: document.querySelector('.th').dataset.layout }; });
-  const seg = th.layout === 'wide' ? 30 : 24, thu = (u) => th.top - th.hh + (u / th.total) * th.span;
+  const seg = th.layout === 'wide' ? 30 : 80, thu = (u) => th.top - th.hh + (u / th.total) * th.span;
   for (const [i, s] of [[0, 0.1], [0, 0.55], [1, 0.55], [2, 0.3], [2, 0.55]]) { await goto(thu(34 + (i + s) * seg), 1600); await page.screenshot({ path: `${out}/mano-tour${i + 1}-${String(Math.round(s * 100)).padStart(2, '0')}-${tag}.png` }); }
   await goto(thu(34 + 5 * seg + 0.55 * seg), 1600); await page.screenshot({ path: `${out}/mano-jardin-${tag}.png` });
   if (errors.length) console.log(tag, 'ERRORES', errors.slice(0, 3));

@@ -45,9 +45,7 @@ for (const [label, width, height, mobile] of [['1440', 1440, 900, false], ['390'
 
   // Barra móvil de cotizar (ficha, tras pasar el CTA) y formulario en la ficha.
   await go('/experiencias/salto-del-buey');
-  if (mobile) { await page.evaluate(() => window.scrollTo(0, 1400)); await page.waitForTimeout(900); await shot('barra-movil'); log.push({ barraVisible: await page.locator('.quote-bar.is-visible').count() }); }
   await scrollTo('#consulta', 80); await page.waitForTimeout(900); await shot('ficha-formulario');
-  if (mobile) log.push({ barraEnFormulario: await page.locator('.quote-bar.is-visible').count() });
 
   // /cotizar con errores de validación.
   await go('/cotizar'); await page.waitForTimeout(1500); await page.waitForSelector('form.quote-form');

@@ -5,13 +5,13 @@
 /* Modo oscuro (Spec 03 §J3). Los tokens se redefinen también en .scrub-hero, que declara los suyos en claro. */
 html[data-theme="dark"],html[data-theme="dark"] .scrub-hero{color-scheme:dark;--bg:#171A18;--surface:#212623;--surface-2:#2A302C;--text-strong:#F5F5F0;--text:#DEDFD8;--text-muted:#BDC3B9;--focus:#FFAD60;--line:rgba(245,245,240,.14);--line-strong:#818C82;--danger:#FFA593;--success:#9ADB9E;--on-brand:#1E201D;--shadow-1:0 4px 16px #0003;--shadow-2:0 12px 32px #0005;--shadow-3:0 20px 60px #0006}
 html[data-theme="dark"],html[data-theme="dark"] body{background:var(--bg)}
-html[data-theme="dark"] .site-header,html[data-theme="dark"] .quote-bar{background:rgba(23,26,24,.97)}
+html[data-theme="dark"] .site-header{background:rgba(23,26,24,.97)}
 /* El texto de los botones naranja es --on-brand en ambos modos (website.css). Aquí NO se fuerza ningún color oscuro global: los secundarios,
    transparentes o con fondo oscuro (cabecera, «Planeemos tu viaje», reseñas) conservan el texto claro de --text-strong. */
 html[data-theme="dark"] .button.secondary,html[data-theme="dark"] .vehicle .button,html[data-theme="dark"] .services-list .button,html[data-theme="dark"] .footer-top .button,html[data-theme="dark"] .review-panel .button,html[data-theme="dark"] .about-preview .button,html[data-theme="dark"] .summary .button,html[data-theme="dark"] .article-body .button{background:var(--surface);color:var(--text-strong);border-color:var(--text-strong)}
 html[data-theme="dark"] .button.g-dark{background:var(--surface-2);color:var(--text-strong)}
 html[data-theme="dark"] .nav-cta{color:var(--text-strong);border-color:var(--text-strong)}
-@media(hover:hover) and (pointer:fine){html[data-theme="dark"] .button:not(.secondary):not(.g-dark):not(.hero-btn--quote):hover,html[data-theme="dark"] .quote-bar-cta:hover{background:#FF983F}}
+@media(hover:hover) and (pointer:fine){html[data-theme="dark"] .button:not(.secondary):not(.g-dark):not(.hero-btn--quote):hover{background:#FF983F}}
 html[data-theme="dark"] .td-steps li[data-on] .td-dot{color:var(--bg)}
 html[data-theme="dark"] .lightbox,html[data-theme="dark"] .lightbox::backdrop{background:rgba(23,26,24,.97)}
 /* Aliados: placa clara con el logo en escala de grises original; la placa oscura de ANATO lleva borde para no fundirse con el fondo. */

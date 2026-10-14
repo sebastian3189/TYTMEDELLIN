@@ -1,5 +1,5 @@
 // Botón flotante de WhatsApp: presente en todas las rutas (también /en), posición/tamaño, enlace sin datos personales, sin solaparse con controles,
-// elevado sobre la QuoteBar móvil, oculto con el menú abierto, foco visible. Capturas en test-results/ronda-j/fab-*.png.
+// sin barra de cotizar duplicada en la ficha móvil, oculto con el menú abierto, foco visible. Capturas en test-results/ronda-j/fab-*.png.
 // Uso: TYT_TEST_URL=http://127.0.0.1:<puerto> node scripts/check-fab.mjs
 import { chromium } from '@playwright/test';
 import assert from 'node:assert/strict';
@@ -45,11 +45,12 @@ try {
     await page.evaluate(() => document.querySelector('.blog-book').scrollIntoView()); await page.waitForTimeout(700);
     await page.screenshot({ path: `${out}/fab-libro-${w}-${theme}.png` });
     if (mobile) {
+      // Ficha en móvil: solo el botón flotante de WhatsApp (la barra de cotizar se retiró): ningún otro enlace wa.me ni .quote-bar.
       await page.goto(base + '/experiencias/hacienda-napoles', { waitUntil: 'load' }); await page.waitForTimeout(600);
       await page.evaluate(() => scrollTo({ top: 1800, behavior: 'instant' })); await page.waitForTimeout(700);
-      const lift = await page.evaluate(() => { const bar = document.querySelector('.quote-bar'), f = document.querySelector('.wa-fab').getBoundingClientRect(); return { visible: bar?.classList.contains('is-visible'), barTop: bar?.getBoundingClientRect().top, fabBottom: f.bottom, hidden: document.querySelector('.wa-fab').dataset.hidden }; });
-      if (lift.visible && lift.hidden === 'false') assert(lift.fabBottom <= lift.barTop, `elevado sobre la QuoteBar ${JSON.stringify(lift)}`);
-      await page.screenshot({ path: `${out}/fab-quotebar-${w}-${theme}.png` });
+      const dup = await page.evaluate(() => ({ bars: document.querySelectorAll('.quote-bar').length, fixedWa: [...document.querySelectorAll('a[href*="wa.me"]')].filter((a) => getComputedStyle(a).position === 'fixed' || getComputedStyle(a.parentElement).position === 'fixed').length, fabs: document.querySelectorAll('.wa-fab').length }));
+      assert.deepEqual(dup, { bars: 0, fixedWa: 1, fabs: 1 }, `ficha móvil sin duplicados ${JSON.stringify(dup)}`);
+      await page.screenshot({ path: `${out}/fab-ficha-${w}-${theme}.png` });
       await page.goto(base + '/', { waitUntil: 'load' }); await page.waitForTimeout(500);
       await page.getByRole('button', { name: /Menú/ }).first().click(); await page.waitForTimeout(500);
       assert.equal(await page.evaluate(() => document.querySelector('.wa-fab').dataset.hidden), 'true', 'oculto con el menú abierto');

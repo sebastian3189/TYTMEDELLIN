@@ -1,4 +1,4 @@
-import { M as jsx, N as jsxs, b as useFlipGrid, j as Fragment, l as PageTitle, p as TourCard, r as tours, v as Marquee, y as Trust } from "../entry-server.js";
+import { A as Fragment, M as jsxs, b as useFlipGrid, j as jsx, l as PageTitle, p as TourCard, r as tours, v as Marquee, y as Trust } from "../entry-server.js";
 import { useRef, useState } from "react";
 //#region src/pages/Catalog.jsx
 function Catalog() {

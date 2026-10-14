@@ -1,5 +1,5 @@
-import { E as textoFase, F as whatsapp, I as language, L as t, M as jsx, N as jsxs, P as company, S as useMedia, T as inicioTextos, c as Eyebrow, j as Fragment, k as SocialIcon, m as Arrow, n as photos, r as tours, s as Button, t as articles, u as Picture, w as CHAPTERS, x as useLightMotion } from "../entry-server.js";
-import { t as Reviews } from "./Reviews-_GbOMycc.js";
+import { A as Fragment, C as CHAPTERS, F as language, I as t, M as jsxs, N as company, O as SocialIcon, P as whatsapp, S as useMedia, T as textoFase, c as Eyebrow, j as jsx, m as Arrow, n as photos, r as tours, s as Button, t as articles, u as Picture, w as inicioTextos, x as useLightMotion } from "../entry-server.js";
+import { t as Reviews } from "./Reviews-BCFLTl7X.js";
 /* empty css                       */
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -1087,7 +1087,7 @@ var N = ORDER.length;
 var CARDS = "/media/baraja";
 var SEG = {
 	wide: 30,
-	compact: 24
+	compact: 80
 };
 var EXIT = 20;
 var RELAY = 34;
@@ -1288,6 +1288,12 @@ function TravelHand() {
 		};
 		decide();
 		setReady(true);
+		let last = [innerWidth, innerHeight];
+		const onResize = () => {
+			if (innerWidth === last[0] && Math.abs(innerHeight - last[1]) < 120) return;
+			last = [innerWidth, innerHeight];
+			decide();
+		};
 		const queries = [
 			WIDE,
 			REDUCE,
@@ -1296,11 +1302,11 @@ function TravelHand() {
 		].map((q) => window.matchMedia(q));
 		queries.forEach((q) => q.addEventListener("change", decide));
 		window.addEventListener("tyt-motion", decide);
-		window.addEventListener("resize", decide);
+		window.addEventListener("resize", onResize);
 		return () => {
 			queries.forEach((q) => q.removeEventListener("change", decide));
 			window.removeEventListener("tyt-motion", decide);
-			window.removeEventListener("resize", decide);
+			window.removeEventListener("resize", onResize);
 		};
 	}, []);
 	const shownRef = useRef(0), swapTimer = useRef(0);
@@ -1321,8 +1327,40 @@ function TravelHand() {
 		return () => clearTimeout(swapTimer.current);
 	}, [active, animated]);
 	useEffect(() => {
+		if (!animated) return void 0;
+		const done = [];
+		[[active + 1, true], [active + 2, false]].forEach(([gi, all]) => {
+			const e = ENTRIES[gi];
+			if (!e || navigator.connection?.saveData) return;
+			(all ? e.photos : e.photos.slice(0, 1)).forEach((p, k) => {
+				const im = new Image();
+				im.decoding = "async";
+				im.sizes = k === 0 ? "(max-width: 799px) 84vw, 36vw" : "(max-width: 799px) 40vw, 18vw";
+				im.srcset = p.srcSet;
+				im.src = p.src;
+				im.decode?.().catch(() => {});
+				done.push(im);
+			});
+		});
+		return () => {
+			done.length = 0;
+		};
+	}, [active, animated]);
+	useEffect(() => {
 		setFull((prev) => prev.has(active) ? prev : new Set(prev).add(active));
 	}, [active]);
+	useEffect(() => {
+		const el = tabs.current[active], list = el?.closest("[role=tablist]");
+		if (!animated || layout !== "compact" || !el || !list) return;
+		list.scrollTo({
+			left: el.offsetLeft - (list.clientWidth - el.offsetWidth) / 2,
+			behavior: "instant"
+		});
+	}, [
+		active,
+		animated,
+		layout
+	]);
 	useLayoutEffect(() => {
 		if (!animated || !titleHost.current) return void 0;
 		const run = () => {
@@ -1342,10 +1380,15 @@ function TravelHand() {
 	useLayoutEffect(() => {
 		if (!ready || !animated) return void 0;
 		const trackEl = track.current, stageEl = stage.current, hand = handEl.current, mq = mqEl.current, deck = deckEl.current;
-		const small = window.matchMedia(SMALL).matches, seg = layout === "wide" ? SEG.wide : SEG.compact;
+		const small = window.matchMedia(SMALL).matches, wide = layout === "wide", seg = wide ? SEG.wide : SEG.compact, shrink = wide ? 1 : .82;
 		const total = RELAY + N * seg + EXIT;
 		let raf = 0, visible = true, destroyed = false, q = null, lastT = 0, stageTop = 92, span = 1, RW = 0, RH = 0, sw = 0, sh = 0;
-		const groups = () => [...hand.querySelectorAll(".th-group")];
+		let groupCache = null, trackTop = 0;
+		const groups = () => groupCache || (groupCache = [...hand.querySelectorAll(".th-group")]);
+		const measureTrack = () => {
+			span = Math.max(1, trackEl.offsetHeight - stageEl.offsetHeight);
+			trackTop = trackEl.getBoundingClientRect().top + scrollY;
+		};
 		const metrics = () => {
 			stageTop = document.querySelector(".site-header")?.offsetHeight || 92;
 			root.current.style.setProperty("--th-top", `${stageTop}px`);
@@ -1353,6 +1396,7 @@ function TravelHand() {
 			RH = hand.clientHeight;
 			sw = stageEl.clientWidth;
 			sh = stageEl.clientHeight;
+			measureTrack();
 			const R = relayDeck(sw, sh, small);
 			deck.style.setProperty("--dw", `${R.w}px`);
 			deck.style.setProperty("--dh", `${R.h}px`);
@@ -1382,7 +1426,7 @@ function TravelHand() {
 				const imgs = [...g.querySelectorAll(".th-photo")];
 				imgs.length;
 				imgs.forEach((img, k) => {
-					const slotIdx = k === f ? 0 : k < f ? k + 1 : k, slot = SLOTS[slotIdx % SLOTS.length], h = slot.h * RH, w = h * .8;
+					const slotIdx = k === f ? 0 : k < f ? k + 1 : k, slot = SLOTS[slotIdx % SLOTS.length], h = slot.h * RH * shrink, w = h * .8;
 					if (img._w !== w) {
 						img.style.width = `${w}px`;
 						img.style.height = `${h}px`;
@@ -1405,7 +1449,7 @@ function TravelHand() {
 				});
 			}
 			const ls0 = clamp(P2 - idx, 0, 1);
-			mq.style.transform = `translate3d(${(-.25 * ls0 * sw).toFixed(1)}px,-50%,0)`;
+			mq.style.transform = `translate3d(${(.12 * sw - .25 * ls0 * sw).toFixed(1)}px,-50%,0)`;
 			deck.style.opacity = String(clamp(1 - (P2 - (N - 2)) * 1.2));
 		};
 		const render = (now) => {
@@ -1414,9 +1458,7 @@ function TravelHand() {
 				lastT = 0;
 				return;
 			}
-			const rect = trackEl.getBoundingClientRect();
-			span = Math.max(1, trackEl.offsetHeight - stageEl.offsetHeight);
-			const u = clamp((stageTop - rect.top) / span) * total;
+			const u = clamp((scrollY + stageTop - trackTop) / span) * total;
 			const fin = clamp((u - (RELAY - 4)) / 4);
 			if (stageEl._fin !== fin) {
 				stageEl._fin = fin;
@@ -1428,7 +1470,7 @@ function TravelHand() {
 			const dt = lastT ? Math.min(64, now - lastT) : 16;
 			lastT = now;
 			if (q === null || Math.abs(target - q) > .36) q = target;
-			else q += (target - q) * (1 - Math.exp(-dt / 60));
+			else q += (target - q) * (1 - Math.exp(-dt / (wide ? 60 : 45)));
 			let moving = true;
 			if (Math.abs(target - q) < 4e-4) {
 				q = target;
@@ -1462,17 +1504,24 @@ function TravelHand() {
 			schedule();
 		});
 		st.current.jump = (i, s = .56) => {
-			const top = trackEl.getBoundingClientRect().top + scrollY, u = RELAY + (i + s) * seg;
+			const u = RELAY + (i + s) * seg;
 			window.scrollTo({
-				top: top - stageTop + u / total * span,
+				top: trackTop - stageTop + u / total * span,
 				behavior: "instant"
 			});
 			schedule();
 		};
 		st.current.refresh = () => {
+			groupCache = null;
 			lastKey = "";
 			schedule();
 		};
+		const bodyRO = new ResizeObserver(() => {
+			measureTrack();
+			lastKey = "";
+			schedule();
+		});
+		bodyRO.observe(document.body);
 		metrics();
 		observer.observe(root.current);
 		resize.observe(hand);
@@ -1486,6 +1535,7 @@ function TravelHand() {
 			cancelAnimationFrame(raf);
 			observer.disconnect();
 			resize.disconnect();
+			bodyRO.disconnect();
 			window.removeEventListener("scroll", onScroll);
 			window.removeEventListener("resize", onScroll);
 			document.removeEventListener("visibilitychange", onScroll);
@@ -1503,7 +1553,11 @@ function TravelHand() {
 	]);
 	useLayoutEffect(() => {
 		st.current.refresh?.();
-	}, [full, fronts]);
+	}, [
+		full,
+		fronts,
+		active
+	]);
 	const select = useCallback((gi, next, announce) => {
 		const n = ENTRIES[gi].photos.length, f = (next % n + n) % n;
 		setFronts((p) => ({
@@ -1540,6 +1594,7 @@ function TravelHand() {
 			id: "th-titulo",
 			children: [
 				"Un lugar para cada",
+				" ",
 				/* @__PURE__ */ jsx("br", {}),
 				/* @__PURE__ */ jsx("em", { children: "forma de viajar." })
 			]
@@ -1619,10 +1674,13 @@ function TravelHand() {
 					"data-swap": swap,
 					children: [
 						/* @__PURE__ */ jsx("div", {
-							ref: mqEl,
-							className: "th-mq",
+							className: "th-mq-clip",
 							"aria-hidden": "true",
-							children: /* @__PURE__ */ jsx("span", { children: entry.lugar })
+							children: /* @__PURE__ */ jsx("div", {
+								ref: mqEl,
+								className: "th-mq",
+								children: /* @__PURE__ */ jsx("span", { children: entry.lugar })
+							})
 						}),
 						header,
 						/* @__PURE__ */ jsx("div", {
@@ -1640,13 +1698,9 @@ function TravelHand() {
 							children: [/* @__PURE__ */ jsx("div", {
 								role: "tablist",
 								"aria-orientation": layout === "wide" ? "vertical" : "horizontal",
-								children: GROUPS.map((g) => /* @__PURE__ */ jsxs("div", {
+								children: GROUPS.map((g) => /* @__PURE__ */ jsx("div", {
 									className: "th-group-tabs",
-									children: [/* @__PURE__ */ jsx("p", {
-										className: "th-group-label",
-										"aria-hidden": "true",
-										children: g.name
-									}), g.items.map((i) => /* @__PURE__ */ jsxs("button", {
+									children: g.items.map((i) => /* @__PURE__ */ jsxs("button", {
 										ref: (el) => {
 											tabs.current[i] = el;
 										},
@@ -1659,7 +1713,7 @@ function TravelHand() {
 										onClick: () => st.current.jump(i),
 										onKeyDown: (e) => onTabKey(e, i),
 										children: [/* @__PURE__ */ jsx("span", { children: two$1(i + 1) }), ENTRIES[i].name]
-									}, ENTRIES[i].slug))]
+									}, ENTRIES[i].slug))
 								}, g.name))
 							}), /* @__PURE__ */ jsx("a", {
 								className: "th-skip",
@@ -1711,29 +1765,44 @@ function TravelHand() {
 						}),
 						/* @__PURE__ */ jsxs("div", {
 							className: "th-foot",
-							children: [/* @__PURE__ */ jsxs("p", {
-								className: "th-cap",
-								children: [
-									ENTRIES[active].name,
-									" · fotografía ",
-									two$1(nowFront + 1),
-									" de ",
-									two$1(ENTRIES[active].photos.length)
-								]
-							}), /* @__PURE__ */ jsxs("div", {
-								className: "th-arrows",
-								children: [/* @__PURE__ */ jsx("button", {
-									type: "button",
-									"aria-label": "Fotografía anterior",
-									onClick: () => select(active, nowFront - 1, true),
-									children: /* @__PURE__ */ jsx(Arrow, { dir: "left" })
-								}), /* @__PURE__ */ jsx("button", {
-									type: "button",
-									"aria-label": "Fotografía siguiente",
-									onClick: () => select(active, nowFront + 1, true),
-									children: /* @__PURE__ */ jsx(Arrow, { dir: "right" })
-								})]
-							})]
+							children: [
+								/* @__PURE__ */ jsxs("p", {
+									className: "th-cap",
+									children: [
+										ENTRIES[active].name,
+										" · fotografía ",
+										two$1(nowFront + 1),
+										" de ",
+										two$1(ENTRIES[active].photos.length)
+									]
+								}),
+								/* @__PURE__ */ jsx("div", {
+									className: "th-dots",
+									role: "group",
+									"aria-label": "Fotografías",
+									children: ENTRIES[active].photos.map((_, k) => /* @__PURE__ */ jsx("button", {
+										type: "button",
+										"aria-label": `Foto ${k + 1} de ${ENTRIES[active].photos.length}`,
+										"aria-current": k === nowFront ? "true" : void 0,
+										onClick: () => select(active, k, true),
+										children: /* @__PURE__ */ jsx("i", {})
+									}, k))
+								}),
+								/* @__PURE__ */ jsxs("div", {
+									className: "th-arrows",
+									children: [/* @__PURE__ */ jsx("button", {
+										type: "button",
+										"aria-label": "Fotografía anterior",
+										onClick: () => select(active, nowFront - 1, true),
+										children: /* @__PURE__ */ jsx(Arrow, { dir: "left" })
+									}), /* @__PURE__ */ jsx("button", {
+										type: "button",
+										"aria-label": "Fotografía siguiente",
+										onClick: () => select(active, nowFront + 1, true),
+										children: /* @__PURE__ */ jsx(Arrow, { dir: "right" })
+									})]
+								})
+							]
 						}),
 						/* @__PURE__ */ jsxs("aside", {
 							className: "th-panel",
@@ -1796,6 +1865,11 @@ function TravelHand() {
 					]
 				})
 			}),
+			layout === "compact" && ENTRIES.map((e, i) => /* @__PURE__ */ jsx("i", {
+				className: "th-snap",
+				"aria-hidden": "true",
+				style: { top: `calc(${RELAY + (i + .56) * seg} * 1svh)` }
+			}, e.slug)),
 			/* @__PURE__ */ jsx("div", {
 				id: "th-inicio",
 				className: "th-marker",

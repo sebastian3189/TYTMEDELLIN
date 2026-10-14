@@ -4,7 +4,7 @@
 .th--static{margin-top:0;z-index:auto}
 .th-track{position:relative;height:calc(var(--th-total,400) * 1svh + 100svh - var(--th-top));pointer-events:none}
 .th-stage{pointer-events:auto;position:sticky;top:var(--th-top);height:calc(100svh - var(--th-top));overflow:hidden;overflow:clip;background:var(--bg);opacity:var(--fin,0);
- display:grid;grid-template-columns:18% minmax(0,1fr) 15%;grid-template-rows:auto minmax(0,1fr) auto;column-gap:16px;row-gap:8px;padding:16px clamp(20px,3vw,48px) 20px}
+ display:grid;grid-template-columns:18% minmax(0,1fr) 15%;grid-template-rows:auto minmax(0,1fr) auto;column-gap:32px;row-gap:16px;padding:16px clamp(20px,3vw,48px) 20px}
 .th-marker{position:absolute;left:0;width:1px;height:1px;pointer-events:none}
 .th-all{position:absolute;left:0;right:0;bottom:12px;margin:0;text-align:center;pointer-events:none}
 .th-all a{pointer-events:auto}
@@ -25,10 +25,11 @@ html[data-theme="dark"] .th-mq{color:rgba(245,245,240,.06)}
 
 /* Índice tipográfico agrupado */
 .th-index{grid-area:2/1/4/2;position:relative;z-index:2;min-width:0;overflow:auto;scrollbar-width:thin}
-.th-group-tabs{display:block}
+.th-group-tabs{display:flex;flex-direction:column;gap:8px}
 .th-group-label{margin:14px 0 4px;font:600 13px/1.2 var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--text)}
 .th-group-tabs:first-child .th-group-label{margin-top:0}
-.th-index [role=tab]{display:flex;align-items:center;gap:10px;width:100%;min-height:34px;padding:2px 0 2px 14px;border:0;border-left:6px solid transparent;background:transparent;text-align:left;color:var(--text);font:700 clamp(16px,1.35vw,21px)/1.1 var(--heading);letter-spacing:-.01em;transition:transform 200ms var(--ease-out-strong),color 200ms ease}
+.th-index [role=tablist]{display:flex;flex-direction:column;gap:8px}
+.th-index [role=tab]{display:flex;align-items:center;gap:12px;width:100%;min-height:34px;padding:7px 0 7px 14px;border:0;border-left:6px solid transparent;background:transparent;text-align:left;color:var(--text);font:700 clamp(16px,1.35vw,21px)/1.1 var(--heading);letter-spacing:-.01em;transition:transform 200ms var(--ease-out-strong),color 200ms ease}
 .th-index [role=tab] span{font:600 13px var(--font);font-variant-numeric:tabular-nums;color:var(--text-muted)}
 .th-index [role=tab][aria-selected=true]{color:var(--text-strong);border-left-color:var(--brand)}
 @media(hover:hover) and (pointer:fine){.th-index [role=tab]:hover{color:var(--text-strong);transform:translateX(6px)}}
@@ -36,7 +37,7 @@ html[data-theme="dark"] .th-mq{color:rgba(245,245,240,.06)}
 .th-skip:focus{position:static;display:inline-flex;align-items:center;min-height:44px;margin-top:12px;font-weight:600;text-decoration:underline;text-underline-offset:4px}
 
 /* La mano: región grande (≥60 % del ancho y ≥70 % del alto útil) con las fotos oficiales */
-.th-hand{grid-area:2/2;position:relative;z-index:1;min-height:0;outline-offset:6px;touch-action:pan-y;clip-path:inset(0 -100vw)}
+.th-hand{grid-area:2/2;position:relative;z-index:1;min-height:0;outline-offset:6px;touch-action:pan-y;clip-path:inset(0)}
 .th-group{position:absolute;inset:0}
 .th-photo{position:absolute;left:0;top:0;display:block;max-width:none;border-radius:20px;object-fit:cover;background:var(--surface-2);box-shadow:var(--shadow-3);opacity:0;will-change:transform,opacity;cursor:pointer;user-select:none;-webkit-user-drag:none}
 .th-hand[data-flip=true] .th-photo{transition:transform 600ms var(--ease-in-out-strong),opacity 200ms ease}
@@ -48,7 +49,7 @@ html[data-theme="dark"] .th-mq{color:rgba(245,245,240,.06)}
 .th-arrows button:active{transform:scale(.97)}
 
 /* Panel */
-.th-panel{grid-area:2/3/4/4;position:relative;z-index:2;align-self:center;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.th-panel{grid-area:2/3/4/4;position:relative;z-index:2;align-self:center;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:20px;contain:layout style}
 .th-count{margin:0;font:600 13px/1.4 var(--font);letter-spacing:.1em;text-transform:uppercase;font-variant-numeric:tabular-nums;color:var(--text)}
 .th-line{margin:0;font-size:17px;line-height:1.5;color:var(--text)}
 .th-line b{color:var(--text-strong)}
@@ -64,16 +65,17 @@ html[data-theme="dark"] .th-mq{color:rgba(245,245,240,.06)}
 
 /* Compacto (<1100 px): chips arriba, mano a lo ancho y banda inferior */
 @media(max-width:1099px){
- .th-stage{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto minmax(0,1fr) auto auto;row-gap:6px;padding:10px 16px 12px}
+ .th-stage{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto minmax(0,1fr) auto auto;row-gap:12px;padding:12px 16px 14px}
  .th-head{grid-area:1/1;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 12px}
  .th-head .eyebrow{margin:0;font-size:12px}
  .th-head h2{font-size:clamp(20px,5.4vw,28px);flex:1 1 100%}
  .th-head h2 br{display:none}
  .th-index{grid-area:2/1;overflow:visible}
- .th-index [role=tablist]{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 16px 6px;margin-inline:-16px;scrollbar-width:none}
+ .th-index [role=tablist]{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 16px 6px;margin-inline:-16px;scrollbar-width:none}
  .th-index [role=tablist]::-webkit-scrollbar{display:none}
- .th-group-tabs{display:flex;align-items:center;gap:8px;flex:none}
- .th-group-label{margin:0 4px 0 8px;font-size:11px;white-space:nowrap}
+ .th-group-tabs{display:flex;flex-direction:row;align-items:center;gap:10px;flex:none}
+ .th-group-label{display:none}
+ .th-index [role=tablist]{flex-direction:row}
  .th-index [role=tab]{width:auto;min-height:44px;padding:6px 14px;border:1.5px solid var(--line-strong);border-radius:999px;background:var(--surface-2);white-space:nowrap;font:600 15px/1 var(--font);scroll-snap-align:center;flex:none}
  .th-index [role=tab] span{display:none}
  .th-index [role=tab][aria-selected=true]{border-color:var(--text-strong);box-shadow:inset 0 0 0 1px var(--text-strong);background:var(--surface)}
@@ -83,8 +85,11 @@ html[data-theme="dark"] .th-mq{color:rgba(245,245,240,.06)}
  .th-panel{grid-area:6/1;align-self:stretch;gap:8px}
  .th-panel .th-count{display:none}
  .th-panel .th-line{font-size:15px;line-height:1.35}
- .th-panel .button{min-height:44px}
+ .th-panel .button{min-height:44px;white-space:nowrap;font-size:15px;padding:10px 16px;width:100%}
+ .th-arrows{margin-left:auto}
+ .th-foot{flex-wrap:nowrap;padding-right:64px}
  .th-deck{display:none}
+ .th-mq-clip{grid-area:3/1/5/2}
  .th-mq{font-size:34vw;top:46%}
 }
 @media(min-width:700px) and (max-width:1099px){.th-panel{flex-direction:row;flex-wrap:wrap;align-items:center}.th-panel .button{width:auto}}
@@ -105,3 +110,18 @@ html[data-theme="dark"] .th-mq{color:rgba(245,245,240,.06)}
 html[data-theme="dark"] .th-photo,html[data-theme="dark"] .th-deck img,html[data-theme="dark"] .th-card-img{outline:1px solid rgba(245,245,240,.12);outline-offset:-1px}
 html[data-theme="dark"] .th-photo{box-shadow:0 18px 40px rgba(0,0,0,.45)}
 @media(prefers-reduced-motion:reduce){.th-index [role=tab],.th-card{transition:none}}
+
+/* Móvil: puntos de foto, snap suave entre experiencias (proximity, sin secuestrar el scroll) y gesto horizontal contenido */
+.th-dots{display:none}
+.th-snap{position:absolute;left:0;width:1px;height:1px;pointer-events:none;scroll-snap-align:start;scroll-margin-top:calc(var(--th-top) - 110px)}
+@media(max-width:1099px){
+ html:has(.th[data-layout=compact][data-hydrated=true]){scroll-snap-type:y proximity}
+ .th-hand{overscroll-behavior-x:contain}
+ .th-cap{display:none}
+ .th-foot{justify-content:space-between}
+ .th-dots{display:flex;align-items:center;flex-wrap:wrap}
+ .th-dots button{display:inline-flex;align-items:center;justify-content:center;width:24px;height:44px;padding:0;border:0;background:none}
+ .th-dots i{display:block;width:8px;height:8px;border-radius:50%;background:var(--line-strong);transition:transform 200ms var(--ease-out-strong),background-color 200ms ease}
+ .th-dots button[aria-current=true] i{background:var(--text-strong);transform:scale(1.5)}
+}
+@media(prefers-reduced-motion:reduce){.th-dots i{transition:none}}

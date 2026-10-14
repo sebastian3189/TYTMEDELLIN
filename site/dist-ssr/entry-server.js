@@ -1345,7 +1345,7 @@ function Arrow({ dir = "ne" }) {
 }
 //#endregion
 //#region src/shared.jsx
-var Quote = lazy(() => import("./assets/Quote-DEv-RDg8.js"));
+var Quote = lazy(() => import("./assets/Quote-BM8Ez4QD.js"));
 var reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 function Picture({ photo, alt, priority = false, className = "", native = false, sizes = "(max-width: 700px) 100vw, 65vw" }) {
 	if (!photo) return null;
@@ -1607,49 +1607,56 @@ function WhatsAppFab() {
 	const ref = useRef(null);
 	useEffect(() => {
 		const el = ref.current;
-		let raf = 0, until = 0;
-		const check = () => {
-			raf = 0;
-			if (performance.now() < until) raf = requestAnimationFrame(check);
+		let raf = 0, until = 0, lastRun = 0, box = null;
+		const measureBox = () => {
 			const r = el.getBoundingClientRect();
+			box = {
+				cx: r.left + r.width / 2,
+				cy: r.top + r.height / 2,
+				r: r.width / 2 + 8
+			};
+		};
+		const check = (now) => {
+			raf = 0;
+			if (now < until) raf = requestAnimationFrame(check);
+			if (now - lastRun < 120) return;
+			lastRun = now;
 			let blocked = Boolean(document.querySelector(".menu-open, dialog[open]"));
-			if (!blocked) {
-				const pad = 8, line = (a, b) => [
-					0,
-					1,
-					2,
-					3,
-					4,
-					5,
-					6
-				].map((k) => a + (b - a) * k / 6), xs = line(r.left - pad, r.right + pad), ys = line(r.top - pad, r.bottom + pad);
-				outer: for (const x of xs) for (const y of ys) for (const hit of document.elementsFromPoint(x, y)) {
-					if (hit === el || el.contains(hit) || hit.closest(".wa-fab")) continue;
+			if (!blocked) outer: for (let k = -1; k < 8; k++) {
+				const x = box.cx + (k < 0 ? 0 : box.r * Math.cos(k * Math.PI / 4)), y = box.cy + (k < 0 ? 0 : box.r * Math.sin(k * Math.PI / 4));
+				for (const hit of document.elementsFromPoint(x, y)) {
+					if (hit.closest(".wa-fab")) continue;
 					if (hit.closest(BLOCKERS)) {
 						blocked = true;
 						break outer;
 					}
 				}
 			}
-			el.dataset.hidden = blocked ? "true" : "false";
+			const value = blocked ? "true" : "false";
+			if (el.dataset.hidden !== value) el.dataset.hidden = value;
 		};
 		const schedule = () => {
 			until = performance.now() + 500;
 			if (!raf) raf = requestAnimationFrame(check);
 		};
+		const onResize = () => {
+			measureBox();
+			schedule();
+		};
+		measureBox();
 		window.addEventListener("scroll", schedule, { passive: true });
-		window.addEventListener("resize", schedule);
+		window.addEventListener("resize", onResize);
 		const mo = new MutationObserver(schedule);
 		mo.observe(document.body, {
 			subtree: true,
 			attributes: true,
 			attributeFilter: ["class", "open"]
 		});
-		const timer = setInterval(schedule, 600);
+		const timer = setInterval(schedule, 800);
 		schedule();
 		return () => {
 			window.removeEventListener("scroll", schedule);
-			window.removeEventListener("resize", schedule);
+			window.removeEventListener("resize", onResize);
 			mo.disconnect();
 			clearInterval(timer);
 			cancelAnimationFrame(raf);
@@ -1700,21 +1707,21 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-DEOb7joo.js");
+var company_ = () => import("./assets/Company-DSoF5kp3.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-B2rdZ6WS.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-C0hcaRij.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-CCIlPq6X.js").then((m) => m.default)),
-	fleet: lazyRoute(() => import("./assets/Fleet-DH2Mvu4n.js").then((m) => m.default)),
-	blog: lazyRoute(pick(() => import("./assets/Blog-kNGpAATo.js"), "Blog")),
-	article: lazyRoute(() => import("./assets/Blog-kNGpAATo.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-DTlHWpfR.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-Di5uoYft.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-D0hlVGxr.js").then((m) => m.default)),
+	fleet: lazyRoute(() => import("./assets/Fleet-DjEw8xMR.js").then((m) => m.default)),
+	blog: lazyRoute(pick(() => import("./assets/Blog-Cui1Pn6a.js"), "Blog")),
+	article: lazyRoute(() => import("./assets/Blog-Cui1Pn6a.js").then((m) => m.default)),
 	about: lazyRoute(pick(company_, "About")),
 	services: lazyRoute(pick(company_, "Services")),
 	contact: lazyRoute(pick(company_, "Contact")),
 	quote: lazyRoute(pick(company_, "QuotePage")),
 	privacy: lazyRoute(pick(company_, "Privacy")),
 	ratings: lazyRoute(pick(company_, "Ratings")),
-	notFound: lazyRoute(() => import("./assets/NotFound-B0H4hQI8.js").then((m) => m.default))
+	notFound: lazyRoute(() => import("./assets/NotFound-BtenZhzH.js").then((m) => m.default))
 };
 R.home, R.catalog, R.tour, R.fleet, R.blog, R.article, R.about, R.services, R.contact, R.quote, R.privacy, R.ratings;
 var preloadAllRoutes = () => Promise.all(Object.values(R).map((route) => route.preload()));
@@ -3650,4 +3657,4 @@ async function render(url) {
 	}));
 }
 //#endregion
-export { Socials as A, useMounted as C, NOT_FOUND as D, textoFase as E, whatsapp as F, language as I, t as L, jsx$1 as M, jsxs$1 as N, usePageMeta as O, company as P, useMedia as S, inicioTextos as T, Manifesto as _, vehicles as a, useFlipGrid as b, Eyebrow as c, QuoteSection as d, Rail as f, EditorialMotion as g, QuoteCopy as h, values as i, Fragment as j, SocialIcon as k, PageTitle as l, Arrow as m, metaFor, photos as n, rawTours as o, TourCard as p, paths, tours as r, render, Button as s, articles as t, Picture as u, Marquee as v, CHAPTERS as w, useLightMotion as x, Trust as y };
+export { Fragment as A, CHAPTERS as C, usePageMeta as D, NOT_FOUND as E, language as F, t as I, jsxs$1 as M, company as N, SocialIcon as O, whatsapp as P, useMedia as S, textoFase as T, Manifesto as _, vehicles as a, useFlipGrid as b, Eyebrow as c, QuoteSection as d, Rail as f, EditorialMotion as g, QuoteCopy as h, values as i, jsx$1 as j, Socials as k, PageTitle as l, Arrow as m, metaFor, photos as n, rawTours as o, TourCard as p, paths, tours as r, render, Button as s, articles as t, Picture as u, Marquee as v, inicioTextos as w, useLightMotion as x, Trust as y };
