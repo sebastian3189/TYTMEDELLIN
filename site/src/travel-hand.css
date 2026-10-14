@@ -136,9 +136,6 @@ html[data-theme="dark"] .th-bg{background:radial-gradient(70% 55% at 50% 58%,rgb
 .th-deco{grid-area:2/2;position:relative;z-index:0;pointer-events:none;min-height:0}
 .th-glow{position:absolute;left:50%;top:54%;width:min(74%,620px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,var(--brand-glow) 0%,transparent 66%)}
 .th-idx{margin-left:12px;font:600 12px var(--font);letter-spacing:.1em;font-variant-numeric:tabular-nums;color:var(--text-muted)}
-.th-lugar{position:absolute;left:0;top:0;z-index:3;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;color:var(--text-strong);opacity:0;pointer-events:none;will-change:transform,opacity}
-.th-lugar b{font:700 13px/1 var(--heading);font-variant:small-caps;letter-spacing:.14em}
-.th-lugar svg{flex:none;transform:rotate(-12deg);color:var(--text-muted)}
 /* Carta postal: filo interior fino y sombra de contacto suave bajo cada foto */
 .th-photo{outline:1px solid rgba(255,255,255,.7);outline-offset:-7px;box-shadow:0 1px 2px rgba(30,32,29,.22),0 14px 30px -6px rgba(30,32,29,.32)}
 html[data-theme="dark"] .th-photo{outline:1px solid rgba(245,245,240,.35);outline-offset:-7px;box-shadow:0 1px 2px rgba(0,0,0,.6),0 18px 40px rgba(0,0,0,.45)}
@@ -160,4 +157,14 @@ html[data-theme="dark"] .th-photo{outline:1px solid rgba(245,245,240,.35);outlin
  .th-arrows--in button{width:44px;height:44px}
  .th-foot{display:none}
  .th-stage{grid-template-rows:auto auto auto auto minmax(0,1fr)}
+}
+
+/* Móvil/tablet (pedido del usuario 2026-10-14): sin pin ni progreso por scroll; la sección tiene su altura natural y la página sigue de largo.
+   Las fotos/tours cambian solo con ‹ ›, tocando una foto, los chips o el deslizamiento horizontal. */
+@media(max-width:1099px){
+ .th:not(.th--static){margin-top:0}
+ .th-track{height:auto}
+ .th-stage{position:relative;top:auto;height:min(calc(100svh - var(--th-top)),780px);opacity:1;background:var(--bg)}
+ .th-marker{top:0!important}
+ .th-all{position:static;padding:10px 0 28px}
 }

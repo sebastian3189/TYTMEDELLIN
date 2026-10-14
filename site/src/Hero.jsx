@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLightMotion } from './PremiumMotion';
 import Arrow from './Arrow';
-import { videoDeTour } from './inicio-videos';
-import { tourSlides } from './tour-entry';
+import { videoDeTour, catalogoVideo } from './inicio-videos';
+import { tourSlides, catalogSlides } from './tour-entry';
 import './home.css';
 
 /*
@@ -127,5 +127,14 @@ export function TourHeroVideo({ tour }) {
     <HeroBlock tour labelId="tour-hero-titulo" video={videoDeTour(tour.slug)} slides={tourSlides(tour.slug)} eyebrow={`${tour.category} · Desde Medellín`} support={tour.title}
       title={<h1 id="tour-hero-titulo" className="hero-h1--tour">{tour.name}</h1>}
       actions={<><a className="button hero-btn hero-btn--explore" id="cta-principal" href="#consulta">Planea esta experiencia<Arrow /></a><Link className="button hero-btn hero-btn--quote" to="/experiencias">Todas las experiencias<Arrow /></Link></>} />
+  );
+}
+
+/** Hero del catálogo /experiencias: mismo bloque, espacio de video propio (`catalogoVideo`) y fotos de varios tours mientras no haya video. */
+export function CatalogHero() {
+  return (
+    <HeroBlock tour labelId="catalogo-hero-titulo" video={catalogoVideo} slides={catalogSlides()} eyebrow="La colección T&T" support="Doce maneras de empezar. Medellín y los recorridos por Antioquia que nacen desde nuestra ciudad."
+      title={<h1 id="catalogo-hero-titulo" className="hero-h1--tour">¿Qué historia quieres vivir?</h1>}
+      actions={<><a className="button hero-btn hero-btn--explore" href="#catalogo">Ver las experiencias<Arrow /></a><Link className="button hero-btn hero-btn--quote" to="/cotizar">Planeemos tu viaje<Arrow /></Link></>} />
   );
 }

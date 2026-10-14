@@ -76,7 +76,7 @@ function Header(){
  const [open,setOpen]=useState(false);const location=useLocation();const toggle=useRef(null);
  useEffect(()=>setOpen(false),[location]);
  useEffect(()=>{const key=e=>{if(e.key==='Escape'&&open){setOpen(false);toggle.current?.focus()}};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key)},[open]);
- const path=unprefix(location.pathname),home=path==='/'||/^\/experiencias\/[^/]+\/?$/.test(path); // el hero a sangre del inicio y de las fichas lleva la cabecera transparente
+ const path=unprefix(location.pathname),home=path==='/'||path==='/experiencias'||/^\/experiencias\/[^/]+\/?$/.test(path); // el hero a sangre del inicio y de las fichas lleva la cabecera transparente
  return <header className={`site-header${home?' is-home':''}${open?' menu-open':''}`}><Link to="/" className="brand" aria-label="Transporte y Turismo Medellín, inicio"><Logo size={56} sizes="(max-width: 899px) 44px, 56px"/></Link><Preferences/><a className="menu-nojs" href="#pie">Menú</a><button ref={toggle} className="menu-toggle" onClick={()=>setOpen(!open)} aria-expanded={open} aria-controls="navigation">{open?'Cerrar':'Menú'} <span aria-hidden="true">{open?'−':'+'}</span></button><nav id="navigation" className={open?'open':''} aria-label="Principal">{nav.map(([label,url])=><NavLink key={url} to={url} end={url==='/'}>{label}</NavLink>)}<Socials className="header-socials"/><Link to="/cotizar" className="nav-cta">Planeemos tu viaje <Arrow/></Link></nav></header>;
 }
 // Pie siempre oscuro (escala --d-* en ambos modos, Spec 03 §I.2): silueta de Medellín, marca, enlaces rápidos, contacto directo, redes y datos legales.

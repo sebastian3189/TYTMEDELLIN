@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import info from './tour-info.json';
 import { useLightMotion } from './PremiumMotion';
+import { watchScroll, docTop } from './scroll-bus';
 
 // Detalle real de cada recorrido: textos del sitio oficial de la marca (tnt-colombia-connect, src/data/sedes.ts, sede Medellín).
 // Solo lo que existe: no se inventan duraciones, precios ni horarios. Ningún texto sobre fotografía.
@@ -20,10 +21,17 @@ export default function TourDetails({ slug }) {
   useEffect(() => {
     const node = list.current;
     if (!node || light) return;
-    let frame = 0;
-    const update = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(() => { const r = node.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return; const p = Math.min(1, Math.max(0, (innerHeight * .7 - r.top) / r.height)); node.style.setProperty('--rp', p.toFixed(3)); node.querySelectorAll('li').forEach((li, i, all) => li.toggleAttribute('data-on', p >= i / all.length - .02)); }); };
-    window.addEventListener('scroll', update, { passive: true }); window.addEventListener('resize', update); update();
-    return () => { window.removeEventListener('scroll', update); window.removeEventListener('resize', update); cancelAnimationFrame(frame); node.style.removeProperty('--rp'); node.querySelectorAll('li').forEach(li => li.removeAttribute('data-on')); };
+    // Planificador único (scroll-bus): medidas una vez; la línea es un transform y los pasos solo cambian al cruzar su umbral.
+    const items = [...node.querySelectorAll('li')]; let top = 0, h = 1, last = -1, lit = -1;
+    const stop = watchScroll({
+      el: node, margin: 0,
+      measure: () => { top = docTop(node); h = node.offsetHeight || 1; },
+      update: (y, vh) => {
+        const p = Math.round(Math.min(1, Math.max(0, (y + vh * .7 - top) / h)) * 500) / 500; if (p === last) return; last = p; node.style.setProperty('--rp', p.toFixed(3));
+        const n = items.filter((_, i, all) => p >= i / all.length - .02).length; if (n !== lit) { lit = n; items.forEach((li, i) => li.toggleAttribute('data-on', i < n)); }
+      },
+    });
+    return () => { stop(); node.style.removeProperty('--rp'); items.forEach(li => li.removeAttribute('data-on')); };
   }, [light, slug]);
   if (!d) return null;
   return <section className="tour-details wrap" id="detalles" data-tn="0" aria-label="Detalles del recorrido">

@@ -3,6 +3,7 @@ import { GlassPill, useGlassPill } from './glass';
 import { useLightMotion } from './PremiumMotion';
 import Arrow from './Arrow';
 import { clamp } from './hand-geometria';
+import { watchScroll, docTop } from './scroll-bus';
 import './tour-motion.css';
 
 /*
@@ -27,11 +28,12 @@ export function TourNav() {
   // Progreso de la página (desde la pestaña hasta la cotización).
   useEffect(() => {
     if (light) { bar.current?.style.setProperty('--tp', '1'); return undefined; }
-    let raf = 0;
-    const update = () => { raf = 0; const end = document.getElementById('consulta'); if (!end) return; const start = sentinel.current.getBoundingClientRect().top + scrollY, stop = end.getBoundingClientRect().top + scrollY; bar.current?.style.setProperty('--tp', clamp((scrollY + innerHeight * 0.5 - start) / Math.max(1, stop - start)).toFixed(4)); };
-    const kick = () => { if (!raf) raf = requestAnimationFrame(update); };
-    addEventListener('scroll', kick, { passive: true }); addEventListener('resize', kick, { passive: true }); update();
-    return () => { cancelAnimationFrame(raf); removeEventListener('scroll', kick); removeEventListener('resize', kick); };
+    // Planificador único (scroll-bus): las posiciones se miden una vez; en el scroll solo se escribe cuando el valor cambia (pasos de 0,2 %).
+    let start = 0, end = 1, last = -1, bw = 0; const fill = bar.current?.firstElementChild, dot = bar.current?.lastElementChild;
+    return watchScroll({
+      measure: () => { const stop = document.getElementById('consulta'); if (stop && sentinel.current) { start = docTop(sentinel.current); end = docTop(stop); } bw = bar.current?.clientWidth || 0; last = -1; },
+      update: (y, vh) => { const p = Math.round(clamp((y + vh * 0.5 - start) / Math.max(1, end - start)) * 500) / 500; if (p === last) return; last = p; if (fill) fill.style.transform = `scaleX(${p})`; if (dot) dot.style.transform = `translate3d(${(p * (bw - 6)).toFixed(1)}px,0,0)`; },
+    });
   }, [light]);
   return (
     <>
@@ -52,22 +54,17 @@ export function TourRoute() {
   const el = useRef(null), light = useLightMotion();
   useLayoutEffect(() => {
     const route = el.current, page = route.parentElement;
-    let raf = 0, top = 0, len = 1;
+    const done = route.querySelector('.tr-done'), dot = route.querySelector('.tr-dot');
+    let pageTop = 0, top = 0, len = 1, last = -1;
+    // Medidas una sola vez (y al cambiar el tamaño del documento); en el scroll solo transform, sin container queries ni lecturas de layout.
     const measure = () => {
-      const nav = document.querySelector('.tn'), end = document.getElementById('consulta'); if (!nav || !end) return;
-      const pr = page.getBoundingClientRect(); top = nav.getBoundingClientRect().bottom - pr.top + (nav.offsetHeight ? 0 : 0); len = Math.max(1, end.getBoundingClientRect().top - pr.top - top);
-      route.style.top = `${top}px`; route.style.height = `${len}px`;
+      const sent = document.querySelector('.tn-sentinel'), nav = document.querySelector('.tn'), end = document.getElementById('consulta'); if (!sent || !nav || !end) return;
+      pageTop = docTop(page); top = docTop(sent) + 1 + nav.offsetHeight - pageTop; len = Math.max(1, docTop(end) - pageTop - top);
+      route.style.top = `${top}px`; route.style.height = `${len}px`; last = -1;
     };
-    const update = () => {
-      raf = 0; const pr = page.getBoundingClientRect(), p = light ? 1 : clamp((innerHeight * 0.55 - (pr.top + top)) / len);
-      route.style.setProperty('--rp', p.toFixed(4)); route.dataset.end = p > 0.995 ? 'true' : 'false';
-    };
-    const kick = () => { if (!raf) raf = requestAnimationFrame(update); };
-    const ro = new ResizeObserver(() => { measure(); kick(); }); ro.observe(page);
-    document.fonts?.ready.then(() => { measure(); kick(); });
-    measure(); update();
-    if (!light) { addEventListener('scroll', kick, { passive: true }); addEventListener('resize', kick, { passive: true }); }
-    return () => { cancelAnimationFrame(raf); ro.disconnect(); removeEventListener('scroll', kick); removeEventListener('resize', kick); };
+    const paint = (p) => { done.style.transform = `scaleY(${p.toFixed(4)})`; dot.style.transform = `translate3d(0,${(p * (len - 10)).toFixed(1)}px,0)`; route.dataset.end = p > 0.995 ? 'true' : 'false'; };
+    if (light) { measure(); route.style.setProperty('--rp', '1'); route.dataset.end = 'true'; const ro0 = new ResizeObserver(measure); ro0.observe(page); return () => ro0.disconnect(); }
+    return watchScroll({ measure, update: (y, vh) => { const p = Math.round(clamp((y + vh * 0.55 - pageTop - top) / len) * 1000) / 1000; if (p === last) return; last = p; paint(p); } });
   }, [light]);
   return <div ref={el} className="tr-route" aria-hidden="true" data-end="false"><i className="tr-line" /><i className="tr-done" /><i className="tr-dot" /></div>;
 }

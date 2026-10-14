@@ -7,7 +7,7 @@ const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const ctx = await browser.newContext({ viewport: { width: w, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
 const page = await ctx.newPage(); const cdp = await ctx.newCDPSession(page); const errors = [];
 page.on('console', (m) => { if (['error', 'warning'].includes(m.type())) errors.push(m.text().slice(0, 160)); }); page.on('pageerror', (e) => errors.push('PAGEERROR ' + e.message.slice(0, 160)));
-await page.goto(`${base}/experiencias/${slug}`, { waitUntil: 'load' }); await page.waitForTimeout(2500);
+await page.goto(`${base}${process.env.RUTA ? "/" + process.env.RUTA : "/experiencias/" + slug}`, { waitUntil: 'load' }); await page.waitForTimeout(2500); if (process.env.CSS) await page.addStyleTag({ content: process.env.CSS });
 await cdp.send('Emulation.setCPUThrottlingRate', { rate: cpu });
 const H = await page.evaluate(() => document.documentElement.scrollHeight);
 const res = await page.evaluate(({ to, step }) => new Promise((resolve) => {

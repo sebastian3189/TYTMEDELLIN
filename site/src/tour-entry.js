@@ -18,6 +18,11 @@ export function tourSlides(slug, max = 6) {
   for (let k = 0; k < need && k < tall.length; k++) out.push(tall[Math.floor(k * step)]);
   return out.filter(Boolean).slice(0, max);
 }
+/** Diaporama del hero del catálogo: una foto oficial de cada uno de 6 tours distintos (nunca la portada JMC con cartel: `gallery` ya la excluye ni se usa Traslados). */
+export function catalogSlides() {
+  const slugs = ['city-tour-comuna-13', 'guatape-piedra-del-penol', 'jardin-antioquia', 'tour-del-cafe-medellin', 'tour-nocturno-medellin', 'santa-fe-de-antioquia'];
+  return slugs.map((s) => { const t = tours.find((x) => x.slug === s); return t.gallery.find((p) => p.width > p.height) || t.gallery.find((p) => p.src === t.hero.src) || t.gallery[0]; });
+}
 export function tourEntry(slug) {
   const t = tours.find((x) => x.slug === slug), copy = inicioTextos.cartas[slug];
   const pool = t.gallery.filter((_, i) => i > 0 || slug === 'tour-de-compras');

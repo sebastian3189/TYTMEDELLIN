@@ -23,6 +23,8 @@ export const inicioVideos = {
  * Formato: MP4 (H.264) 16:9, sin audio útil (se reproduce silenciado), ≤ 8 MB; el póster es lo único que se ve con movimiento reducido o ahorro de datos.
  * La clave es el `slug` de la ficha. PENDIENTE CLIENTE: los videos y pósteres reales de cada experiencia.
  */
+/* Video de cabecera del catálogo /experiencias (mismo hero compartido; mientras no haya video, diaporama con fotos oficiales de varios tours). */
+export const catalogoVideo = { src: null, poster: null };
 export const toursVideos = {
   'city-tour-comuna-13': { src: null, poster: null },
   'guatape-piedra-del-penol': { src: null, poster: null },

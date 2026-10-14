@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { inicioTextos } from './inicio-textos';
 import { tourEntry } from './tour-entry';
 import { relayDeck, deckPose, RELAY_SVH, FADE_SVH } from './baraja-geometria';
-import { smooth, placePhotos, placeLugar, smallCaps } from './hand-geometria';
+import { smooth, placePhotos } from './hand-geometria';
 import Arrow from './Arrow';
 import { GlassPill, useGlassPill } from './glass';
 import { GoogleBadgeStatic } from './CardExtras';
@@ -24,7 +24,7 @@ const CARDS = '/media/baraja';
 const SEG = { wide: 30, compact: 80 }; // svh por experiencia (móvil: ≈0,8 pantallas por tour, sin tramos muertos)
 const EXIT = 20, RELAY = RELAY_SVH + FADE_SVH;
 // Compacto (móvil/tablet): el scroll recorre la información DE UN SOLO tour (llegada y abanico → una foto tras otra → salida); el tour solo cambia con los chips.
-const COMPACT_SVH = 232, COMPACT_END = 10, PH_A = 0.16, PH_C = 0.88;
+const REST = 0.48, COMPACT_SVH = 232, COMPACT_END = 10, PH_A = 0.16, PH_C = 0.88;
 const totalFor = (wide) => (wide ? RELAY + N * SEG.wide + EXIT : RELAY + COMPACT_SVH + COMPACT_END);
 const mapLocal = (tl) => (tl < PH_A ? 0.62 * (tl / PH_A) : 0.62 + 0.18 * clamp((tl - PH_A) / (PH_C - PH_A))); // abanico abierto y deriva suave; la despedida es un fundido (sin recorrido que cruce el texto)
 const WIDE = '(min-width: 1100px)', SMALL = '(max-width: 799px)', REDUCE = '(prefers-reduced-motion: reduce)', LOW = '(max-height: 560px)', REDUCE_KEY = 'tyt-reducir-movimiento';
@@ -136,8 +136,8 @@ export default function TravelHand() {
     const trackEl = track.current, stageEl = stage.current, hand = handEl.current, mq = mqEl.current, deck = deckEl.current;
     const small = window.matchMedia(SMALL).matches, wide = layout === 'wide', seg = wide ? SEG.wide : SEG.compact, shrink = wide ? 1 : innerWidth < 768 ? 0.62 : 0.82, mob = innerWidth < 768; // compacto: fotos más pequeñas, dentro de su propia región (<768 px: ≈25 % menos que antes, excepción autorizada del usuario)
     const compact = !wide, total = totalFor(wide);
-    let raf = 0, visible = true, destroyed = false, q = null, lastT = 0, stageTop = 92, span = 1, RW = 0, RH = 0, sw = 0, sh = 0;
-    let arrT = 0, leaving = null, curTl = 0, lastSf = -1; // compacto: arranque de la llegada tras elegir un chip, grupo que sale y progreso del tour
+    let raf = 0, visible = !compact, destroyed = false, q = null, lastT = 0, stageTop = 92, span = 1, RW = 0, RH = 0, sw = 0, sh = 0;
+    let arrT = compact ? performance.now() + 1e9 : 0, leaving = null, curTl = 0, lastSf = -1; // compacto: arranque de la llegada tras elegir un chip, grupo que sale y progreso del tour
     let groupCache = null, trackTop = 0;
     const groups = () => groupCache || (groupCache = [...hand.querySelectorAll('.th-group')]);
     // Medidas del carril precalculadas (resize / ResizeObserver): el cuadro de scroll no lee layout.
@@ -166,7 +166,7 @@ export default function TravelHand() {
         if (leaving && now > leaving.until) { leaving = null; lastKey = ''; }
         // La foto delantera avanza con el scroll (una información tras otra); la elección manual manda hasta que el scroll se mueve > 24 px.
         const n = ENTRIES[idx].photos.length, sf = clamp(Math.floor(clamp((P - PH_A) / (PH_C - PH_A)) * n), 0, n - 1);
-        if (st.current.manualY === null && sf !== lastSf) { lastSf = sf; if ((st.current.fronts[idx] || 0) !== sf) { setFronts(sf ? { [idx]: sf } : {}); flipOn(); } }
+        if (false && st.current.manualY === null && sf !== lastSf) { lastSf = sf; if ((st.current.fronts[idx] || 0) !== sf) { setFronts(sf ? { [idx]: sf } : {}); flipOn(); } }
       } else {
         idx = clamp(Math.floor(P), 0, N - 1); P2 = clamp(P, 0, N);
         if (idx !== st.current.active) { st.current.active = idx; setActive(idx); }
@@ -190,8 +190,7 @@ export default function TravelHand() {
           if (!vis) continue;
         }
         const ls = clamp(local, 0, 1);
-        const fr = placePhotos([...g.querySelectorAll('.th-photo')], f, local, RW, RH, shrink, mob, keep);
-        placeLugar(g.querySelector('.th-lugar'), fr, ls, RH);
+        placePhotos([...g.querySelectorAll('.th-photo')], f, local, RW, RH, shrink, mob, keep);
       }
       // Marquesina decorativa del lugar: −25 % del ancho por tramo, sin bucle.
       mq.style.transform = `translate3d(${(0.12 * sw - 0.25 * eff * sw).toFixed(1)}px,-50%,0)`;
@@ -202,6 +201,8 @@ export default function TravelHand() {
     const render = (now) => {
       raf = 0;
       if (destroyed || !visible || document.hidden) { lastT = 0; return; }
+      // Móvil/tablet (pedido del usuario): sección sin pin y sin progreso por scroll; solo anima al llegar y al cambiar de tour (chips, flechas, tocar).
+      if (compact) { apply(REST, now); if (arrT || leaving) schedule(); return; }
       const f = clamp((scrollY + stageTop - trackTop) / span), u = f * total;
       // Fundido de entrada del escenario sobre el de la película (últimos FADE_SVH del relevo); al subir, simétrico.
       const fin = clamp((u - (RELAY - FADE_SVH)) / FADE_SVH);
@@ -219,7 +220,7 @@ export default function TravelHand() {
     };
     const schedule = () => { if (!raf && !destroyed) raf = requestAnimationFrame(render); };
     const onScroll = () => schedule();
-    const observer = new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) { lastT = 0; lastKey = ''; schedule(); } else if (raf) { cancelAnimationFrame(raf); raf = 0; } }, { rootMargin: '200px 0px' });
+    const observer = new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) { if (compact && arrT > performance.now() + 1e8) arrT = performance.now(); lastT = 0; lastKey = ''; schedule(); } else if (raf) { cancelAnimationFrame(raf); raf = 0; } }, { rootMargin: '200px 0px' });
     const resize = new ResizeObserver(() => { metrics(); schedule(); });
 
     st.current.jump = (i, s = 0.56) => {
@@ -232,13 +233,14 @@ export default function TravelHand() {
       if (i === st.current.active) return;
       leaving = { gi: st.current.active, until: performance.now() + 260 }; arrT = performance.now() + 120; lastSf = -1; lastKey = '';
       st.current.manualY = null; st.current.active = i; setActive(i); setFronts({});
-      if (curTl > 0.8) window.scrollTo({ top: trackTop - stageTop + ((RELAY + 0.3 * COMPACT_SVH) / total) * span, behavior: 'instant' });
       schedule();
     };
     st.current.refresh = () => { groupCache = null; lastKey = ''; schedule(); };
     const bodyRO = new ResizeObserver(() => { measureTrack(); lastKey = ''; schedule(); }); bodyRO.observe(document.body);
     metrics(); observer.observe(root.current); resize.observe(hand); resize.observe(stageEl);
-    window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', onScroll, { passive: true });
+    if (!compact) window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    if (compact) { stageEl.style.setProperty('--cfin', '1'); stageEl.style.setProperty('--fin', '1'); stageEl.style.pointerEvents = ''; stageEl.dataset.on = 'true'; }
     document.addEventListener('visibilitychange', onScroll);
     schedule();
     return () => {
@@ -329,7 +331,7 @@ export default function TravelHand() {
             {ENTRIES.map((e, gi) => {
               const near = Math.abs(gi - active) <= 1, hasFull = full.has(gi);
               if (!near && !hasFull) return null;
-              return <div className="th-group" data-i={gi} key={e.slug} aria-hidden={gi === active ? undefined : 'true'}>{e.photos.map((p, k) => (k === 0 || hasFull) ? <Photo key={k} photo={p} entry={e} k={k} primary={gi === active || k === 0} /> : null)}<span className="th-lugar" aria-hidden="true"><b>{smallCaps(e.lugar)}</b><svg viewBox="0 0 32 32" width="26" height="26" focusable="false"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeDasharray="2 2.2" /><circle cx="16" cy="16" r="9" fill="none" stroke="currentColor" strokeWidth="1.2" /><path d="M11 17.5l3.2-3.2 2.3 2.3 4.5-4.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg></span></div>;
+              return <div className="th-group" data-i={gi} key={e.slug} aria-hidden={gi === active ? undefined : 'true'}>{e.photos.map((p, k) => (k === 0 || hasFull) ? <Photo key={k} photo={p} entry={e} k={k} primary={gi === active || k === 0} /> : null)}</div>;
             })}
           </div>
           <div className="th-foot">

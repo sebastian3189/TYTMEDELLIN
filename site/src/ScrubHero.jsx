@@ -116,7 +116,7 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
     const cardEls = deckRef.current ? [...deckRef.current.querySelectorAll('.bd-card')] : [];
     const fxEls = titleRef.current ? [...titleRef.current.querySelectorAll('[data-fx]')] : [];
     const floatEls = floatRef.current ? [...floatRef.current.querySelectorAll('.bd-float')] : [];
-    const haloEl = haloRef.current, labelEls = cardEls.map((el) => el.querySelector('.bd-label'));
+    const haloEl = haloRef.current;
 
 
     const track2 = (delta, size) => {
@@ -225,16 +225,13 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
       // Baraja de cartas.
       for (let i = 0; i < cardEls.length; i++) {
         cardPlace(dims, st, i, cp);
-        // Rótulo del lugar bajo la carta (escritorio): visible en la carta de arriba y, mientras se barajan, en todas; se va con la baraja (D).
-        const lab = mobile ? 0 : Math.max(cp.z === 10 + N ? 1 : 0, smooth(clamp((Math.sin(Math.PI * st.sh) - 0.5) / 0.4))) * st.D;
-        const key = `${cp.x.toFixed(1)}|${cp.y.toFixed(1)}|${cp.r.toFixed(2)}|${cp.s.toFixed(4)}|${cp.o.toFixed(3)}|${cp.z}|${lab.toFixed(2)}`;
+        const key = `${cp.x.toFixed(1)}|${cp.y.toFixed(1)}|${cp.r.toFixed(2)}|${cp.s.toFixed(4)}|${cp.o.toFixed(3)}|${cp.z}`;
         if (key === lastCard[i]) continue;
         lastCard[i] = key;
         const el = cardEls[i];
         el.style.transform = `translate3d(${cp.x - dims.Bw / 2}px,${cp.y - dims.Bh / 2}px,0) rotate(${cp.r}deg) scale(${cp.s})`;
         el.style.opacity = cp.o.toFixed(3); el.style.zIndex = String(cp.z);
         el.style.setProperty('--inv', (1 / cp.s).toFixed(3));
-        if (labelEls[i]) labelEls[i].style.opacity = lab.toFixed(2);
       }
       if (haloEl && !mobile) haloEl.style.opacity = (st.D * 0.9).toFixed(3);
       // «Baraja a la vista»: titular partido, lema, confianza y tira se van y vuelven con D.
@@ -381,7 +378,7 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
       for (let i = 0; i < count; i++) { drop(full, i); drop(low, i); }
       blobs.fill(null);
       for (const k of ['ready', 'frame', 'loaded', 'progress', 'target', 'settled', 'u', 'bitmaps', 'bitmapsPeak', 'bitmapMb', 'bitmapMbPeak']) delete section.dataset[k];
-      for (const el of [mediaEl, haloEl, ...floatEls, ...cardEls, ...labelEls, ...fxEls]) { el?.removeAttribute('style'); }
+      for (const el of [mediaEl, haloEl, ...floatEls, ...cardEls, ...fxEls]) { el?.removeAttribute('style'); }
       stageEl.style.opacity = ''; stageEl.style.pointerEvents = '';
       stageEl.dataset.ui = 'deck'; stageEl.dataset.cap = ''; stageEl.dataset.ch = '1';
       for (const k of ['--bw', '--bh', '--stage-h', '--m-t1', '--deck-top', '--deck-bottom', '--deck-x', '--deck-y', '--deck-h']) stageEl.style.removeProperty(k);
@@ -466,7 +463,6 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
             {animated && cards.map((c) => (
               <div key={c.slug} className="bd-card" aria-hidden="true">
                 <span className="bd-tilt"><img className="bd-thumb" src={cardImg(c.slug, 't')} width="320" height="400" alt="" decoding="async" loading="lazy" /><i className="bd-stamp"><svg viewBox="0 0 48 48" focusable="false"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 2.6" /><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" strokeWidth="1.3" /><path d="M15 29l6-7 4 4 3-3 5 6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /><circle cx="30.5" cy="18.5" r="2" fill="currentColor" /></svg></i></span>
-                <span className="bd-label">{inicioTextos.cartas[c.slug]?.lugar}</span>
               </div>
             ))}
           </div>
