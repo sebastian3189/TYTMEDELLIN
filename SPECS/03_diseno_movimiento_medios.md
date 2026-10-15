@@ -742,6 +742,149 @@ sin trampas; simetría al subir; reducido legible; CLS 0; pesos dentro del lími
 teléfono real de gama media fluido. Lo verifica el auditor; el usuario aprueba el
 aspecto. Pendientes: textos nuevos del inicio, fotos de Compras, revisión foto a foto.
 
+##### I.2 Escalas tonales — 2026-10-14
+
+**Estado: CONTRATO DEL DIRECTOR, pendiente de implementación, auditoría y aprobación
+visual del usuario.** Redactado por `director-diseno-marca` con lectura de `site/src`
+(`website.css :root`, `preferences.css` oscuro, `glass.css`) sin editarlo. Compuerta:
+«Tokens y componentes base». Sin créditos ni medios.
+
+**Petición del usuario (textual):** «usa escalas de blancos, grises y negro según el
+modo si es oscuro o claro, que no se vea plano; también escalas de naranja según la
+paleta de colores de la marca; y ese naranja que pusiste a los botones no lo hagas tan
+brillante».
+
+**Precedencia.** Sustituye en I1, I2.3, J3, K y L6 lo que contradiga: los fondos
+admitidos pasan de tres a los cinco tonos de superficie de cada modo; el botón primario
+deja `#FF7F09`/`#F7800C` como base; el texto naranja se permite solo con `--brand-text`
+(prohibido `#FF7F09` como texto); el brillo naranja de tarjetas baja a los valores de
+`--brand-glow`; el foco claro pasa de `#9A4300` a `#8A3F00`. Se mantienen: una acción
+naranja por pantalla, naranja ≤10 % de la superficie y ningún texto sobre foto.
+Contraste: fórmula WCAG 2.2, calculado con script (redondeo a 2 decimales).
+
+**1. Escalas neutras** (cálida en claro, grafito verdoso en oscuro; sin negro puro)
+
+```css
+/* Claro */
+--n-0:#FFFFFF; --n-100:#FAF8F5; --n-200:#F4F4F4; --n-300:#EAE8E3; --n-400:#D7D5CF;
+--n-500:#ABADA6; --n-600:#8A8D86; --n-700:#5A5D58; --n-800:#3C3F3B; --n-900:#2B2E2A;
+--n-1000:#1E201D;
+/* Oscuro */
+--d-0:#0F1110; --d-100:#171A18; --d-200:#1D211E; --d-300:#242925; --d-400:#2D332F;
+--d-500:#3A413C; --d-600:#5B635D; --d-700:#818C82; --d-800:#BDC3B9; --d-900:#DEDFD8;
+--d-1000:#F5F5F0;
+```
+
+Anclas de marca: `#FFFFFF` = n-0, `#F4F4F4` = n-200, `#3C3F3B` = n-800.
+
+**2. Escala naranja de marca** (`#FF7F09` = o-500; tono 27–31°)
+
+```css
+--o-50:#FFF6EC; --o-100:#FFEBD6; --o-200:#FFD3A8; --o-300:#FFB570; --o-400:#FF9A3D;
+--o-500:#FF7F09; --o-600:#EE7A12; --o-700:#D9680A; --o-800:#A84C00; --o-900:#8A3F00;
+```
+
+`#B85400` (propuesto en K) se descarta como texto: 4,43:1 sobre `#F4F4F4` y 3,98 sobre
+n-300. Se usa o-800 `#A84C00`, que cumple en todas las superficies claras.
+
+**3. Mapa semántico**
+
+| Token | Claro | Oscuro | Uso |
+|---|---|---|---|
+| `--page` | n-100 `#FAF8F5` | d-100 `#171A18` | lienzo |
+| `--surface-sunken` | n-300 `#EAE8E3` | d-0 `#0F1110` | pie, pistas, huecos de imagen |
+| `--surface-1` | n-200 `#F4F4F4` | d-200 `#1D211E` | banda alterna de sección, chips, franja P9 |
+| `--surface-2` | n-0 `#FFFFFF` + `--shadow-1` | d-300 `#242925` + `--shadow-1` | tarjetas, formularios |
+| `--surface-3` | n-0 `#FFFFFF` + `--shadow-3` + borde subtle | d-400 `#2D332F` + `--shadow-3` | menús, visor, tarjeta activa, popovers |
+| `--border-subtle` | `rgba(30,32,29,.08)` | `rgba(245,245,240,.10)` | decorativo |
+| `--border-strong` | n-600 `#8A8D86` | d-700 `#818C82` | campos y controles (≥3:1) |
+| `--text-strong` | n-1000 `#1E201D` | d-1000 `#F5F5F0` | títulos |
+| `--text-body` | n-800 `#3C3F3B` | d-900 `#DEDFD8` | cuerpo |
+| `--text-muted` | n-700 `#5A5D58` | d-800 `#BDC3B9` | secundario (mínimo absoluto) |
+| `--overlay` | `rgba(30,32,29,.32)` | `rgba(8,9,8,.64)` | velo de modal (nunca bajo texto) |
+| `--glass-bg` | `rgba(255,255,255,.62)` | `rgba(255,255,255,.06)` | vidrio líquido |
+| `--glass-border` | `rgba(255,255,255,.70)` + `inset 0 1px 0 rgba(255,255,255,.85)` | `rgba(255,255,255,.12)` + `inset 0 1px 0 rgba(255,255,255,.14)` | borde y reflejo |
+| `--brand-solid` | o-600 `#EE7A12` | o-600 `#EE7A12` | fondo del botón primario |
+| `--brand-solid-hover` | o-500 `#FF7F09` | o-500 `#FF7F09` | hover |
+| `--brand-solid-active` | o-700 `#D9680A` | o-700 `#D9680A` | pulsado |
+| `--on-brand` | n-1000 `#1E201D` | n-1000 `#1E201D` | texto sobre naranja |
+| `--brand-soft` | o-50 `#FFF6EC` | `rgba(255,127,9,.12)` (≈`#332616` sobre page) | chips activos, avisos, fondo de icono |
+| `--brand-text` | o-800 `#A84C00` | o-400 `#FF9A3D` | texto naranja (enlaces de énfasis, h3 en hover) |
+| `--brand-glow` | `rgba(238,122,18,.18)` | `rgba(255,127,9,.22)` | aura (≤.22) |
+| `--focus` | o-900 `#8A3F00` | `#FFAD60` | anillo 3 px + 3 px |
+
+Contraste medido (texto/fondo):
+
+| Texto | page | sunken | surface-1 | surface-2 | surface-3 | brand-soft |
+|---|---|---|---|---|---|---|
+| Claro strong `#1E201D` | 15,48 | 13,40 | 14,92 | 16,41 | 16,41 | 15,35 |
+| Claro body `#3C3F3B` | 10,07 | 8,72 | 9,71 | 10,68 | 10,68 | 9,99 |
+| Claro muted `#5A5D58` | 6,31 | 5,46 | 6,08 | 6,68 | 6,68 | 6,25 |
+| Claro brand-text `#A84C00` | 5,36 | 4,64 | 5,16 | 5,68 | 5,68 | 5,31 |
+| Claro focus `#8A3F00` (no textual) | 7,10 | 6,14 | 6,84 | 7,52 | 7,52 | 7,04 |
+| Claro border-strong `#8A8D86` (no textual) | 3,18 | 2,75 ✗ | 3,06 | 3,37 | 3,37 | 3,15 |
+| Oscuro strong `#F5F5F0` | 16,04 | 17,33 | 14,90 | 13,53 | 11,81 | 13,43 |
+| Oscuro body `#DEDFD8` | 13,07 | 14,13 | 12,15 | 11,03 | 9,63 | 10,95 |
+| Oscuro muted `#BDC3B9` | 9,75 | 10,53 | 9,06 | 8,22 | 7,18 | 8,16 |
+| Oscuro brand-text `#FF9A3D` | 8,30 | 8,97 | 7,72 | 7,01 | 6,11 | 6,95 |
+| Oscuro focus `#FFAD60` | 9,52 | 10,29 | 8,85 | 8,03 | 7,01 | 7,97 |
+| Oscuro border-strong `#818C82` | 5,02 | 5,42 | 4,66 | 4,23 | 3,69 | 4,20 |
+
+✗ Prohibidos campos y controles sobre `--surface-sunken` claro. Vidrio: muted claro
+sobre glass encima de `#F4F4F4` 6,46; body oscuro sobre glass 11,10 (respaldo opaco
+`--surface-2` sin `backdrop-filter` o con `prefers-reduced-transparency`).
+
+**4. Botón primario naranja «menos brillante»**
+
+```css
+background:linear-gradient(180deg,rgba(255,255,255,.12) 0%,rgba(255,255,255,0) 52%),
+           var(--brand-solid);                 /* #EE7A12 */
+color:var(--on-brand); border:1px solid rgba(110,50,0,.14);
+box-shadow:inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(110,50,0,.12),
+           0 1px 2px rgba(110,50,0,.16), 0 4px 10px -2px rgba(238,122,18,.18);
+/* hover (puntero fino) */ background-color:var(--brand-solid-hover); brillo superior .12;
+           sombra 0 6px 14px -4px rgba(255,127,9,.20);
+/* active */ background-color:var(--brand-solid-active); brillo .08; scale(.97); sin sombra exterior;
+/* deshabilitado */ fondo n-300/d-400, texto muted, sin opacidad.
+```
+
+Contraste del texto `#1E201D`: base 5,81; con brillo superior (≈`#F08A2E`) 6,55;
+hover 6,48; active 4,64 (todos ≥4,5). Se retiran el brillo .30 interno, el resplandor
+exterior >.20 y la base `#F7800C`. Reconocible como `#FF7F09`: mismo tono (28° vs 29°),
+solo 13 puntos menos de saturación y 2 de luminosidad; el hover devuelve el naranja
+exacto de marca y el logo conserva su color original.
+
+**5. Reglas contra lo plano**
+
+1. Alternar por sección `--page` → `--surface-1` → `--page`; nunca dos secciones
+   seguidas con el mismo fondo. El pie usa `--surface-sunken`.
+2. Elevación: banda (sin sombra) < tarjeta `--surface-2` + `--shadow-1` < hover
+   `--shadow-2` < flotante `--surface-3` + `--shadow-3`. Oscuro: la elevación aclara
+   el tono y añade `inset 0 1px 0 rgba(245,245,240,.06)`; sombras oscuras:
+   `--shadow-1: 0 1px 2px rgba(5,6,5,.40), 0 6px 16px rgba(5,6,5,.28)`;
+   `--shadow-2: 0 2px 4px rgba(5,6,5,.40), 0 16px 32px rgba(5,6,5,.36)`;
+   `--shadow-3: 0 4px 8px rgba(5,6,5,.40), 0 28px 64px -8px rgba(5,6,5,.55)`.
+   Claro conserva `--shadow-1/2/3` de I1.
+3. Toda tarjeta lleva `--border-subtle`; `--border-strong` solo en controles.
+4. Gradiente tonal suave permitido en fondos de sección (sin texto sobre foto):
+   claro `linear-gradient(180deg,#FAF8F5,#F4F3F0)`; acento
+   `radial-gradient(120% 80% at 85% 0%,rgba(255,127,9,.05),transparent 60%),#F4F4F4`
+   (≈`#F5EEE8`; muted 5,82, brand-text 4,94); oscuro
+   `linear-gradient(180deg,#171A18,#1B1F1C)` y acento `rgba(255,127,9,.06)` sobre
+   `#171A18` (≈`#252017`; muted 8,99, brand-text 7,66). Máximo un gradiente con acento
+   por pantalla; sin ruido, mallas ni bandas visibles.
+5. `--brand-soft` solo en: chip/filtro activo (texto `--brand-text` o `--text-strong`),
+   fondo de icono de diferencial, aviso informativo y fila seleccionada. Nunca como
+   fondo de sección completa ni junto al botón primario en el mismo bloque.
+6. `--brand-glow`: tarjeta activa `0 0 0 1px rgba(238,122,18,.35), 0 18px 48px -12px
+   var(--brand-glow)` y aura radial de 420 px a .10; una a la vez.
+
+**Criterio de aprobación.** Capturas 1440×900 y 390×844, claro y oscuro, de inicio,
+`/experiencias` y una ficha: tres niveles de superficie distinguibles; ningún par de
+secciones contiguas iguales; botón con base `#EE7A12` y contraste ≥4,5; contrastes
+iguales o superiores a la tabla; naranja ≤10 %. Lo verifica el auditor y el usuario
+aprueba el aspecto.
+
 ### Álbum de experiencias — petición del usuario, 2026-10-12
 
 Sustituye solo la destacada P4 al final de `ScrubHero`: el usuario solicita aspecto
@@ -968,6 +1111,37 @@ en redes», posibles cifras, FAQ y cómo llegar — `PENDIENTE CLIENTE`.
 #### K. Revisión 5 — una sola sección de experiencias: «La mano de viaje» (PROPUESTA, 2026-10-14)
 
 **Respuesta del usuario (2026-10-14):** aprueba «La mano de viaje» («Aprobar y construir»).
+Precisión posterior del usuario (con captura del tramo de cartas tras la película en
+modo oscuro): «quita estas tarjetas y deja después de las películas "Choose your next
+memory / A place for every way of traveling." pero súmale fotos, hazlo más dinámico,
+grande y llamativo con el scroll, que sea una gran experiencia visual». Ajustes
+obligatorios sobre K: (a) eliminar por completo el tramo de cartas posterior a la
+película (carta destacada, flechas, contador 01/12, tira de 12 miniaturas, marquesina)
+— ya previsto en K; (b) la sección conserva el eyebrow «Elige tu próximo recuerdo» y el
+título «Un lugar para cada forma de viajar.»; (c) MÁS FOTOS: 6–8 fotos oficiales por
+tour en el abanico/collage (las galerías oficiales tienen 3–23; usar todas las
+disponibles hasta 8, excluyendo la portada JMC con cartel); (d) MÁS GRANDE: la
+composición de fotos ocupa ≥60 % del ancho y ≥70 % del alto útil en escritorio y casi
+pantalla completa en móvil; (e) MÁS DINÁMICO con scroll: fotos que entran desde
+distintas profundidades con parallax, escalan y se recolocan al avanzar, marquesina del
+lugar detrás; transición secuencial entre tours. Peso: cargar por tour bajo demanda.
+(f) TÍTULO GRANDE POR EXPERIENCIA (usuario, 2026-10-14: «deja el título grande por
+experiencia como en las que vamos a quitar, pero para estas»): cada tour muestra arriba
+su nombre gigante en Montserrat 800 (como el «COMUNA 13» del tramo retirado), nombre
+COMPLETO siempre visible sin cortes (tamaño ajustado al ancho: min(128px, ancho útil ×
+0,92 / ancho medido); 2 líneas equilibradas en móvil), en tinta sólida con contraste
+AA en claro y oscuro, nunca sobre foto; cambia con el tour activo con transición
+secuencial (sale → entra) y se mantiene quieto mientras se lee.
+
+**Peticiones del usuario (2026-10-14), con capturas del sitio oficial como referencia:**
+selector de experiencias tipo «liquid glass» (píldora translúcida, opción activa
+sólida); botones naranja «liquid glass» estilo iPhone (texto oscuro sobre naranja por
+contraste); estrellas «5,0 · Google» en las tarjetas (valoración de la EMPRESA, rotulada
+como tal); botón de compartir por experiencia con las opciones del componente oficial
+`CompartirExperiencia.tsx`; brillo naranja detrás de las tarjetas al pasar el cursor
+(texto naranja solo si cumple contraste: #B85400 en claro, #FF9A3D en oscuro). En
+móvil: sin rótulos de grupo no seleccionables en el índice; más espacio entre
+experiencias en móvil y escritorio. Se retira la barra móvil de cotizar de las fichas.
 
 **Estado: aprobado; pendiente de construcción, auditoría y aprobación visual.** Redactada por `director-diseno-marca`
 con lectura de `site/` sin editarla (árbol de trabajo del 2026-10-14). Sin créditos ni
@@ -1119,6 +1293,377 @@ aprueba el aspecto.
 Pendientes: aprobación del usuario; microcopy «Saltar experiencias» y traducción EN
 de los textos ya existentes (verificar en `locales/en.json`); más fotos de Compras y
 revisión foto a foto — `PENDIENTE CLIENTE` donde corresponda.
+
+#### L. «¿Qué nos hace diferentes?» en el inicio — «El camino, punto por punto» (PROPUESTA, 2026-10-14)
+
+**Respuesta del usuario (2026-10-14):** aprueba «El camino, punto por punto» («Aprobar y construir»), incluidos el rótulo «Transporte y Turismo Medellín» y el cierre en dos líneas. Pendiente de construcción y auditoría.
+
+**Estado: PROPUESTA del director, petición separada; pendiente de aprobación del
+usuario, construcción, auditoría y aprobación visual.** Redactada por
+`director-diseno-marca` con lectura de `site/src` sin editarla (`pages/Home.jsx`,
+`HomeVideos.jsx`, `TravelHand.jsx`, `icons.jsx`, `glass.css`). Sin créditos ni medios
+nuevos. Compuertas: «Inicio móvil y escritorio» y «Movimiento probado con versión
+ligera y reducida». Texto: Spec 02, «¿Qué nos hace diferentes?» (aprobado, literal).
+
+**Petición del usuario (textual):** «pon lo siguiente con animaciones y un diseño
+increíble en nuestra página de inicio» + el copy de «¿Qué nos hace diferentes?».
+Petición previa aplicable: sin emojis, iconos normales. Se aplican los ya aprobados
+vidrio líquido (`glass.css`) y brillo naranja de K. Se presenta un único diseño.
+
+##### L1. Ubicación
+
+Orden de `/`: hero → historia → `ScrubHero` → `TravelHand` → «Nos encargamos del
+camino» → **L (`id="diferentes"`)** → reseñas → equipo → libro → cierre → redes.
+Motivos: (1) tras elegir experiencia y ver los servicios, el visitante pregunta «¿por
+qué ustedes?»; L responde y las reseñas Google lo prueban justo después; (2) no queda
+pegada a las dos escenas fijadas (`ScrubHero`, `TravelHand`): una tercera escena de
+scroll seguida cansaría; (3) continúa el hilo «del primer traslado al último recuerdo»
+y cierra con «todo el camino».
+
+##### L2. Concepto y momento memorable
+
+Una **ruta** (línea de tinta 2 px) recorre los 10 diferenciales como paradas de un
+viaje; un punto naranja de 10 px avanza por ella con el scroll. Momento memorable: al
+final, la línea desemboca en la frase de cierre gigante y el punto naranja se posa
+**como punto final** junto a «camino.»: el recorrido entero se convierte en la firma
+«Es cómo te hacemos sentir durante todo el camino». Toma de SOTY el titular gigante y
+el objeto que viaja, de Apple la columna fija con contador, de Belmond/Black Tomato el
+aire y la calma. Sin fotos: la sección habla de servicio, no de lugares (evita texto
+cerca de foto y permisos).
+
+##### L3. Iconos (sustituyen los emojis; Lucide, ISC, como `icons.jsx`)
+
+Viewbox 24, `stroke-width 1.75`, extremos y uniones redondeados, `currentColor`,
+`aria-hidden`; cada trazo con `pathLength="1"` para dibujarse. Claves nuevas en
+`icons.jsx`: 01 `planeLanding` (avión aterrizando), 02 `carFront` (vehículo de
+frente), 03 `users` (ya existe; equipo), 04 `droplet` (gota), 05 `globe` (globo
+terráqueo), 06 `clock` (reloj), 07 `camera` (cámara), 08 `shieldCheck` (escudo con
+visto), 09 `messageCircle` (globo de mensaje), 10 `heart` (corazón). Color tinta
+(`--text-strong`); nunca naranja.
+
+##### L4. Escritorio ≥1100 px (1440×900)
+
+Sección sobre `--bg`, `padding-block` de I1. Cabecera a todo el ancho: micro-rótulo
+«Transporte y Turismo Medellín» (`--fs-label`); h2 partido P1 «¿Qué nos hace /
+diferentes?» en `--fs-display` (línea 2 desplazada a la derecha); debajo en dos
+columnas 5/12 + 6/12: entradilla en `--fs-h3` tinta y párrafo `--fs-body`.
+
+Cuerpo en rejilla 5/12 + 7/12:
+
+- **Columna fija izquierda** (`position:sticky; top:20svh`, scroll nativo, no pin):
+  contador «04 / 10» Montserrat 800 `clamp(96px,10vw,160px)` tabular, tinta; icono del
+  diferencial activo a 96 px dentro de un disco de vidrio de 160 px con brillo naranja
+  detrás; barra de progreso tinta 2 px con 10 marcas. Todo `aria-hidden` (duplica la lista).
+- **Columna derecha**: `<ol>` de 10 `<li>` en dos subcolumnas escalonadas (la segunda
+  baja 120 px), orden de lectura 01→10 por filas. Cada tarjeta de vidrio líquido
+  (radio 20, padding 28, alto mínimo reservado 240 px): fila superior con disco de
+  vidrio 56 px + icono 28 px y número «01» (`--fs-label`, tabular); h3 `--fs-h3`;
+  descripción `--fs-body` `--text`. La ruta SVG pasa **detrás** de las tarjetas
+  uniendo los centros de los iconos (medida con `ResizeObserver`), visible a través
+  del vidrio.
+- **Cierre**: a todo el ancho, `--fs-manifesto` en dos líneas, 16ch: «No es solamente
+  a dónde te llevamos.» (Montserrat 300) / «Es cómo te hacemos sentir durante todo el
+  camino.» (800); encima, rótulo «Experiencias a otro nivel». La ruta baja desde la
+  tarjeta 10 hasta la línea base tras «camino.». Sin botón: la acción naranja vive en
+  el cierre de J1 (#9); aquí no compite.
+
+900–1099 px: cabecera apilada, tarjetas en 2 columnas sin escalón, sin columna fija;
+la ruta serpentea entre filas.
+
+##### L5. Móvil <900 px (390×844)
+
+Sin sticky ni pin; scroll natural. Titular apilado `--fs-display`, entradilla,
+párrafo. Lista en una columna con la ruta recta junto al borde izquierdo (x = 28 px):
+cada disco de icono 56 px se asienta sobre la línea y la tarjeta queda a su derecha
+(ancho completo menos 72 px). Cierre `clamp(36px,10vw,48px)` alineado a la izquierda;
+el punto aterriza tras «camino.». Vidrio sin `backdrop-filter` (rendimiento):
+`rgba(255,255,255,.86)` con borde y reflejo interior.
+
+##### L6. Materiales
+
+Tarjeta clara: `rgba(255,255,255,.62)`, `blur(20px) saturate(160%)` (solo ≥1100 px),
+borde `rgba(255,255,255,.7)`, `inset 0 1px 0 rgba(255,255,255,.85)`, `--shadow-1`.
+Oscura: `rgba(255,255,255,.06)`, borde `rgba(255,255,255,.12)`, reflejo `.14`, texto
+`#F5F5F0`/`#DEDFD8`. Ruta: `rgba(30,32,29,.28)` claro / `rgba(245,245,240,.32)` oscuro;
+tramo recorrido tinta sólida / `#F5F5F0`. **Brillo naranja** (K): tarjeta activa
+`0 0 0 1px rgba(255,127,9,.45), 0 18px 48px -12px rgba(255,127,9,.45)` (oscuro .55) y
+un aura radial `rgba(255,127,9,.16)` de 420 px detrás; una sola a la vez. Respaldos:
+sin `backdrop-filter` o `prefers-reduced-transparency` → `--surface` opaco.
+Naranja total ≤10 % de la pantalla; prohibido texto naranja.
+
+##### L7. Movimiento (tokens I1 y `movimiento-apple.md`; motor opción B, sin librerías)
+
+| Qué | Cuándo | Cómo |
+|---|---|---|
+| Titular | entra al 75 % del viewport, una vez | palabras con máscara por línea: `translateY(.6em)→0` + opacidad, 700 ms `--ease-out-strong`, escalonado 60 ms |
+| Entradilla y párrafo | tras el titular | y 8→0, 420 ms, escalonado 60 ms |
+| Tarjeta | entra al 85 %, una vez | opacidad 0→1, y 24→0, `scale(.96→1)`, 600 ms `--ease-out-strong`; escalonado 80 ms por subcolumna |
+| Icono | +120 ms tras su tarjeta | `stroke-dashoffset 1→0`, 700 ms `--ease-out-strong` |
+| Ruta y punto | continuo con el scroll | `stroke-dashoffset` y `transform` del punto ligados al progreso (`linear`, suavizado τ 80 ms; saltos >0,12 se igualan); simétrico al subir |
+| Activa (escritorio) | tarjeta más cercana al 50 % del viewport | brillo y aura con `transition: box-shadow, opacity 320ms ease`; contador sale 220 ms (y −12) y entra 420 ms (y 12→0), simétrico; icono grande sale 220 ms y se redibuja 600 ms |
+| Hover fino | `(hover:hover) and (pointer:fine)` | tarjeta −4 px + brillo, 200 ms; sin cambiar tamaños |
+| Cierre | entra al 75 %, una vez | palabras como el titular, escalonado 40 ms; el punto llega por la ruta y asienta con `scale(1.3→1)` 420 ms `--ease-out-strong` |
+
+Móvil: mismas entradas únicas; ruta y punto con `translateY` del punto y
+`scaleY` de la línea recorrida (sin `getPointAtLength`); sin estado activo por scroll
+(el brillo solo al tocar). **Reducido / `saveData`**: todo visible y estático, iconos
+dibujados, ruta completa, punto ya posado; solo fundidos ≤150 ms. Sin JS / prerender:
+contenido completo visible (las clases de ocultación solo las añade JS). En reposo
+ningún texto tiene opacidad <1.
+
+##### L8. Accesibilidad y rendimiento
+
+`<section aria-labelledby>` → h2 → p → `<ol>` (10 `<li>` con h3 + p) → p de cierre.
+Contador, icono grande, ruta y punto `aria-hidden`; sin `aria-live`. Sin texto sobre
+foto (no hay fotos). Contraste medido sobre el peor fondo (vidrio sobre el aura):
+h3/cierre ≥7:1, descripción ≥4,5:1 en claro y oscuro. Zoom 200 % sin pérdidas.
+Rendimiento: solo `transform`, `opacity` y `stroke-dashoffset` (un SVG); un bucle rAF
+para ruta/activa, detenido fuera de vista y con pestaña oculta, escrituras en `style`;
+`IntersectionObserver` para entradas; alturas reservadas, CLS 0; 0 KB de imágenes.
+
+##### L9. Criterio de aprobación
+
+Capturas 1440×900, 1024×768 y 390×844, claro y oscuro: titular antes/después del
+revelado; tarjetas 01, 05 y 10 activas (contador y brillo); lista completa; cierre con
+el punto posado; 390 reducido; sin JS. Aprobado si: ubicación L1; copy literal del
+Spec 02 sin emojis; 10 iconos coherentes L3; lista semántica; contraste medido ≥ L8;
+una sola tarjeta con brillo; sin texto naranja; sin bloqueo de scroll ni pin en móvil;
+CLS 0; simetría al subir; reducido legible. Lo verifica el auditor; el usuario aprueba
+el aspecto.
+
+Pendientes: aprobación del usuario; rótulo «Transporte y Turismo Medellín» y división
+del cierre (propuestas del director); traducción EN en `locales/en.json` — revisión del
+usuario.
+
+#### M. Fichas de experiencia — «La ruta se juega carta a carta» (PROPUESTA, 2026-10-14)
+
+**Respuesta del usuario (2026-10-14):** aprueba §M «La ruta se juega carta a carta» para las 12 fichas, SIN mover «Cotizar» (se queda en su posición actual). Pendiente de construcción y auditoría.
+Precisión del usuario (2026-10-14): el INICIO queda congelado en el commit cb2fb11 «meencanta3» (sus transiciones le encantan; no se alteran). En las fichas se REUTILIZAN esas transiciones del inicio: baraja de fotos del tour que se baraja y cuya carta superior crece a la foto principal, reparto tipo «mano de viaje» con título gigante, y la galería «Archivo de nuestros viajes» como mano de viaje con marquesina, parallax, flechas, teclado y gesto. Mismos tiempos y curvas que el inicio, componentes compartidos parametrizados por tour.
+
+**Estado: PROPUESTA del director; pendiente de aprobación del usuario, construcción,
+auditoría y aprobación visual.** Redactada por `director-diseno-marca` con lectura de
+`site/src` sin editarla (`pages/Tour.jsx`, `TourDetails.jsx`, `FeaturedGallery.jsx`,
+`PremiumMotion.jsx`, `glass.jsx`, `TravelHand.jsx`, `Reviews.jsx`, `shared.jsx`,
+`tour-info.json`, `content.js`, `website.css`). Sin créditos ni medios nuevos ni copy
+nuevo. Compuertas: «Tokens y componentes base» y «Movimiento probado con versión ligera
+y reducida». Aplica a las 12 fichas `/experiencias/{slug}`, incluida
+`traslados-aeropuerto-jmc`.
+
+**Petición del usuario (textual, con captura móvil clara de City Tour & Comuna 13):**
+«mejora las transiciones en experiencias; te paso el ejemplo de lo que quiero que
+mejores de Comuna, pero mejóralo en todo; y según el inicio, las transiciones de
+tarjetas y demás apartados visuales, adáptalo y mejóralo en las experiencias para que
+no se vea tan simple y tenga más detalles visuales».
+
+**Diagnóstico de la captura.** La ficha actual es correcta pero plana: una carta sola
+sin profundidad, «COMUNA 13» aparece sin entrada, la barra de pestañas es una banda
+blanca sin estado activo, y «El espíritu del recorrido» es texto centrado sin ritmo.
+Cada bloque entra igual (o no entra); no hay hilo que una la página con el inicio.
+
+**Precedencia.** Sustituye la fila `/experiencias/{slug}` de I4 y el apartado «Fichas»
+del ajuste 2026-10-13 en lo que contradiga. Se conservan: P1, P2 con ajuste al ancho
+(K «título grande»), P4, P5, P9, tokens de I1/I.2, materiales de vidrio de L6, brillo
+de I.2.5.6, motor opción B (I5/K9) y la regla de ningún texto sobre foto (I2.1).
+
+##### M1. Concepto y momento memorable
+
+La ficha continúa la metáfora del inicio: **elegiste una carta; ahora se juega**. La
+portada llega como la carta de la baraja y se abre en una mano pequeña; el nombre del
+lugar se asienta en tinta gigante; desde la barra de pestañas nace la **ruta de §L**
+(línea tinta 2 px con punto naranja de 10 px) que acompaña al visitante por capítulos o
+itinerario y **termina en la cotización**, donde el punto se posa como punto final.
+Galería, reseñas y «Otros caminos» se **reparten** como cartas desde un mazo.
+Momento memorable: la llegada (carta + abanico + «COMUNA 13» revelándose por palabras)
+y el aterrizaje del punto en «Cotizar». Toma de SOTY el mazo, la marquesina y el
+objeto que viaja; de Apple el vidrio y la columna con indicador; de Belmond/Black Tomato
+el aire y una sola acción.
+
+##### M2. Orden de bloques y bandas tonales (I.2.5: nunca dos contiguas iguales)
+
+| # | Bloque (`id`) | Fondo claro / oscuro |
+|---|---|---|
+| 1 | Portada P1 + mano pequeña | `--page` + gradiente con acento (único de la parte alta) |
+| 2 | Título gigante P2 (`cartas[slug].lugar`) | `--page` (misma escena que 1) |
+| 3 | Pestañas pegajosas de vidrio | vidrio sobre lo que pase debajo |
+| 4 | Espíritu del recorrido (`#esencia`) + P9 | `--surface-1` |
+| 5 | Detalles: destacados, incluye, itinerario, punto de encuentro | `--page` |
+| 6 | Capítulos P5 (`moments`) | `--surface-1` |
+| 7 | Galería P4 repartida (`#fotos`) | `--page` |
+| 8 | Antes de viajar + FAQ (`#preparar`) | `--surface-1` |
+| 9 | Reseñas | `--page` |
+| 10 | Otros caminos (mini-baraja) | `--surface-1` |
+| 11 | Cierre: cotización (`#consulta`), destino de la ruta | `--page` + gradiente con acento |
+| — | Pie | `--surface-sunken` |
+
+Cambio de orden propuesto: hoy la cotización va antes de reseñas y «Otros caminos»; se
+propone moverla al final (prueba social antes de pedir; la ruta termina en la acción).
+Requiere visto bueno del usuario y del dueño del Spec 02; si no se aprueba, la ruta
+termina igual en `#consulta` y 9–10 quedan después sin punto.
+
+##### M3. Recorrido bloque a bloque (escritorio ≥1100 px)
+
+Tokens: entrada `--ease-out-strong`, en pantalla `--ease-in-out-strong`, progreso
+`linear`; `--dur-reveal 700ms`, `--dur-flip 600ms`, texto 420/220 ms, `--stagger 60ms`.
+«Revelado por palabras» = cada palabra en máscara de su línea, `translateY(.6em)→0` +
+opacidad, 700 ms, escalonado 60 ms, una vez al 75 % del viewport (L7).
+
+1. **Portada.** Columna 7/12: «Todas las experiencias», eyebrow, h1 `tour.name`
+   partido P1, lead `tour.title`, botón naranja «Planea esta experiencia» (única acción
+   naranja de la pantalla). Columna 5/12: **mano pequeña**: carta `tour.hero` 4:5
+   (`--shadow-3`, radio 20, −3°) y detrás 2 satélites al 82 % (`gallery[1]`,
+   `gallery[2]`, distintos del héroe) con pivote bajo la carta
+   (`transform-origin:50% 140%`) a −11° y +8°, `--shadow-2`; pie «{tour.name} · Archivo
+   T&T» debajo, fuera de la foto. Entrada al cargar: texto por palabras (h1) y fases
+   (eyebrow → lead → botón, 420 ms, 60 ms); la carta llega desde y 40 px y 0°→−3°,
+   700 ms; los satélites se abren desde detrás 600 ms con +180 ms. Scroll: h1 deriva
+   P1 existente (`--editorial-shift`); carta y −24 px, satélites ±12/±20 px (tres
+   profundidades, como `TravelHand`). Hover fino sobre la mano: satélites +3° y −6 px,
+   200 ms. Fotos con borde `rgba(245,245,240,.12)` en oscuro.
+2. **Título gigante.** `Marquee` actual (ajuste al ancho, 2 líneas equilibradas en
+   móvil). Entrada: revelado por palabras con escalonado 80 ms; luego deriva ±3 %
+   ligada al scroll (existente). Debajo nace la ruta: línea tinta que se dibuja de
+   izquierda a derecha (`scaleX 0→1`, 700 ms) hasta el punto naranja en reposo. Tinta
+   `#1E201D` claro / `#DEDFD8` oscuro (K8). Sin fotos detrás.
+3. **Pestañas pegajosas.** Píldora de vidrio centrada (no banda a todo el ancho):
+   `--glass-bg`, `blur(20px) saturate(160%)`, `--glass-border`, radio 999, `--shadow-1`,
+   `top` = cabecera + 12 px. Opción activa con `GlassPill` sólida (`--surface-2` /
+   d-400, texto `--text-strong`) que viaja 420 ms `--ease-in-out-strong` (`useGlassPill`).
+   Activa por scroll con `IntersectionObserver` (`rootMargin:-45% 0px -50% 0px`) sobre
+   las secciones de cada pestaña; `aria-current="location"` en el enlace. Dentro de la
+   píldora, en su borde inferior, la ruta en miniatura: línea 2 px `scaleX` = progreso
+   de la página con el punto naranja de 6 px en su extremo. Al volverse pegajosa
+   (centinela IO): sombra `--shadow-1→--shadow-2` y y −4 px, 200 ms. «Cotizar» es enlace
+   de texto con flecha (no naranja); al activarse recibe el brillo de I.2.5.6 (anillo
+   .35 + aura), nunca relleno naranja. `scroll-margin-top` en cada destino.
+4. **Espíritu del recorrido.** Rejilla 5/12 + 7/12 (deja de estar centrado):
+   izquierda eyebrow + h2 `tour.title` revelado por palabras; derecha descripción
+   (y 8→0, 420 ms) y los tres `trip-facts` como chips de vidrio con icono que se dibuja
+   (`pathLength=1`, `stroke-dashoffset 1→0`, 700 ms, +120 ms). P8: dos miniaturas
+   flotantes (`gallery[3]`, `gallery[4]`, 140–180 px, ±4°) en los márgenes con
+   parallax .15/.3; solo si la galería tiene ≥5 fotos. P9 entra con fundido 420 ms.
+5. **Detalles (`TourDetails`).** Párrafos con fases 420 ms. **Destacados**: tres
+   tarjetas de vidrio (radio 20, padding 28, alto reservado) con número tabular y
+   disco de icono 56 px; entran 600 ms (y 24→0, `scale(.96→1)`) escalonadas 80 ms.
+   **Qué incluye**: los iconos existentes se dibujan en cascada 60 ms al entrar; texto
+   ya visible. **Itinerario** (Guatapé, Santa Fe; `ruta.pasos`): ruta de §L vertical a
+   la izquierda de los pasos, recorrido en tinta con `scaleY` ligado a `--rp`
+   (existente), punto naranja 10 px que avanza, cada número se rellena tinta al ser
+   alcanzado y el último asienta el punto con `scale(1.3→1)` 420 ms. **Punto de
+   encuentro**: tarjeta de vidrio con icono de pin dibujado. Una tarjeta con brillo a
+   la vez (la más cercana al 50 % del viewport).
+6. **Capítulos P5.** Se conserva el pin escritorio (3×90vh). Mejoras: la foto saliente
+   no desaparece: retrocede como carta (`scale(.94)`, −2°, y 12 px, opacidad →0 en 420
+   ms) mientras la nueva entra con `clip-path` inset de abajo arriba + `scale(1.06→1)`;
+   los botones de capítulo se montan sobre una ruta vertical de 3 paradas con el punto
+   naranja ligado a `--story-progress` (es el itinerario de las 10 fichas sin
+   `ruta.pasos`). Texto 420/220 ms simétrico.
+7. **Galería P4 repartida.** Al cruzar el 70 % (una vez): la destacada y hasta 12
+   miniaturas parten apiladas en el centro de la destacada (rotaciones ±4° alternas,
+   desfase 4 px) y vuelan a su sitio con Flip 600 ms `--ease-in-out-strong`,
+   escalonado 40 ms (≤1,05 s total); las miniaturas 13+ aparecen con fundido. Cambio de
+   foto: Flip existente + la destacada saliente vuelve a su miniatura en 420 ms;
+   contador «03 / 23» sale 220 / entra 420 ms con y 8 px. Visor: la imagen crece desde
+   la destacada (Flip 420 ms) y vuelve 220 ms.
+8. **Antes de viajar + FAQ.** h2 aprobado revelado por palabras; recomendaciones como
+   tarjetas de vidrio pequeñas con icono `check` dibujado. FAQ: filas de vidrio con
+   `--border-subtle`; la abierta pasa a `--surface-2` + `--shadow-1`; el contenido entra
+   con opacidad y y 8→0 en 200 ms y el «+» rota 45° en 200 ms (la altura cambia sin
+   animarse: no se anima `height`).
+9. **Reseñas.** Las tarjetas entran como baraja abierta (±3°→0, y 24→0, 600 ms,
+   escalonado 80 ms), una vez. Cifra verificada «265» con contador 0→265 en 800 ms
+   `--ease-out-strong` (solo cifras existentes de `Reviews.jsx`). Hover fino: −4 px +
+   brillo, uno a la vez.
+10. **Otros caminos: mini-baraja.** Las 6 `TourCard` parten como mazo en la primera
+    ranura del carril (desfase 6 px, ±4°) y se reparten a sus ranuras con Flip 600 ms,
+    escalonado 60 ms, al 60 % del viewport, una vez. Hover P3 + brillo naranja.
+11. **Cierre / cotizar.** Título y apoyo por fases; la tarjeta del formulario entra
+    y 24→0 600 ms; **sin efectos sobre el formulario** (I4). El punto de la ruta de las
+    pestañas «aterriza»: un punto naranja de 10 px aparece tras la última palabra del h2
+    de la cotización con `scale(1.3→1)` 420 ms (decorativo, `aria-hidden`). El botón de
+    envío es la única acción naranja de esa pantalla.
+
+Continuidad opcional desde el inicio: si la carta de `TravelHand`/catálogo enlaza con
+`<Link viewTransition>` (React Router 7, API nativa, sin dependencias), la portada
+comparte `view-transition-name` con la carta de la ficha; sin soporte se omite.
+
+##### M4. Móvil <900 px (390×844)
+
+Scroll natural. Portada apilada: texto, botón a todo el ancho, mano a 72vw con
+satélites asomando ±6° (sin parallax; solo entrada). Título gigante en 2 líneas
+equilibradas. Pestañas: píldora de vidrio en carril horizontal con `scroll-snap`, la
+activa centrada (`useGlassPill`), sin `backdrop-filter`: `rgba(255,255,255,.86)` /
+`rgba(36,41,37,.92)`. Espíritu y detalles en una columna; P8 oculto. Itinerario y
+capítulos con la ruta recta a x = 28 px (L5). Capítulos: pin corto solo si la altura
+útil ≥680 px y como máximo 3×60svh; si no, apilados con foto (entrada como carta, 600
+ms) y texto debajo. Galería: reparto solo de la destacada y las miniaturas visibles;
+arrastre horizontal en la destacada sigue al dedo (`translateX` + rotación ≤6°,
+`touch-action:pan-y`), ≥48 px cambia de foto, si no vuelve en 220 ms. Mini-baraja:
+reparto de las 2 cartas visibles; el resto ya en su sitio. Ningún bloqueo de scroll.
+
+##### M5. Reducido, `saveData`, sin JS y fallos
+
+Todo visible y estático en su lugar final: mano abierta, iconos dibujados, rutas
+completas con el punto posado, galería y cartas en su sitio, sin pin, parallax, Flip
+ni deriva; solo fundidos ≤150 ms. Respeta el cambio de preferencia en sesión
+(`useLightMotion`). Sin JS / prerender: contenido completo (las clases de ocultación
+solo las añade JS). En reposo ningún texto con opacidad <1. Foto fallida: hueco
+`--surface-2`; sin satélites suficientes la mano muestra los que haya (0–2).
+`prefers-reduced-transparency` o sin `backdrop-filter`: vidrio opaco `--surface-2`.
+
+##### M6. Rendimiento y peso
+
+- Solo `transform`, `opacity`, `clip-path` y `stroke-dashoffset`. Sin librerías
+  nuevas: rAF + FLIP propio y `element.animate` (ya usados).
+- **Un solo bucle de scroll por página**: hoy `EditorialMotion`, `Marquee`,
+  `TourDetails` y `Story` registran cada uno su `scroll`; se unifican en un
+  planificador compartido que solo calcula los bloques visibles, detenido fuera de vista
+  y con la pestaña oculta; escrituras en `style`, nunca en estado de React por cuadro.
+- Entradas con un `IntersectionObserver` compartido (`useReveal`), desconectado tras
+  revelar. `will-change` solo durante la animación. ≤13 animaciones WAAPI simultáneas.
+- Peso: +0 KB de imágenes en el LCP (sigue siendo la carta `tour.hero` con
+  `priority`); satélites con la variante `small` existente, `loading="lazy"` y
+  `fetchpriority="low"`, ≤2×60 KB; P8 solo ≥1100 px, diferido. JS añadido ≤6 KB gz.
+- Metas: CLS ≤0,1 (0 por encima del pliegue; alturas reservadas), INP ≤200 ms
+  (`scripts/measure-inp.mjs`), sin tareas largas >50 ms en el reparto.
+
+##### M7. Variantes por ficha (datos reales)
+
+| Caso | Fichas | Ajuste |
+|---|---|---|
+| Itinerario con `ruta.pasos` (5) | Guatapé, Santa Fe | ruta del bloque 5 + ruta de capítulos |
+| Sin `ruta.pasos` | las otras 10 | la ruta vive en capítulos (3 paradas) |
+| Galería corta | Jardín (5), Compras (3), Traslados (2) | sin P8 si <5; mano con 1 satélite si <3; galería de 2 = dos cartas en abanico sin tira |
+| Servicio | Traslados JMC | mismo contrato; portada sin la foto con cartel si existe alternativa (revisión foto a foto) |
+
+##### M8. Accesibilidad y contraste
+
+Pestañas: `<nav aria-label>` con enlaces y `aria-current="location"` (no `tablist`).
+Rutas, puntos, satélites, P8, marquesina y mazos `aria-hidden`; copias decorativas
+`inert`. Foco 3 px `--focus`; áreas ≥44 px. Contraste según I.2.3: texto sobre vidrio
+claro (muted 6,46) y oscuro (body 11,10); h1/h2/título gigante ≥7:1 en ambos modos;
+sin texto naranja salvo `--brand-text`. Una acción naranja por pantalla; naranja
+≤10 %. Zoom 200 % sin pérdidas.
+
+##### M9. Criterio de aprobación
+
+Capturas de **City Tour & Comuna 13, Guatapé & Piedra del Peñol y Traslados JMC** a
+1440×900 y 390×844, claro y oscuro (12 juegos): portada al 0 % y tras la entrada;
+título gigante revelado; pestañas pegajosas con la activa en cada una de las 4
+opciones; espíritu; destacados e incluye con iconos dibujados; itinerario/capítulos a
+mitad; galería antes, durante (~50 %) y después del reparto y tras cambiar foto;
+FAQ abierta; reseñas; mini-baraja repartida; cierre con el punto posado. Además 390
+reducido y sin JS de Comuna 13.
+
+Aprobado si: ningún texto sobre foto; contraste medido ≥ M8 en claro y oscuro; bandas
+de M2 sin contiguas iguales; una acción naranja por pantalla; la activa de las
+pestañas coincide con la sección visible; simetría al subir en pin y rutas; sin
+bloqueo ni pin largo en teléfono real de gama media; reducido completo y legible;
+CLS/INP/peso dentro de M6; Traslados sin huecos por galería corta. Lo verifica el
+auditor; el usuario aprueba el aspecto.
+
+Pendientes: aprobación del usuario (incluido el cambio de orden de M2); revisión foto a
+foto de satélites y P8 por ficha; más fotos de Compras y Traslados (`PENDIENTE
+CLIENTE`); confirmar que «265» sigue vigente en `Reviews.jsx` antes del contador.
 
 ## Compuerta
 

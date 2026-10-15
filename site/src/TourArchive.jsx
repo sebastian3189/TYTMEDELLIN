@@ -4,6 +4,7 @@ import { smooth, clamp, placePhotos, placeLugar, smallCaps } from './hand-geomet
 import { tourEntry } from './tour-entry';
 import FeaturedGallery from './FeaturedGallery';
 import Arrow from './Arrow';
+import { t } from './i18n';
 import './travel-hand.css';
 import './tour-motion.css';
 
@@ -71,7 +72,7 @@ export default function TourArchive({ tour }) {
             onPointerUp={(e) => { const dx = e.clientX - (st.current.sx ?? e.clientX), dy = e.clientY - (st.current.sy ?? e.clientY); if (e.pointerType !== 'mouse' && Math.abs(dx) >= 48 && Math.abs(dx) > Math.abs(dy) * 1.2) select(front + (dx < 0 ? 1 : -1), true); }}>
             <div className="th-group">
               {photos.map((p, k) => <img key={k} className="th-photo" data-k={k} src={p.src} srcSet={p.srcSet} sizes={k === front ? '36vw' : '18vw'} width={p.width} height={p.height} alt={`${tour.name}, fotografía ${k + 1}`} loading="lazy" decoding="async" draggable="false" />)}
-              <span className="th-lugar" aria-hidden="true"><b>{smallCaps(entry.lugar)}</b></span>
+              <span className="th-lugar" aria-hidden="true"><b>{smallCaps(t(entry.lugar))}</b></span>
             </div>
           </div>
           <div className="ta-foot">

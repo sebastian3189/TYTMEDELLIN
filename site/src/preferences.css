@@ -12,7 +12,6 @@ html[data-theme="dark"] .button.secondary,html[data-theme="dark"] .vehicle .butt
 html[data-theme="dark"] .button.g-dark{background:var(--surface-1);color:var(--text-strong)}
 html[data-theme="dark"] .nav-cta{color:var(--text-strong);border-color:var(--text-strong)}
 @media(hover:hover) and (pointer:fine){html[data-theme="dark"] .button:not(.secondary):not(.g-dark):not(.hero-btn--quote):hover{background:var(--brand-solid-hover)}}
-html[data-theme="dark"] .td-steps li[data-on] .td-dot{color:var(--bg)}
 html[data-theme="dark"] .lightbox,html[data-theme="dark"] .lightbox::backdrop{background:rgba(23,26,24,.97)}
 /* Aliados: placa clara con el logo en escala de grises original; la placa oscura de ANATO lleva borde para no fundirse con el fondo. */
 html[data-theme="dark"] .ally-chip{background:#F4F4F4;border-color:#F4F4F4}

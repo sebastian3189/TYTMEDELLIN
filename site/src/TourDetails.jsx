@@ -1,8 +1,6 @@
-import { useEffect, useRef } from 'react';
 import info from './tour-info.json';
-import { useLightMotion } from './PremiumMotion';
-import { watchScroll, docTop } from './scroll-bus';
 
+// (Ronda 2026-10-15: el bloque «Itinerario» con la línea que se enciende se retiró; lo sustituye la historia por paradas de ItineraryStory.)
 // Detalle real de cada recorrido: textos del sitio oficial de la marca (tnt-colombia-connect, src/data/sedes.ts, sede Medellín).
 // Solo lo que existe: no se inventan duraciones, precios ni horarios. Ningún texto sobre fotografía.
 const ICONS = {
@@ -17,22 +15,7 @@ const iconFor = t => /transporte/i.test(t) ? 'car' : /veh[ií]culo/i.test(t) ? '
 const Icon = ({ name }) => <svg className="td-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={ICONS[name]} pathLength="1" /></svg>;
 
 export default function TourDetails({ slug }) {
-  const d = info[slug], list = useRef(null), light = useLightMotion();
-  useEffect(() => {
-    const node = list.current;
-    if (!node || light) return;
-    // Planificador único (scroll-bus): medidas una vez; la línea es un transform y los pasos solo cambian al cruzar su umbral.
-    const items = [...node.querySelectorAll('li')]; let top = 0, h = 1, last = -1, lit = -1;
-    const stop = watchScroll({
-      el: node, margin: 0,
-      measure: () => { top = docTop(node); h = node.offsetHeight || 1; },
-      update: (y, vh) => {
-        const p = Math.round(Math.min(1, Math.max(0, (y + vh * .7 - top) / h)) * 500) / 500; if (p === last) return; last = p; node.style.setProperty('--rp', p.toFixed(3));
-        const n = items.filter((_, i, all) => p >= i / all.length - .02).length; if (n !== lit) { lit = n; items.forEach((li, i) => li.toggleAttribute('data-on', i < n)); }
-      },
-    });
-    return () => { stop(); node.style.removeProperty('--rp'); items.forEach(li => li.removeAttribute('data-on')); };
-  }, [light, slug]);
+  const d = info[slug];
   if (!d) return null;
   return <section className="tour-details wrap" id="detalles" data-tn="0" aria-label="Detalles del recorrido">
     <div className="td-lead" data-tr>
@@ -41,7 +24,6 @@ export default function TourDetails({ slug }) {
       {d.destacados.length > 0 && <ul className="td-chips" role="list">{d.destacados.map(h => <li key={h}>{h}</li>)}</ul>}
     </div>
     <div className="td-grid">
-      {d.ruta && <div className="td-route" data-tr><h3>{d.ruta.titulo}</h3><ol ref={list} className="td-steps">{d.ruta.pasos.map((p, i) => <li key={p}><span className="td-dot" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span><span>{p}</span></li>)}</ol></div>}
       <div className="td-incl" data-tr>
         <h3>Qué incluye</h3>
         <ul role="list">{d.incluye.map(t => <li key={t}><Icon name={iconFor(t)} /><span>{t}</span></li>)}</ul>

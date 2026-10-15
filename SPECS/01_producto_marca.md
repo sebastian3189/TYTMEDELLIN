@@ -91,7 +91,7 @@ Revisión del 11 de octubre de 2026:
 - [Sede Medellín](https://www.transporteyturismocolombia.com/sedes/medellin): contacto
   local **+57 304 496 1698**, Instagram `@transporteenmedellin`. Este número reemplaza
   el contacto general del grupo usado en el primer prototipo.
-- Correo corporativo `transporteturismocolombia@gmail.com`; dirección publicada:
+- Correo corporativo `transporteyturismomedellin@gmail.com`; dirección publicada:
   Carrera 79AA #1A Sur-280, Medellín; NIT `901738550-6`, RNT `176384`.
 - [Historia](https://www.transporteyturismocolombia.com/historia): idea en 2020,
   primeros traslados con un automóvil en 2021, consolidación de oficina/equipo en 2024.

@@ -1,7 +1,7 @@
 import { startTransition, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { rawTours } from './tours-text';
-import { company, whatsapp } from './company';
+import { company } from './company';
 import indicativos from './indicativos.json';
 import QuoteCopy from './QuoteCopy';
 import { language, t } from './i18n';
@@ -12,9 +12,9 @@ const countryLabel = row => language()==='en' ? new Intl.DisplayNames(['en'],{ty
  * Formulario de cotización (Spec 02 «Conversión», Spec 04 «Formularios», Spec 03 §I).
  * Adaptado de tnt-colombia-connect/src/components/venta/FormularioCotizacion.tsx (campos, validaciones, mensajes, indicativo con país
  * reconocido en vivo, tipo de solicitud PQRSF solo en /contacto, foco al primer error, honeypot) al sistema claro premium de este sitio.
- * Canal: sin backend. Se valida, se muestra un resumen, se copia al portapapeles y se abre WhatsApp con SOLO el nombre del recorrido en el
- * enlace (Spec 02: nunca nombre/teléfono/correo en la URL); el oficial manda todos los datos dentro del enlace de WhatsApp: se mantiene la
- * decisión del spec. Honeypot y time-trap en cliente; sin analítica con datos personales.
+ * Canal: sin backend. Se valida y, tras la autorización de datos, se abre wa.me con el mensaje completo ya escrito (excepción aprobada por el usuario el
+ * 2026-10-15, Spec 04 «Excepción WhatsApp»); la persona solo pulsa Enviar. «Copiar mensaje» como alternativa. Honeypot y time-trap en cliente; sin
+ * localStorage ni analítica con datos personales.
  */
 const TIPOS = [['turismo', 'Turismo y traslados'], ['peticion', 'Petición'], ['queja', 'Queja'], ['reclamo', 'Reclamo'], ['sugerencia', 'Sugerencia'], ['contacto', 'Contacto'], ['felicitacion', 'Felicitación']];
 const ORDER = ['experiencia', 'fecha', 'personas', 'salida', 'nombre', 'indicativo', 'telefono', 'correo', 'empresa', 'mensaje', 'consentimiento'];
@@ -43,6 +43,22 @@ function validate(v, plan) {
   return e;
 }
 
+// Mensaje de WhatsApp (ES/EN según la página). Sin emojis; saltos de línea reales que encodeURIComponent convierte en %0A. Máx. ~1.800 caracteres: se recortan las notas.
+const MAX_MESSAGE = 1800;
+function buildMessage(v, plan, withType, pais) {
+  const en = language() === 'en', tipo = TIPOS.find(([id]) => id === v.tipo)[1];
+  const phone = `${v.indicativo} ${v.telefono.trim()}${pais ? ` (${countryLabel(pais)})` : ''}`;
+  const L = en
+    ? { hi: plan ? "Hello, Transporte y Turismo Medellín. I'd like a quote:" : `Hello, Transporte y Turismo Medellín. My request (${t(tipo)}):`, type: 'Inquiry type', exp: 'Experience', date: 'Date', people: 'Travelers', pickup: 'Pickup point', tbd: 'To be arranged', lang: 'Language', langName: 'English', notes: plan ? 'Notes' : 'Message', name: 'Name', company: 'Company', phone: 'Phone', email: 'Email', none: "I'd like to know what options are available.", sent: 'Sent from the website' }
+    : { hi: plan ? 'Hola, Transporte y Turismo Medellín. Quiero cotizar:' : `Hola, Transporte y Turismo Medellín. Mi solicitud (${tipo}):`, type: 'Tipo de solicitud', exp: 'Experiencia', date: 'Fecha', people: 'Viajeros', pickup: 'Punto de recogida', tbd: 'Por acordar', lang: 'Idioma', langName: 'Español', notes: plan ? 'Notas' : 'Mensaje', name: 'Nombre', company: 'Empresa', phone: 'Teléfono', email: 'Correo', none: 'Me gustaría conocer las opciones disponibles.', sent: 'Enviado desde la web' };
+  const build = (notes) => [L.hi, withType && `${L.type}: ${en ? t(tipo) : tipo}`, plan && `${L.exp}: ${en ? t(v.experiencia) : v.experiencia}`, plan && `${L.date}: ${v.fecha}`, plan && `${L.people}: ${Number(v.personas)}`, plan && `${L.pickup}: ${v.salida.trim() || L.tbd}`, `${L.lang}: ${L.langName}`, `${L.notes}: ${notes}`, `${L.name}: ${v.nombre.trim()}`, v.empresa.trim() && `${L.company}: ${v.empresa.trim()}`, `${L.phone}: ${phone}`, v.correo.trim() && `${L.email}: ${v.correo.trim()}`, `
+${L.sent}`].filter(Boolean).join('\n');
+  let notes = v.mensaje.trim().replace(/\s*\n\s*/g, ' ') || L.none, text = build(notes);
+  if (text.length > MAX_MESSAGE) { notes = notes.slice(0, Math.max(0, notes.length - (text.length - MAX_MESSAGE) - 1)).trimEnd() + '…'; text = build(notes); }
+  return text;
+}
+const waUrl = (text) => `https://wa.me/${company.whatsapp}?text=${encodeURIComponent(text)}`;
+
 export default function Quote({ context = 'Un recorrido a mi medida', mode = 'cotizar' }) {
   const withType = mode === 'contacto';
   const [v, setV] = useState({ tipo: 'turismo', experiencia: context, fecha: '', personas: '', salida: '', nombre: '', indicativo: '+57', telefono: '', correo: '', empresa: '', mensaje: '', consentimiento: false });
@@ -58,7 +74,7 @@ export default function Quote({ context = 'Un recorrido a mi medida', mode = 'co
   const attrs = (name, extra, own = true) => ({ id: name, name, 'aria-invalid': Boolean(errors[name]), 'aria-describedby': [own && errors[name] && `${name}-error`, extra].filter(Boolean).join(' ') || undefined });
   const error = (name) => errors[name] && <small id={`${name}-error`} className="error">{errors[name]}</small>;
 
-  async function submit(event) {
+  function submit(event) {
     event.preventDefault();
     // Honeypot (los bots lo rellenan) y time-trap (envío en <2 s SIN ninguna interacción previa: teclado, puntero o autocompletado cuentan como interacción, así
     // no hay falsos positivos con personas). Ambos descartan con el mismo aviso genérico de reintento, sin revelar el motivo, para no fallar en silencio.
@@ -68,18 +84,16 @@ export default function Quote({ context = 'Un recorrido a mi medida', mode = 'co
     setErrors(next); setCopied('idle');
     const first = ORDER.find((name) => next[name]);
     if (first) { setSummary(''); requestAnimationFrame(() => form.current?.querySelector(`#${first}`)?.focus()); return; }
-    const phone = `${v.indicativo} ${v.telefono.trim()}${pais ? ` (${countryLabel(pais)})` : ''}`;
-    const tipo = TIPOS.find(([id]) => id === v.tipo)[1];
-    const lines = [`Hola, T&T Medellín. ${plan ? `Quiero cotizar: ${v.experiencia}.` : `${tipo}.`}`, withType ? `Tipo de solicitud: ${tipo}` : '', `Nombre: ${v.nombre.trim()}`, v.empresa.trim() && `Empresa: ${v.empresa.trim()}`, `Teléfono: ${phone}`, v.correo.trim() && `Correo: ${v.correo.trim()}`, plan && `Fecha: ${v.fecha}`, plan && `Personas: ${Number(v.personas)}`, plan && `Punto de salida: ${v.salida.trim() || 'Por acordar'}`, `${plan ? 'Detalles' : 'Mensaje'}: ${v.mensaje.trim() || 'Me gustaría conocer las opciones disponibles.'}`].filter(Boolean);
-    const englishLines=[`Hello, T&T Medellín. ${plan?`I'd like a quote for: ${t(v.experiencia)}.`:`${t(tipo)}.`}`,withType&&`Inquiry type: ${t(tipo)}`,`Name: ${v.nombre.trim()}`,v.empresa.trim()&&`Company: ${v.empresa.trim()}`,`Phone: ${phone}`,v.correo.trim()&&`Email: ${v.correo.trim()}`,plan&&`Date: ${v.fecha}`,plan&&`People: ${Number(v.personas)}`,plan&&`Departure point: ${v.salida.trim()||'To be arranged'}`,`${plan?'Details':'Message'}: ${v.mensaje.trim()||"I'd like to know what options are available."}`].filter(Boolean);
-    const text = (language()==='en'?englishLines:lines).join('\n');
-    startTransition(() => setSummary(text)); // el resumen es trabajo diferible: no retrasa la respuesta al clic (INP)
-    try { await navigator.clipboard.writeText(text); setCopied('ok'); } catch { setCopied('manual'); }
+    const text = buildMessage(v, plan, withType, pais);
+    const url = waUrl(text);
+    // Excepción aprobada por el usuario (Spec 04 «Excepción WhatsApp»): el mensaje completo va en el enlace de wa.me. Se abre de forma síncrona dentro del gesto
+    // del usuario (no se bloquea). Con 'noopener' window.open devuelve siempre null, así que el bloqueo no es detectable: el panel con el botón grande queda siempre visible.
+    window.open(url, '_blank', 'noopener,noreferrer');
+    startTransition(() => setSummary(text));
     requestAnimationFrame(() => document.querySelector('#resumen-solicitud')?.focus());
   }
   const copy = async () => { try { await navigator.clipboard.writeText(summary); setCopied('ok'); } catch { setCopied('manual'); document.querySelector('.summary textarea')?.select(); } };
   const errorList = ORDER.filter((name) => errors[name]);
-  const message = copied === 'ok' ? 'Solicitud copiada. Abre WhatsApp y pégala en la conversación.' : 'No pudimos copiar automáticamente: usa «Copiar solicitud» o selecciona el texto.';
 
   return <section className="quote-section wrap"><QuoteCopy withType={withType}/>
     <form ref={form} className="quote-form" noValidate onSubmit={submit} onInputCapture={() => { touched.current = true; }} onKeyDownCapture={() => { touched.current = true; }} onPointerDownCapture={() => { touched.current = true; }} aria-label={withType ? 'Formulario de contacto' : 'Formulario de cotización'}>
@@ -103,11 +117,12 @@ export default function Quote({ context = 'Un recorrido a mi medida', mode = 'co
         <div className="field full"><label htmlFor="correo">Correo electrónico (opcional)</label><input {...attrs('correo')} type="email" autoComplete="email" maxLength={120} value={v.correo} onChange={set('correo')}/>{error('correo')}</div>
         <div className="field full"><label htmlFor="mensaje">{plan ? '¿Qué haría especial este viaje?' : 'Cuéntanos tu consulta *'}</label><textarea {...attrs('mensaje', 'mensaje-ayuda')} rows={4} maxLength={800} value={v.mensaje} onChange={set('mensaje')}/><small id="mensaje-ayuda" className="hint">{plan ? 'Opcional: intereses, equipaje o necesidades del grupo. ' : ''}{v.mensaje.length}/800</small>{error('mensaje')}</div>
       </div></fieldset>
-      <div className="consent full"><input {...attrs('consentimiento')} type="checkbox" checked={v.consentimiento} onChange={set('consentimiento')} required/><label htmlFor="consentimiento">He leído el <Link to="/politica-de-tratamiento-de-datos" target="_blank">política de tratamiento de datos</Link> y autorizo compartir esta solicitud con T&T cuando la envíe.</label>{error('consentimiento')}</div>
+      <div className="consent full"><input {...attrs('consentimiento')} type="checkbox" checked={v.consentimiento} onChange={set('consentimiento')} required/><label htmlFor="consentimiento">He leído el <Link to="/politica-de-tratamiento-de-datos" target="_blank">política de tratamiento de datos</Link> y autorizo enviar esta solicitud a T&T por WhatsApp.</label>{error('consentimiento')}</div>
       {retry && <div className="form-errors full" role="alert"><strong>No pudimos preparar tu consulta.</strong> Inténtalo de nuevo en unos segundos.</div>}
       {!retry && errorList.length > 0 && <div className="form-errors full" role="alert"><strong>Revisa {errorList.length === 1 ? 'este campo' : `estos ${errorList.length} campos`}:</strong> {errorList.map((name, i) => <span key={name}>{i > 0 && ', '}<a href={`#${name}`} onClick={(e) => { e.preventDefault(); form.current.querySelector(`#${name}`)?.focus(); }}>{LABEL[name]}</a></span>)}.</div>}
-      <button className="button full" type="submit">{withType && !plan ? 'Preparar mi mensaje' : 'Preparar mi consulta'}<Arrow/></button>
-      <p className="form-note full">Los datos permanecen en esta página hasta que tú decidas compartirlos. Preparar la consulta no confirma una reserva. También puedes llamarnos: <a href={`tel:${company.phone.replaceAll(' ', '')}`}>{company.phone}</a>.</p>
-      {summary && <div className="summary full" id="resumen-solicitud" tabIndex={-1}><h3>Revisa y comparte tu solicitud</h3><ol className="summary-steps"><li>Revisa el texto.</li><li>Cópialo (ya lo intentamos por ti).</li><li>Ábrelo en WhatsApp y pégalo.</li></ol><textarea aria-label="Resumen de solicitud" value={summary} readOnly rows={8}/><div className="summary-actions"><button type="button" className="button" onClick={copy}>Copiar solicitud</button><a className="button" href={whatsapp(plan ? v.experiencia : 'mi consulta')} target="_blank" rel="noreferrer">Abrir WhatsApp y pegar<Arrow/></a></div><p role="status">{message}</p><button type="button" className="text-link" onClick={() => { setSummary(''); form.current.querySelector('#nombre')?.focus(); }}>Editar mis datos</button></div>}
+      <button className="button full" type="submit">Enviar por WhatsApp<Arrow/></button>
+      <p className="form-note full">Se abrirá WhatsApp con tu mensaje listo; revisa y pulsa Enviar.</p>
+      <p className="form-note full">No guardamos tus datos en este navegador. Enviar la consulta no confirma una reserva. También puedes llamarnos: <a href={`tel:${company.phone.replaceAll(' ', '')}`}>{company.phone}</a>.</p>
+      {summary && <div className="summary full" id="resumen-solicitud" tabIndex={-1}><h3>Tu mensaje está listo</h3><p>Abrimos WhatsApp con tu mensaje escrito. Revisa y pulsa Enviar. Si no se abrió, usa el botón.</p><a className="button wa-open" href={waUrl(summary)} target="_blank" rel="noopener noreferrer">Abrir WhatsApp con mi mensaje<Arrow/></a><textarea aria-label="Resumen de solicitud" value={summary} readOnly rows={8}/><div className="summary-actions"><button type="button" className="button" onClick={copy}>Copiar mensaje</button></div><p role="status">{copied === 'ok' ? 'Mensaje copiado. Si WhatsApp no está instalado, pégalo en WhatsApp Web.' : copied === 'manual' ? 'No pudimos copiar automáticamente: selecciona el texto y cópialo.' : ''}</p><button type="button" className="text-link" onClick={() => { setSummary(''); form.current.querySelector('#nombre')?.focus(); }}>Editar mis datos</button></div>}
     </form></section>;
 }

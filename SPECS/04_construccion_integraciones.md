@@ -71,8 +71,8 @@ Ronda oficial (CORREGIR + CONSTRUIR, 2026-10-12; pendiente de auditoría indepen
   de las fotos oficiales, 4 por tour, derivados con los mismos presupuestos).
 - **Formulario** (`Quote.jsx`, carga diferida) y **barra móvil** (`QuoteBar.jsx`, portal a `<body>`): campos, validaciones, indicativo con país en
   vivo (`indicativos.json`, datos oficiales), PQRSF solo en `/contacto`, foco al primer error, resumen de errores `role="alert"`, honeypot y time-trap
-  de cliente. Canal sin backend: copiar + WhatsApp con solo el nombre del recorrido en la URL (el oficial manda los datos dentro del enlace;
-  se mantiene la regla de Spec 02/04: nada personal en URLs).
+  de cliente. Canal sin backend: al validar y con la autorización marcada se abre
+  `wa.me` con el mensaje completo prellenado (ver «Excepción WhatsApp»); «Copiar mensaje» como alternativa.
 - **Contacto** (`Contact.jsx`): datos de la sede Medellín (+57 304 496 1698; dirección y coordenadas del oficial); mapa con el MISMO embed de
   OpenStreetMap que el oficial detrás de una fachada (el iframe se carga al pulsar), título accesible y enlaces a Google Maps/OpenStreetMap.
   Horario: `PENDIENTE CLIENTE` (el oficial solo lo da para el grupo). Redes: Instagram y TikTok de la sede Medellín; Facebook de Medellín
@@ -173,6 +173,21 @@ final”.
 Si se usa un servicio de datos, las tablas de leads son privadas y aplican mínimo
 privilegio. Ningún dato personal viaja a analítica, logs de frontend o URLs.
 
+## Excepción WhatsApp (aprobada por el usuario, 2026-10-15)
+
+Decisión del usuario: «quiero que cuando se llene el formulario el mensaje que se cree quede directo en el chat de WhatsApp, que solo sea enviar».
+Motivo: no hay backend y `wa.me` es el único canal. Esto **exceptúa** la regla «ningún dato personal en URLs» solo para este destino
+(`https://wa.me/573044961698?text=…`) y para el mensaje que la persona acaba de escribir. Mitigaciones obligatorias:
+
+- Se abre solo tras validación y con la casilla de autorización marcada (enlazada a `/politica-de-tratamiento-de-datos`); texto junto al botón:
+  «Se abrirá WhatsApp con tu mensaje listo; revisa y pulsa Enviar.»
+- Sin `localStorage`, analítica ni logs con esos datos; `window.open(..., 'noopener,noreferrer')` y `rel="noopener noreferrer"`.
+- Mensaje ES/EN según la página, sin emojis, tope ~1.800 caracteres (se recortan las notas con «…»).
+- Alternativa «Copiar mensaje». Con `noopener` el bloqueo de ventanas no es detectable, por lo que el panel con el botón «Abrir WhatsApp con mi mensaje»
+  (mismo `href`) queda siempre visible tras enviar.
+- Nota para el asesor legal: la política de datos (`DataPolicy.jsx`) sigue diciendo que se «copia al portapapeles»; el texto legal no se tocó y
+  conviene mencionar que el mensaje se envía por WhatsApp (tercero, WhatsApp/Meta).
+
 ## Seguridad
 
 HTTPS, validación de servidor, escape de contenido, dependencias revisadas, ambientes
@@ -212,3 +227,72 @@ verificación de construcción, no aprobación independiente ni prueba en teléf
 - [ ] No deja placeholders, logs de depuración ni dependencias innecesarias.
 - [ ] Tiene evidencia verificable y revisión del dueño correspondiente.
 
+
+### CONSTRUIR + CORREGIR — Revisión 4 del inicio, modo oscuro, libro y despliegue (2026-10-14; pendiente de auditoría independiente)
+
+Implementa Spec 03 §J1–J5 (aprobado por el usuario el 2026-10-14) y los cambios posteriores del usuario. Archivos: `HomeVideos.jsx` (hero, historia,
+cierre, redes), `home.css`, `inicio-videos.js` (único archivo de datos de video e Instagram), `ScrubHero.jsx` (título «Elige tu próximo recuerdo»,
+carga perezosa), `BlogBook.jsx` + `experience-book.css` (libro), `preferences.css` (modo oscuro), `WhatsAppFab.jsx` + `fab.css`, `Arrow.jsx`.
+
+- **Inicio (J1/J2).** Orden: hero → historia (video 9:16 de 290×516) → baraja y película → «La mano de viaje» → servicios → reseñas → equipo → libro → cierre → redes.
+  Sin `src` en `inicio-videos.js`, cada espacio es un bloque oscuro provisional con sus dimensiones finales (CLS 0). Con `src`: hero `<video autoplay muted loop
+  playsinline>` con velo ≥0,60, botón «Pausar/Reproducir video» y solo póster en movimiento reducido o `saveData`. La cabecera es transparente sobre el hero
+  (`html[data-hero]`, observador en `HomeHero`) y sólida al salir. El póster de arranque `#boot` y `html.boot-scrub` se retiraron: el LCP del inicio es el titular.
+- **La mano de viaje (Spec 03 §K, aprobada; prioridad del usuario).** `TravelHand.jsx` + `travel-hand.css` sustituyen a `ExperienceExplorer.jsx` (eliminado) y al
+  tramo de cartas de `ScrubHero` (carta destacada, flechas, 01/12, tira de 12, marquesina, títulos por carta, `bd-full` de 960 px, lista estática): la película termina
+  en un relevo de 30 svh + 4 svh de fundido (`timeline()`: 339 svh escritorio, antes 767). La sección se superpone a esa pista con margen negativo (`−(100svh −
+  cabecera + 34svh)`), su escenario fijo aparece con la misma caja de mazo (`relayDeck`, compartida) y el de la película se funde: un solo bucle visible a la vez.
+  11 experiencias × (portada de la baraja + hasta 7 fotos oficiales de `media.json`, ≥5 salvo Compras con sus 3 + portada) en una mano de casillas con parallax por
+  profundidad, escala y recolocación ligadas al progreso (30 svh por tour escritorio, 24 móvil; pista 384/308 svh); región de fotos ≥60 % del ancho y ≥70 % del alto
+  del escenario; título gigante por experiencia (Montserrat 800, mayúsculas, tamaño medido `mín(128, 0,92·ancho/ancho medido)`, 2 líneas en móvil, tinta sólida,
+  nunca bajo una foto: la región recorta en vertical) con cambio secuencial 220/420 ms; marquesina decorativa del lugar detrás (aria-hidden, 5–6 % de contraste);
+  índice agrupado (`tablist`, ↑/↓/Inicio/Fin), ‹ ›, ←/→, clic y deslizamiento ≥48 px; la elección manual dura hasta que el scroll se mueve 24 px; `aria-live` solo ante
+  acciones del usuario. Carga por tour bajo demanda (solo la portada de los vecinos; las demás fotos al activarse). Reducido, `saveData`, 2g/3g, altura ≤560 px o
+  escenario móvil <640 px: sin pin, lista de las 11 experiencias (también es el HTML sin JS y prerenderizado). `explorer-data.js`/`exploration-media.json`
+  quedaron sin uso (pendiente de retirar con el director). Prueba: `check-mano.mjs` (reemplaza a `check-formas.mjs`).
+- **Vidrio líquido, botones naranja, tarjetas y flota (pedidos del usuario, 2026-10-14).** `glass.css` + `glass.jsx`: selector de vidrio (`backdrop-filter` 20 px + saturación
+  160 %, borde superior claro, respaldo opaco con `@supports`) con la opción activa como píldora sólida que viaja entre opciones (medición + `transform`, 320 ms; tinta
+  `#1E201D`/texto blanco en claro, `#F5F5F0`/texto oscuro en oscuro), en los filtros de `/experiencias` (móvil: carril con snap) y en los chips móviles de «La mano de viaje».
+  Botones naranja: degradado de luz superior 34 %→0, borde interior claro, sombra cálida `rgba(255,127,9,.35)`, texto siempre `#1E201D`, `scale(.97)`, foco visible.
+  `CardExtras.jsx` (copia del oficial): insignia «★★★★★ 5,0 · Google» en vidrio (valoración de la EMPRESA; `aria-label` «Valoración de la empresa en Google: 5,0 de 5»; enlaza a
+  su ficha) y botón de compartir con menú accesible (portal, `aria-expanded`, flechas/Inicio/Fin, Esc devuelve el foco, Tab atrapado, confirmación `role=status`):
+  hoja nativa, WhatsApp, Facebook, X, Instagram y TikTok (copian el enlace y abren la red), correo y copiar enlace; URL = canonical de la página o el origen actual
+  (nada personal; el mensaje usa «T&T Medellín», no «T&T Colombia»). Resplandor naranja al pasar el cursor (solo `hover:hover`; título `#B85400` claro / `#FF9A3D` oscuro; sin
+  elevación ni zoom en movimiento reducido). `/vehiculos`: cuadrícula 3×2, capacidad con icono, descripción y equipamiento literal del oficial (`content.js`
+  `FEATURES`, iconos de línea en `icons.jsx`); EN con las etiquetas del oficial. La barra móvil de cotizar (`QuoteBar`) se retiró (ya existen el botón flotante y el formulario).
+- **Portada congelada (pedido del usuario 2026-10-14, commits «meencanta»).** La portada (`Home.jsx`, `ScrubHero.jsx`, `TravelHand.jsx`, `HomeVideos.jsx`, `baraja-geometria.js`) es idéntica a
+  HEAD `cb2fb11` en comportamiento y tiempos; sus tres hojas (`scrub-hero.css`, `travel-hand.css`, `home.css`) solo cambiaron el NOMBRE de los tokens (`--surface-2`→`--surface-1`,
+  `--surface`→`--surface-2`) y `home-legacy.css` (`body:has(.home-hero)`) devuelve a la portada los VALORES de HEAD (superficies oscuras, bordes, sombras, foco y botón naranja
+  brillante). Comparación píxel a píxel contra HEAD con `scripts/compare-home.mjs` (HEAD compilado en otra carpeta). Excepciones autorizadas: pie nuevo, botón flotante de WhatsApp y,
+  en móvil <768 px, fotos de «La mano de viaje» ≈25 % más pequeñas.
+- **Escalas tonales (Spec 03 §I.2)** aplicadas fuera de la portada: `website.css :root` (escalas `--n-*`, `--d-*`, `--o-*` y mapa semántico), `preferences.css` (oscuro y `.tone-dark`),
+  `glass.css` (botón primario `#EE7A12`, vidrio, resplandor `--brand-glow`, texto naranja `--brand-text`). Pie siempre oscuro en claro y NARANJA (`--o-600`) en oscuro, con la silueta
+  de Medellín (`Skyline.jsx`, SVG propio de 1,7 KB) y barra legal en `--o-800`; contraste medido ≥4,6:1 (`scripts/capture-pie.mjs`).
+- **Barra de ficha en móvil (`TourBar.jsx`)**: «Cotizar por WhatsApp» con el nombre del recorrido; aparece al bajar, se oculta al subir, al detenerse y con el formulario a la vista; mientras
+  se ve, el botón flotante se oculta (nunca los dos a la vez; `check-fab.mjs`). Botón flotante 64/58 px con pulso (2 al cargar, uno cada ~12 s, ninguno con movimiento reducido) y etiqueta «¿Hablamos?».
+- **Redes (cambio del usuario).** Perfil centrado (logo en círculo, nombre, @, «Seguir» con icono de Instagram) y cuadrícula 4×2 de publicaciones 1:1 sin
+  separación (móvil: 3 columnas × 2), icono de reel/carrusel con sombra, todo estático y local (sin scripts ni iframes de terceros). `instagram.posts[]`
+  `{url, image, type, alt}`: sin `image` el cuadro es provisional y enlaza al perfil; `stats` nulo = oculto (PENDIENTE CLIENTE). Enlace «También en TikTok».
+- **Libro (J4).** Dirección real, hoja de dos segmentos 30/70 con curvatura, reverso con contenido, sombreado y reflejo, sombra proyectada, elevación,
+  850/700 ms con `--ease-in-out-strong`, controles bajo el libro, clics múltiples hacia el último destino, móvil de una página con deslizamiento ≥48 px,
+  reducido = fundido 150 ms. Móvil: esquina levantada que respira una vez, giro de pista de ~15° y «Desliza para pasar la página» hasta el primer giro
+  (`sessionStorage`, con try/catch). Prueba: `check-experience-book.mjs`.
+- **Modo oscuro (J3).** `--on-brand` en ambos modos; se eliminó la regla global que oscurecía el texto de `.button`/`.nav-cta`; logos de aliados sobre placa
+  clara, deshabilitados sin `opacity`, autorrelleno, bordes de cartas/fotos, icono de TikTok con color explícito.
+- **Botón de WhatsApp.** Fijo abajo a la derecha (56/52 px, safe-area); se eleva sobre la `QuoteBar` y se atenúa mientras taparía un enlace, botón, campo o el pie,
+  y con el menú o un diálogo abiertos (muestreo con `elementsFromPoint`). Texto genérico, sin datos personales. «Saltar» y «Reducir movimiento» salen de esa esquina.
+- **Flechas.** Un único SVG (`Arrow.jsx`, trazo 1,75, 18 px, `currentColor`); los glifos ↗ → ← ↓ ↑ salieron de las cadenas y de `locales/en.json`.
+- **Rendimiento.** `content-visibility:auto` en secciones bajo el pliegue; un solo `local()` por cara de respaldo; `ScrubHero` no pide fotogramas, imágenes
+  flotantes ni tira hasta acercarse (margen 100 %); resumen del formulario con `startTransition`; logo de cabecera `fetchPriority="low"`.
+
+**Despliegue y reglas de host.** `npm run build` escribe `dist/<ruta>/index.html` (25 rutas × es/en), `404.html`, `200.html` (cáscara vacía), `sitemap.xml`,
+`robots.txt` y un `canonical` absoluto por ruta. Variables: `TYT_SITE_URL` (dominio; sin ella se usa el marcador `dominio-pendiente-cliente.invalid`,
+PENDIENTE CLIENTE) y `TYT_INDEXABLE=1` (quita `noindex`, abre `robots.txt`; por defecto el prototipo sigue cerrado). Reglas de host:
+1. Estático ideal: `try_files $uri $uri/index.html =404` con `error_page 404 /404.html` (estado 404 real) y gzip/brotli de texto; `/assets/*` inmutable.
+2. Host solo SPA (reescribe todo a un HTML): usar `/200.html` como destino de la reescritura (Netlify `/* /200.html 200`; Cloudflare Pages lo hace por
+   defecto). Si se reescribe a `/index.html` (que es el inicio prerenderizado), `main.jsx` compara `#root[data-path]` con la URL y, si no coincide, descarta el
+   HTML y renderiza en el cliente: ya no hay React #418 en `/contacto` ni `/experiencias/hacienda-napoles`.
+3. `/site` y `/flota` se publican con la cáscara (redirección de cliente). Servidor de pruebas tipo producción: `node scripts/serve-static.mjs dist <puerto> [spa]`.
+
+Pruebas: `check-prerender.mjs` (25 rutas, canonical, sitemap, robots y reescritura SPA), `check-experience-book.mjs`, `check-fab.mjs`, `check-scrub-hero.mjs`
+(actualizada: la baraja ya no vive en la cabecera del inicio), `capture-ronda-j.mjs`; capturas en `site/test-results/ronda-j/`.

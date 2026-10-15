@@ -72,3 +72,4 @@
 .contact-place .map-links,.contact-place .map-frame + p{margin-top:16px}
 @media(min-width:900px){.quote-section .quote-copy{position:sticky;top:120px}}
 @media(max-width:899px){.contact-place{padding-block:32px 24px}.contact-place + .quote-section{padding-top:24px}}
+.summary .wa-open{display:flex;width:100%;margin:0 0 20px!important;min-height:60px;font-size:17px;background:var(--brand-solid);color:var(--on-brand);border-color:transparent}

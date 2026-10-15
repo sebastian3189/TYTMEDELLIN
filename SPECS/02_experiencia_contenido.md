@@ -157,6 +157,9 @@ la lista. `PENDIENTE CLIENTE`. No se inventan términos ni volúmenes.
 Aprobado completo, incluido el cambio del titular a «Medellín,» / «a tu ritmo.»
 (sustituye a «a tu manera.»). Pendiente de implementación y auditoría.
 
+**Cambio del usuario (2026-10-14):** se retira la frase «Un grupo reunido frente al
+Palacio de la Cultura.» (subtítulo de la fase c2 del inicio).
+
 **Cambio del usuario (2026-10-12):** el titular pasa a «Medellín,» / «a otro nivel.»
 (sustituye a «a tu ritmo.»). Pendiente: el eyebrow «Experiencias a otro nivel» repite
 «otro nivel» en la misma pantalla (regla de uso de este spec); decisión del usuario.
@@ -267,6 +270,17 @@ mayoría»: confirmar por ficha (el traslado JMC también admite la terminal).
   para las filas 1, 2, 5, 6, 11, 12 (content.ts) como base.
 - Criterio medible: clics en WhatsApp/cotizar desde páginas con FAQ frente a sin FAQ.
 
+**Cambio del usuario (2026-10-14):** se retira la barra móvil de cotizar (QuoteBar con
+WhatsApp + «Cotizar») de las fichas: es redundante con el botón flotante de WhatsApp y el
+formulario de la página. **Actualización posterior del mismo día:** el usuario pide en
+móvil que, al bajar en una ficha, el WhatsApp flotante se oculte un momento y aparezca
+una barra con el nombre del tour y «Cotizar por WhatsApp»; al subir o detenerse vuelve el
+flotante. Nunca ambos a la vez. Pie de página siempre oscuro, con silueta propia de
+Medellín en negro; RNT 176384 y NIT 901738550-6. Ajuste del usuario: en MODO OSCURO
+el pie es NARANJA con la silueta de la ciudad también naranja (texto en tinta oscura
+con contraste AA); en modo claro, pie oscuro con silueta negra. Dominio publicado provisional:
+tytmedellin.vercel.app.
+
 ## Respuestas del cliente a las FAQ pendientes (aportadas por el usuario, 2026-10-14)
 
 Datos verificados por el cliente; se publican con su texto (edición mínima de estilo
@@ -279,9 +293,8 @@ cancelaciones, manejamos las siguientes condiciones sobre el anticipo recibido:
 más de 15 días de anticipación: devolución del 60 %; entre 8 y 14 días: devolución del
 20 %; con 7 días o menos: no aplica devolución. Las solicitudes de cambio de fecha están
 sujetas a disponibilidad y a las condiciones de la reserva.
-> Nota de revisión: el texto no cubre exactamente 15 días (queda entre «más de 15» y
-> «8 a 14»). Confirmar con el cliente antes de publicar o redactar «15 días o más» si
-> el cliente lo aprueba.
+> Corrección aprobada por el usuario (2026-10-14): publicar «15 días o más de
+> anticipación: devolución del 60 %» en lugar de «más de 15 días».
 
 **2. Medios de pago, anticipo y facturación.** Para confirmar una experiencia
 solicitamos un anticipo del 30 % del valor total. El 70 % restante puede cancelarse
@@ -315,7 +328,8 @@ ofrecemos flexibilidad para ajustar los horarios según las necesidades del viaj
 
 Los horarios pueden modificarse dependiendo del lugar de recogida, tráfico, condiciones
 climáticas e itinerario. (Sin dato del cliente: Santa Fe de Antioquia, Jardín, Salto
-del Buey, Tour de Compras y Traslados JMC → no mostrar duración en esas fichas.)
+del Buey, Tour de Compras y Traslados JMC → no mostrar duración en esas fichas;
+el usuario confirma omitirlo por ahora, 2026-10-14.)
 
 **6. Qué no incluye.** Salvo que la cotización indique expresamente lo contrario,
 nuestros servicios no incluyen entradas a parques o atracciones, compras personales,
@@ -359,3 +373,63 @@ desde la planeación hasta la finalización de su experiencia.
 3, 5, 6, 7, 8, 9; Traslados: 10; Confianza/legal: 4 en /nosotros o pie con RNT y NIT).
 La duración de la tabla 5 se muestra además en la ficha de cada experiencia que la
 tenga. EN: añadir claves a `site/src/locales/en.json` para revisión del usuario.
+
+## «¿Qué nos hace diferentes?» — copy aportado por el usuario (2026-10-14), APROBADO para el inicio
+
+Texto del cliente; se publica literal (los emojis se sustituyen por iconos SVG de línea
+coherentes, como pidió el usuario para las flechas). Afirmaciones verificadas por el
+cliente (incluye «flota propia», hidratación y fotos/videos sin costo, WhatsApp 24/7).
+
+**Título:** ¿Qué nos hace diferentes?
+**Entradilla:** No solo te llevamos a conocer Medellín. Nos encargamos de que vivas una
+experiencia a otro nivel.
+**Párrafo:** En Transporte y Turismo Medellín creemos que una experiencia extraordinaria
+comienza mucho antes de subir al vehículo. Por eso, cuidamos cada detalle de tu viaje,
+brindándote seguridad, comodidad, atención personalizada y el respaldo de un equipo
+comprometido contigo.
+
+1. (avión) **Monitoreamos tu vuelo.** Seguimos el estado de tu vuelo hasta su aterrizaje
+   en Medellín para coordinar tu recogida y estar preparados ante posibles cambios de horario.
+2. (vehículo) **Flota propia y vehículos certificados.** Contamos con vehículos modernos,
+   habilitados y en óptimas condiciones, con mantenimiento preventivo y documentación al
+   día para ofrecerte comodidad y seguridad.
+3. (equipo) **Un equipo que responde por ti.** Guías, conductores y personal logístico
+   trabajan bajo nuestros estándares de servicio. Coordinamos directamente cada
+   experiencia, sin intermediarios innecesarios, para garantizar el control de calidad.
+4. (gota) **Hidratación incluida.** Durante nuestras experiencias te ofrecemos agua e
+   hidratación sin costo adicional. Porque los pequeños detalles también hacen grandes diferencias.
+5. (globo) **Experiencias 100 % privadas.** Nada de grupos desconocidos ni recorridos
+   masivos. Tu vehículo y tu experiencia son exclusivos para ti y tus acompañantes.
+6. (reloj) **Flexibilidad en tus horarios.** Adaptamos nuestros recorridos a tus
+   intereses y necesidades. Queremos que disfrutes cada destino a tu ritmo.
+7. (cámara) **Recuerdos sin costo adicional.** Capturamos fotografías y videos durante
+   tu experiencia para que te lleves recuerdos especiales de tu visita.
+8. (escudo) **Seguridad y respaldo legal.** Somos una empresa legalmente constituida,
+   con Registro Nacional de Turismo (RNT 176384). Operamos con vehículos habilitados y las
+   coberturas y pólizas aplicables a nuestros servicios.
+9. (mensaje) **Acompañamiento por WhatsApp 24/7.** Contamos con un canal de atención para
+   ayudarte ante imprevistos, cambios de planes o cualquier situación relacionada con tu servicio.
+10. (corazón) **Atención desde el primer contacto.** No solo organizamos recorridos.
+    Escuchamos tus necesidades, te asesoramos y diseñamos experiencias que se ajustan a
+    lo que realmente buscas.
+
+**Cierre:** Transporte y Turismo Medellín — Experiencias a otro nivel. No es solamente a
+dónde te llevamos. Es cómo te hacemos sentir durante todo el camino.
+
+EN: añadir claves en `site/src/locales/en.json`; traducción PENDIENTE de revisión del usuario.
+
+**Cambios del usuario (2026-10-14, tarde):** correo de contacto en todo el sitio:
+transporteyturismomedellin@gmail.com (sustituye a transporteturismocolombia@gmail.com).
+Logo en contenedor circular. Nueva subpágina local «Política de tratamiento de datos»
+para Medellín con el texto oficial literal del sitio del grupo, adaptando solo los datos
+del responsable (Transporte y Turismo Medellín, NIT 901738550-6, RNT 176384, Carrera 79AA
+#1A Sur-280, Medellín, transporteyturismomedellin@gmail.com, +57 304 496 1698);
+requiere revisión del consultor legal antes de publicar.
+
+**Decisión del usuario (2026-10-14):** el video miniatura del inicio usa el reel
+https://www.instagram.com/p/DdXYS5gJ-GH/ TAL CUAL, con su música original («DtMF», Bad
+Bunny), por decisión expresa del usuario tras ser advertido de que la licencia de
+Instagram no cubre el uso en la web y del riesgo de reclamos de derechos de autor. El
+usuario asume ese riesgo. Pendiente: sustituirlo por la versión con solo la voz cuando
+el cliente la aporte. Reproducción: silenciado por defecto (requisito de autoplay) con
+botón para activar el sonido.

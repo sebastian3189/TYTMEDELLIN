@@ -9,12 +9,14 @@ import '../policy.css';
  * Medellín (Transporte y Turismo Medellín, NIT 901738550-6, RNT 176384, Carrera 79AA #1A Sur-280, Medellín, correo y WhatsApp de esta sede). No se
  * cambian obligaciones, finalidades, derechos, plazos ni procedimientos.
  * REQUIERE REVISIÓN DEL ASESOR LEGAL antes de considerarse vigente (igual que la fuente). Versión en inglés: DataPolicyEn (traducción de cortesía, también por revisar por el asesor; prevalece el español).
+ * Modificación 2026-10-15 (decisión del usuario, Spec 04 «Excepción WhatsApp»): se añade el apartado «Envío de tu solicitud por WhatsApp» y se
+ * precisa el apartado 2 porque los formularios ya no copian un resumen, sino que abren WhatsApp con el mensaje prellenado. Revisar con el asesor.
  * Nota para el asesor: los apartados 8 y 9 (cookies y medición) se conservan literales de la fuente; confirmar si aplican a esta sede, porque este sitio hoy no carga
  * herramientas de medición ni muestra aviso de cookies.
  */
 const SECTIONS = [
-  ['responsable', '1. Responsable del tratamiento'], ['datos', '2. Datos que recogemos'], ['finalidad', '3. Finalidad'], ['autorizacion', '4. Autorización'],
-  ['derechos', '5. Tus derechos'], ['ejercer', '6. Cómo ejercerlos'], ['retencion', '7. Retención'], ['cookies', '8. Cookies'], ['medicion', '9. Medición del sitio'],
+  ['responsable', '1. Responsable del tratamiento'], ['datos', '2. Datos que recogemos'], ['whatsapp', '3. Envío de tu solicitud por WhatsApp'], ['finalidad', '4. Finalidad'], ['autorizacion', '5. Autorización'],
+  ['derechos', '6. Tus derechos'], ['ejercer', '7. Cómo ejercerlos'], ['retencion', '8. Retención'], ['cookies', '9. Cookies'], ['medicion', '10. Medición del sitio'],
 ];
 export default function DataPolicy() {
   if (language() === 'en') return <DataPolicyEn />;
@@ -31,21 +33,24 @@ export default function DataPolicy() {
           <p>Transporte y Turismo Medellín, con domicilio en Carrera 79AA #1A Sur-280, Medellín, correo <a href={`mailto:${company.email}`}>{company.email}</a> y teléfono +57 304 496 1698.</p>
           <p>NIT 901738550-6. RNT 176384.</p></section>
         <section id="datos"><h2>2. Datos que recogemos</h2>
-          <p>Únicamente los que nos escribes en el formulario de contacto: nombre, empresa u organización, correo electrónico, teléfono, tipo de consulta, número de personas, fecha del viaje y el mensaje. No recogemos datos sensibles ni datos de menores de edad.</p></section>
-        <section id="finalidad"><h2>3. Finalidad</h2>
+          <p>Únicamente los que nos escribes en los formularios de contacto y cotización: nombre, empresa u organización, correo electrónico, teléfono, tipo de consulta, número de personas, fecha del viaje, los demás detalles del viaje que decidas incluir (por ejemplo, punto de recogida) y el mensaje. No recogemos datos sensibles ni datos de menores de edad.</p></section>
+        <section id="whatsapp"><h2>3. Envío de tu solicitud por WhatsApp</h2>
+          <p>Cuando completas un formulario y lo envías, este sitio no guarda tus datos: con la información que escribiste prepara un mensaje y abre WhatsApp (en la aplicación o en WhatsApp Web) con ese mensaje ya escrito, dirigido a nuestro número +57 304 496 1698. Tú decides si lo envías.</p>
+          <p>Para prellenar el mensaje, sus datos viajan dentro del enlace que abre WhatsApp, por lo que pueden quedar registrados en el historial de tu navegador o dispositivo. WhatsApp es un servicio de un tercero (WhatsApp LLC, del grupo Meta Platforms) que trata la información conforme a sus propias condiciones y política de privacidad, y puede almacenarla fuera de Colombia. Al enviar el mensaje, autorizas esa transmisión y transferencia internacional. Si prefieres no usar WhatsApp, puedes copiar el mensaje y enviarlo a <a href={`mailto:${company.email}`}>{company.email}</a>.</p></section>
+        <section id="finalidad"><h2>4. Finalidad</h2>
           <p>Responder a tu consulta, elaborar la cotización o propuesta que solicites y mantener el contacto comercial derivado de esa solicitud. No usamos tus datos para ninguna otra cosa ni los cedemos a terceros con fines publicitarios.</p></section>
-        <section id="autorizacion"><h2>4. Autorización</h2>
+        <section id="autorizacion"><h2>5. Autorización</h2>
           <p>El tratamiento requiere tu autorización previa, expresa e informada, que otorgas marcando la casilla correspondiente en el formulario. La casilla nunca viene marcada de antemano, y puedes retirar tu autorización en cualquier momento.</p></section>
-        <section id="derechos"><h2>5. Tus derechos</h2>
+        <section id="derechos"><h2>6. Tus derechos</h2>
           <p>Como titular puedes conocer, actualizar y rectificar tus datos; solicitar prueba de la autorización; ser informado del uso que les damos; presentar quejas ante la Superintendencia de Industria y Comercio; y revocar la autorización o solicitar la supresión de tus datos.</p></section>
-        <section id="ejercer"><h2>6. Cómo ejercerlos</h2>
+        <section id="ejercer"><h2>7. Cómo ejercerlos</h2>
           <p>Escribiendo a <a href={`mailto:${company.email}`}>{company.email}</a> con el asunto «Protección de datos». Atendemos consultas en un plazo máximo de diez días hábiles y reclamos en quince, conforme a la ley.</p></section>
-        <section id="retencion"><h2>7. Retención</h2>
+        <section id="retencion"><h2>8. Retención</h2>
           <p>Conservamos los datos mientras dure la relación comercial y, después, durante el plazo legal aplicable a las obligaciones contables y fiscales. Cumplido ese plazo, se suprimen.</p></section>
-        <section id="cookies"><h2>8. Cookies</h2>
+        <section id="cookies"><h2>9. Cookies</h2>
           <p>Usamos dos clases de cookies propias. Las <strong>necesarias</strong> solo guardan tus preferencias en este navegador —el idioma, el tema claro u oscuro y tu propia decisión sobre cookies— y sin ellas el sitio no puede recordarte cómo lo dejaste. Las <strong>de medición</strong> nos dicen qué páginas se visitan y qué botones se pulsan.</p>
           <p>Las de medición <strong>no se activan hasta que las aceptas</strong> en el aviso que aparece al entrar. Si eliges «solo las necesarias», no se descarga ninguna herramienta de terceros y no se envía ningún dato. Puedes cambiar de opinión cuando quieras borrando las cookies de este sitio en tu navegador: el aviso volverá a aparecer.</p></section>
-        <section id="medicion"><h2>9. Medición del sitio</h2>
+        <section id="medicion"><h2>10. Medición del sitio</h2>
           <p>Si aceptas las cookies de medición, usamos Google Tag Manager y Google Analytics para entender cómo se usa el sitio: qué páginas se ven, en qué idioma, qué destinos despiertan más interés y desde dónde se nos escribe por WhatsApp. Lo hacemos para mejorar la web, no para perseguirte.</p>
           <p><strong>Nunca enviamos a esas herramientas tu nombre, tu correo, tu teléfono ni el contenido de tu mensaje.</strong> Lo que se registra es la página y el botón, nunca quién eres. La dirección IP se anonimiza y la información se conserva un máximo de catorce meses, tras los cuales se elimina.</p>
           <p className="policy-muted">Google actúa como encargado del tratamiento y puede almacenar esos datos fuera de Colombia. Al aceptar, autorizas esa transferencia internacional.</p></section>
@@ -56,8 +61,8 @@ export default function DataPolicy() {
 
 /* English courtesy translation (literal; no obligations, rights, deadlines or procedures added, removed or softened). Requires review by the legal consultant. */
 const SECTIONS_EN = [
-  ['controller', '1. Data controller'], ['data', '2. Data we collect'], ['purpose', '3. Purpose'], ['authorization', '4. Authorization'],
-  ['rights', '5. Your rights'], ['exercise', '6. How to exercise them'], ['retention', '7. Retention'], ['cookies', '8. Cookies'], ['measurement', '9. Site measurement'],
+  ['controller', '1. Data controller'], ['data', '2. Data we collect'], ['whatsapp', '3. Sending your request via WhatsApp'], ['purpose', '4. Purpose'], ['authorization', '5. Authorization'],
+  ['rights', '6. Your rights'], ['exercise', '7. How to exercise them'], ['retention', '8. Retention'], ['cookies', '9. Cookies'], ['measurement', '10. Site measurement'],
 ];
 function DataPolicyEn() {
   return <>
@@ -74,21 +79,24 @@ function DataPolicyEn() {
           <p>Transporte y Turismo Medellín, domiciled at Carrera 79AA #1A Sur-280, Medellín, email <a href={`mailto:${company.email}`}>{company.email}</a> and telephone +57 304 496 1698.</p>
           <p>NIT 901738550-6. RNT 176384.</p></section>
         <section id="data"><h2>2. Data we collect</h2>
-          <p>Only what you write to us in the contact form: name, company or organization, email address, telephone, type of enquiry, number of people, travel date and the message. We do not collect sensitive data or data of minors.</p></section>
-        <section id="purpose"><h2>3. Purpose</h2>
+          <p>Only what you write to us in the contact and quote forms: name, company or organization, email address, telephone, type of enquiry, number of people, travel date, any other trip details you choose to include (for example, pickup point) and the message. We do not collect sensitive data or data of minors.</p></section>
+        <section id="whatsapp"><h2>3. Sending your request via WhatsApp</h2>
+          <p>When you complete and submit a form, this site does not store your data: with the information you wrote it prepares a message and opens WhatsApp (in the app or in WhatsApp Web) with that message already written, addressed to our number +57 304 496 1698. You decide whether to send it.</p>
+          <p>To pre-fill the message, its data travels inside the link that opens WhatsApp, so it may be recorded in the history of your browser or device. WhatsApp is a third-party service (WhatsApp LLC, part of the Meta Platforms group) that processes the information under its own terms and privacy policy, and may store it outside Colombia. By sending the message, you authorize that transmission and international transfer. If you prefer not to use WhatsApp, you can copy the message and send it to <a href={`mailto:${company.email}`}>{company.email}</a>.</p></section>
+        <section id="purpose"><h2>4. Purpose</h2>
           <p>To answer your enquiry, prepare the quotation or proposal you request and maintain the commercial contact arising from that request. We do not use your data for anything else and we do not transfer it to third parties for advertising purposes.</p></section>
-        <section id="authorization"><h2>4. Authorization</h2>
+        <section id="authorization"><h2>5. Authorization</h2>
           <p>Processing requires your prior, express and informed authorization, which you give by ticking the corresponding box in the form. The box is never ticked in advance, and you may withdraw your authorization at any time.</p></section>
-        <section id="rights"><h2>5. Your rights</h2>
+        <section id="rights"><h2>6. Your rights</h2>
           <p>As the data subject you may know, update and rectify your data; request proof of the authorization; be informed of the use we make of it; file complaints with the Superintendencia de Industria y Comercio (Superintendence of Industry and Commerce); and revoke the authorization or request the deletion of your data.</p></section>
-        <section id="exercise"><h2>6. How to exercise them</h2>
+        <section id="exercise"><h2>7. How to exercise them</h2>
           <p>By writing to <a href={`mailto:${company.email}`}>{company.email}</a> with the subject "Protección de datos" (data protection). We answer enquiries within a maximum of ten business days and claims within fifteen, in accordance with the law.</p></section>
-        <section id="retention"><h2>7. Retention</h2>
+        <section id="retention"><h2>8. Retention</h2>
           <p>We keep the data for as long as the commercial relationship lasts and, afterwards, for the legal period applicable to accounting and tax obligations. Once that period has elapsed, the data is deleted.</p></section>
-        <section id="cookies"><h2>8. Cookies</h2>
+        <section id="cookies"><h2>9. Cookies</h2>
           <p>We use two kinds of first-party cookies. The <strong>necessary</strong> ones only store your preferences in this browser —the language, the light or dark theme and your own decision about cookies— and without them the site cannot remember how you left it. The <strong>measurement</strong> ones tell us which pages are visited and which buttons are pressed.</p>
           <p>Measurement cookies <strong>are not activated until you accept them</strong> in the notice that appears when you arrive. If you choose "only the necessary ones", no third-party tool is downloaded and no data is sent. You can change your mind whenever you want by deleting this site's cookies in your browser: the notice will appear again.</p></section>
-        <section id="measurement"><h2>9. Site measurement</h2>
+        <section id="measurement"><h2>10. Site measurement</h2>
           <p>If you accept measurement cookies, we use Google Tag Manager and Google Analytics to understand how the site is used: which pages are viewed, in which language, which destinations arouse the most interest and from where we are written to on WhatsApp. We do this to improve the website, not to chase you.</p>
           <p><strong>We never send those tools your name, your email, your telephone or the content of your message.</strong> What is recorded is the page and the button, never who you are. The IP address is anonymized and the information is kept for a maximum of fourteen months, after which it is deleted.</p>
           <p className="policy-muted">Google acts as data processor and may store that data outside Colombia. By accepting, you authorize that international transfer.</p></section>

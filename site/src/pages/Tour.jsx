@@ -16,9 +16,12 @@ import { inicioTextos } from '../inicio-textos';
 import { Marquee, Trust, EditorialMotion, useMedia, useLightMotion } from '../PremiumMotion';
 import { Picture, Arrow, Eyebrow, Rail, TourCard, QuoteSection } from '../shared';
 import { usePageMeta } from '../meta';
+import { t, language } from '../i18n';
 import NotFound from './NotFound';
 import '../mobile-motion.css';
 import TourBar from '../TourBar';
+import ItineraryStory from '../ItineraryStory';
+import { itinerarios } from '../itinerarios';
 
 function Story({tour}){
  const ref=useRef(null);const [active,setActive]=useState(0);
@@ -35,10 +38,10 @@ export default function Tour(){const {slug}=useParams();const tour=tours.find(t=
  <TourRoute/>
  <TourHeroVideo tour={tour}/>
  <TourHero tour={tour}/>
- <Marquee text={tour.name.toLocaleUpperCase('es')}/>
+ <Marquee text={t(tour.name).toLocaleUpperCase(language()==='en'?'en':'es')}/>
  <TourNav/>
  <section id="esencia" data-tn="0" className="tour-intro tp-band wrap"><div className="ti-l"><Eyebrow>El espíritu del recorrido</Eyebrow><h2 data-tr>{tour.title}</h2></div><div className="ti-r"><p data-tr>{tour.description}</p><div className="trip-facts" data-tr><span><Icon name="mapPin" size={20} draw/>Salida coordinada en Medellín</span><span><Icon name="clock" size={20} draw/>Consulta fechas y disponibilidad</span><span><Icon name="users" size={20} draw/>Propuesta para tu grupo</span></div>{duracion&&<div className="tour-duration" data-tr><p><Icon name="clock" size={20} draw/><span><b>Duración y salida:</b> {duracion}</span></p><small>{NOTA_HORARIOS}</small></div>}</div></section>
- <Trust/><TourDetails slug={tour.slug}/><Story tour={tour}/><div id="fotos" data-tn="1"><TourArchive tour={tour}/></div>
+ <Trust/><TourDetails slug={tour.slug}/>{itinerarios[tour.slug]?<ItineraryStory tour={tour}/>:<Story tour={tour}/>}<div id="fotos" data-tn="1"><TourArchive tour={tour}/></div>
  <section className="prepare tp-band wrap" id="preparar" data-tn="2"><div><Eyebrow>Pequeños detalles, mejor viaje</Eyebrow><h2 data-tr>Ven con ganas.<br/>Lo demás, <em>planeémoslo.</em></h2><p>{tour.advice}</p>{tourInfo[tour.slug]?.recomendaciones.length>0&&<ul className="td-tips" role="list" data-tr>{tourInfo[tour.slug].recomendaciones.map(t=><li key={t}><Icon name="check" size={18} draw/>{t}</li>)}</ul>}</div><Faq items={faq} headingLevel={3} title="Preguntas frecuentes" eyebrow="Resolvemos tus dudas" className="faq-in"/></section>
  <QuoteSection context={tour.name}/><Reviews/><section className="wrap section tp-band" data-tr><Eyebrow>El viaje puede continuar</Eyebrow><h2>Otros caminos<br/>por <em>descubrir.</em></h2><Rail label="Más experiencias">{tours.filter(t=>t.slug!==slug).sort((a,b)=>Number(b.category===tour.category)-Number(a.category===tour.category)).slice(0,6).map(t=><TourCard key={t.slug} tour={t}/>)}</Rail></section>
  <TourBar name={tour.name}/>
