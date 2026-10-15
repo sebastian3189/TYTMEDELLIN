@@ -30,4 +30,23 @@ html[data-theme="dark"] input,html[data-theme="dark"] textarea,html[data-theme="
 html[lang="en"] .home-hero h1{font-size:clamp(48px,min(9vw,14svh),160px)}
 @media(max-width:799px){html[lang="en"] .home-hero h1{font-size:clamp(30px,calc((100vw - 40px) / 9.8),54px)}}
 
-.site-preferences select{width:76px;cursor:pointer;appearance:auto}.site-preferences select:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+/* Selector de idioma: botón compacto + lista (≥44 px de alto, cabe a 320 px) */
+.language-menu{position:relative}
+.site-preferences .language-toggle{gap:5px;min-width:44px;padding:0 10px;cursor:pointer}
+.site-preferences .language-toggle:focus-visible,.language-list a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.language-list{position:absolute;z-index:120;top:calc(100% + 8px);right:0;min-width:204px;margin:0;padding:6px;list-style:none;border-radius:20px;background:var(--glass-bg);border:1px solid var(--glass-border);-webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);box-shadow:inset 0 1px 0 var(--glass-hl),var(--shadow-2);animation:lang-in 180ms var(--ease-out-strong)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.language-list{background:var(--surface-2)}}
+.site-header .site-preferences .language-list a{color:var(--text-strong);display:flex;width:auto;height:auto;border:0;background:transparent;align-items:center;justify-content:space-between;gap:16px;min-height:44px;padding:0 14px;border-radius:14px;color:var(--text-strong);font:500 15px var(--font);text-decoration:none}
+.site-preferences .language-list a[aria-current="true"]{background:var(--brand-soft);font-weight:700}
+.language-list .language-code{font:700 12px var(--font);color:var(--text-muted)}
+@media(hover:hover){.site-preferences .language-list a:hover{background:var(--surface-1)}}
+@keyframes lang-in{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.language-list{animation:none}}
+.site-header .site-preferences .language-list{background:rgba(255,255,255,.95)}
+html[data-theme="dark"] .site-header .site-preferences .language-list{background:rgba(35,38,35,.95)}
+.site-header .site-preferences .language-list .language-code{color:var(--text-muted)}
+/* La cabecera transparente del inicio fuerza texto claro en sus enlaces: la lista del selector tiene su propio fondo y conserva el tono del tema. */
+.site-header .site-preferences .language-list a{color:var(--text-strong)!important;background:transparent!important;border:0!important;white-space:nowrap}
+.site-header .site-preferences .language-list a[aria-current="true"]{background:var(--brand-soft)!important}
+.site-header .site-preferences .language-list .language-code{color:var(--text-muted)!important}
+@media(hover:hover){.site-header .site-preferences .language-list a:hover{background:var(--surface-1)!important}}

@@ -85,6 +85,7 @@ var Aceptar = "Aceitar";
 var Configurar = "Configurar";
 var Necesarias = "Necessárias";
 var Preferencias = "Preferências";
+var Rechazar = "Rejeitar";
 var pt_BR_default = {
 	"(se abre en una pestaña nueva)": "(abre em uma nova aba)",
 	". WhatsApp y los sitios externos aplican sus propias políticas al abrirlos.": ". O WhatsApp e os sites externos aplicam suas próprias políticas quando você os acessa.",
@@ -1376,7 +1377,12 @@ var pt_BR_default = {
 	"Guardar el tema claro u oscuro entre visitas es opcional y requiere tu aceptación. El idioma se determina por la dirección de la página. Puedes configurar o retirar tu consentimiento desde «Cookies y preferencias» en el pie del sitio.": "Guardar o tema claro ou escuro entre visitas é opcional e exige sua aceitação. O idioma é determinado pelo endereço da página. Você pode configurar ou retirar seu consentimento em «Cookies e preferências» no rodapé do site.",
 	"No usamos Google Analytics, Google Tag Manager ni otras herramientas de medición o publicidad. No enviamos eventos ni datos de los formularios a servicios de analítica.": "Não usamos Google Analytics, Google Tag Manager nem outras ferramentas de medição ou publicidade. Não enviamos eventos nem dados dos formulários a serviços de análise.",
 	"El mapa de OpenStreetMap solo se carga cuando pulsas el botón para mostrarlo. Ese clic establece una conexión con el proveedor del mapa. Los enlaces a WhatsApp y otras plataformas se abren cuando tú los eliges.": "O mapa do OpenStreetMap só é carregado quando você toca no botão para exibi-lo. Esse clique estabelece uma conexão com o provedor do mapa. Os links para o WhatsApp e outras plataformas são abertos quando você os escolhe.",
-	"Ubicación de la oficina en Medellín: Carrera 79AA #1A Sur-280": "Localização do escritório em Medellín: Carrera 79AA #1A Sur-280"
+	"Ubicación de la oficina en Medellín: Carrera 79AA #1A Sur-280": "Localização do escritório em Medellín: Carrera 79AA #1A Sur-280",
+	Rechazar,
+	"No dejes para mañana lo que puedes disfrutar hoy": "Não deixe para amanhã o que você pode curtir hoje",
+	"Elige un destino y cotiza por WhatsApp en un minuto.": "Escolha um destino e peça um orçamento pelo WhatsApp em um minuto.",
+	"Ver destinos": "Ver destinos",
+	"Cerrar mensaje de bienvenida": "Fechar mensagem de boas-vindas"
 };
 //#endregion
-export { Aceptar, Ampliar, Buses, Calidad, Calificaciones, Cerrar, Ciudad, Compromiso, Conecta, Confianza, Configurar, Contacto, Correo, Cotizar, Cultivos, Descubre, Detalles, Disfruta, Empresa, Enamórate, Experiencias, Explora, Familia, Felicitación, Foto, Fotografía, Fotografías, Guatapé, Hoy, Indicativo, Inicio, Inspiración, Inspírate, Jardín, Llámanos, Mensaje, Menú, Miradores, Naturaleza, Necesarias, Nevera, Noche, Nombre, Nosotros, Número, Opcional, Personalizable, Personas, Petición, Planeación, Preferencias, Principal, Privacidad, Provenza, Pueblos, Queja, Reclamo, Recolección, Recuerda, Revisa, Rionegro, Seguir, Seguridad, Sencillez, Servicio, Servicios, Siente, Silenciar, Sorpréndete, Sugerencia, Síguenos, Todas, Todos, Traslados, Vehículos, Vive, de, pt_BR_default as default, empieza, es, mueven, nota, notas, pasajeros, por, quieres, tu };
+export { Aceptar, Ampliar, Buses, Calidad, Calificaciones, Cerrar, Ciudad, Compromiso, Conecta, Confianza, Configurar, Contacto, Correo, Cotizar, Cultivos, Descubre, Detalles, Disfruta, Empresa, Enamórate, Experiencias, Explora, Familia, Felicitación, Foto, Fotografía, Fotografías, Guatapé, Hoy, Indicativo, Inicio, Inspiración, Inspírate, Jardín, Llámanos, Mensaje, Menú, Miradores, Naturaleza, Necesarias, Nevera, Noche, Nombre, Nosotros, Número, Opcional, Personalizable, Personas, Petición, Planeación, Preferencias, Principal, Privacidad, Provenza, Pueblos, Queja, Rechazar, Reclamo, Recolección, Recuerda, Revisa, Rionegro, Seguir, Seguridad, Sencillez, Servicio, Servicios, Siente, Silenciar, Sorpréndete, Sugerencia, Síguenos, Todas, Todos, Traslados, Vehículos, Vive, de, pt_BR_default as default, empieza, es, mueven, nota, notas, pasajeros, por, quieres, tu };

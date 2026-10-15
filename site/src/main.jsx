@@ -1,12 +1,24 @@
-import { StrictMode } from 'react';
+import { StrictMode, useEffect, useState } from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import Website, { preloadRoute } from './Website.jsx';
-import { language, prepareLanguage } from './i18n';
-import { languageInfo } from './languages';
+import { language, prepareLanguage, setLanguage } from './i18n';
+import { languageFromPath, languageInfo } from './languages';
 await prepareLanguage(language());
 
-const app = <StrictMode><BrowserRouter basename={languageInfo(language()).prefix || '/'}><Website /></BrowserRouter></StrictMode>;
+// El idioma activo cambia sin recargar (switchLanguage, desde el selector): la app se vuelve a montar con el diccionario y el prefijo nuevos.
+// «Atrás/Adelante» entre entradas de otro idioma también se resuelve aquí.
+function App() {
+  const [code, setCode] = useState(language());
+  useEffect(() => {
+    const change = (event) => { setCode(event.detail); requestAnimationFrame(() => document.querySelector('.language-toggle')?.focus({ preventScroll: true })); };
+    const pop = () => { const next = languageFromPath(location.pathname); if (next !== language()) { prepareLanguage(next).then(() => { setLanguage(next); document.documentElement.lang = languageInfo(next).html; setCode(next); }); } };
+    window.addEventListener('tyt-language-change', change); window.addEventListener('popstate', pop);
+    return () => { window.removeEventListener('tyt-language-change', change); window.removeEventListener('popstate', pop); };
+  }, []);
+  return <BrowserRouter key={code} basename={languageInfo(code).prefix || '/'}><Website /></BrowserRouter>;
+}
+const app = <StrictMode><App /></StrictMode>;
 const root = document.getElementById('root');
 // Rutas prerenderizadas (scripts/prerender.mjs): se hidratan tras dejar resuelto el chunk de la ruta. Sin HTML (404 real, /site, /flota): render normal.
 // Hosts con reescritura SPA (cualquier ruta → un mismo index.html): el HTML del #root puede ser de OTRA ruta (data-path); hidratarlo daría React #418.

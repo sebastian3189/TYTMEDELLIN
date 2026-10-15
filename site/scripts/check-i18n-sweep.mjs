@@ -1,12 +1,13 @@
 // Barrido i18n: renderiza cada /en/** (y sus pares ES) desde el servidor estático y lista cadenas que siguen en español (EN) o en inglés (ES).
-// Uso: node scripts/serve-static.mjs dist 4417 &  node scripts/check-i18n-sweep.mjs [es]
+// Uso: node scripts/serve-static.mjs dist 4417 &  node scripts/check-i18n-sweep.mjs [es|pt]   (pt = /pt-br: sin español ni inglés)
 // Extrae texto de TODOS los nodos (incluidos los ocultos: menús, diálogos, hojas) y aria-label/alt/title/placeholder/value de botones.
 import { chromium } from '@playwright/test';
 import { readdirSync, statSync, existsSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-const base = process.env.TYT_TEST_URL || 'http://127.0.0.1:4417', lang = process.argv[2] === 'es' ? 'es' : 'en';
+const base = process.env.TYT_TEST_URL || 'http://127.0.0.1:4417', lang = process.argv[2] === 'es' ? 'es' : process.argv[2] === 'pt' ? 'pt' : 'en';
 const walk = (d, rel = '') => readdirSync(d).flatMap((f) => { const p = join(d, f), r = rel + '/' + f; return statSync(p).isDirectory() ? (f === 'assets' || f === 'media' ? [] : walk(p, r)) : f === 'index.html' ? [rel || '/'] : []; });
 let routes = walk('dist/en', '/en').map((r) => r.replace(/\/index\.html$/, ''));
+if (lang === 'pt') routes = routes.map((r) => r.replace(/^\/en/, '/pt-br'));
 if (lang === 'es') routes = routes.map((r) => r.replace(/^\/en/, '') || '/');
 routes = [...new Set(routes)].sort();
 // Nombres propios y de marca que se conservan (se eliminan antes de contar palabras).
@@ -22,8 +23,18 @@ const verdict = (str) => {
   const acc = /[áéíóúñ¿¡]/.test(str.replace(PROPER, ' '));
   return { sp: sp >= 1 && sp >= en || (acc && en === 0), en: en >= 1 && sp === 0 && !acc };
 };
+// Portugués (Brasil): palabras exclusivas del español (no existen en portugués) o del inglés; ñ, ¿ ¡ y -ción/-ciones delatan español.
+const SPX = new Set('el los las del con una tus su sus en al más estos estas hasta después también según sin qué cómo hay día días precio viajes aquí donde cuando mis pero ya muy otro otra otros nuestro nuestra nosotros inicio vehículo vehículos servicio servicios experiencia experiencias contacto cotizar cotización tratamiento datos solicitud siguiente pestaña cerrar escríbenos síguenos nuevo nueva imágenes fotografía fotografías menú preguntas recibir razones realidad mejor recuerdo'.split(' '));
+const verdictPt = (str) => {
+  const clean = str.replace(/Antioque[ñn]o|R[eé]plica del Viejo Pe[nñ]ol|Somos lo que dejamos a los dem[aá]s|Protecci[oó]n de datos/gi, ' ').replace(PROPER, ' ').replace(/-\p{L}+/gu, ' '), words = clean.toLowerCase().match(/[a-záéíóúñüãõçâêô]+/g) || [];
+  if (/^[A-Z]{2} · /.test(str) || !words.length) return { bad: false };
+  if (/[ñ¿¡]|ci[oó]n(es)?/i.test(clean)) return { bad: true };
+  let sp = 0, en = 0; for (const w of words) { if (SPX.has(w)) sp++; if (EN.has(w)) en++; }
+  return { bad: sp >= 1 || (en >= 1 && words.length > 0 && en * 2 >= words.length) };
+};
 const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const VW = Number(process.env.TYT_W || 1440), ctx = await browser.newContext({ viewport: { width: VW, height: VW < 800 ? 844 : 900 }, isMobile: VW < 800, hasTouch: VW < 800 });
+const ALLOW = new Set(['Español', 'English', 'Português (Brasil)', 'ES', 'EN', 'PT']);
 const found = new Map(); let total = 0; const all = {};
 for (const r of routes) {
   const page = await ctx.newPage();
@@ -41,7 +52,8 @@ for (const r of routes) {
     all[r] = strs;
     for (const s of strs) {
       total++;
-      const v = verdict(s), bad = lang === 'en' ? v.sp : v.en;
+      if (ALLOW.has(s)) continue;
+      const v = verdict(s), bad = lang === 'pt' ? verdictPt(s).bad : lang === 'en' ? v.sp : v.en;
       if (bad) { if (!found.has(s)) found.set(s, []); found.get(s).push(r); }
     }
   } catch (e) { console.log('ERROR', r, e.message.slice(0, 80)); }

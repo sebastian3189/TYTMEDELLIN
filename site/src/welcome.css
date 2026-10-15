@@ -1,0 +1,19 @@
+/* Mensaje de bienvenida (Spec 03 §I.2): tarjeta blanca (oscura en modo oscuro), × arriba a la izquierda, icono de sol naranja y botón naranja. */
+.welcome{position:fixed;z-index:88;top:var(--welcome-top,104px);right:max(24px,env(safe-area-inset-right));width:min(calc(100% - 48px),380px);display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;padding:20px 20px 20px 18px;border-radius:24px;background:var(--surface-2);color:var(--text-strong);border:1px solid var(--border-subtle);box-shadow:var(--shadow-3);font:400 15px/1.45 var(--font);animation:welcome-in 420ms var(--ease-out-strong) backwards}
+.welcome.is-leaving{opacity:0;transform:translateY(-8px);transition:opacity 200ms ease,transform 200ms ease}
+@keyframes welcome-in{from{opacity:0;transform:translateY(-12px) scale(.98)}to{opacity:1;transform:none}}
+.welcome-icon{display:inline-grid;place-items:center;width:48px;height:48px;border-radius:50%;background:var(--brand-soft);color:var(--brand-solid)}
+html[data-theme="dark"] .welcome-icon{color:var(--o-400)}
+.welcome-body h2{font:700 17px/1.25 var(--heading);letter-spacing:-.01em;margin:0}
+.welcome-body p{margin:6px 0 14px;color:var(--text-body)}
+.welcome-cta{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 22px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 52%),var(--brand-solid);color:var(--on-brand);border:1px solid rgba(110,50,0,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 4px 10px -2px rgba(238,122,18,.28);font:600 15px/1.2 var(--font);text-decoration:none;transition:background-color 200ms ease,transform 140ms var(--ease-out-strong)}
+.welcome-cta:active{transform:scale(.97)}
+@media(hover:hover) and (pointer:fine){.welcome-cta:hover{background:linear-gradient(180deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 52%),var(--brand-solid-hover)}}
+/* × arriba a la izquierda: círculo visible de 30 px dentro de un área táctil de 44 px que sobresale de la esquina */
+.welcome-close{position:absolute;top:-14px;left:-14px;width:44px;height:44px;display:grid;place-items:center;padding:0;border:0;background:none;cursor:pointer}
+.welcome-close span{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--surface-2);color:var(--text-strong);border:1px solid var(--line-strong);font:400 20px/1 var(--font);box-shadow:var(--shadow-1);padding-bottom:2px;transition:transform 140ms var(--ease-out-strong)}
+.welcome-close:active span{transform:scale(.92)}
+.welcome-close:focus-visible,.welcome-cta:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+@media(max-width:767px){.welcome{left:max(16px,env(safe-area-inset-left));right:max(16px,env(safe-area-inset-right));width:auto;padding:16px 16px 16px 14px;gap:12px}.welcome-close{top:-12px;left:-6px}}
+@media(max-width:359px){.welcome{grid-template-columns:1fr}.welcome-icon{width:40px;height:40px}}
+@media(prefers-reduced-motion:reduce){.welcome{animation:none}.welcome.is-leaving,.welcome-cta,.welcome-close span{transition:none}}

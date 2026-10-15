@@ -8,6 +8,14 @@ export async function prepareLanguage(value) {
   const code=languageInfo(value).code;
   if(!dictionaries[code]) dictionaries[code]=(await loaders[code]()).default;
 }
+// Cambio de idioma sin recargar (Spec 04): carga el diccionario, actualiza la URL (/en, /pt-br) y avisa a la aplicación para que se vuelva a montar.
+export async function switchLanguage(value) {
+  const code=languageInfo(value).code; if(code===locale) return;
+  await prepareLanguage(code);
+  const {pathname,search,hash}=window.location, next=pathForLanguage(pathname,code)+search+hash;
+  history.pushState(null,'',next); setLanguage(code); document.documentElement.lang=languageInfo(code).html;
+  window.dispatchEvent(new CustomEvent('tyt-language-change',{detail:code}));
+}
 export const unprefix = stripLanguage;
 export const languagePath = pathForLanguage;
 const normalize = value => value.replace(/\s+/g, ' ').trim();

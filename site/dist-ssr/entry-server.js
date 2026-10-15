@@ -1,1196 +1,70 @@
 import { renderToString } from "react-dom/server";
-import { Link, NavLink, Navigate, Route, Routes, StaticRouter, useLocation } from "react-router-dom";
+import { Link, NavLink, Navigate, Route, Routes, StaticRouter, useLocation, useNavigationType } from "react-router-dom";
 import { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { createPortal } from "react-dom";
-var en_default = {
-	"(se abre en una pestaña nueva)": "(opens in a new tab)",
-	". WhatsApp y los sitios externos aplican sus propias políticas al abrirlos.": ". WhatsApp and external websites apply their own policies when you open them.",
-	"265 reseñas en Google": "265 Google reviews",
-	"404 · Otro camino": "404 · Another way",
-	"A tu ritmo": "At your own pace",
-	"Abrir en Google Maps": "Open in Google Maps",
-	"Abrir en OpenStreetMap": "Open in OpenStreetMap",
-	"Acordamos las paradas según tus intereses y el tiempo disponible, sin convertir el día en una carrera.": "We agree on stops around your interests and available time, without turning the day into a race.",
-	"Acordamos paradas, recogidas y espacio de equipaje según el grupo.": "We arrange stops, pickups and luggage space to suit your group.",
-	"Acordar un punto de encuentro": "Agree on a meeting point",
-	"Acércate al cultivo y al trabajo detrás de una taza. Un encuentro con la cultura cafetera desde Medellín.": "Discover how coffee is grown and the work behind each cup. An encounter with coffee culture from Medellín.",
-	"Aeropuerto y traslados": "Airport and transfers",
-	"Agencias, hoteles y aliados": "Agencies, hotels and partners",
-	"Agua entre montañas, una piedra que domina el paisaje y un pueblo que narra su vida en cada zócalo.": "Water between mountains, a rock overlooking the landscape and a town telling its story through every painted façade.",
-	"Al cargarlo, tu navegador se conecta a OpenStreetMap.": "Loading the map connects your browser to OpenStreetMap.",
-	"Alcaldía de Guatapé": "Guatapé Mayor's Office",
-	"Alcaldía de Medellín": "Medellín Mayor's Office",
-	"Aliados y referencias": "Partners and references",
-	"Ambiente local": "Local atmosphere",
-	"Amplia y cómoda para grupos medianos: excursiones, equipos de trabajo y traslados con equipaje. Consulta su disponibilidad para tu recorrido.": "Spacious and comfortable for medium-sized groups: excursions, work teams and transfers with luggage. Ask about availability for your trip.",
-	"Ampliar fotografía": "Enlarge photo",
-	"Animales y zonas acuáticas": "Animals and water attractions",
-	"Animales, atracciones y zonas acuáticas en Hacienda Nápoles: un parque temático para compartir un día de naturaleza y actividades en familia.": "Animals, attractions and water areas at Hacienda Nápoles: a theme park for a day of nature and family activities.",
-	"Anterior: Más experiencias": "Previous: More experiences",
-	"Antes de aterrizar": "Before landing",
-	"Antes de elegir": "Before choosing",
-	"Antes de viajar": "Before you travel",
-	"Apertura: Medellín, a otro nivel": "Opening: Medellín, on another level",
-	"Apertura: una baraja de doce experiencias. La carta superior se abre en una transición cinematográfica sobre Medellín que termina en la Plaza Botero y luego se despliegan las doce experiencias, cada una con su enlace.": "Opening: a deck of twelve experiences. The top card opens into a cinematic transition over Medellín ending at Plaza Botero. The twelve experiences then unfold, each with its own link.",
-	"Aprovecha el tiempo libre para comparar precios entre El Hueco y los outlets antes de decidir.": "Use your free time to compare prices at El Hueco and the outlets before deciding.",
-	"Aquí empieza la conversación": "The conversation starts here",
-	"Archivo de viajes de T&T Medellín": "T&T Medellín travel archive",
-	"Arquitectura colonial": "Colonial architecture",
-	"Arquitectura tradicional y encuentros cotidianos le dan carácter a cada pueblo.": "Traditional architecture and everyday encounters give each town its character.",
-	"Atardecer y fotografía": "Sunset and photography",
-	"Atención personalizada": "Personal attention",
-	"Atención personalizada.": "Personal attention.",
-	"Aterriza. Nosotros conectamos el camino.": "Land. We'll take it from here.",
-	"Autenticidad.": "Authenticity.",
-	"Aventura para toda la familia": "Adventure for the whole family",
-	"Buscar experiencia": "Find an experience",
-	"Buscar una nueva perspectiva": "Find a new perspective",
-	Buses: "Coaches",
-	"Cada recorrido es una nueva oportunidad para hacerlo bien.": "Every trip is a new opportunity to get it right.",
-	"Café, Guatapé, ciudad…": "Coffee, Guatapé, the city…",
-	"Calcula tiempo extra para caminar cada pueblo con calma: la ruta pasa por varios, no por uno solo.": "Allow extra time to explore each town at your own pace: the route visits several, not just one.",
-	Calidad: "Quality",
-	"Calidad.": "Quality.",
-	Calificaciones: "Reviews",
-	"Calificación: 5.0 de 5 estrellas.": "Rating: 5.0 out of 5 stars.",
-	"Calles coloniales, plazas y el Puente de Occidente en una escapada para acercarte a la historia de Antioquia.": "Colonial streets, plazas and the Puente de Occidente on a getaway into Antioquia's history.",
-	"Calzado cerrado y con buen agarre: el sendero hacia la cascada exige tracción, y si te animas con el canopy o la vía ferrata lo necesitas todavía más.": "Wear closed shoes with a good grip: the trail to the waterfall needs traction, especially if you also try the zip line or via ferrata.",
-	"Calzado con agarre y ropa de cambio. Comunica cualquier necesidad física; las actividades de aventura dependen de requisitos y condiciones del operador.": "Bring grippy shoes and a change of clothes. Tell us about any physical needs; adventure activities are subject to the operator's requirements and conditions.",
-	"Calzado cómodo, protección para el sol y espacio en la cámara. Consulta las condiciones de caminata si alguien del grupo necesita apoyo.": "Comfortable shoes, sun protection and room on your camera. Ask about walking conditions if anyone in your group needs assistance.",
-	"Camina el Puente de Occidente con calma y reserva tiempo para contemplar el paisaje.": "Walk across the Puente de Occidente at your own pace and allow time to enjoy the scenery.",
-	"Camina por un sendero ecológico hasta la cascada del Salto del Buey. El lugar también ofrece opciones de aventura como canopy y vía ferrata.": "Follow an ecological trail to the Salto del Buey waterfall. The site also offers adventures such as a zip line and via ferrata.",
-	"Camina sin apuro por sus calles de color: es un pueblo para perderse a pie, no para ver desde el carro.": "Take your time in its colorful streets: this town is best explored on foot, not from a car.",
-	"Camina, observa y conversa. Las mejores fotografías también nacen de escuchar.": "Walk, look and talk. Listening also leads to the best photographs.",
-	"Caminar entre colores": "Walk among colors",
-	"Caminar la memoria": "Walk through history",
-	"Cargar mapa interactivo": "Load interactive map",
-	"Cascada natural": "Natural waterfall",
-	"Categorías del catálogo de la marca. Fotografías de referencia; la unidad asignada y su disponibilidad en Medellín se confirman en la propuesta.": "Vehicle categories from the brand's catalog. Photos are for reference; your assigned vehicle and availability in Medellín are confirmed in the proposal.",
-	"Centro histórico": "Historic center",
-	"Centro histórico de Santa Fe": "Santa Fe historic center",
-	"Cercanía.": "A personal connection.",
-	"Cerrar ×": "Close ×",
-	Ciudad: "City",
-	"Ciudad para escuchar historias": "City stories",
-	"Color y tradición": "Color and tradition",
-	"Combina opciones de comercio local y outlets con tiempo para decidir.": "Combine local shops and outlets, with time to decide.",
-	"Combínalo con un tour de día, como el City Tour o el Tour Miradores, para cerrar la jornada sin perder tiempo de sol.": "Pair it with a daytime experience, such as the City Tour or Viewpoints Tour, to round off the day without missing the daylight.",
-	"Comparte el día y la dirección desde la que quieres salir. Si llegas en avión, incluye tu número de vuelo cuando hables con el equipo.": "Share your date and departure address. If you are flying in, include your flight number when you speak with the team.",
-	"Comparte el número de viajeros y edades para revisar opciones.": "Share the number of travelers and their ages so we can review the options.",
-	"Comparte vuelo, dirección, equipaje y fecha. Preparamos la recogida y el recorrido.": "Share your flight, address, luggage and date. We'll arrange the pickup and journey.",
-	"Comparte vuelo, fecha, número de personas y equipaje para preparar la recogida.": "Share your flight, date, group size and luggage to arrange the pickup.",
-	"Compartir una pausa": "Share a pause",
-	Compromiso: "Commitment",
-	"Conductores profesionales": "Professional drivers",
-	"Conductores y guías profesionales": "Professional drivers and guides",
-	Conecta: "Connect",
-	Confianza: "Trust",
-	"Confianza con fuente": "Trust you can verify",
-	"Confianza.": "Trust.",
-	"Confianza. Calidad. Cercanía. Hospitalidad. Autenticidad.": "Trust. Quality. Personal connection. Hospitality. Authenticity.",
-	"Confirma vuelo, equipaje, punto de encuentro y condiciones de espera. El valor y la disponibilidad se acuerdan antes de contratar.": "Confirm your flight, luggage, meeting point and waiting arrangements. Price and availability are agreed before booking.",
-	"Conoce al equipo": "Meet the team",
-	"Conoce el Puente de Occidente y recorre el centro histórico de Santa Fe de Antioquia, entre fachadas coloniales, la plaza y su iglesia principal.": "Discover the Puente de Occidente and Santa Fe de Antioquia's historic center, with its colonial façades, plaza and main church.",
-	"Conoce la historia de Medellín a través de sus lugares emblemáticos y la Comuna 13, con sus escaleras eléctricas y murales.": "Explore Medellín's history through its landmarks and Comuna 13, with its outdoor escalators and murals.",
-	"Conocer el traslado": "Explore the transfer",
-	"Conservar la cercanía": "Keep the personal connection",
-	"Consolidar un equipo": "Build a team",
-	"Consulta fechas y disponibilidad": "Ask about dates and availability",
-	"Consulta las opciones de canopy y vía ferrata si quieres ampliar el plan. Se confirman por separado.": "Ask about zip-line and via-ferrata options if you want to extend the experience. These are confirmed separately.",
-	"Consulta las áreas de fauna y atracciones disponibles para el día de tu visita.": "Ask which wildlife areas and attractions will be available on the day of your visit.",
-	"Consultar este vehículo": "Ask about this vehicle",
-	"Consultar la política de tratamiento de datos de la empresa": "Read the company's data protection policy",
-	"Consultar por WhatsApp": "Ask via WhatsApp",
-	Contacto: "Contact",
-	"Contacto y derechos": "Contact and your rights",
-	"Contempla el embalse y las montañas desde la Piedra del Peñol. El recorrido continúa por las calles de Guatapé, entre zócalos pintados a mano y el malecón.": "Take in the reservoir and mountains from the Piedra del Peñol. Continue through Guatapé's streets, hand-painted façades and waterfront.",
-	"Contempla el valle y las montañas mientras la luz transforma el paisaje de Medellín.": "Watch the valley and mountains as light transforms Medellín's landscape.",
-	"Conversar con el equipo": "Talk to the team",
-	"Coordinación de personas, puntos de encuentro y horarios para el propósito de tu jornada.": "Coordinating people, meeting points and schedules around the purpose of your day.",
-	"Coordinamos el transporte privado y el recorrido contigo. La propuesta confirma las paradas, el acompañamiento, los horarios y el valor antes de contratar.": "We arrange private transport and the route with you. The proposal confirms stops, guidance, schedules and price before booking.",
-	"Coordinamos tu traslado entre el Aeropuerto José María Córdova y tu alojamiento en Medellín. Comparte tu número de vuelo, la dirección y el número de pasajeros para organizar la recogida.": "We coordinate your transfer between José María Córdova Airport and your accommodation in Medellín. Share your flight number, address and passenger count to arrange pickup.",
-	Correo: "Email",
-	Cotizar: "Get a quote",
-	"Cuaderno de viaje": "Travel journal",
-	"Cuaderno de viaje · En grupo": "Travel journal · Group travel",
-	"Cuaderno de viaje · Inspiración": "Travel journal · Inspiration",
-	"Cuaderno de viaje · Planeación": "Travel journal · Planning",
-	"Cuando el valle enciende sus luces.": "When the valley lights up.",
-	"Cultura y tradición": "Culture and tradition",
-	"Cuéntanos edades, equipaje, movilidad e intereses. El equipo revisa las opciones y confirma lo que es posible para la fecha elegida.": "Tell us about ages, luggage, mobility and interests. The team reviews the options and confirms what is possible for your chosen date.",
-	"Cuéntanos qué": "Tell us what",
-	"Cuéntanos qué te interesa y cuánto tiempo tienes. Antes de confirmar, revisa las paradas, los servicios incluidos, el valor y las condiciones de cambio.": "Tell us what interests you and how much time you have. Before confirming, review the stops, included services, price and change conditions.",
-	"Cámara de Comercio de Medellín": "Medellín Chamber of Commerce",
-	"Cómo funciona esta consulta": "How your inquiry works",
-	"De las plazas a los murales, descubre Medellín a través de las personas y las historias que le dan forma.": "From plazas to murals, discover Medellín through the people and stories that shape it.",
-	"De un sueño": "From a dream",
-	"Definir qué estás buscando": "Decide what you're looking for",
-	"Degustación y tradición": "Tasting and tradition",
-	"Deja margen para el traslado al aeropuerto y confirma la hora de recogida según tu vuelo.": "Allow enough time for the airport transfer and confirm pickup time around your flight.",
-	"Deja tiempo para la plaza principal y la iglesia después del centro histórico: son la última parada de la ruta.": "Leave time for the main plaza and church after the historic center: they are the last stop on the route.",
-	"Dejar espacio para disfrutar": "Leave time to enjoy",
-	"Dejar espacio para lo que encuentres": "Make room for your finds",
-	"Del primer traslado": "From your first transfer",
-	Descubre: "Discover",
-	"Descubre Medellín después del atardecer: sus miradores ofrecen otra perspectiva del valle y de las luces de la ciudad.": "Discover Medellín after sunset: its viewpoints offer another perspective on the valley and city lights.",
-	"Desde el inicio fueron demasiado amables, la atención y seguimiento de cada día fue excelente. Nos sentimos cómodos, seguros y bien recibidos. La experiencia superó nuestras expectativas, volveríamos a contratarlos sin dudar.": "They were so kind from the start; the attention and daily follow-up were excellent. We felt comfortable, safe and welcome. The experience exceeded our expectations. We would hire them again without hesitation.",
-	"Desde los primeros traslados, aprendimos a escuchar. Esa cercanía sigue guiando nuestra forma de recibir y acompañar.": "We learned to listen from our very first transfers. That personal connection still shapes the way we welcome and accompany you.",
-	"Detalles del recorrido": "Tour details",
-	"Diseñada especialmente para tours grupales con máxima visibilidad. Consulta su disponibilidad para el recorrido que tienes en mente.": "Designed especially for group tours with excellent visibility. Ask about availability for the trip you have in mind.",
-	Disfruta: "Enjoy",
-	"Doce maneras de empezar. Medellín y los recorridos por Antioquia que nacen desde nuestra ciudad.": "Twelve ways to begin. Medellín and the journeys through Antioquia that start in our city.",
-	"El City Tour y la Comuna 13 acercan arte y vida urbana. El recorrido de compras pone el acento en el comercio local.": "The City Tour and Comuna 13 bring you closer to art and urban life. The shopping tour focuses on local commerce.",
-	"El Hueco y outlets": "El Hueco and outlets",
-	"El Hueco, outlets y tiendas locales.": "El Hueco, outlets and local shops.",
-	"El Puente de Occidente conecta el recorrido con el paisaje de la región.": "The Puente de Occidente connects the route with the region's landscape.",
-	"El agua es el centro de la experiencia: un momento para detenerse y mirar.": "Water is at the heart of the experience: a moment to stop and look.",
-	"El agua también es parte del plan": "Water is part of the plan too",
-	"El archivo de nuestros viajes": "Our travel photo archive",
-	"El atardecer es una invitación a observar. El clima decide los colores de cada salida.": "Sunset invites you to look closely. The weather sets the colors of each outing.",
-	"El buen viaje empieza con cinco datos.": "A great trip starts with five details.",
-	"El café y el Salto del Buey proponen experiencias al aire libre distintas. Describe tus preferencias y condición para que el equipo oriente el plan.": "Coffee and Salto del Buey offer different outdoor experiences. Share your preferences and fitness level so the team can guide your plans.",
-	"El camino": "The journey",
-	"El camino también es el destino.": "The journey is part of the destination.",
-	"El centro histórico se descubre a pie, mirando fachadas y detalles de su arquitectura.": "Discover the historic center on foot, taking in its façades and architectural details.",
-	"El clima puede cambiar entre pueblos. Consulta las localidades del itinerario y lleva ropa para una jornada de carretera y caminatas.": "Weather can change between towns. Check the stops on your itinerary and bring clothes for a day of driving and walking.",
-	"El color cuenta una historia": "Color tells a story",
-	"El color se vive sin prisa.": "Color is best enjoyed slowly.",
-	"El día se despide": "The day says goodbye",
-	"El enlace entre el Aeropuerto José María Córdova y tu alojamiento en Medellín, organizado desde antes de llegar.": "Your connection between José María Córdova Airport and your accommodation in Medellín, arranged before you arrive.",
-	"El equipaje": "Luggage",
-	"El espacio justo.": "Just the right space.",
-	"El espíritu del recorrido": "The spirit of the journey",
-	"El horizonte tiene otro color.": "The horizon takes on a new color.",
-	"El malecón y las vistas del agua completan un día que comienza y termina en Medellín.": "The waterfront and views over the water complete a day that begins and ends in Medellín.",
-	"El número de asientos no cuenta toda la historia. Comparte cuántas maletas llevan y cualquier requerimiento especial.": "Seat count is not the whole story. Tell us how many bags you are bringing and any special requirements.",
-	"El oficio detrás del aroma": "The craft behind the aroma",
-	"El paisaje cambia al dejar la ciudad y entrar en el Oriente Antioqueño.": "The landscape changes as you leave the city for eastern Antioquia.",
-	"El primer trayecto en Medellín": "Your first journey in Medellín",
-	"El recorrido comienza al bajar la luz: definimos contigo el punto de salida y el ritmo del plan.": "The tour begins as the light fades: we agree on your departure point and the pace of the outing.",
-	"El recorrido invita a caminar por un entorno natural y a observar el paisaje de cerca.": "The route invites you to walk through a natural setting and look closely at the landscape.",
-	"El seguimiento del vuelo ayuda a coordinar el encuentro. Confirma las condiciones de espera.": "Flight tracking helps us coordinate your meeting. Confirm the waiting arrangements.",
-	"El servicio incluye seguimiento del vuelo. Confirma con el equipo el punto de encuentro y las condiciones de espera.": "The service includes flight tracking. Confirm the meeting point and waiting arrangements with the team.",
-	"El servicio prestado superó las expectativas que traía. Tienes un equipo súper, híper, mega genial y profesional. Si regresara en otra ocasión de seguro los escogería y con seguridad lo recomendaré a mis amigos que quieran visitar Colombia.": "The service exceeded my expectations. You have an absolutely wonderful, professional team. If I return, I will definitely choose you again, and I will certainly recommend you to friends wanting to visit Colombia.",
-	"El tamaño del grupo": "Group size",
-	"El tiempo de la plaza": "Time in the plaza",
-	"El viaje forma parte de la experiencia. Coordinamos tiempos para aprovechar la visita con calma.": "The journey is part of the experience. We coordinate timings so you can enjoy your visit at a relaxed pace.",
-	"El viaje puede continuar": "The journey can continue",
-	"Elegir nota": "Choose an article",
-	"Elegir tu nivel de aventura": "Choose your level of adventure",
-	"Elige el tipo de solicitud y prepara tu mensaje. Compártelo con nuestro equipo en WhatsApp.": "Choose your inquiry type and prepare your message. Share it with our team on WhatsApp.",
-	"Elige la categoría que se ajusta a tu grupo. Confirmamos unidad, equipaje y equipamiento al cotizar.": "Choose the category that suits your group. We confirm the vehicle, luggage space and equipment when quoting.",
-	"Elige tu próximo recuerdo": "Choose your next memory",
-	"Empresa muy seria, responsable. Sarai fue nuestra asesora comercial y es una persona increíble. En general, todo el personal que tuvimos en cada tour fueron excelentes! Recomendados al 100%. Volveríamos a contratar con ellos.": "A very reliable, responsible company. Sarai was our sales adviser and she is an incredible person. Everyone who accompanied us on each tour was excellent! Highly recommended. We would hire them again.",
-	"Empresas y eventos": "Companies and events",
-	"Empresas, agencias y grupos": "Companies, agencies and groups",
-	"En 2020 nació la idea. En 2021 comenzaron los primeros traslados con un automóvil. Las conversaciones con los viajeros ayudaron a dar forma a nuestra manera de trabajar.": "The idea began in 2020. The first transfers started in 2021 with one car. Conversations with travelers helped shape the way we work.",
-	"En el pueblo, camina entre calles adoquinadas y zócalos pintados a mano, y visita el malecón frente al agua.": "In town, walk through cobbled streets and hand-painted façades, and visit the waterfront promenade.",
-	"En esta experiencia": "In this experience",
-	"En grupo": "Group travel",
-	"En la Comuna 13, el arte urbano y las escaleras eléctricas acompañan el relato del barrio.": "In Comuna 13, urban art and outdoor escalators accompany the neighborhood's story.",
-	Enamórate: "Fall in love",
-	"Encontrar color en lo cotidiano": "Find color in everyday life",
-	"Encontrarse con la cascada": "Meet the waterfall",
-	"Encuentra tu experiencia": "Find your experience",
-	"Encuentra tu recorrido": "Find your journey",
-	"Enlaces del pie": "Footer links",
-	"Entradas, alimentación y actividades adicionales se detallan en la cotización. Consulta qué está incluido y qué se paga por separado.": "Admission, meals and additional activities are detailed in your quote. Ask what is included and what is paid separately.",
-	"Entrar en el verde": "Step into the green",
-	"Entre hojas y granos": "Among leaves and beans",
-	"Envíanos tu número de vuelo apenas reserves: así ajustamos la hora de recogida sin que tengas que llamar.": "Send us your flight number as soon as you book so we can adjust pickup time without you needing to call.",
-	"Equipo de T&T Medellín": "The T&T Medellín team",
-	"Es la segunda vez que utilizamos la compañía, y la seguiremos utilizando en el futuro. Estamos 100% complacidos con el servicio. Yo tengo una lesión en la rodilla y ellos hasta me cargaron en la espalda para ayudarme a bajar escaleras, y me consiguieron silla de ruedas en todos los lugares.": "This is our second time using the company, and we will keep using them. We are completely satisfied with the service. I have a knee injury, and they even carried me on their back to help me down stairs and found wheelchairs for me everywhere.",
-	"Escribir un correo": "Send an email",
-	"Escribir por WhatsApp": "Message us on WhatsApp",
-	"Escríbenos por WhatsApp (se abre en una pestaña nueva)": "Message us on WhatsApp (opens in a new tab)",
-	"Escríbenos, llámanos o prepara una consulta con los detalles de tu recorrido.": "Write, call or prepare an inquiry with the details of your journey.",
-	"Escuchamos tu propósito y damos seguimiento a lo acordado.": "We listen to your plans and follow up on what we agree.",
-	"Esperar el cambio de luz": "Wait for the light to change",
-	"Este recorrido": "This journey",
-	"Este recorrido acerca la historia de Medellín a través de sus lugares emblemáticos y sus barrios. En la Comuna 13, las escaleras eléctricas y los murales forman parte del paisaje urbano que conocerás.": "This route introduces Medellín's history through its landmarks and neighborhoods. In Comuna 13, outdoor escalators and murals form part of the urban landscape you will discover.",
-	"Este sitio no incorpora analítica publicitaria ni almacenamiento de solicitudes. Las fotografías y las fuentes se sirven desde el proyecto.": "This site does not use advertising analytics or store inquiries. Photos and fonts are served from the project.",
-	"Esto también": "This is also",
-	"Excelente experiencia de principio a fin. Desde la planificación del viaje hasta la ejecución de cada actividad, el equipo demostró un alto nivel de profesionalismo, organización y conocimiento. Todo el personal fue sumamente amable y atento.": "An excellent experience from start to finish. From planning the trip to each activity, the team showed great professionalism, organization and knowledge. Everyone was extremely kind and attentive.",
-	"Excelente para grupos familiares o pequeños equipos de trabajo, con asientos individuales y sitio de sobra para el equipaje.": "Great for families or small work teams, with individual seats and plenty of luggage space.",
-	"Experiencia diferente": "A different experience",
-	Experiencias: "Experiences",
-	"Experiencias a medida.": "Tailor-made experiences.",
-	"Experiencias a medida. Vehículo privado. Atención personalizada.": "Tailor-made experiences. Private vehicle. Personal attention.",
-	"Experiencias a otro nivel": "Experiences on another level",
-	Explora: "Explore",
-	"Explora a tu ritmo": "Explore at your own pace",
-	"Explora los recorridos desde Medellín y conversa con nuestro equipo para planear tu experiencia.": "Explore journeys from Medellín and talk with our team to plan your experience.",
-	"Explorar experiencias": "Explore experiences",
-	"Explorar juntos": "Explore together",
-	"Fachadas, conversaciones de plaza y cultura cafetera en uno de los recorridos por Antioquia que parten de Medellín.": "Colorful façades, conversations in the plaza and coffee culture on a journey through Antioquia from Medellín.",
-	Familia: "Family",
-	"Filtrar experiencias": "Filter experiences",
-	"Finca cafetera": "Coffee farm",
-	"Formas de viajar": "Ways to travel",
-	Foto: "Photo",
-	Fotografía: "Photo",
-	"Fotografía anterior": "Previous photo",
-	"Fotografía siguiente": "Next photo",
-	Fotografías: "Photos",
-	"Fotografías de City Tour & Comuna 13": "Photos of City Tour & Comuna 13",
-	"Fotos y videos del recorrido": "Photos and videos of the tour",
-	"Fue un excelente servicio de inicio a fin, la comunicación con Sarai fue excepcional. Nos recogieron de forma muy cumplida y al final del concierto nos recogieron en el lugar acordado. Los vehículos en muy buen estado.": "Excellent service from start to finish. Communication with Sarai was exceptional. They picked us up right on time and met us at the agreed place after the concert. The vehicles were in very good condition.",
-	"Fuimos 2 personas y tuvimos una muy buena experiencia con todo el equipo. Todo estuvo bien organizado, el transporte fue puntual y siempre fueron muy atentos. Queremos destacar especialmente al guía Albeiro, quien fue súper amable y excelente guía.": "There were two of us, and we had a very good experience with the entire team. Everything was well organized, transport was punctual and they were always attentive. Special thanks to Albeiro, who was so kind and an excellent guide.",
-	"GUATAPÉ · PIEDRA DEL PEÑOL": "GUATAPÉ · PIEDRA DEL PEÑOL",
-	"Gracias por tanto calor humano en estas vacaciones, nos cuidaron, siempre estuvieron atentos a lo que necesitamos, nos guiaron y nos aconsejaron. Son un gran equipo, nunca nos vieron como cliente sino nos trataron como si fuéramos grandes amigos de mucho tiempo.": "Thank you for the warmth you showed us on this vacation. You looked after us, paid attention to our needs, guided and advised us. You're a great team: you treated us like longtime friends, not just customers.",
-	"Grafiti y arte urbano": "Graffiti and urban art",
-	"Guardar el panorama": "Capture the panorama",
-	"Guatapé, Santa Fe, Jardín y Oriente ofrecen maneras diferentes de acercarse al territorio. Consulta tiempos de traslado antes de llenar tu agenda.": "Guatapé, Santa Fe, Jardín and Oriente offer different ways to discover the region. Check driving times before filling your schedule.",
-	"Guía Local": "Local Guide",
-	"Hablar con el equipo": "Talk to the team",
-	"Hay lugares que enseñan a ir despacio.": "Some places teach you to slow down.",
-	"Hay una Medellín que se mira.": "There is a Medellín you can see.",
-	"Hecho para ti": "Made for you",
-	"Historia y cultura local": "Local history and culture",
-	"Historias de quienes viajaron con nosotros": "Stories from people who traveled with us",
-	"Hospitalidad, respeto y disposición para acompañar a cada viajero.": "Hospitality, respect and a willingness to support every traveler.",
-	"Hospitalidad.": "Hospitality.",
-	Hoy: "Today",
-	"Hoy seguimos cuidando lo que nos hizo empezar: hospitalidad, dedicación y orgullo por compartir nuestra tierra.": "Today we still care for what inspired us to begin: hospitality, dedication and pride in sharing our home.",
-	"Ideal para grupos grandes, eventos corporativos y excursiones extendidas. Disponibles en configuraciones de 25, 35 y 40 pasajeros.": "Ideal for large groups, corporate events and longer excursions. Available in 25-, 35- and 40-passenger configurations.",
-	"Ideal para viajes ejecutivos y traslados al aeropuerto. Máximo confort y elegancia para una a tres personas.": "Ideal for business travel and airport transfers. Comfort and elegance for one to three people.",
-	"Ideas para viajar": "Ideas for traveling",
-	"Iglesia y plaza principal": "Church and main plaza",
-	"Imaginar el camino": "Imagine the journey",
-	"Indica maletas y equipos: la capacidad cambia según lo que lleves.": "Tell us about bags and equipment: capacity depends on what you bring.",
-	"Información clara": "Clear information",
-	"Información comprensible y una conversación directa para organizarte.": "Clear information and a direct conversation to help you plan.",
-	Inicio: "Home",
-	Inspiración: "Inspiration",
-	Inspírate: "Be inspired",
-	"La Piedra del Peñol abre el paisaje del embalse. Consulta el acceso y las opciones de ascenso al organizar tu visita.": "The Piedra del Peñol opens up views over the reservoir. Ask about access and climbing options when planning your visit.",
-	"La Piedra del Peñol ofrece una vista abierta del embalse y las montañas de Antioquia. Es una de las paradas del recorrido antes de conocer Guatapé.": "The Piedra del Peñol offers wide views of the reservoir and Antioquia's mountains. It is one of the stops before exploring Guatapé.",
-	"La cantidad de personas, el equipaje y las necesidades de movilidad ayudan a proponer un vehículo y un ritmo adecuados.": "Group size, luggage and mobility needs help us suggest the right vehicle and pace.",
-	"La ciudad como punto de partida": "The city as a starting point",
-	"La ciudad se ilumina": "The city lights up",
-	"La colección T&T": "The T&T collection",
-	"La comodidad también es parte del viaje": "Comfort is part of the journey too",
-	"La degustación reúne la historia del recorrido en un momento para detenerse y compartir.": "The tasting brings the story of the tour together in a moment to pause and share.",
-	"La dirección de llegada y las necesidades del grupo guían la elección del vehículo.": "Your arrival address and group needs guide the choice of vehicle.",
-	"La disponibilidad y el valor se confirman con el equipo.": "Availability and price are confirmed with the team.",
-	"La encuentras en una conversación, en el color de una calle y en la curva que abre un nuevo paisaje. Queremos acompañarte a descubrirla con el cuidado de un equipo local.": "You find it in a conversation, the color of a street and the bend that reveals a new landscape. We want to help you discover it with the care of a local team.",
-	"La experiencia": "The experience",
-	"La experiencia fue súper buena. Desde la atención previa a los tours y las recomendaciones, el trato de Sarai siempre fue excepcional. El guía Albeiro fue súper atento, súper amable, súper paciente y con gran conocimiento. Los almuerzos incluidos son muy buenos.": "The experience was wonderful. From the pre-tour attention to the recommendations, Sarai's service was exceptional. Albeiro was very attentive, kind, patient and knowledgeable. The included lunches were very good.",
-	"La fecha y el punto de partida": "Your date and departure point",
-	"La noche cambia las distancias, los colores y la forma de sentir Medellín. Recorre su otra cara con un plan coordinado.": "Night changes distances, colors and the way Medellín feels. Discover another side of the city with a coordinated plan.",
-	"La pausa de una taza": "Pause for a cup",
-	"La plaza y la iglesia principal son puntos de encuentro para cerrar la visita antes de regresar.": "The plaza and main church provide a final meeting point before the return journey.",
-	"La recogida y el regreso se coordinan para que puedas concentrarte en disfrutar.": "Pickup and return are coordinated so you can focus on enjoying the experience.",
-	"La ruta conecta puntos desde los que la ciudad se descubre con otra escala.": "The route connects viewpoints that reveal the city on a different scale.",
-	"La ruta, las paradas y la fecha determinan la unidad disponible.": "Your route, stops and date determine the available vehicle.",
-	"La subida a la Piedra exige esfuerzo. Cuéntanos las necesidades de movilidad del grupo y confirma entradas, alimentación y actividades antes de viajar.": "Climbing the Piedra requires effort. Tell us about your group's mobility needs and confirm admission, meals and activities before traveling.",
-	"La vida alrededor de la plaza y la cultura cafetera dan contexto a cada encuentro.": "Life around the plaza and coffee culture give context to every encounter.",
-	"La vida alrededor de una plaza": "Life around a plaza",
-	"La visita combina paradas por la ciudad con un acercamiento a los cambios que han vivido sus comunidades.": "The visit combines city stops with an introduction to the changes its communities have experienced.",
-	"Las calles de Guatapé invitan a detenerse frente a los zócalos y a recorrer el pueblo a pie.": "Guatapé's streets invite you to pause at its painted façades and explore the town on foot.",
-	"Las calles tradicionales y las fachadas de Jardín invitan a caminar y observar.": "Jardín's traditional streets and colorful façades invite you to walk and look around.",
-	"Las vistas nocturnas y el ambiente local son el centro de esta experiencia.": "Nighttime views and local atmosphere are at the heart of this experience.",
-	"Las zonas acuáticas ofrecen otra forma de compartir. Acordamos el pasaporte y las actividades antes de confirmar.": "The water areas offer another way to spend time together. We agree on the admission package and activities before confirming.",
-	"Leer la nota": "Read the article",
-	"Leer más": "Read more",
-	"Llamar a T&T Medellín": "Call T&T Medellín",
-	"Llamar al +57 304 496 1698": "Call +57 304 496 1698",
-	"Llega con la cámara cargada y lista: el recorrido está pensado para el atardecer, y la luz cambia rápido de un mirador a otro.": "Bring your camera charged and ready: the tour is timed for sunset, and the light changes quickly between viewpoints.",
-	"Lleva abrigo ligero y batería para la cámara. La visibilidad depende del clima y las paradas se confirman con el equipo.": "Bring a light jacket and a charged camera. Visibility depends on the weather; stops are confirmed with the team.",
-	"Lleva algo de abrigo: los miradores están en alto y refresca más que en el centro de la ciudad.": "Bring a warm layer: the viewpoints are higher up and cooler than the city center.",
-	"Lleva calzado cómodo para subir hasta el mirador de la Piedra del Peñol: es el tramo que regala la vista sobre la represa.": "Wear comfortable shoes to climb to the Piedra del Peñol viewpoint, where you can look out over the reservoir.",
-	"Lleva calzado cómodo y comunica el volumen de compras previsto. Las compras y acuerdos con comercios no están incluidos en el transporte.": "Wear comfortable shoes and tell us how much shopping you expect to do. Purchases and arrangements with shops are not included in transport.",
-	"Lleva cambio de ropa, protección solar y lo necesario para actividades acuáticas. El pasaporte, las entradas y las restricciones deben confirmarse.": "Bring a change of clothes, sun protection and what you need for water activities. Admission packages, tickets and restrictions must be confirmed.",
-	"Lleva la cámara con espacio de sobra: entre las escaleras eléctricas y el arte urbano, es el recorrido que más fotografías deja.": "Bring plenty of space on your camera: between the outdoor escalators and urban art, there is a lot to photograph.",
-	"Lleva ropa de cambio: entre el sendero y la cascada, es casi seguro que termines mojado.": "Bring a change of clothes: between the trail and the waterfall, you are likely to get wet.",
-	"Lleva ropa fresca y protección solar. Consulta tiempos de caminata, entradas y paradas de alimentación al organizar la salida.": "Wear light clothing and sun protection. Ask about walking times, admission and meal stops when planning your trip.",
-	"Lleva una capa ligera para los miradores. Confirma horarios y paradas con el equipo; el recorrido no implica entradas a establecimientos.": "Bring a light layer for the viewpoints. Confirm schedules and stops with the team; admission to venues is not included in the tour.",
-	"Lleva una chaqueta ligera: en los miradores nocturnos refresca más que en el centro de la ciudad.": "Bring a light jacket: nighttime viewpoints are cooler than the city center.",
-	Llámanos: "Call us",
-	"Lo demás,": "Everything else,",
-	"Lo que cuenta": "What matters",
-	"Lo que esperas del día": "What you want from the day",
-	"Lo que nos mueve": "What drives us",
-	"Los detalles importan: desde el primer mensaje hasta el punto de regreso.": "Details matter, from the first message to the return point.",
-	"Los traslados al aeropuerto nos enseñan a escuchar.": "Airport transfers teach us to listen.",
-	"Lugares emblemáticos": "City landmarks",
-	"Lugares emblemáticos para ubicarte en Medellín y empezar a entender su identidad.": "Landmarks to help you find your bearings in Medellín and begin to understand its identity.",
-	Menú: "Menu",
-	"Miradores icónicos": "Iconic viewpoints",
-	"Mirar desde lo alto": "Look from above",
-	"Monitoreo de vuelos": "Flight tracking",
-	"Más experiencias": "More experiences",
-	"Más que llegar": "More than arriving",
-	"Nacimos con la intención de recibir bien. Crecemos escuchando a las personas que nos acompañan.": "We began with the intention of welcoming people well. We grow by listening to those who travel with us.",
-	Naturaleza: "Nature",
-	"Naturaleza para mirar de cerca": "A closer look at nature",
-	"Naturaleza y cultura cafetera": "Nature and coffee culture",
-	"No hay una única forma de descubrir Medellín y los recorridos que parten desde aquí. Elige según lo que quieras sentir.": "There is no single way to discover Medellín and the journeys that start here. Choose according to what you want to feel.",
-	"No solo visites Medellín. Vívela.": "Don't just visit Medellín. Live it.",
-	Noche: "Night",
-	"Noche en Medellín": "Medellín at Night",
-	"Nombre, teléfono, correo opcional y los detalles del recorrido. El equipo utiliza la solicitud que envíes para responder y preparar la propuesta. Evita incluir documentos de identidad o información sensible.": "Your name, phone number, optional email and trip details. The team uses the inquiry you send to respond and prepare a proposal. Avoid including identity documents or sensitive information.",
-	"Nos adaptamos.": "We adapt.",
-	"Nos cuentas el tipo de compras y las zonas de interés para orientar la ruta.": "Tell us what you want to shop for and which areas interest you so we can plan the route.",
-	"Nos encargamos del camino": "We'll take care of the journey",
-	"Nos encuentras en": "Find us at",
-	"Nos importan las personas.": "People matter to us.",
-	"Nos mueve nuestra tierra.": "Our home inspires us.",
-	Nosotros: "About us",
-	"Nota anterior": "Previous article",
-	"Nota siguiente": "Next article",
-	"Notas del equipo para elegir, preparar y disfrutar tus recorridos desde Medellín.": "Notes from our team to help you choose, prepare and enjoy your journeys from Medellín.",
-	"Nuestra casa. Nuestra gente.": "Our home. Our people.",
-	"Nuestra experiencia con el tour privado fue sencillamente excepcional. Desde el primer momento, la organización y comunicación fueron impecables, lo que nos brindó mucha confianza y tranquilidad durante todo el proceso. Se nota claramente el excelente manejo administrativo que tienen.": "Our private tour was simply exceptional. From the very start, organization and communication were impeccable, giving us confidence and peace of mind throughout the process. You can clearly see their excellent management.",
-	"Nuestra historia": "Our story",
-	"Nuestros valores": "Our values",
-	"Oficina de T&T Medellín. Escríbenos antes de venir para coordinar tu visita.": "T&T Medellín office. Message us before coming so we can arrange your visit.",
-	"Oficina, equipo y desarrollo de flota en Medellín.": "Office, team and fleet development in Medellín.",
-	"Opiniones sobre Transporte & Turismo Medellín publicadas en Google. Referencia: septiembre de 2026.": "Reviews of Transporte & Turismo Medellín published on Google. Reference: September 2026.",
-	"Organiza con nosotros la salida y el regreso: es una experiencia que necesita tiempo de carretera.": "Plan your departure and return with us: this experience requires time on the road.",
-	"Organiza una jornada por El Hueco, outlets y tiendas locales con los lugares que realmente te interesan.": "Plan a day at El Hueco, outlets and local shops, focusing on the places that interest you.",
-	"Organizar un recorrido es más sencillo cuando la conversación empieza por lo importante.": "Planning a trip is easier when the conversation starts with what matters.",
-	"Otro nivel de servicio. Alan es un tipazo, las unidades están impecables y la atención es impecable de principio a fin. Te resuelven todo y viajas con total tranquilidad. Si vienes a Medellín, este es el contacto que tienes que asegurar.": "Service on another level. Alan is a great guy, the vehicles are spotless and the attention is impeccable from start to finish. They take care of everything so you can travel with peace of mind. If you're coming to Medellín, this is the contact you need.",
-	"Otros caminos": "Other paths",
-	"Paisajes de montaña": "Mountain landscapes",
-	"Paisajes impresionantes": "Impressive scenery",
-	"Paisajes inolvidables": "Unforgettable landscapes",
-	"Para consultar, actualizar o solicitar la eliminación de información compartida con T&T, contacta a": "To access, update or request deletion of information shared with T&T, contact",
-	"Parque temático": "Theme park",
-	"Pausar el movimiento de los aliados": "Pause the partner carousel",
-	"Pensar en el equipaje": "Think about luggage",
-	"Pequeñas paradas, grandes recuerdos": "Small stops, great memories",
-	"Pequeños detalles, mejor viaje": "Small details, a better trip",
-	"Perfecta para grupos pequeños que buscan espacio y comodidad superior, con altura y versatilidad para rutas regionales.": "Perfect for small groups seeking extra space and comfort, with the height and versatility for regional routes.",
-	"Perfecto con excelente, el city tour comuna 13 excelente servicio, por parte del conductor (Francisco) y el guía (Brian), sin palabras, que Chimba Medellín, ahhh no olviden pedir la bandeja paisa al la hora del almuerzo brutal!!!": "Absolutely excellent! The City Tour and Comuna 13 service was amazing, from the driver Francisco and guide Brian. What a fantastic city! Don't forget to order bandeja paisa at lunch—it was incredible!",
-	"Personas del equipo de T&T Medellín": "People from the T&T Medellín team",
-	"Personas que": "People who",
-	"Personas, maletas": "People, bags",
-	"Planea el día completo sin prisa: entre animales y atracciones no alcanza a verse todo en pocas horas.": "Plan a full day at an unhurried pace: the animals and attractions need more than just a few hours.",
-	"Planea esta experiencia": "Plan this experience",
-	Planeación: "Planning",
-	"Planeamos teniendo en cuenta las personas, la ruta y las condiciones del recorrido.": "We plan around the people, route and travel conditions.",
-	"Planeemos el siguiente camino": "Let's plan the next journey",
-	"Planeemos tu viaje": "Let's plan your trip",
-	"Poner rumbo a un día distinto": "Set off for a different kind of day",
-	"Pregunta a tu guía por el mural que más te llame la atención: cada grafiti de la Comuna 13 cuenta una historia distinta.": "Ask your guide about the mural that catches your eye: every piece of graffiti in Comuna 13 tells a different story.",
-	"Pregunta por el proceso completo del grano, de la siembra a la taza: es el hilo conductor de todo el recorrido.": "Ask about the full process, from planting the bean to serving the cup: it connects the whole tour.",
-	"Pregunta por la cultura cafetera de la zona: es parte central de lo que hace especial a Jardín.": "Ask about the area's coffee culture: it is central to what makes Jardín special.",
-	"Prepara la cámara y disfruta de las vistas antes de regresar al punto acordado.": "Get your camera ready and enjoy the views before returning to the agreed meeting point.",
-	Principal: "Main navigation",
-	Privacidad: "Privacy",
-	"Proceso del café": "Coffee production",
-	"Propuesta para tu grupo": "A proposal for your group",
-	"Prueba la primera taza sin azúcar: así distingues mejor las notas que explica el guía durante la degustación.": "Try the first cup without sugar so you can better identify the flavors your guide describes during the tasting.",
-	"Pueblo de Guatapé": "Guatapé town",
-	"Pueblo de Guatapé y sus zócalos": "Guatapé and its painted façades",
-	"Pueblo patrimonio": "Heritage town",
-	Pueblos: "Towns",
-	"Pueblos con encanto": "Charming towns",
-	"Pueblos para cambiar de ritmo": "Towns for a change of pace",
-	"Pueblos, plazas y montañas: una salida desde Medellín para mirar Antioquia a un ritmo más tranquilo.": "Towns, plazas and mountains: a journey from Medellín to discover Antioquia at a more relaxed pace.",
-	"Puerta a puerta": "Door to door",
-	"Punto de encuentro": "Meeting point",
-	"Queremos agradecer a todo el equipo de Transporte y Turismo Medellín por los tours que nos brindaron como grupo. Todo fue excelente: puntualidad, guías muy amables, transporte cómodo y seguro, y las rutas súper bien organizadas. De verdad que la experiencia fue 100% satisfactoria.": "We want to thank the entire Transporte y Turismo Medellín team for our group tours. Everything was excellent: punctuality, very friendly guides, comfortable and safe transport, and well-organized routes. It was a completely satisfying experience.",
-	"Quiero agradecer a la empresa de transporte turismo Medellín, por el excelente servicio que nos brindó durante la celebración de mi cumpleaños. Desde el primer contacto demostraron profesionalismo, puntualidad y una atención impecable.": "I want to thank Transporte Turismo Medellín for the excellent service during my birthday celebration. From the first contact they showed professionalism, punctuality and impeccable attention.",
-	"Quiénes van contigo": "Who's coming with you",
-	"Qué compartes": "What you share",
-	"Qué incluye": "What's included",
-	"Recibir a los primeros viajeros": "Welcome the first travelers",
-	"Recogida en tu hotel en Medellín": "Pickup at your hotel in Medellín",
-	"Recorre El Hueco, outlets de fábrica y tiendas locales para conocer distintas opciones de compra en Medellín.": "Explore El Hueco, factory outlets and local shops to discover different shopping options in Medellín.",
-	"Recorre Jardín entre fachadas de colores, calles tradicionales y cultura cafetera: una visita para conocer la vida de este pueblo de Antioquia.": "Explore Jardín's colorful façades, traditional streets and coffee culture: a visit to discover life in this Antioquian town.",
-	"Recorre el entorno de una finca y conoce cómo empieza el camino del café.": "Explore a farm and learn how coffee begins its journey.",
-	"Recorre los miradores de Medellín al atardecer y contempla la ciudad y las montañas desde distintas perspectivas.": "Visit Medellín's viewpoints at sunset and see the city and mountains from different perspectives.",
-	"Recorre los pueblos del Oriente Antioqueño entre plazas, arquitectura tradicional y paisajes de montaña.": "Explore eastern Antioquia's towns, with their plazas, traditional architecture and mountain landscapes.",
-	"Recorrer y comparar": "Explore and compare",
-	"Recorrido de T&T Medellín": "A T&T Medellín journey",
-	"Recorridos privados": "Private tours",
-	"Recorridos, traslados y movilidad coordinada desde Medellín para viajeros, empresas y aliados.": "Tours, transfers and coordinated transport from Medellín for travelers, companies and partners.",
-	Recuerda: "Remember",
-	"Reducir movimiento": "Reduce motion",
-	"Regresar con tranquilidad": "Return with peace of mind",
-	"Regreso a Medellín": "Return to Medellín",
-	"Represa y vistas panorámicas": "Reservoir and panoramic views",
-	"Reserva tiempo en el pueblo para caminar sus calles y ver los zócalos pintados a mano antes de llegar al malecón.": "Allow time to walk through town and see the hand-painted façades before reaching the waterfront.",
-	"Reserva tiempo suficiente para el viaje. El itinerario se adapta a las condiciones del día y a las necesidades del grupo.": "Allow enough time for the journey. The itinerary adapts to the day's conditions and your group's needs.",
-	"Reseñas anteriores": "Previous reviews",
-	"Reseñas de clientes en Google": "Customer reviews on Google",
-	"Reseñas siguientes": "Next reviews",
-	"Responsable identificado en el sitio de la marca: T&T, NIT 901738550-6.": "Data controller identified on the brand's website: T&T, tax ID 901738550-6.",
-	"Revisa con el equipo las pausas y prioridades. Un itinerario claro también debe considerar el tiempo que cada persona necesita.": "Review breaks and priorities with the team. A clear itinerary also needs to allow for everyone's pace.",
-	"Revisa tu solicitud, cópiala y compártela con nuestro equipo en WhatsApp.": "Review your inquiry, copy it and share it with our team on WhatsApp.",
-	"Ruta de la experiencia": "Experience itinerary",
-	"SUV Ejecutiva": "Executive SUV",
-	"Salida coordinada en Medellín": "Coordinated departure in Medellín",
-	"Salir hacia las montañas": "Head for the mountains",
-	"Saltar al contenido": "Skip to content",
-	"Sedán Ejecutivo": "Executive Sedan",
-	Seguridad: "Safety",
-	Sencillez: "Simplicity",
-	"Senderismo y aventura": "Hiking and adventure",
-	"Senderos y vegetación conducen a una cascada que cambia la escala de todo lo que la rodea.": "Trails and vegetation lead to a waterfall that changes the scale of everything around it.",
-	Servicio: "Service",
-	Servicios: "Services",
-	Siente: "Feel",
-	"Sigue el sonido del agua.": "Follow the sound of water.",
-	"Sigue las etapas del grano y conversa sobre el trabajo que hay detrás del sabor.": "Follow the bean's journey and talk about the work behind its flavor.",
-	"Siguiente: Más experiencias": "Next: More experiences",
-	"Sobre nuestras calificaciones": "About our reviews",
-	"Solicitar propuesta": "Request a proposal",
-	"Somos de": "We are from",
-	"Somos del camino.": "The road is part of who we are.",
-	Sorpréndete: "Be surprised",
-	Síguenos: "Follow us",
-	"Síguenos en Instagram (se abre en una pestaña nueva)": "Follow us on Instagram (opens in a new tab)",
-	"Síguenos en TikTok (se abre en una pestaña nueva)": "Follow us on TikTok (opens in a new tab)",
-	"T&T Medellín | Medellín, a otro nivel": "T&T Medellín | Medellín, on another level",
-	"TOUR DE COMPRAS": "SHOPPING TOUR",
-	"TOUR DEL CAFÉ": "COFFEE TOUR",
-	"TOUR MIRADORES": "VIEWPOINTS TOUR",
-	"TRASLADOS JMC": "JMC TRANSFERS",
-	"Te contamos qué esperar y confirmamos las condiciones antes de salir.": "We explain what to expect and confirm the arrangements before you set off.",
-	"Tiempo para comprar y disfrutar": "Time to shop and enjoy",
-	"Tiempo para conocer, acompañamiento para organizar. Explora recorridos por Medellín y excursiones por Antioquia.": "Time to discover, support to organize. Explore tours around Medellín and excursions through Antioquia.",
-	"Tiendas locales": "Local shops",
-	"Todas las notas": "All articles",
-	"Todo maravilloso. Allan y su equipo nos recogieron en el aeropuerto, nos dieron consejos, fuimos a un espectacular tour nocturno familiar, conocimos la ciudad, Guatapé, Comuna 13 y hasta fuimos a la Hacienda Nápoles. Un saludo desde Guanacaste, Costa Rica.": "Everything was wonderful. Allan and his team picked us up at the airport and gave us advice. We took a spectacular family night tour, explored the city, Guatapé and Comuna 13, and even visited Hacienda Nápoles. Greetings from Guanacaste, Costa Rica.",
-	Todos: "All",
-	"Tomar el camino del pueblo": "Take the road to town",
-	"Tour Miradores": "Viewpoints Tour",
-	"Tour de Compras": "Shopping Tour",
-	"Tour del Café": "Coffee Tour",
-	"Tours 100% privados · Guía-conductor exclusivo · Horarios flexibles": "100% private tours · Your own driver-guide · Flexible schedules",
-	"Tradición y gastronomía": "Tradition and gastronomy",
-	"Transporte con atención local": "Transport with local attention",
-	"Transporte privado": "Private transport",
-	"Transporte y Turismo Medellín, inicio": "Transporte y Turismo Medellín, home",
-	Traslados: "Transfers",
-	"Traslados Aeropuerto JMC": "JMC Airport Transfers",
-	"Traslados de aeropuerto": "Airport transfers",
-	"Traslados entre el Aeropuerto José María Córdova y tu alojamiento en Medellín, con seguimiento del vuelo y recogida coordinada.": "Transfers between José María Córdova Airport and your accommodation in Medellín, with flight tracking and coordinated pickup.",
-	"Tu experiencia": "Your experience",
-	"Tu hotel en Medellín o la terminal del Aeropuerto JMC": "Your hotel in Medellín or the JMC Airport terminal",
-	"Tu información,": "Your information,",
-	"Tu plan merece": "Your plans deserve",
-	"Tu plan tiene": "Your plan has",
-	"Tu próxima historia": "Your next story",
-	"Tu recorrido": "Your journey",
-	"Tu viaje, tus tiempos,": "Your trip, your pace,",
-	"Tus hallazgos, a tu ritmo.": "Your finds, at your own pace.",
-	"Tuve una experiencia espectacular con Alhan de Transporte y Turismo Medellín. Desde el inicio, la organización fue impecable y todo se desarrolló de manera puntual y fluida. La ruta estuvo muy bien planificada, permitiendo disfrutar al máximo cada uno de los lugares visitados.": "I had a spectacular experience with Alhan from Transporte y Turismo Medellín. From the beginning, everything was impeccably organized and ran smoothly and on time. The route was well planned, letting us fully enjoy every place we visited.",
-	"Un día para volver a sorprenderse.": "A day to be amazed all over again.",
-	"Un encuentro coordinado": "A coordinated meeting",
-	"Un lugar para cada": "A place for every",
-	"Un lugar para cada forma de viajar.": "A place for every way of traveling.",
-	"Un puente entre paisajes": "A bridge between landscapes",
-	"Una ciudad que vuelve a dibujarse.": "A city drawing itself anew.",
-	"Una ciudad. Infinitas perspectivas.": "One city. Endless perspectives.",
-	"Una conversación operativa para revisar recorridos y necesidades de tus viajeros.": "A practical conversation to review routes and your travelers' needs.",
-	"Una dirección precisa y una persona de contacto simplifican el comienzo. Confirma si habrá recogidas adicionales.": "A precise address and one contact person make the start easier. Confirm whether extra pickups are needed.",
-	"Una familia, una agencia o un equipo de trabajo: cada grupo tiene su propio ritmo.": "A family, an agency or a work team: every group has its own pace.",
-	"Una historia en movimiento": "A story in motion",
-	"Una historia que empieza en la tierra.": "A story that begins in the soil.",
-	"Una historia que nace aquí": "A story born here",
-	"Una idea que une el amor por Medellín y las ganas de servir.": "An idea combining a love of Medellín with the desire to serve.",
-	"Una mirada al valle desde la ladera.": "A view of the valley from the hillside.",
-	"Una mirada que te llevas": "A view to take with you",
-	"Una salida al parque temático para compartir naturaleza y actividades en familia, con transporte coordinado desde Medellín.": "A theme-park outing to enjoy nature and family activities, with coordinated transport from Medellín.",
-	"Usa calzado cómodo y lleva una maleta con espacio extra: el tour está pensado para comprar sin apuro entre El Hueco, los outlets y las tiendas locales.": "Wear comfortable shoes and bring a bag with extra space: this tour is designed for unhurried shopping at El Hueco, outlets and local stores.",
-	"Usa zapatos para terreno rural. La finca, el alcance de la visita y la degustación se confirman en tu propuesta.": "Wear shoes suitable for rural terrain. The farm, scope of the visit and tasting are confirmed in your proposal.",
-	"VUELTA A ORIENTE": "EASTERN ANTIOQUIA",
-	"Van Ejecutiva": "Executive Van",
-	"Ve con la cámara lista: el recorrido cambia de paisaje de montaña en cada tramo entre pueblo y pueblo.": "Have your camera ready: the mountain scenery changes on every stretch between towns.",
-	"Ve con ropa que puedas mojar: el parque tiene zonas acuáticas y son parte del plan.": "Wear clothes you can get wet: the park's water attractions are part of the plan.",
-	"Vehículo privado.": "Private vehicle.",
-	Vehículos: "Vehicles",
-	"Vehículos cómodos": "Comfortable vehicles",
-	"Ven con ganas.": "Bring your enthusiasm.",
-	"Ver experiencia": "View experience",
-	"Ver las 12 experiencias": "See all 12 experiences",
-	"Ver todas las reseñas en Google": "Read all reviews on Google",
-	"Viajar juntos sin improvisar cada parada.": "Travel together without improvising every stop.",
-	"Viajeros y familias": "Travelers and families",
-	"Visita una finca cafetera, camina entre los cultivos y conoce el proceso del grano antes de compartir una taza recién preparada.": "Visit a coffee farm, walk among the crops and learn about the bean's journey before sharing a freshly prepared cup.",
-	"Vista de Medellín desde la ladera de la Comuna 13": "View of Medellín from the hillside in Comuna 13",
-	"Vista panorámica de la represa": "Panoramic view of the reservoir",
-	"Vistas panorámicas": "Panoramic views",
-	Vive: "Live",
-	"Volver a las experiencias": "Back to experiences",
-	"Volver con otra perspectiva": "Return with a new perspective",
-	"Vuelta a Oriente": "Eastern Antioquia Tour",
-	"WhatsApp Medellín": "WhatsApp Medellín",
-	"Y otra que se": "And another you",
-	"a muchos": "to many",
-	"a otro nivel.": "on another level.",
-	"agua entre montañas y zócalos de color.": "water between mountains and colorful façades.",
-	"al último": "to your last",
-	"aquí.": "here.",
-	"bajo tu": "under your",
-	"calles coloniales y el Puente de Occidente.": "colonial streets and the Puente de Occidente.",
-	"compartido.": "shared.",
-	"con más": "with more",
-	"con pueblos y plazas, sin carreras.": "with towns and plazas, without rushing.",
-	"control.": "control.",
-	"conversación.": "conversation.",
-	de: "of",
-	"de 5 estrellas en Google": "out of 5 stars on Google",
-	"del aeropuerto a tu alojamiento, coordinado.": "from the airport to your accommodation, coordinated.",
-	"descubrir.": "discover.",
-	"el oficio detrás de cada taza.": "the craft behind every cup.",
-	"el valle cambia con la luz.": "the valley changes with the light.",
-	"el valle cuando enciende sus luces.": "the valley as its lights come on.",
-	empieza: "begins",
-	"empieza con una": "starts with a",
-	"en el trato.": "in every interaction.",
-	"encuentros.": "encounters.",
-	es: "is",
-	"escuchemos.": "heard.",
-	"experiencia.": "experience.",
-	"experiencias para explorar": "experiences to explore",
-	"fachadas de color y plaza sin prisa.": "colorful façades and an unhurried plaza.",
-	"forma de viajar.": "way of traveling.",
-	"fotografías · Toca para ampliar": "photos · Tap to enlarge",
-	"importa.": "matters.",
-	"muchas formas.": "many possibilities.",
-	mueven: "move",
-	"necesitas.": "you need.",
-	"no está": "is not",
-	pasajeros: "passengers",
-	"personas.": "people.",
-	"planeémoslo.": "let's plan it.",
-	"plazas, murales e historias de Medellín.": "plazas, murals and Medellín's stories.",
-	por: "to",
-	"que lo": "to be",
-	"quien ya": "from those who",
-	quieres: "do you want to",
-	"recuerdo.": "memory.",
-	"se viven": "are experienced",
-	"sentido.": "meaning.",
-	tu: "your",
-	"un día en familia, con transporte coordinado.": "a family day out, with coordinated transport.",
-	"una cascada al final del sendero.": "a waterfall at the end of the trail.",
-	"viajó.": "have traveled.",
-	"vive.": "can experience.",
-	"vivir?": "experience?",
-	"y todo lo que": "and everything that",
-	"¡Una experiencia increíble de principio a fin! El servicio fue excelente y la comunicación siempre fue rápida, clara y muy profesional. Todo el equipo, especialmente los guías y coordinadores, fue sumamente atento, amable y flexible.": "An incredible experience from start to finish! The service was excellent and communication was always quick, clear and very professional. Everyone, especially the guides and coordinators, was very attentive, kind and flexible.",
-	"¡Una experiencia simplemente impecable y de otro nivel! Quiero recomendar con total confianza a Transporte y Turismo Medellín, una empresa que superó todas mis expectativas desde el primer momento. Cada tour fue inolvidable: el Tour a Guatapé, el City Tour y el Tour de Compras estuvieron organizados de manera excelente.": "Simply impeccable service, on another level! I wholeheartedly recommend Transporte y Turismo Medellín, a company that exceeded all my expectations from the first moment. Every tour was unforgettable: Guatapé, the City Tour and the Shopping Tour were excellently organized.",
-	"· 5 reseñas": "· 5 reviews",
-	"· Archivo T&T": "· T&T archive",
-	"· Desde Medellín": "· From Medellín",
-	"· Nota 0": "· Article 0",
-	"· fotografía": "· photo",
-	"¿Ciudad, pueblos o naturaleza?": "City, towns or nature?",
-	"¿Cómo organizamos la experiencia?": "How do we organize the experience?",
-	"¿Qué debo confirmar sobre el precio?": "What should I confirm about the price?",
-	"¿Qué historia": "What story",
-	"¿Se puede adaptar para mi grupo?": "Can it be adapted for my group?",
-	"Todas las experiencias": "All experiences",
-	"Volver al cuaderno": "Back to the journal",
-	"Activar modo claro": "Switch to light mode",
-	"Activar modo oscuro": "Switch to dark mode",
-	Cerrar: "Close",
-	"Carta anterior": "Previous card",
-	"Carta siguiente": "Next card",
-	"Saltar introducción": "Skip introduction",
-	"Activar movimiento": "Enable motion",
-	"No completar": "Leave empty",
-	"Los campos con * son obligatorios.": "Fields marked * are required.",
-	"Tipo de solicitud *": "Inquiry type *",
-	"Tipo de solicitud": "Inquiry type",
-	"Turismo y traslados": "Tours and transfers",
-	Petición: "Request",
-	Queja: "Complaint",
-	Reclamo: "Claim",
-	Sugerencia: "Suggestion",
-	Felicitación: "Compliment",
-	"Tu plan": "Your plans",
-	"Tu experiencia *": "Your experience *",
-	"Fecha del recorrido *": "Tour date *",
-	"Personas *": "People *",
-	"Punto de salida": "Departure point",
-	"Tus datos": "Your details",
-	"Nombre *": "Name *",
-	Nombre: "Name",
-	"Empresa (si aplica)": "Company (if applicable)",
-	"Teléfono / WhatsApp *": "Phone / WhatsApp *",
-	Indicativo: "Country code",
-	Número: "Number",
-	"Correo electrónico (opcional)": "Email (optional)",
-	"Cuántas personas viajan, incluyéndote.": "Number of travelers, including you.",
-	"Hotel, barrio o aeropuerto. Si aún no lo sabes, lo acordamos.": "Hotel, neighborhood or airport. If you don't know yet, we'll arrange it together.",
-	"¿Qué haría especial este viaje?": "What would make this trip special?",
-	"Cuéntanos tu consulta *": "Tell us about your inquiry *",
-	"Opcional: intereses, equipaje o necesidades del grupo.": "Optional: interests, luggage or group needs.",
-	"He leído el": "I have read the",
-	"aviso de privacidad": "privacy notice",
-	"y autorizo compartir esta solicitud con T&T cuando la envíe.": "and authorize sharing this inquiry with T&T when I send it.",
-	"No pudimos preparar tu consulta.": "We couldn't prepare your inquiry.",
-	"Inténtalo de nuevo en unos segundos.": "Please try again in a few seconds.",
-	Revisa: "Please check",
-	"este campo": "this field",
-	"Preparar mi mensaje": "Prepare my message",
-	"Preparar mi consulta": "Prepare my inquiry",
-	"Los datos permanecen en esta página hasta que tú decidas compartirlos. Preparar la consulta no confirma una reserva. También puedes llamarnos:": "Your details stay on this page until you choose to share them. Preparing an inquiry does not confirm a booking. You can also call us:",
-	"Revisa y comparte tu solicitud": "Review and share your inquiry",
-	"Revisa el texto.": "Review the text.",
-	"Cópialo (ya lo intentamos por ti).": "Copy it (we have already tried for you).",
-	"Ábrelo en WhatsApp y pégalo.": "Open WhatsApp and paste it.",
-	"Resumen de solicitud": "Inquiry summary",
-	"Copiar solicitud": "Copy inquiry",
-	"Abrir WhatsApp y pegar": "Open WhatsApp and paste",
-	"Editar mis datos": "Edit my details",
-	"Solicitud copiada. Abre WhatsApp y pégala en la conversación.": "Inquiry copied. Open WhatsApp and paste it into the conversation.",
-	"No pudimos copiar automáticamente: usa «Copiar solicitud» o selecciona el texto.": "We couldn't copy automatically: use “Copy inquiry” or select the text.",
-	"Formulario de contacto": "Contact form",
-	"Formulario de cotización": "Quote form",
-	"Un recorrido a mi medida": "A tailor-made tour",
-	"Fecha del recorrido": "Tour date",
-	Personas: "People",
-	"Teléfono / WhatsApp": "Phone / WhatsApp",
-	"Correo electrónico": "Email",
-	Empresa: "Company",
-	Mensaje: "Message",
-	"Autorización de datos": "Data consent",
-	"Escribe tu nombre (al menos 2 letras).": "Enter your name (at least 2 letters).",
-	"Escribe un teléfono o WhatsApp para poder responderte.": "Enter a phone or WhatsApp number so we can reply.",
-	"Escribe solo números, espacios o guiones.": "Use only numbers, spaces or hyphens.",
-	"Revisa el número: debe tener entre 7 y 15 dígitos.": "Check the number: it must contain 7 to 15 digits.",
-	"Indicativo no reconocido: escribe el de tu país, por ejemplo +57.": "Unknown country code: enter yours, for example +57.",
-	"Escribe un correo válido, por ejemplo nombre@correo.com.": "Enter a valid email address, for example name@example.com.",
-	"Elige la fecha en la que quieres hacer el recorrido.": "Choose the date for your tour.",
-	"Elige una fecha de hoy en adelante.": "Choose today or a future date.",
-	"Escribe cuántas personas son, en números (de 1 a 99).": "Enter the number of people (1 to 99).",
-	"Cuéntanos un poco más: mínimo 10 caracteres.": "Tell us a little more: at least 10 characters.",
-	"Necesitamos tu autorización para poder responderte.": "We need your consent before we can reply.",
-	"mi recorrido": "my trip",
-	"mi consulta": "my inquiry",
-	"Por acordar": "To be arranged",
-	Detalles: "Details",
-	"Me gustaría conocer las opciones disponibles.": "I'd like to know what options are available.",
-	"Desliza para seguir la historia": "Scroll to follow the story",
-	"Elige una experiencia": "Choose an experience",
-	"Abrir WhatsApp": "Open WhatsApp",
-	"Más información": "More information",
-	"Medellín, a otro nivel": "Medellín, on another level",
-	"Medellín, a otro nivel. Transporte privado y experiencias desde Medellín con un equipo local.": "Medellín, on another level. Private transport and experiences from Medellín with a local team.",
-	"Explora doce recorridos desde Medellín: ciudad, cultura, café y paisajes de Antioquia.": "Explore twelve journeys from Medellín: city, culture, coffee and Antioquia's landscapes.",
-	"Conoce las categorías de vehículos para tu traslado privado o viaje en grupo desde Medellín.": "Explore vehicle categories for your private transfer or group trip from Medellín.",
-	"Traslados, recorridos privados y transporte para empresas, agencias y grupos en Medellín.": "Transfers, private tours and transport for companies, agencies and groups in Medellín.",
-	"Conoce la historia, el equipo y los valores de Transporte y Turismo Medellín.": "Meet the team and discover the story and values of Transporte y Turismo Medellín.",
-	"Ideas y consejos para preparar tus experiencias y recorridos desde Medellín.": "Ideas and advice for planning your experiences and journeys from Medellín.",
-	"Habla con el equipo de T&T Medellín por teléfono, correo o WhatsApp.": "Talk to the T&T Medellín team by phone, email or WhatsApp.",
-	"Planea tu viaje": "Plan your trip",
-	"Prepara tu consulta de transporte o turismo para recibir una propuesta del equipo de Medellín.": "Prepare your transport or tour inquiry to receive a proposal from the Medellín team.",
-	"Consulta la referencia histórica de calificaciones y las reseñas actuales de T&T Medellín en Google.": "See historical ratings and current T&T Medellín reviews on Google.",
-	"Conoce cómo se prepara tu consulta y qué información decides compartir con T&T Medellín.": "Learn how your inquiry is prepared and what information you choose to share with T&T Medellín.",
-	"Página no encontrada": "Page not found",
-	"Regresa a las experiencias de T&T Medellín para encontrar tu recorrido.": "Return to T&T Medellín experiences to find your journey.",
-	"Retomar el movimiento de los aliados": "Resume the partner carousel",
-	"Aire acondicionado": "Air conditioning",
-	"Asientos en cuero": "Leather seats",
-	"WiFi a bordo": "Onboard WiFi",
-	"Cargadores USB": "USB chargers",
-	"Sistema de sonido": "Sound system",
-	"Espacio para equipaje": "Luggage space",
-	"Asientos reclinables": "Reclining seats",
-	"Ventanas panorámicas": "Panoramic windows",
-	"Micrófono para el guía": "Guide microphone",
-	Nevera: "Cooler",
-	"Iluminación LED ambiental": "Ambient LED lighting",
-	"Sistema de entretenimiento": "Entertainment system",
-	"Control de clima dual": "Dual-zone climate control",
-	"Transporte y Turismo Medellín": "Transporte y Turismo Medellín",
-	"¿Qué nos hace": "What makes us",
-	"diferentes?": "different?",
-	"No solo te llevamos a conocer Medellín. Nos encargamos de que vivas una experiencia a otro nivel.": "We don't just take you to see Medellín. We make sure you live an experience on another level.",
-	"En Transporte y Turismo Medellín creemos que una experiencia extraordinaria comienza mucho antes de subir al vehículo. Por eso, cuidamos cada detalle de tu viaje, brindándote seguridad, comodidad, atención personalizada y el respaldo de un equipo comprometido contigo.": "At Transporte y Turismo Medellín we believe an extraordinary experience begins long before you step into the vehicle. That is why we take care of every detail of your trip, giving you safety, comfort, personalized attention and the backing of a team committed to you.",
-	"Monitoreamos tu vuelo.": "We monitor your flight.",
-	"Seguimos el estado de tu vuelo hasta su aterrizaje en Medellín para coordinar tu recogida y estar preparados ante posibles cambios de horario.": "We follow your flight status until it lands in Medellín to coordinate your pickup and be ready for any schedule changes.",
-	"Flota propia y vehículos certificados.": "Our own fleet and certified vehicles.",
-	"Contamos con vehículos modernos, habilitados y en óptimas condiciones, con mantenimiento preventivo y documentación al día para ofrecerte comodidad y seguridad.": "We have modern, authorized vehicles in optimal condition, with preventive maintenance and up-to-date documentation to give you comfort and safety.",
-	"Un equipo que responde por ti.": "A team that stands behind you.",
-	"Guías, conductores y personal logístico trabajan bajo nuestros estándares de servicio. Coordinamos directamente cada experiencia, sin intermediarios innecesarios, para garantizar el control de calidad.": "Guides, drivers and logistics staff work under our service standards. We coordinate every experience directly, with no unnecessary intermediaries, to guarantee quality control.",
-	"Hidratación incluida.": "Hydration included.",
-	"Durante nuestras experiencias te ofrecemos agua e hidratación sin costo adicional. Porque los pequeños detalles también hacen grandes diferencias.": "During our experiences we offer you water and hydration at no extra cost. Because small details make big differences too.",
-	"Experiencias 100 % privadas.": "100% private experiences.",
-	"Nada de grupos desconocidos ni recorridos masivos. Tu vehículo y tu experiencia son exclusivos para ti y tus acompañantes.": "No strangers' groups or mass tours. Your vehicle and your experience are exclusive to you and your companions.",
-	"Flexibilidad en tus horarios.": "Flexible schedules.",
-	"Adaptamos nuestros recorridos a tus intereses y necesidades. Queremos que disfrutes cada destino a tu ritmo.": "We adapt our tours to your interests and needs. We want you to enjoy every destination at your own pace.",
-	"Recuerdos sin costo adicional.": "Memories at no extra cost.",
-	"Capturamos fotografías y videos durante tu experiencia para que te lleves recuerdos especiales de tu visita.": "We capture photos and videos during your experience so you take home special memories of your visit.",
-	"Seguridad y respaldo legal.": "Safety and legal backing.",
-	"Somos una empresa legalmente constituida, con Registro Nacional de Turismo (RNT 176384). Operamos con vehículos habilitados y las coberturas y pólizas aplicables a nuestros servicios.": "We are a legally incorporated company with a National Tourism Registry (RNT 176384). We operate with authorized vehicles and the coverage and policies applicable to our services.",
-	"Acompañamiento por WhatsApp 24/7.": "WhatsApp support 24/7.",
-	"Contamos con un canal de atención para ayudarte ante imprevistos, cambios de planes o cualquier situación relacionada con tu servicio.": "We have a support channel to help you with unexpected events, changes of plans or any situation related to your service.",
-	"Atención desde el primer contacto.": "Attention from the first contact.",
-	"No solo organizamos recorridos. Escuchamos tus necesidades, te asesoramos y diseñamos experiencias que se ajustan a lo que realmente buscas.": "We don't just organize tours. We listen to your needs, advise you and design experiences that fit what you are really looking for.",
-	"No es solamente a dónde te llevamos.": "It is not only where we take you.",
-	"Es cómo te hacemos sentir durante todo el camino": "It is how we make you feel all along the way",
-	"Preguntas frecuentes": "Frequently asked questions",
-	"Antes de decidir": "Before you decide",
-	"Resolvemos tus dudas": "We answer your questions",
-	"Confianza y respaldo": "Trust and backing",
-	"Lo que debes saber de nosotros": "What you should know about us",
-	"Dudas sobre vehículos y grupos": "Questions about vehicles and groups",
-	"¿Cómo cotizo mi viaje?": "How do I get a quote for my trip?",
-	"Cuéntanos fechas, número de personas, punto de salida y llegada, y equipaje. Puedes hacerlo desde el formulario de cotización o escribirnos por WhatsApp al +57 304 496 1698.": "Tell us the dates, number of people, departure and arrival points, and luggage. You can use the quote form or write to us on WhatsApp at +57 304 496 1698.",
-	"¿Cotizar es lo mismo que reservar?": "Is getting a quote the same as booking?",
-	"No. La cotización no confirma una reserva. Primero revisamos contigo la experiencia, las fechas y el número de viajeros; luego confirmas con el equipo.": "No. A quote does not confirm a booking. We first review the experience, dates and number of travelers with you; then you confirm with the team.",
-	"¿Los recorridos son privados?": "Are the tours private?",
-	"Sí, es nuestra propuesta: tours 100% privados, con guía-conductor exclusivo, vehículo privado y sin grupos masivos. Los horarios son flexibles; las condiciones de cada recorrido se confirman al cotizar.": "Yes, that is our proposal: 100% private tours, with an exclusive guide-driver, a private vehicle and no mass groups. Schedules are flexible; the conditions of each tour are confirmed when you request a quote.",
-	"¿Qué incluye una experiencia?": "What does an experience include?",
-	"En las fichas: transporte privado, vehículos cómodos, conductores y guías profesionales, atención personalizada, y fotos y videos del recorrido. Confirma paradas, entradas y alimentación en tu propuesta antes de reservar.": "On each tour page: private transport, comfortable vehicles, professional drivers and guides, personalized attention, and photos and videos of the tour. Confirm stops, tickets and meals in your proposal before booking.",
-	"¿Dónde empieza el recorrido?": "Where does the tour start?",
-	"En la mayoría de experiencias, con la recogida en tu hotel en Medellín. Dinos tu alojamiento o punto de salida y confirmaremos el lugar de encuentro y si hay costos adicionales.": "On most experiences, with pickup at your hotel in Medellín. Tell us your accommodation or departure point and we will confirm the meeting place and whether there are extra costs.",
-	"¿Puedo adaptar el recorrido a mi grupo?": "Can I adapt the tour to my group?",
-	"Sí, cuéntanos qué lugares quieres visitar, cuánto tiempo tienes y qué necesitas. Revisaremos contigo las opciones disponibles para que sea tu viaje, tus tiempos, tu experiencia.": "Yes, tell us which places you want to visit, how much time you have and what you need. We will review the available options with you so it is your trip, your timing, your experience.",
-	"¿Cómo elijo entre ciudad, pueblos o naturaleza?": "How do I choose between city, towns or nature?",
-	"Ciudad para historias y arte urbano; pueblos para cambiar de ritmo; naturaleza para mirar de cerca. Consulta los tiempos de traslado antes de llenar la agenda y cuéntanos tus preferencias.": "City for stories and street art; towns for a change of pace; nature to look up close. Check travel times before filling the schedule and tell us your preferences.",
-	"¿Cómo funciona el traslado desde el aeropuerto?": "How does the airport transfer work?",
-	"Coordinamos el traslado entre el Aeropuerto José María Córdova y tu alojamiento en Medellín, con seguimiento del vuelo. Comparte tu número de vuelo, dirección y número de pasajeros.": "We coordinate the transfer between José María Córdova Airport and your accommodation in Medellín, with flight tracking. Share your flight number, address and number of passengers.",
-	"¿Qué pasa si mi vuelo cambia de hora?": "What if my flight time changes?",
-	"El servicio incluye seguimiento del vuelo y ajustamos la recogida según tu número de vuelo. Las condiciones de espera y el punto de encuentro se confirman con el equipo.": "The service includes flight tracking and we adjust the pickup according to your flight number. Waiting conditions and the meeting point are confirmed with the team.",
-	"¿Qué vehículos tienen y para cuántas personas?": "What vehicles do you have and for how many people?",
-	"Sedán Ejecutivo (1–3), SUV Ejecutiva (1–4), Van Ejecutiva (1–8), Van Master (1–14), Van Sprinter (1–17) y buses (25–40). La unidad y su disponibilidad se confirman al cotizar.": "Executive Sedan (1–3), Executive SUV (1–4), Executive Van (1–8), Van Master (1–14), Van Sprinter (1–17) and buses (25–40). The unit and its availability are confirmed when you request a quote.",
-	"¿Atienden empresas y grupos?": "Do you serve companies and groups?",
-	"Sí: puedes consultar transporte para equipos de trabajo, eventos y grupos. Indica horarios, rutas y número de pasajeros para preparar la propuesta.": "Yes: you can ask about transport for work teams, events and groups. Share schedules, routes and number of passengers so we can prepare the proposal.",
-	"¿Qué debo confirmar antes de contratar?": "What should I confirm before booking?",
-	"Revisa el valor total, las inclusiones, el horario, el vehículo propuesto y las condiciones de pago y cancelación con el equipo que atiende tu solicitud.": "Review the total price, inclusions, schedule, proposed vehicle and the payment and cancellation terms with the team handling your request.",
-	"¿Qué debo preparar antes del recorrido?": "What should I prepare before the tour?",
-	"Ten a la mano fecha, punto de partida y, si llegas en avión, tu número de vuelo. Cada ficha trae recomendaciones propias, como calzado cómodo para los miradores o la cámara con espacio.": "Have your date, starting point and, if you arrive by plane, your flight number at hand. Each tour page has its own recommendations, such as comfortable shoes for the viewpoints or a camera with space.",
-	"¿Cuál es la política de cancelación, cambios y reembolsos?": "What is the cancellation, change and refund policy?",
-	"Entendemos que los planes pueden cambiar. Por eso, ofrecemos alternativas de reprogramación sujetas a disponibilidad. Para cancelaciones, manejamos las siguientes condiciones sobre el anticipo recibido: 15 días o más de anticipación: devolución del 60 %; entre 8 y 14 días: devolución del 20 %; con 7 días o menos: no aplica devolución. Las solicitudes de cambio de fecha están sujetas a disponibilidad y a las condiciones de la reserva.": "We understand plans can change. That is why we offer rescheduling alternatives subject to availability. For cancellations we apply the following terms on the deposit received: 15 days or more in advance: 60% refund; between 8 and 14 days: 20% refund; 7 days or less: no refund. Date change requests are subject to availability and to the booking conditions.",
-	"¿Cuáles son los medios de pago, el anticipo y la facturación?": "What are the payment methods, deposit and invoicing?",
-	"Para confirmar una experiencia solicitamos un anticipo del 30 % del valor total. El 70 % restante puede cancelarse durante o al finalizar la experiencia. Contamos con enlaces de pago electrónicos seguros y opciones de pago en pesos colombianos (COP). Para algunos servicios de traslado aeroportuario, el anticipo puede ser del 50 %. Emitimos certificados de reserva y contamos con facturación electrónica según los datos suministrados por el cliente.": "To confirm an experience we ask for a 30% deposit of the total price. The remaining 70% can be paid during or at the end of the experience. We have secure electronic payment links and payment options in Colombian pesos (COP). For some airport transfer services the deposit may be 50%. We issue booking certificates and provide electronic invoicing based on the data supplied by the customer.",
-	"¿En qué idiomas atienden los guías?": "Which languages do the guides speak?",
-	"Nuestros servicios se ofrecen principalmente en español. También contamos con guías bilingües en inglés y podemos coordinar acompañamiento en portugués u otros idiomas, previa solicitud y según disponibilidad.": "Our services are mainly offered in Spanish. We also have bilingual English-speaking guides and can arrange support in Portuguese or other languages on request and subject to availability.",
-	"¿Qué seguros y pólizas respaldan el servicio?": "What insurance and policies back the service?",
-	"Trabajamos con vehículos de servicio especial debidamente habilitados, documentación vigente y las coberturas reglamentarias correspondientes, incluyendo SOAT y seguros aplicables al transporte contratado. Contamos con el Registro Nacional de Turismo RNT 176384 y NIT 901738550-6.": "We work with properly authorized special-service vehicles, valid documentation and the corresponding mandatory coverage, including SOAT and insurance applicable to the contracted transport. We hold National Tourism Registry RNT 176384 and NIT 901738550-6.",
-	"Registro Nacional de Turismo RNT 176384 · NIT 901738550-6": "National Tourism Registry RNT 176384 · NIT 901738550-6",
-	"¿Qué no incluye una experiencia?": "What is not included in an experience?",
-	"Salvo que la cotización indique expresamente lo contrario, nuestros servicios no incluyen entradas a parques o atracciones, compras personales, propinas ni actividades adicionales. Cada propuesta comercial especifica claramente los servicios incluidos y los costos que corren por cuenta del viajero.": "Unless the quote expressly states otherwise, our services do not include tickets to parks or attractions, personal purchases, tips or additional activities. Each commercial proposal clearly specifies the included services and the costs borne by the traveler.",
-	"¿Pueden viajar niños, bebés o mascotas?": "Can children, babies or pets travel?",
-	"¡Las familias son bienvenidas! Los bebés pueden viajar sin costo adicional, de acuerdo con las condiciones de la reserva y la capacidad del vehículo. No manejamos una edad mínima general para las experiencias, aunque algunas atracciones pueden establecer restricciones particulares. También podemos recibir mascotas, coordinando previamente sus condiciones de transporte para garantizar comodidad y seguridad.": "Families are welcome! Babies can travel at no extra cost, according to the booking conditions and the vehicle capacity. We do not have a general minimum age for experiences, although some attractions may set their own restrictions. We can also take pets, arranging their transport conditions in advance to ensure comfort and safety.",
-	"¿Hay opciones de accesibilidad o para movilidad reducida?": "Are there accessibility or reduced-mobility options?",
-	"Buscamos adaptar nuestras experiencias a las necesidades de cada viajero. Si algún pasajero tiene movilidad reducida o requiere asistencia especial, recomendamos informarlo antes de reservar para verificar el vehículo apropiado, las condiciones del recorrido y la accesibilidad de los lugares que desea visitar.": "We aim to adapt our experiences to each traveler's needs. If a passenger has reduced mobility or needs special assistance, we recommend telling us before booking so we can check the right vehicle, the tour conditions and the accessibility of the places they want to visit.",
-	"¿Qué pasa si llueve?": "What if it rains?",
-	"¡La experiencia no tiene por qué detenerse! La mayoría de nuestros recorridos pueden realizarse con lluvia moderada. Cuando las condiciones climáticas afectan alguna actividad, buscamos ajustar el itinerario o proponer alternativas, priorizando siempre la seguridad de nuestros viajeros.": "The experience doesn't have to stop! Most of our tours can run in moderate rain. When weather conditions affect an activity, we look to adjust the itinerary or propose alternatives, always putting our travelers' safety first.",
-	"¿Cuánto esperan en el aeropuerto y cómo me identifico?": "How long do you wait at the airport and how do I recognize you?",
-	"Realizamos seguimiento a los vuelos para coordinar la llegada de nuestros pasajeros. Nuestro conductor se comunica previamente y comparte las instrucciones del punto de encuentro, así como sus datos y los del vehículo. En servicios previamente coordinados podemos ofrecer señalización personalizada con el nombre del pasajero o grupo. Entendemos que pueden presentarse demoras en migración, recogida de equipaje o vuelos, por lo que ofrecemos acompañamiento y flexibilidad en la espera.": "We track flights to coordinate our passengers' arrival. Our driver contacts you beforehand and shares the meeting point instructions, as well as their details and the vehicle's. For pre-arranged services we can offer a personalized sign with the passenger's or group's name. We understand there can be delays at immigration, baggage claim or with flights, so we offer support and flexibility while you wait.",
-	"¿Cuál es el horario de atención y en cuánto responden las cotizaciones?": "What are your support hours and how fast do you answer quote requests?",
-	"Nuestra operación de transporte cuenta con disponibilidad las 24 horas, mediante reserva previa. Brindamos asesoría personalizada por nuestros canales digitales y WhatsApp. Nos esforzamos por responder las solicitudes de cotización lo más pronto posible, teniendo en cuenta la disponibilidad de nuestro equipo comercial. Nuestro compromiso es acompañar al viajero desde la planeación hasta la finalización de su experiencia.": "Our transport operation is available 24 hours, with prior booking. We provide personalized advice through our digital channels and WhatsApp. We do our best to answer quote requests as soon as possible, depending on our sales team's availability. Our commitment is to accompany the traveler from planning to the end of their experience.",
-	"Duración y salida": "Duration and departure",
-	"Duración y salida:": "Duration and departure:",
-	"9 horas, desde las 9:00 a. m.": "9 hours, from 9:00 a.m.",
-	"10 horas aprox., desde las 8:30 a. m.": "About 10 hours, from 8:30 a.m.",
-	"4 a 5 horas, horario flexible": "4 to 5 hours, flexible schedule",
-	"Horario acordado con el cliente": "Schedule agreed with the customer",
-	"Día completo, desde las 5:00 a. m.": "Full day, from 5:00 a.m.",
-	"Según itinerario contratado": "According to the contracted itinerary",
-	"Según lugar de salida e itinerario": "Depending on departure point and itinerary",
-	"Los horarios pueden modificarse dependiendo del lugar de recogida, tráfico, condiciones climáticas e itinerario.": "Schedules may change depending on the pickup location, traffic, weather conditions and itinerary.",
-	"Toca la foto para ampliar": "Tap the photo to enlarge",
-	"Política de tratamiento de datos": "Personal data processing policy",
-	"Qué datos personales recogemos, con qué finalidad, cuánto tiempo los conservamos y cómo ejercer tus derechos (Ley 1581 de 2012).": "What personal data we collect, what for, how long we keep it and how to exercise your rights (Law 1581 of 2012).",
-	"Activar sonido": "Turn sound on",
-	Silenciar: "Mute",
-	"Pausar video": "Pause video",
-	"Reproducir video": "Play video",
-	"Enviar por WhatsApp": "Send via WhatsApp",
-	"Se abrirá WhatsApp con tu mensaje listo; revisa y pulsa Enviar.": "WhatsApp will open with your message ready; review it and press Send.",
-	"No guardamos tus datos en este navegador. Enviar la consulta no confirma una reserva. También puedes llamarnos:": "We do not store your details in this browser. Sending the inquiry does not confirm a booking. You can also call us:",
-	"Tu mensaje está listo": "Your message is ready",
-	"Abrimos WhatsApp con tu mensaje escrito. Revisa y pulsa Enviar. Si no se abrió, usa el botón.": "We opened WhatsApp with your message written. Review it and press Send. If it did not open, use the button.",
-	"Abrir WhatsApp con mi mensaje": "Open WhatsApp with my message",
-	"Copiar mensaje": "Copy message",
-	"Mensaje copiado. Si WhatsApp no está instalado, pégalo en WhatsApp Web.": "Message copied. If WhatsApp is not installed, paste it into WhatsApp Web.",
-	"No pudimos copiar automáticamente: selecciona el texto y cópialo.": "We couldn't copy automatically: select the text and copy it.",
-	"autorizo enviar esta solicitud a T&T por WhatsApp.": "and authorize sending this inquiry to T&T via WhatsApp.",
-	"Elige el tipo de solicitud y completa tus datos. Te dejamos el mensaje listo en WhatsApp para que solo pulses Enviar.": "Choose your inquiry type and fill in your details. We leave the message ready in WhatsApp so you only press Send.",
-	"Completa tus datos y te dejamos el mensaje listo en WhatsApp para que solo pulses Enviar.": "Fill in your details and we leave the message ready in WhatsApp so you only press Send.",
-	"El formulario prepara tu mensaje en el navegador. No envía datos a una base de datos ni confirma reservas. Al enviarlo, se abre WhatsApp con el mensaje ya escrito y tú decides si lo envías; también puedes copiarlo y enviarlo por correo.": "The form prepares your message in your browser. It does not send data to a database or confirm bookings. When you submit it, WhatsApp opens with the message already written and you decide whether to send it; you can also copy it and send it by email.",
-	"Parada {n} de {total}": "Stop {n} of {total}",
-	"Foto pendiente": "Photo pending",
-	"En la visita": "On the visit",
-	Opcional: "Optional",
-	"Ingreso no incluido": "Admission not included",
-	"Por confirmar en ruta operativa": "To be confirmed on the operating route",
-	"Según elección": "Depending on your choice",
-	"Sujeta a selección": "Subject to selection",
-	"Según pasaporte": "Depending on your pass",
-	Personalizable: "Customizable",
-	"Itinerario sugerido, sujeto a confirmación operativa": "Suggested itinerary, subject to operational confirmation",
-	"Sujeto al operador": "Subject to the operator",
-	"Elegir parada": "Choose a stop",
-	"Ir a la parada": "Go to stop",
-	"Un recorrido por": "A journey through",
-	"El recorrido, parada a parada": "The route, stop by stop",
-	"Duración aproximada": "Approximate duration",
-	"Lo que puedes vivir": "What you can experience",
-	"Tú eliges dónde comprar": "You choose where to shop",
-	"Zonas y atracciones del parque: el acceso depende del pasaporte, la apertura y el tiempo disponible, y no se visitan necesariamente todas en un único día.": "Park zones and attractions: access depends on the pass, opening times and available time, and not all of them are necessarily visited in a single day.",
-	"Posibles destinos personalizables, no un itinerario de visita obligatoria.": "Possible customizable destinations, not a mandatory itinerary.",
-	"City Tour": "City Tour",
-	Guatapé: "Guatapé",
-	"Medellín de Noche": "Medellín at Night",
-	Miradores: "Viewpoints",
-	"Santa Fe de Antioquia": "Santa Fe de Antioquia",
-	"Hacienda Nápoles": "Hacienda Nápoles",
-	"Salto del Buey": "Salto del Buey",
-	"Recordar para transformar": "Remember to transform",
-	"Parque Memorial Inflexión": "Inflexión Memorial Park",
-	"Comenzamos con la memoria de Medellín. En el Parque Memorial Inflexión conocemos una parte fundamental de su historia y cómo la ciudad ha trabajado para transformar su pasado.": "We begin with the memory of Medellín. At the Inflexión Memorial Park we learn about a fundamental part of its history and how the city has worked to transform its past.",
-	"Espacio de memoria, explicación histórica, fotografías respetuosas y reflexión.": "A memory space, historical explanation, respectful photographs and reflection.",
-	"Visitantes frente a un muro de piedra oscura con la frase «Somos lo que dejamos a los demás» y una torre de apartamentos al fondo": "Visitors in front of a dark stone wall with the phrase “Somos lo que dejamos a los demás” and an apartment tower in the background",
-	"El corazón administrativo": "The administrative heart",
-	"La Alpujarra": "La Alpujarra",
-	"Recorremos el centro administrativo de Medellín, donde se encuentran importantes edificios públicos y espacios representativos de la vida de la ciudad.": "We tour Medellín's administrative center, home to important public buildings and spaces that represent the life of the city.",
-	"Entorno de la Gobernación, Alcaldía y Plaza de la Libertad; fotografías exteriores.": "Surroundings of the Governor's Office, City Hall and Plaza de la Libertad; exterior photographs.",
-	"Grupo de viajeros frente al edificio de la Gobernación de Antioquia en La Alpujarra, con las banderas de Antioquia, Colombia y Medellín": "Group of travelers in front of the Antioquia Governor's Office building at La Alpujarra, with the flags of Antioquia, Colombia and Medellín",
-	"Una ciudad que se ilumina": "A city that lights up",
-	"Parque de las Luces": "Parque de las Luces",
-	"Descubrimos la Plaza Cisneros y sus famosas columnas luminosas, símbolo de la renovación de espacios urbanos en Medellín.": "We discover Plaza Cisneros and its famous luminous columns, a symbol of the renewal of urban spaces in Medellín.",
-	"Plaza, columnas y contexto de transformación del centro.": "The plaza, the columns and the context of the downtown transformation.",
-	"Bosque de columnas de luz de la Plaza Cisneros, con un grupo de viajeros posando en la plaza": "The forest of light columns at Plaza Cisneros, with a group of travelers posing in the plaza",
-	"Arte en el centro": "Art downtown",
-	"Plaza Botero": "Plaza Botero",
-	"Entre esculturas monumentales y arquitectura emblemática, conocemos una de las plazas más reconocidas del centro de Medellín.": "Among monumental sculptures and emblematic architecture, we visit one of the best-known plazas in downtown Medellín.",
-	"Esculturas, exterior del Palacio de la Cultura y fotografías. Entrada a museos no incluida salvo confirmación.": "Sculptures, the exterior of the Palacio de la Cultura and photographs. Museum admission not included unless confirmed.",
-	"Escultura reclinada de Fernando Botero frente a la fachada de piedra a cuadros del Palacio de la Cultura": "Reclining sculpture by Fernando Botero in front of the checkered stone façade of the Palacio de la Cultura",
-	"Tradición paisa": "Paisa tradition",
-	"Pueblito Paisa": "Pueblito Paisa",
-	"Subimos al Cerro Nutibara para descubrir una réplica de un pueblo antioqueño, sus calles tradicionales y una hermosa panorámica de Medellín.": "We go up Cerro Nutibara to discover a replica of an Antioquian town, its traditional streets and a beautiful panorama of Medellín.",
-	"Iglesia, plaza, fachadas, mirador y artesanías.": "Church, plaza, façades, viewpoint and handicrafts.",
-	"Viajeros en la plaza empedrada del Pueblito Paisa, con la iglesia blanca y las fachadas de balcones coloridos al fondo": "Travelers in the cobbled plaza of Pueblito Paisa, with the white church and colorful balconied façades behind",
-	"Medellín desde el aire": "Medellín from above",
-	"Metro y Metrocable": "Metro and Metrocable",
-	"Vivimos de cerca el sistema de transporte que conecta diferentes sectores de Medellín y disfrutamos de una perspectiva diferente de sus barrios y montañas.": "We experience up close the transport system that connects different parts of Medellín and enjoy a different perspective of its neighborhoods and mountains.",
-	"Trayecto de Metro/Metrocable según línea y accesos acordados. Precisar en la cotización si los pasajes están incluidos.": "Metro/Metrocable ride depending on the agreed line and access. Specify in the quote whether fares are included.",
-	"Viajeros dentro de una cabina del Metrocable con las montañas de Medellín al fondo": "Travelers inside a Metrocable cabin with Medellín's mountains in the background",
-	"Colores que cuentan historias": "Colors that tell stories",
-	"Comuna 13": "Comuna 13",
-	"Nos adentramos en una comunidad que convirtió el arte urbano en una poderosa expresión de identidad, creatividad y transformación.": "We step into a community that turned urban art into a powerful expression of identity, creativity and transformation.",
-	"Murales y relatos de la comuna.": "Murals and stories from the comuna.",
-	"Mural de un rostro de mujer con un colibrí en una calle de la Comuna 13": "Mural of a woman's face with a hummingbird on a street in Comuna 13",
-	"Subir para descubrir": "Climb to discover",
-	"Escaleras eléctricas de Comuna 13": "Comuna 13 outdoor escalators",
-	"Recorremos las famosas escaleras eléctricas al aire libre, uno de los referentes de accesibilidad y renovación urbana de la zona.": "We ride the famous outdoor escalators, one of the landmarks of accessibility and urban renewal in the area.",
-	"Escaleras, paisajes del barrio y fotografías.": "Escalators, neighborhood views and photographs.",
-	"Grupo de viajeros subiendo por las escaleras eléctricas techadas de la Comuna 13": "Group of travelers riding the covered escalators of Comuna 13",
-	"Talento de barrio": "Neighborhood talent",
-	"Arte y miradores de Comuna 13": "Art and viewpoints of Comuna 13",
-	"Terminamos con el talento local: música, expresiones artísticas, emprendimientos y vistas que hacen única la experiencia en la Comuna 13.": "We finish with local talent: music, artistic expression, small businesses and views that make the experience in Comuna 13 unique.",
-	"Galerías, emprendimientos y posibles presentaciones según disponibilidad. No garantizar un espectáculo específico.": "Galleries, small businesses and possible performances depending on availability. No specific show is guaranteed.",
-	"Mirador de la Comuna 13 con el letrero «Medellín Comuna 13» y la ciudad al fondo": "Comuna 13 viewpoint with the “Medellín Comuna 13” sign and the city in the background",
-	"Nuestro primer encuentro con el campo": "Our first encounter with the countryside",
-	"Alto del Chocho": "Alto del Chocho",
-	"Hacemos una parada para conectar con el paisaje rural del Oriente antioqueño, conocer animales de granja y descubrir sabores típicos de la región.": "We stop to connect with the rural landscape of eastern Antioquia, meet farm animals and discover typical flavors of the region.",
-	"Animales, fotografías y alimentos opcionales. Confirmar condiciones de acceso.": "Animals, photographs and optional food. Access conditions to be confirmed.",
-	"Alpacas y llamas en el patio de tierra del Alto del Chocho, bajo una gran estructura de madera": "Alpacas and llamas in the dirt courtyard of Alto del Chocho, under a large wooden structure",
-	"Un pueblo lleno de memoria": "A town full of memory",
-	"Réplica del Viejo Peñol": "Viejo Peñol replica",
-	"Conocemos la historia del antiguo Peñol a través de una réplica que conserva el espíritu del pueblo anterior a la construcción del embalse.": "We learn the history of the old Peñol through a replica that preserves the spirit of the town that existed before the reservoir was built.",
-	"Plaza, fachadas, iglesia y explicación histórica.": "Plaza, façades, church and historical explanation.",
-	"Viajeros en la plaza frente a la iglesia de torres de ladrillo de la réplica del Viejo Peñol": "Travelers in the plaza in front of the brick-towered church of the Viejo Peñol replica",
-	"Piedra del Peñol": "Piedra del Peñol",
-	"La imponente Piedra del Peñol nos recibe con uno de los paisajes más reconocidos de Antioquia. Quienes lo deseen podrán realizar el ascenso para contemplar el embalse desde arriba.": "The imposing Piedra del Peñol greets us with one of the best-known landscapes in Antioquia. Those who wish can make the climb to view the reservoir from above.",
-	"Base, fotos y ascenso opcional. El ingreso/subida se paga aparte si no figura incluido.": "The base, photos and an optional climb. Admission/climb is paid separately if not listed as included.",
-	"La Piedra del Peñol completa vista desde su base, con la escalera que la recorre": "The whole Piedra del Peñol seen from its base, with the staircase that runs up it",
-	"Postales de colores": "Colorful postcards",
-	"Calle de los Recuerdos": "Calle de los Recuerdos",
-	"Caminamos por las calles llenas de color que narran costumbres, tradiciones y momentos de la vida del municipio.": "We walk along colorful streets that tell of the customs, traditions and everyday moments of the town.",
-	"Zócalos, arquitectura local, fotos.": "Zócalos (painted baseboard reliefs), local architecture, photos.",
-	"Fachada de Guatapé con zócalos de colores y balcones con flores, frente a un grupo de viajeros": "Guatapé façade with colorful zócalos and flower balconies, in front of a group of travelers",
-	"Bajo un cielo de sombrillas": "Under a sky of umbrellas",
-	"Calle de las Sombrillas": "Calle de las Sombrillas",
-	"Una de las paradas más fotogénicas del recorrido: colores, detalles artesanales y rincones que invitan a llevarse un recuerdo de Guatapé.": "One of the most photogenic stops of the tour: colors, handcrafted details and corners that invite you to take home a memory of Guatapé.",
-	"Recorrido corto y fotografías.": "A short walk and photographs.",
-	"Calle empedrada de Guatapé cubierta por sombrillas de colores, con una viajera caminando": "Cobbled street in Guatapé covered with colorful umbrellas, with a traveler walking",
-	"El corazón de Guatapé": "The heart of Guatapé",
-	"Parque Principal y Parroquia": "Main Square and Parish Church",
-	"Llegamos al corazón del municipio, donde la vida local, la arquitectura y la tradición se reúnen alrededor de su parque principal.": "We reach the heart of the town, where local life, architecture and tradition come together around its main square.",
-	"Plaza, iglesia (ingreso según apertura), comercio local.": "Plaza, church (entry depending on opening hours), local shops.",
-	"La esencia de los zócalos": "The essence of the zócalos",
-	"Plazoleta de los Zócalos": "Plazoleta de los Zócalos",
-	"Los zócalos cuentan historias en cada fachada. En esta plazoleta descubrimos por qué el color es parte de la identidad de Guatapé.": "The zócalos tell stories on every façade. In this small plaza we discover why color is part of Guatapé's identity.",
-	"Plazoleta, arte, fotos y artesanías.": "Small plaza, art, photos and handicrafts.",
-	"Fachada de zócalos coloridos con balcones y una escalera de entrada en Guatapé": "Façade with colorful zócalos, balconies and an entrance staircase in Guatapé",
-	"Frente al agua": "By the water",
-	"Malecón de Guatapé": "Guatapé waterfront",
-	"Cerramos el recorrido urbano frente al embalse, disfrutando del paisaje, el aire fresco y el ambiente turístico del malecón.": "We end the town walk facing the reservoir, enjoying the scenery, the fresh air and the lively atmosphere of the waterfront.",
-	"Paseo, paisaje y fotografías.": "A stroll, scenery and photographs.",
-	"Navegar el paisaje": "Sail the landscape",
-	"Paseo en lancha": "Boat ride",
-	"Para quienes desean añadir otra perspectiva, existe la opción de navegar el embalse y admirar desde el agua sus islas y montañas.": "For those who want to add another perspective, there is the option of sailing the reservoir and admiring its islands and mountains from the water.",
-	"Paseo en embarcación solo si se contrata. No mostrar como actividad incluida por defecto.": "Boat ride only if booked. Not included by default.",
-	"Lancha avanzando por el embalse de Guatapé, con la Piedra del Peñol a lo lejos": "A boat moving across the Guatapé reservoir, with the Piedra del Peñol in the distance",
-	"Medellín se enciende": "Medellín lights up",
-	"Mirador Octava Maravilla": "Octava Maravilla viewpoint",
-	"Comenzamos contemplando las luces de Medellín desde un mirador que revela la belleza del Valle de Aburrá al anochecer.": "We begin by watching the lights of Medellín from a viewpoint that reveals the beauty of the Aburrá Valley at nightfall.",
-	"Panorámica, fotografías; consumo gastronómico opcional.": "Panoramic views, photographs; optional food and drink.",
-	"Letrero luminoso «La Octava Maravilla» en el mirador de noche, con las luces de la ciudad al fondo": "Illuminated “La Octava Maravilla” sign at the viewpoint at night, with the city lights behind",
-	"La energía de Provenza": "The energy of Provenza",
-	Provenza: "Provenza",
-	"Descubrimos el ambiente gastronómico y cultural de Provenza, entre restaurantes, luces y espacios llenos de vida.": "We discover the culinary and cultural atmosphere of Provenza, among restaurants, lights and lively spaces.",
-	"Caminata y tiempo libre; consumos no incluidos salvo acuerdo.": "A walk and free time; food and drink not included unless agreed.",
-	"Grupo de viajeros bajo el arco iluminado «Medellín · Provenza» por la noche": "Group of travelers under the illuminated “Medellín · Provenza” arch at night",
-	"Un clásico de El Poblado": "A classic of El Poblado",
-	"Parque Lleras": "Parque Lleras",
-	"Continuamos por uno de los sectores más conocidos de El Poblado para apreciar el movimiento y el ambiente nocturno de Medellín.": "We continue through one of the best-known areas of El Poblado to experience the bustle and nightlife of Medellín.",
-	"Caminata por áreas pertinentes, fotografías; adaptar a familias y preferencias.": "Walk through suitable areas, photographs; adapted to families and preferences.",
-	"Sabores para cerrar la noche": "Flavors to close the night",
-	"Parada gastronómica": "Food stop",
-	"Terminamos con tiempo para disfrutar la gastronomía local o el espacio de entretenimiento que mejor se ajuste a tu estilo de viaje.": "We finish with time to enjoy local cuisine or the entertainment venue that best fits your travel style.",
-	"Cena o consumo opcional y por cuenta del cliente salvo inclusión expresa.": "Dinner or other food and drink is optional and at the client's expense unless expressly included.",
-	"Viajeros con músicos de una cantina tradicional decorada con colores y artesanías": "Travelers with musicians in a traditional cantina decorated with colors and handicrafts",
-	"La ciudad a nuestros pies": "The city at our feet",
-	"Mirador La Palma": "La Palma viewpoint",
-	"Desde La Palma apreciamos Medellín desde otra perspectiva: barrios, montañas y la inmensidad del valle.": "From La Palma we see Medellín from another perspective: neighborhoods, mountains and the vastness of the valley.",
-	"Vistas, fotografías y parada contemplativa.": "Views, photographs and a contemplative stop.",
-	"Montañas y horizonte": "Mountains and horizon",
-	"Cerro El Picacho": "Cerro El Picacho",
-	"Seguimos hacia un punto privilegiado para observar la geografía del Valle de Aburrá y disfrutar de una de las vistas más representativas de la ciudad.": "We continue to a privileged spot to observe the geography of the Aburrá Valley and enjoy one of the city's most representative views.",
-	"Mirador y fotografías, sujeto a acceso y condiciones de seguridad.": "Viewpoint and photographs, subject to access and safety conditions.",
-	"Sabores con vista": "Flavors with a view",
-	"Si lo deseas, complementamos el recorrido con una parada para probar sabores locales mientras disfrutamos del ambiente de la montaña.": "If you wish, we complement the tour with a stop to try local flavors while enjoying the mountain atmosphere.",
-	"Comida y bebidas adicionales, no incluidas por defecto.": "Additional food and drinks, not included by default.",
-	"Bienvenidos a la finca": "Welcome to the farm",
-	"Llegamos a una finca donde la tradición cafetera se vive de cerca, rodeados de naturaleza y del aroma del café colombiano.": "We arrive at a farm where coffee-growing tradition is lived up close, surrounded by nature and the aroma of Colombian coffee.",
-	"Bienvenida e introducción.": "Welcome and introduction.",
-	"Dos viajeros con sombrero y delantal cafetero entre la vegetación de la finca": "Two travelers wearing hats and coffee-farm aprons among the farm's vegetation",
-	"Donde nace el café": "Where coffee begins",
-	Cultivos: "Crops",
-	"Caminamos entre cultivos para descubrir cómo crece el café y qué hace especiales a los granos de esta región.": "We walk among the crops to discover how coffee grows and what makes the beans of this region special.",
-	"Cultivo y explicación del proceso agrícola.": "The crop and an explanation of the farming process.",
-	"Un caficultor muestra un canasto con granos rojos de café junto a los cafetos": "A coffee grower shows a basket of red coffee cherries next to the coffee plants",
-	"Manos a la cosecha": "Hands on the harvest",
-	Recolección: "Harvesting",
-	"Conocemos el trabajo detrás de cada cosecha y, cuando las condiciones lo permiten, participamos en una demostración de recolección.": "We learn about the work behind each harvest and, when conditions allow, take part in a picking demonstration.",
-	"Demostración o práctica solo si está disponible.": "Demonstration or hands-on practice only if available.",
-	"Viajeros con delantales y canastos de recolección sobre una ladera de la finca": "Travelers with aprons and picking baskets on a hillside of the farm",
-	"Del fruto al grano": "From fruit to bean",
-	"Beneficio y secado": "Processing and drying",
-	"Descubrimos cómo el fruto se transforma y cómo cada etapa de beneficio y secado influye en la calidad de la bebida.": "We discover how the fruit is transformed and how each stage of processing and drying influences the quality of the drink.",
-	"Despulpado, lavado y secado según operación de la finca.": "Pulping, washing and drying depending on the farm's operation.",
-	"Persona rastrillando el café extendido en el secadero de la finca, con las montañas al fondo": "A person raking coffee spread out on the farm's drying patio, with mountains in the background",
-	"El aroma de la transformación": "The aroma of transformation",
-	"Tostión y molienda": "Roasting and grinding",
-	"Exploramos la tostión y la molienda, dos procesos que ayudan a construir los aromas y sabores del café que disfrutamos.": "We explore roasting and grinding, two processes that help build the aromas and flavors of the coffee we enjoy.",
-	"Demostración o explicación según instalaciones.": "Demonstration or explanation depending on the facilities.",
-	"El momento de saborear": "Time to savor",
-	"Cata de café": "Coffee tasting",
-	"Terminamos con una degustación para identificar aromas, sabores y matices del café colombiano.": "We finish with a tasting to identify aromas, flavors and nuances of Colombian coffee.",
-	"Cata según modalidad contratada.": "Tasting depending on the package booked.",
-	"Llévate un pedacito de la finca": "Take a piece of the farm home",
-	"Productos cafeteros": "Coffee products",
-	"Antes de regresar, puedes conocer los productos de la finca y elegir un recuerdo especial para llevar a casa.": "Before heading back, you can browse the farm's products and choose a special souvenir to take home.",
-	"Compras voluntarias, no incluidas.": "Voluntary purchases, not included.",
-	"Tradición entre montañas": "Tradition among the mountains",
-	"El Retiro": "El Retiro",
-	"Descubrimos un municipio conocido por sus calles tradicionales, su ambiente tranquilo y su herencia artesanal.": "We discover a town known for its traditional streets, its calm atmosphere and its handicraft heritage.",
-	"Parque, iglesia y espacios artesanales sujetos a apertura.": "Park, church and craft spaces subject to opening hours.",
-	"Aire del Oriente": "Air of the Oriente",
-	"La Ceja": "La Ceja",
-	"Seguimos por el Oriente antioqueño para apreciar sus plazas, tradiciones y la vida cotidiana de sus pueblos.": "We continue through eastern Antioquia to appreciate its plazas, traditions and the everyday life of its towns.",
-	"Plaza principal, entorno local y fotografías.": "Main plaza, local surroundings and photographs.",
-	"Letras blancas «La Ceja» en la plaza principal del municipio, con árboles y puestos de turismo al fondo": "White “La Ceja” letters in the town's main plaza, with trees and a tourist information stand behind",
-	"Historia que permanece": "History that endures",
-	Rionegro: "Rionegro",
-	"Caminamos por un municipio lleno de historia y arquitectura que conserva una parte importante del pasado regional.": "We walk through a town full of history and architecture that preserves an important part of the region's past.",
-	"Centro histórico, parque y exterior de la catedral.": "Historic center, park and cathedral exterior.",
-	"Una dulce tradición": "A sweet tradition",
-	"San Antonio de Pereira": "San Antonio de Pereira",
-	"Cerramos entre calles tradicionales y la famosa cultura de postres de San Antonio de Pereira.": "We finish among traditional streets and the famous dessert culture of San Antonio de Pereira.",
-	"Plaza, iglesia, postrerías; consumo adicional.": "Plaza, church, dessert shops; additional cost for food.",
-	"Fachada de colores de una postrería de San Antonio de Pereira, con una viajera señalando el letrero": "Colorful façade of a dessert shop in San Antonio de Pereira, with a traveler pointing at the sign",
-	"Paisajes para recordar": "Landscapes to remember",
-	"Parada panorámica": "Scenic stop",
-	"Aprovechamos el recorrido para detenernos, cuando sea posible, y admirar los paisajes del Oriente antioqueño.": "We make the most of the route to stop, when possible, and admire the landscapes of eastern Antioquia.",
-	"Fotografías en parada segura y autorizada; no asegurar un lugar hasta definirlo.": "Photographs at a safe, authorized stop; no location is guaranteed until it is defined.",
-	"Un viaje al pasado": "A journey to the past",
-	"Calles coloniales": "Colonial streets",
-	"Las calles de Santa Fe de Antioquia nos transportan a otra época, entre fachadas coloniales y rincones llenos de historia.": "The streets of Santa Fe de Antioquia take us to another era, among colonial façades and corners full of history.",
-	"Recorrido peatonal, fotografías y arquitectura.": "A walk on foot, photographs and architecture.",
-	"Calle empedrada de Santa Fe de Antioquia entre casas blancas coloniales con puertas verdes": "Cobbled street in Santa Fe de Antioquia between white colonial houses with green doors",
-	"El corazón de la ciudad colonial": "The heart of the colonial city",
-	"Plaza Mayor": "Plaza Mayor",
-	"Conocemos la plaza principal, donde se encuentran la vida cotidiana, los sabores y las tradiciones del municipio.": "We visit the main plaza, where everyday life, flavors and traditions of the town come together.",
-	"Parque, comercio y gastronomía.": "Park, shops and food.",
-	"Grupo de viajeros en el parque principal de Santa Fe de Antioquia, con la fuente y una iglesia blanca detrás": "Group of travelers in the main park of Santa Fe de Antioquia, with the fountain and a white church behind",
-	"Historia en cada detalle": "History in every detail",
-	"Catedral de la Inmaculada Concepción": "Cathedral of the Immaculate Conception",
-	"Visitamos el entorno de uno de los templos más emblemáticos de Santa Fe de Antioquia y descubrimos su legado arquitectónico.": "We visit the surroundings of one of the most emblematic churches in Santa Fe de Antioquia and discover its architectural legacy.",
-	"Fachada e interior cuando esté abierto.": "Façade and interior when open.",
-	"Fachada blanca con torre de campanario de la catedral de Santa Fe de Antioquia y la plaza frente a ella": "White façade with bell tower of the cathedral of Santa Fe de Antioquia and the plaza in front of it",
-	"Patrimonio que se conserva": "Heritage that endures",
-	"Iglesias y arquitectura histórica": "Churches and historic architecture",
-	"Continuamos por espacios donde se conservan detalles religiosos y arquitectónicos que cuentan la historia de esta antigua capital antioqueña.": "We continue through spaces that preserve religious and architectural details that tell the story of this former capital of Antioquia.",
-	"Exteriores y visitas interiores si están autorizadas.": "Exteriors and interior visits if authorized.",
-	"Fachada colonial blanca con ventanas de rejas de madera tallada sobre una calle empedrada": "White colonial façade with carved wooden window grilles on a cobbled street",
-	"Un puente con historia": "A bridge with history",
-	"Puente de Occidente": "Puente de Occidente",
-	"Admiramos el histórico Puente de Occidente, una obra de ingeniería suspendida sobre el río Cauca y uno de los símbolos de la región.": "We admire the historic Puente de Occidente, an engineering work suspended over the Cauca River and one of the symbols of the region.",
-	"Visita, fotografías y explicación patrimonial, según acceso permitido.": "Visit, photographs and heritage explanation, depending on permitted access.",
-	"Vista del Puente de Occidente sobre el río Cauca entre montañas": "View of the Puente de Occidente over the Cauca River among mountains",
-	"Sabores de la región": "Flavors of the region",
-	"Gastronomía local": "Local cuisine",
-	"Terminamos con la posibilidad de probar sabores tradicionales y disfrutar del ambiente cálido de Santa Fe de Antioquia.": "We finish with the chance to taste traditional flavors and enjoy the warm atmosphere of Santa Fe de Antioquia.",
-	"Alimentos y bebidas según cotización; no incluidos por defecto.": "Food and drinks as per the quote; not included by default.",
-	"Grupo de viajeros almorzando en una larga mesa de un restaurante colonial": "Group of travelers having lunch at a long table in a colonial restaurant",
-	"Una aventura prehistórica": "A prehistoric adventure",
-	"Aventura Jurásica": "Jurassic Adventure",
-	"Comenzamos descubriendo figuras de dinosaurios y espacios temáticos que despiertan la imaginación de grandes y pequeños.": "We start by discovering dinosaur figures and themed spaces that spark the imagination of young and old.",
-	"Recorrido por atracciones jurásicas autorizadas.": "A tour of authorized Jurassic attractions.",
-	"Visitante junto a una escultura de dinosaurio en un camino de piedra de Aventura Jurásica": "Visitor next to a dinosaur sculpture on a stone path in Jurassic Adventure",
-	"La emoción de la fauna": "The thrill of wildlife",
-	"Sabana Africana": "African Savanna",
-	"Conocemos espacios dedicados a la fauna donde podemos observar diferentes especies dentro de las condiciones del parque.": "We visit areas dedicated to wildlife where we can observe different species within the park's conditions.",
-	"Observación responsable; no asegurar avistamiento concreto ni contacto con animales.": "Responsible observation; no specific sighting or contact with animals is guaranteed.",
-	"Conexión con la naturaleza": "Connection with nature",
-	"Santuario de fauna": "Wildlife sanctuary",
-	"Exploramos áreas dedicadas al conocimiento y la observación de especies animales, respetando su entorno y las indicaciones del parque.": "We explore areas dedicated to learning about and observing animal species, respecting their environment and the park's guidelines.",
-	"Zonas de fauna abiertas y habilitadas.": "Open, authorized wildlife areas.",
-	"Conocer también es viajar": "Learning is also traveling",
-	"Espacios históricos": "Historic spaces",
-	"La visita también ofrece lugares para conocer el contexto histórico de este sitio y cómo se transformó con el paso del tiempo.": "The visit also offers places to learn about the historical context of this site and how it has changed over time.",
-	"Museos abiertos y accesibles según pasaporte.": "Museums that are open and accessible depending on the pass.",
-	"Arco de entrada de Hacienda Nápoles con la avioneta histórica sobre el letrero": "Entrance arch of Hacienda Nápoles with the historic small plane above the sign",
-	"Un momento para refrescarse": "A moment to cool off",
-	"Atracciones acuáticas": "Water attractions",
-	"Cuando el pasaporte lo permite, disfrutamos de espacios acuáticos para añadir diversión y descanso a la jornada.": "When the pass allows it, we enjoy water areas that add fun and rest to the day.",
-	"Atracciones acuáticas sujetas a pasaporte, horarios y seguridad.": "Water attractions subject to pass, hours and safety.",
-	"Una pausa para recargar energías": "A break to recharge",
-	"Zona gastronómica": "Dining area",
-	"Hacemos una pausa para almorzar y continuar disfrutando del día con comodidad.": "We take a break for lunch and keep enjoying the day in comfort.",
-	"Comida solo si está incluida en el servicio contratado; si no, pago adicional.": "Meal only if included in the service booked; otherwise, additional payment.",
-	"Compras a tu ritmo": "Shopping at your pace",
-	"El Hueco": "El Hueco",
-	"Explora uno de los sectores comerciales más populares de Medellín, con opciones de ropa, calzado, accesorios y productos para diferentes presupuestos.": "Explore one of Medellín's most popular shopping areas, with clothing, footwear, accessories and products for different budgets.",
-	"Tiendas según interés del cliente.": "Stores according to the client's interests.",
-	"Viajeros brindando en una calle comercial concurrida de El Hueco, con toldos y puestos al fondo": "Travelers raising a toast on a busy shopping street in El Hueco, with awnings and stalls behind",
-	"Encuentra lo que buscas": "Find what you are looking for",
-	"Sector comercial del centro": "Downtown shopping district",
-	"Podemos adaptar la ruta para visitar comercios especializados del centro de Medellín de acuerdo con tu lista de compras.": "We can adapt the route to visit specialized shops in downtown Medellín according to your shopping list.",
-	"Establecimientos elegidos previamente.": "Establishments chosen in advance.",
-	"Variedad en un solo lugar": "Variety in one place",
-	"Centro Comercial Santafé": "Santafé Shopping Center",
-	"Si prefieres la comodidad de un centro comercial, Santafé reúne numerosas tiendas, servicios y opciones gastronómicas.": "If you prefer the comfort of a shopping mall, Santafé brings together many stores, services and dining options.",
-	"Tiendas a elección; compras y consumos propios.": "Stores of your choice; purchases and food and drink are at your own cost.",
-	"Compras y estilo": "Shopping and style",
-	"Centro Comercial El Tesoro": "El Tesoro Shopping Center",
-	"Una alternativa para disfrutar de tiendas, restaurantes y una experiencia de compras en un entorno moderno.": "An alternative to enjoy stores, restaurants and a shopping experience in a modern setting.",
-	"Tiendas según preferencias.": "Stores according to preferences.",
-	"Una ruta hecha para ti": "A route made for you",
-	"Tiendas especializadas": "Specialty stores",
-	"También podemos diseñar el recorrido alrededor de tus intereses: moda, textiles, accesorios, artesanías o regalos.": "We can also design the route around your interests: fashion, textiles, accessories, handicrafts or gifts.",
-	"Paradas acordadas antes del servicio.": "Stops agreed before the service.",
-	"Llegar a la montaña": "Arriving in the mountains",
-	"Comenzamos entre montañas y naturaleza para conocer el entorno de esta aventura.": "We begin among mountains and nature to get to know the setting of this adventure.",
-	"Tres visitantes con casco en un mirador de montaña, con el Salto del Buey al fondo": "Three visitors wearing helmets at a mountain lookout, with the Salto del Buey waterfall in the background",
-	"Caminar entre paisajes": "Walking among landscapes",
-	"Recorremos los senderos habilitados y descubrimos los paisajes que rodean la cascada.": "We walk the authorized trails and discover the landscapes surrounding the waterfall.",
-	"Familia caminando por un sendero de selva entre raíces y vegetación": "Family walking along a jungle trail among roots and vegetation",
-	"Contemplar la cascada": "Contemplating the waterfall",
-	"Disfrutamos de la imponencia de la cascada y de uno de los grandes escenarios naturales de la región.": "We enjoy the grandeur of the waterfall and one of the region's great natural settings.",
-	"El Salto del Buey cayendo entre rocas y vegetación, con una visitante en primer plano": "Salto del Buey falling among rocks and vegetation, with a visitor in the foreground",
-	"Aventura opcional": "Optional adventure",
-	"Según el plan contratado, es posible añadir actividades de aventura con acompañamiento especializado.": "Depending on the plan booked, adventure activities with specialized guidance can be added.",
-	"Pareja con equipo de seguridad en una plataforma de madera de la actividad de aventura, con las montañas detrás": "Couple wearing safety gear on a wooden platform of the adventure activity, with mountains behind",
-	"__revisar_itinerarios_2026-10-15": "Itinerary translations (SPECS/anexos/instrucciones_scroll_experiencias_TT.md) are faithful drafts pending human review.",
-	"Etapa {n} de {total}": "Step {n} of {total}",
-	"Ir a la etapa": "Go to step",
-	"En el servicio": "In the service",
-	Jardín: "Jardín",
-	"Traslados JMC": "JMC Transfers",
-	"Cómo funciona tu traslado": "How your transfer works",
-	"Etapas del servicio, no un itinerario de visitas.": "Service steps, not an itinerary of visits.",
-	"Un pueblo de Antioquia": "A town in Antioquia",
-	"Conocemos la vida de este pueblo de Antioquia entre fachadas de colores, calles tradicionales y cultura cafetera.": "We get to know life in this Antioquia town among colorful façades, traditional streets and coffee culture.",
-	"Vista aérea del casco urbano de Jardín, con su iglesia entre los tejados": "Aerial view of Jardín's town center, with its church among the rooftops",
-	"Calles de Jardín": "Streets of Jardín",
-	"Caminamos sin apuro por sus calles de color: es un pueblo para perderse a pie, no para ver desde el carro.": "We walk its colorful streets without rushing: this is a town to get lost in on foot, not to see from the car.",
-	"Calle de Jardín entre fachadas de colores, con las torres de la basílica al fondo": "A Jardín street between colorful façades, with the basilica towers in the background",
-	"Basílica de Jardín": "Jardín Basilica",
-	"Jardín es un pueblo patrimonio, de calles tradicionales que se descubren caminando.": "Jardín is a heritage town whose traditional streets are best discovered on foot.",
-	"Basílica de torres gemelas de Jardín frente a su plaza, con un monumento y jardines": "Jardín's twin-towered basilica facing its plaza, with a monument and gardens",
-	"El color también se pinta": "Color is also painted",
-	"Murales de Jardín": "Murals of Jardín",
-	"Un mural de aves de colores se suma a las fachadas y calles que dan color al pueblo.": "A mural of colorful birds adds to the façades and streets that bring color to the town.",
-	"Mural de aves de colores sobre un muro de Jardín": "Mural of colorful birds on a wall in Jardín",
-	"Cultura cafetera": "Coffee culture",
-	"Taza de café sobre una mesa, con las montañas de la zona cafetera al fondo": "A cup of coffee on a table, with the mountains of the coffee region in the background",
-	"Seguimos tu vuelo": "We track your flight",
-	"Antes de que aterrices": "Before you land",
-	"Comparte tu número de vuelo, dirección y número de pasajeros.": "Share your flight number, address and number of passengers.",
-	"Tu conductor te contacta": "Your driver contacts you",
-	"Antes de la recogida": "Before pick-up",
-	"Nuestro conductor se comunica previamente y comparte las instrucciones del punto de encuentro, así como sus datos y los del vehículo.": "Our driver contacts you beforehand and shares the meeting point instructions, as well as their details and those of the vehicle.",
-	"El punto de encuentro y las condiciones de espera se confirman con el equipo.": "The meeting point and waiting conditions are confirmed with our team.",
-	"Te recibimos en el aeropuerto": "We welcome you at the airport",
-	"Aeropuerto José María Córdova": "José María Córdova Airport",
-	"Entendemos que pueden presentarse demoras en migración, recogida de equipaje o vuelos, por lo que ofrecemos acompañamiento y flexibilidad en la espera.": "We understand there may be delays at immigration, baggage claim or flights, so we offer support and flexibility while you wait.",
-	"En servicios previamente coordinados podemos ofrecer señalización personalizada con el nombre del pasajero o grupo.": "For previously coordinated services, we can offer a personalized sign with the name of the passenger or group.",
-	"Viajera con su maleta junto a la zona de salidas del aeropuerto, con la torre de control al fondo": "Traveler with her suitcase next to the airport departures area, with the control tower in the background",
-	"De puerta a puerta": "Door to door",
-	"Hasta tu alojamiento en Medellín": "To your accommodation in Medellín",
-	"Coordinamos tu traslado entre el Aeropuerto José María Córdova y tu alojamiento en Medellín.": "We coordinate your transfer between José María Córdova Airport and your accommodation in Medellín.",
-	"Puerta a puerta, con transporte privado.": "Door to door, with private transport.",
-	"Van blanca y pasajeros junto a la zona de salidas del aeropuerto José María Córdova": "White van and passengers next to the departures area at José María Córdova Airport",
-	"Reel: viajar por Medellín a tu propio ritmo, en tour privado": "Reel: travel around Medellín at your own pace, on a private tour",
-	"Ver en Instagram": "View on Instagram",
-	"Saltar experiencias": "Skip experiences",
-	"Cuéntanos tu plan y lo preparamos contigo.": "Tell us your plan and we will prepare it with you.",
-	"Escríbenos por WhatsApp": "Message us on WhatsApp",
-	"Síguenos en redes": "Follow us on social media",
-	"También en TikTok": "Also on TikTok",
-	"Enlaces rápidos": "Quick links",
-	"Contacto directo": "Direct contact",
-	"Tratamiento de datos": "Data processing",
-	"Detalle de la experiencia": "Experience details",
-	"Un lugar para cada forma de viajar": "A place for every way of traveling",
-	"¿Por qué elegirnos?": "Why choose us?",
-	"Razones para visitar Medellín": "Reasons to visit Medellín",
-	"Tours y servicios imperdibles": "Must-do tours and services",
-	"Aprender y recibir en Medellín": "Learn and host in Medellín",
-	"Sus palabras, nuestro mejor recuerdo": "Their words, our best memory",
-	"Preguntas sobre transporte en Medellín": "Questions about transport in Medellín",
-	"Un golpe de realidad": "A reality check",
-	"Tours únicos, fotos únicas": "Unique tours, unique photos",
-	Todas: "All",
-	"Filtrar por categoría": "Filter by category",
-	"política de tratamiento de datos": "data processing policy",
-	"y autorizo enviar esta solicitud a T&T por WhatsApp.": "and I authorize sending this request to T&T via WhatsApp.",
-	"¿Qué historia quieres vivir?": "Which story do you want to live?",
-	"Ver las experiencias": "View the experiences",
-	"Pausar imágenes": "Pause images",
-	"Reproducir imágenes": "Play images",
-	Ampliar: "Enlarge",
-	"· Toca la foto para ampliar": "· Tap the photo to enlarge",
-	"Cotizar por WhatsApp": "Get a quote on WhatsApp",
-	"Cotizar esta experiencia por WhatsApp": "Get a quote for this experience on WhatsApp",
-	Seguir: "Follow",
-	"Nota destacada ·": "Featured note ·",
-	nota: "note",
-	notas: "notes",
-	"Desliza para pasar la página": "Swipe to turn the page"
-};
+//#region src/languages.js
+var LANGUAGES = [
+	{
+		code: "es",
+		prefix: "",
+		label: "Español",
+		html: "es-CO",
+		og: "es_CO"
+	},
+	{
+		code: "en",
+		prefix: "/en",
+		label: "English",
+		html: "en",
+		og: "en_US"
+	},
+	{
+		code: "pt-BR",
+		prefix: "/pt-br",
+		label: "Português (Brasil)",
+		html: "pt-BR",
+		og: "pt_BR"
+	}
+];
+var languageInfo = (code) => LANGUAGES.find((x) => x.code === code) || LANGUAGES[0];
+var languageFromPath = (path) => /^\/pt-br(?:\/|$)/i.test(path) ? "pt-BR" : /^\/en(?:\/|$)/.test(path) ? "en" : "es";
+var stripLanguage = (path) => path.replace(/^\/(?:en|pt-br)(?=\/|$)/i, "") || "/";
+var pathForLanguage = (path, code) => languageInfo(code).prefix + (stripLanguage(path) === "/" ? "/" : stripLanguage(path));
 //#endregion
 //#region src/i18n.js
-var locale = typeof window !== "undefined" && /^\/en(?:\/|$)/.test(window.location.pathname) ? "en" : "es";
+var locale = typeof window !== "undefined" ? languageFromPath(window.location.pathname) : "es";
+var dictionaries = { es: {} };
+var loaders = {
+	en: () => import("./assets/en-BfTFsgZ_.js"),
+	"pt-BR": () => import("./assets/pt-BR-DZ9XAYy_.js")
+};
 var language = () => locale;
 var setLanguage = (value) => {
-	locale = value === "en" ? "en" : "es";
+	locale = languageInfo(value).code;
 };
-var unprefix = (path) => path.replace(/^\/en(?=\/|$)/, "") || "/";
-var languagePath = (path, lang) => lang === "en" ? "/en" + (path === "/" ? "/" : path) : path;
+async function prepareLanguage(value) {
+	const code = languageInfo(value).code;
+	if (!dictionaries[code]) dictionaries[code] = (await loaders[code]()).default;
+}
+async function switchLanguage(value) {
+	const code = languageInfo(value).code;
+	if (code === locale) return;
+	await prepareLanguage(code);
+	const { pathname, search, hash } = window.location, next = pathForLanguage(pathname, code) + search + hash;
+	history.pushState(null, "", next);
+	setLanguage(code);
+	document.documentElement.lang = languageInfo(code).html;
+	window.dispatchEvent(new CustomEvent("tyt-language-change", { detail: code }));
+}
+var unprefix = stripLanguage;
+var languagePath = pathForLanguage;
 var normalize = (value) => value.replace(/\s+/g, " ").trim();
 function t(value) {
-	if (locale !== "en" || typeof value !== "string" || !value.trim()) return value;
+	if (locale === "es" || typeof value !== "string" || !value.trim()) return value;
 	const key = normalize(value);
-	if (Object.hasOwn(en_default, key)) return value.replace(value.trim(), en_default[key]);
+	const english = dictionaries[locale] || {};
+	if (Object.hasOwn(english, key)) return value.replace(value.trim(), english[key]);
 	const patterns = [
 		[/^estos (\d+) campos$/, (n) => `these ${n} fields`],
 		[/^Foto (\d+) de (\d+), (.+)$/, (n, total, name) => `Photo ${n} of ${total}, ${t(name)}`],
@@ -1216,16 +90,41 @@ function t(value) {
 		[/^Categoría (.+)$/, (name) => `Category: ${t(name)}`],
 		[/^(.+) \| T&T Medellín$/, (title) => `${t(title)} | T&T Medellín`]
 	];
-	for (const [pattern, convert] of patterns) {
+	const portuguesePatterns = [
+		[/^estos (\d+) campos$/, (n) => `estes ${n} campos`],
+		[/^Foto (\d+) de (\d+), (.+)$/, (n, total, name) => `Foto ${n} de ${total}, ${t(name)}`],
+		[/^(.+)\. (Descubre|Explora|Siente|Conecta|Vive|Disfruta|Sorpréndete|Recuerda|Enamórate|Inspírate): (.+)$/, (name, verb, text) => `${t(name)}. ${t(verb)}: ${t(text)}`],
+		[/^Ampliar fotografía (\d+) de (.+)$/, (n, name) => `Ampliar foto ${n} de ${t(name)}`],
+		[/^Fotografía (\d+) de (.+)$/, (n, name) => `Foto ${n} de ${t(name)}`],
+		[/^Mostrar fotografía (\d+) de (.+)$/, (n, name) => `Mostrar foto ${n} de ${t(name)}`],
+		[/^(.+), fotografía (\d+) de (\d+)$/, (name, n, total) => `${t(name)}, foto ${n} de ${total}`],
+		[/^Foto (\d+) de (\d+)$/, (n, total) => `Foto ${n} de ${total}`],
+		[/^(.+) \(se abre en una pestaña nueva\)$/, (name) => `${t(name)} (abre em uma nova aba)`],
+		[/^Seguir a (.+) en Instagram$/, (name) => `Seguir ${name} no Instagram`],
+		[/^También en TikTok (@.+)$/, (name) => `Também no TikTok ${name}`],
+		[/^(.+) · Desde Medellín$/, (cat) => `${t(cat)} · Saindo de Medellín`],
+		[/^(.+), fotografía (\d+)$/, (name, n) => `${t(name)}, foto ${n}`],
+		[/^(.+), capítulo (\d+)$/, (name, n) => `${t(name)}, capítulo ${n}`],
+		[/^Capítulo (\d+): (.+)$/, (n, title) => `Capítulo ${n}: ${t(title)}`],
+		[/^Fotografías de (.+)$/, (name) => `Fotos de ${t(name)}`],
+		[/^Elegir fotografía de (.+)$/, (name) => `Escolher foto de ${t(name)}`],
+		[/^Galería ampliada de (.+)$/, (name) => `Galeria ampliada de ${t(name)}`],
+		[/^Un recorrido por (.+)$/, (name) => `Um passeio por ${t(name)}`],
+		[/^Planea esta experiencia: (.+)$/, (name) => `Planeje esta experiência: ${t(name)}`],
+		[/^Leer la nota: (.+)$/, (name) => `Ler o artigo: ${t(name)}`],
+		[/^Categoría (.+)$/, (name) => `Categoria: ${t(name)}`],
+		[/^(.+) \| T&T Medellín$/, (title) => `${t(title)} | T&T Medellín`]
+	];
+	for (const [pattern, convert] of locale === "pt-BR" ? portuguesePatterns : patterns) {
 		const match = key.match(pattern);
 		if (match) return convert(...match.slice(1));
 	}
 	const punctuation = key.match(/^(.+?)([.:*→↗↓]+)$/);
-	if (punctuation && Object.hasOwn(en_default, punctuation[1].trim())) return en_default[punctuation[1].trim()] + punctuation[2];
+	if (punctuation && Object.hasOwn(english, punctuation[1].trim())) return english[punctuation[1].trim()] + punctuation[2];
 	return value;
 }
 function localizedProps(type, props) {
-	if (locale !== "en" || !props || props.translate === "no") return props;
+	if (locale === "es" || !props || props.translate === "no") return props;
 	const next = { ...props };
 	const children = (value) => Array.isArray(value) ? value.map(children) : typeof value === "string" ? t(value) : value;
 	if (type !== "script" && type !== "style" && type !== "textarea") next.children = children(props.children);
@@ -1250,7 +149,7 @@ var company = {
 	instagram: "https://www.instagram.com/transporteenmedellin",
 	tiktok: "https://www.tiktok.com/@tytmedellin"
 };
-var whatsapp = (context = "mi recorrido") => `https://wa.me/${company.whatsapp}?text=${encodeURIComponent(language() === "en" ? `Hello, I'd like to ask T&T Medellín about ${t(context)}.` : `Hola, quiero consultar con T&T Medellín sobre ${context}.`)}`;
+var whatsapp = (context = "mi recorrido") => `https://wa.me/${company.whatsapp}?text=${encodeURIComponent(language() === "pt-BR" ? `Olá, gostaria de consultar a T&T Medellín sobre ${t(context)}.` : language() === "en" ? `Hello, I'd like to ask T&T Medellín about ${t(context)}.` : `Hola, quiero consultar con T&T Medellín sobre ${context}.`)}`;
 //#endregion
 //#region src/i18n-runtime/jsx-runtime.js
 var jsx$1 = (type, props, key) => jsx(type, localizedProps(type, props), key);
@@ -1653,15 +552,15 @@ function Allies() {
 //#endregion
 //#region src/meta.js
 var staticMeta = {
-	"/": ["Medellín, a otro nivel", "Medellín, a otro nivel. Transporte privado y experiencias desde Medellín con un equipo local."],
-	"/experiencias": ["Experiencias", "Explora doce recorridos desde Medellín: ciudad, cultura, café y paisajes de Antioquia."],
-	"/vehiculos": ["Vehículos", "Conoce las categorías de vehículos para tu traslado privado o viaje en grupo desde Medellín."],
-	"/servicios": ["Servicios", "Traslados, recorridos privados y transporte para empresas, agencias y grupos en Medellín."],
-	"/nosotros": ["Nosotros", "Conoce la historia, el equipo y los valores de Transporte y Turismo Medellín."],
-	"/blog": ["Cuaderno de viaje", "Ideas y consejos para preparar tus experiencias y recorridos desde Medellín."],
-	"/contacto": ["Contacto", "Habla con el equipo de T&T Medellín por teléfono, correo o WhatsApp."],
-	"/cotizar": ["Planea tu viaje", "Prepara tu consulta de transporte o turismo para recibir una propuesta del equipo de Medellín."],
-	"/calificaciones": ["Calificaciones", "Consulta la referencia histórica de calificaciones y las reseñas actuales de T&T Medellín en Google."],
+	"/": ["Tours privados y transporte en Medellín", "Descubre Medellín con tours privados y transporte coordinado por un equipo local. Cuéntanos tu plan y cotiza una experiencia para tu grupo."],
+	"/experiencias": ["Tours y experiencias desde Medellín", "Elige entre doce experiencias desde Medellín: Comuna 13, Guatapé, café, pueblos y naturaleza. Conoce los recorridos y consulta las condiciones para tu grupo."],
+	"/vehiculos": ["Vehículos para traslados y grupos en Medellín", "Compara sedanes, SUV, vans y buses para traslados y viajes desde Medellín. Consulta capacidad, equipaje y disponibilidad para elegir con el equipo."],
+	"/servicios": ["Transporte privado y servicios en Medellín", "Organiza tours privados, traslados al aeropuerto y transporte para empresas, eventos o agencias en Medellín. Comparte tu ruta y solicita una propuesta."],
+	"/nosotros": ["Nuestro equipo local en Medellín", "Conoce la historia, el equipo y los valores de Transporte y Turismo Medellín."],
+	"/blog": ["Guía para planear tu viaje desde Medellín", "Ideas y consejos para preparar tus experiencias y recorridos desde Medellín."],
+	"/contacto": ["Contacto y WhatsApp de T&T Medellín", "Habla con nuestro equipo en Medellín por WhatsApp, teléfono o correo. Comparte tu recorrido, resuelve dudas y consulta la ubicación de la oficina."],
+	"/cotizar": ["Cotiza tu tour o traslado en Medellín", "Cuéntanos fechas, viajeros y punto de salida para cotizar tu tour o traslado en Medellín. Revisa y envía tu mensaje por WhatsApp; cotizar no confirma una reserva."],
+	"/calificaciones": ["Opiniones de viajeros sobre T&T Medellín", "Consulta la referencia histórica de calificaciones y las reseñas actuales de T&T Medellín en Google."],
 	"/politica-de-tratamiento-de-datos": ["Política de tratamiento de datos", "Qué datos personales recogemos, con qué finalidad, cuánto tiempo los conservamos y cómo ejercer tus derechos (Ley 1581 de 2012)."],
 	"/privacidad": ["Privacidad", "Conoce cómo se prepara tu consulta y qué información decides compartir con T&T Medellín."]
 };
@@ -1670,11 +569,58 @@ var fullTitle = (title) => `${title} | T&T Medellín`;
 function applyMeta(title, description) {
 	document.title = fullTitle(t(title));
 	document.querySelector("meta[name=\"description\"]")?.setAttribute("content", t(description));
-	const canonical = document.querySelector("link[rel=\"canonical\"]");
-	if (canonical) try {
+	for (const [key, value] of [
+		["og:title", document.title],
+		["og:description", t(description)],
+		["og:locale", languageInfo(language()).og],
+		["twitter:title", document.title],
+		["twitter:description", t(description)]
+	]) {
+		const attribute = key.startsWith("og:") ? "property" : "name";
+		let node = document.querySelector(`meta[${attribute}="${key}"]`);
+		if (!node) {
+			node = document.createElement("meta");
+			node.setAttribute(attribute, key);
+			document.head.appendChild(node);
+		}
+		node.setAttribute("content", value);
+	}
+	if (title === NOT_FOUND[0]) {
+		document.querySelectorAll("link[rel=\"canonical\"],link[hreflang],meta[property=\"og:url\"]").forEach((n) => n.remove());
+		return;
+	}
+	let canonical = document.querySelector("link[rel=\"canonical\"]");
+	if (!canonical) {
+		canonical = document.createElement("link");
+		canonical.rel = "canonical";
+		canonical.href = document.querySelector("meta[name=\"tyt-site-origin\"]")?.content || location.origin;
+		document.head.appendChild(canonical);
+	}
+	try {
 		const url = new URL(canonical.href);
 		url.pathname = location.pathname.replace(/\/+$/, "") || "/";
+		url.search = "";
+		url.hash = "";
 		canonical.href = url.href;
+		let og = document.querySelector("meta[property=\"og:url\"]");
+		if (!og) {
+			og = document.createElement("meta");
+			og.setAttribute("property", "og:url");
+			document.head.appendChild(og);
+		}
+		og.content = url.href;
+		for (const item of [...LANGUAGES, { code: "x-default" }]) {
+			let node = document.querySelector(`link[hreflang="${item.code}"]`);
+			if (!node) {
+				node = document.createElement("link");
+				node.rel = "alternate";
+				node.hreflang = item.code;
+				document.head.appendChild(node);
+			}
+			const alternate = new URL(url);
+			alternate.pathname = pathForLanguage(location.pathname, item.code === "x-default" ? "es" : item.code).replace(/\/+$/, "") || "/";
+			node.href = alternate.href;
+		}
 	} catch {}
 }
 function usePageMeta(title, description) {
@@ -2169,11 +1115,11 @@ function Arrow({ dir = "ne" }) {
 //#region src/CardExtras.jsx
 var RATING = 5;
 function GoogleBadge({ className = "" }) {
-	const figure = RATING.toLocaleString(language() === "en" ? "en-US" : "es-CO", {
+	const figure = RATING.toLocaleString(languageInfo(language()).html, {
 		minimumFractionDigits: 1,
 		maximumFractionDigits: 1
 	});
-	const label = language() === "en" ? `Company rating on Google: ${figure} out of 5` : `Valoración de la empresa en Google: ${figure} de 5`;
+	const label = language() === "pt-BR" ? `Avaliação da empresa no Google: ${figure} de 5` : language() === "en" ? `Company rating on Google: ${figure} out of 5` : `Valoración de la empresa en Google: ${figure} de 5`;
 	return /* @__PURE__ */ jsxs$1("a", {
 		className: `card-google ${className}`,
 		href: company.reviews,
@@ -2200,11 +1146,11 @@ function GoogleBadge({ className = "" }) {
 	});
 }
 function GoogleBadgeStatic({ className = "" }) {
-	const figure = RATING.toLocaleString(language() === "en" ? "en-US" : "es-CO", {
+	const figure = RATING.toLocaleString(languageInfo(language()).html, {
 		minimumFractionDigits: 1,
 		maximumFractionDigits: 1
 	});
-	const label = language() === "en" ? `Company rating on Google: ${figure} out of 5` : `Valoración de la empresa en Google: ${figure} de 5`;
+	const label = language() === "pt-BR" ? `Avaliação da empresa no Google: ${figure} de 5` : language() === "en" ? `Company rating on Google: ${figure} out of 5` : `Valoración de la empresa en Google: ${figure} de 5`;
 	return /* @__PURE__ */ jsxs$1("span", {
 		className: `card-google card-google--static ${className}`,
 		role: "img",
@@ -2248,9 +1194,20 @@ function shareUrl(path) {
 			if (!/\.invalid$/.test(u.hostname)) origin = u.origin;
 		}
 	} catch {}
-	return origin + (language() === "en" ? "/en" : "") + path;
+	return origin + pathForLanguage(path, language());
 }
 var TEXT = {
+	"pt-BR": {
+		button: "Compartilhar esta experiência",
+		title: "Compartilhar por",
+		copy: "Copiar link",
+		copied: "Link copiado",
+		error: "Não foi possível copiar. Copie o endereço da barra do navegador.",
+		more: "Mais opções…",
+		paste: "Link copiado. Cole no seu story ou mensagem do {red}.",
+		mail: "E-mail",
+		message: "Confira esta experiência da T&T Medellín:"
+	},
 	es: {
 		button: "Compartir esta experiencia",
 		title: "Compartir por",
@@ -2276,7 +1233,7 @@ var TEXT = {
 };
 function ShareMenu({ name: rawName, path, className = "" }) {
 	const name = t(rawName);
-	const tx = TEXT[language() === "en" ? "en" : "es"];
+	const tx = TEXT[language()];
 	const [open, setOpen] = useState(false), [pos, setPos] = useState(null), [native, setNative] = useState(false), [notice, setNotice] = useState("");
 	const btn = useRef(null), menu = useRef(null), timer = useRef(0);
 	useEffect(() => {
@@ -2481,7 +1438,7 @@ function ShareMenu({ name: rawName, path, className = "" }) {
 }
 //#endregion
 //#region src/shared.jsx
-var Quote = lazy(() => import("./assets/Quote-CAYMCDxk.js"));
+var Quote = lazy(() => import("./assets/Quote-yMVC5-ow.js"));
 var reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 function Picture({ photo, alt, priority = false, className = "", native = false, sizes = "(max-width: 700px) 100vw, 65vw" }) {
 	if (!photo) return null;
@@ -2628,7 +1585,7 @@ function TourCard({ tour }) {
 		]
 	});
 }
-function PageTitle({ tag, title, text, photo, floating = [] }) {
+function PageTitle({ tag, title, text, photo, photoAlt = tag, floating = [] }) {
 	return /* @__PURE__ */ jsxs$1(EditorialMotion, {
 		className: `page-title wrap ${photo ? "page-title-with-photo" : ""}`,
 		children: [/* @__PURE__ */ jsxs$1("div", {
@@ -2644,7 +1601,7 @@ function PageTitle({ tag, title, text, photo, floating = [] }) {
 				className: "page-title-card",
 				children: /* @__PURE__ */ jsx$1(Picture, {
 					photo,
-					alt: tag,
+					alt: photoAlt,
 					priority: true,
 					sizes: "(max-width: 700px) 72vw, 320px"
 				})
@@ -2683,7 +1640,211 @@ function QuoteSection({ context, mode }) {
 	});
 }
 //#endregion
+//#region src/RouteScroll.jsx
+var positions = /* @__PURE__ */ new Map();
+var activeKey = null;
+var held = null;
+var holdScroll = () => {
+	held = window.scrollY;
+};
+if (typeof window !== "undefined") {
+	history.scrollRestoration = "manual";
+	window.addEventListener("scroll", () => {
+		if (activeKey) positions.set(activeKey, window.scrollY);
+	}, { passive: true });
+}
+function RouteScroll() {
+	const location = useLocation(), action = useNavigationType();
+	useLayoutEffect(() => {
+		activeKey = null;
+		let stopped = false, timer, frame;
+		const keep = held;
+		setTimeout(() => {
+			held = null;
+		}, 0);
+		const saved = keep !== null ? keep : positions.get(location.key);
+		let anchor = null;
+		try {
+			anchor = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+		} catch {}
+		const apply = () => {
+			if (stopped) return;
+			const offset = (document.querySelector(".site-header")?.getBoundingClientRect().height || 0) + 16;
+			const top = anchor ? Math.max(0, anchor.getBoundingClientRect().top + window.scrollY - offset) : (action === "POP" || keep !== null) && saved !== void 0 ? saved : 0;
+			window.scrollTo({
+				top,
+				behavior: "instant"
+			});
+		};
+		const stop = () => {
+			stopped = true;
+			observer.disconnect();
+			clearTimeout(timer);
+			cancelAnimationFrame(frame);
+		};
+		const observer = new ResizeObserver(() => {
+			cancelAnimationFrame(frame);
+			frame = requestAnimationFrame(apply);
+		});
+		apply();
+		activeKey = location.key;
+		if (anchor || (action === "POP" || keep !== null) && saved !== void 0) {
+			observer.observe(document.body);
+			timer = setTimeout(stop, 2500);
+		}
+		for (const event of [
+			"wheel",
+			"touchstart",
+			"pointerdown",
+			"keydown"
+		]) window.addEventListener(event, stop, {
+			once: true,
+			passive: true
+		});
+		if (action !== "POP" && keep === null && !anchor) document.querySelector("main")?.focus({ preventScroll: true });
+		return () => {
+			stop();
+			activeKey = null;
+			for (const event of [
+				"wheel",
+				"touchstart",
+				"pointerdown",
+				"keydown"
+			]) window.removeEventListener(event, stop);
+		};
+	}, [
+		location.key,
+		location.pathname,
+		location.hash,
+		action
+	]);
+	return null;
+}
+//#endregion
+//#region src/consent.js
+var CONSENT_KEY = "tyt-privacy-v1";
+var VERSION = 1;
+var LIFETIME = 15552e6;
+var memory = null;
+if (typeof window !== "undefined") window.addEventListener("storage", (event) => {
+	if (event.key === "tyt-privacy-v1" || event.key === null) memory = null;
+});
+function readConsent() {
+	if (memory && memory.expires > Date.now()) return memory;
+	try {
+		const value = JSON.parse(localStorage.getItem(CONSENT_KEY));
+		if (value?.version === VERSION && typeof value.preferences === "boolean" && value.expires > Date.now()) return value;
+	} catch {}
+	return null;
+}
+var allowPreferences = () => readConsent()?.preferences === true;
+function saveConsent(preferences) {
+	memory = {
+		version: VERSION,
+		preferences: Boolean(preferences),
+		expires: Date.now() + LIFETIME
+	};
+	let persisted = false;
+	try {
+		localStorage.setItem(CONSENT_KEY, JSON.stringify(memory));
+		persisted = true;
+	} catch {}
+	if (!preferences) try {
+		localStorage.removeItem("tyt-theme");
+	} catch {}
+	window.dispatchEvent(new CustomEvent("tyt-consent-change"));
+	return persisted;
+}
+var openConsent = () => window.dispatchEvent(new CustomEvent("tyt-open-consent"));
+//#endregion
 //#region src/Preferences.jsx
+var SHORT = {
+	es: "ES",
+	en: "EN",
+	"pt-BR": "PT"
+};
+function LanguageMenu() {
+	const [open, setOpen] = useState(false), root = useRef(null), button = useRef(null);
+	const { pathname, search, hash } = useLocation(), current = language(), info = LANGUAGES.find((x) => x.code === current) || LANGUAGES[0];
+	useEffect(() => {
+		if (!open) return;
+		const down = (e) => {
+			if (!root.current?.contains(e.target)) setOpen(false);
+		};
+		const key = (e) => {
+			if (e.key === "Escape") {
+				setOpen(false);
+				button.current?.focus();
+			}
+			if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+				const items = [...root.current.querySelectorAll("a")], i = items.indexOf(document.activeElement);
+				e.preventDefault();
+				items[(i + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length]?.focus();
+			}
+		};
+		document.addEventListener("pointerdown", down);
+		document.addEventListener("keydown", key);
+		return () => {
+			document.removeEventListener("pointerdown", down);
+			document.removeEventListener("keydown", key);
+		};
+	}, [open]);
+	const choose = (e, code) => {
+		if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button > 0) return;
+		e.preventDefault();
+		setOpen(false);
+		if (code === current) {
+			button.current?.focus();
+			return;
+		}
+		holdScroll();
+		switchLanguage(code);
+	};
+	return /* @__PURE__ */ jsxs$1("div", {
+		className: "language-menu",
+		ref: root,
+		children: [/* @__PURE__ */ jsxs$1("button", {
+			ref: button,
+			type: "button",
+			className: "language-toggle",
+			translate: "no",
+			"aria-haspopup": "true",
+			"aria-expanded": open,
+			"aria-label": `${t("Idioma del sitio")}: ${info.label}`,
+			onClick: () => setOpen(!open),
+			children: [/* @__PURE__ */ jsxs$1("svg", {
+				"aria-hidden": "true",
+				width: "18",
+				height: "18",
+				viewBox: "0 0 24 24",
+				fill: "none",
+				stroke: "currentColor",
+				strokeWidth: "1.7",
+				children: [/* @__PURE__ */ jsx$1("circle", {
+					cx: "12",
+					cy: "12",
+					r: "9"
+				}), /* @__PURE__ */ jsx$1("path", { d: "M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3Z" })]
+			}), /* @__PURE__ */ jsx$1("span", { children: SHORT[current] })]
+		}), open && /* @__PURE__ */ jsx$1("ul", {
+			className: "language-list",
+			role: "list",
+			children: LANGUAGES.map((lang) => /* @__PURE__ */ jsx$1("li", { children: /* @__PURE__ */ jsxs$1("a", {
+				href: languagePath(pathname, lang.code) + search + hash,
+				hrefLang: lang.html,
+				lang: lang.html,
+				translate: "no",
+				"aria-current": lang.code === current ? "true" : void 0,
+				onClick: (e) => choose(e, lang.code),
+				children: [/* @__PURE__ */ jsx$1("span", { children: lang.label }), /* @__PURE__ */ jsx$1("span", {
+					className: "language-code",
+					"aria-hidden": "true",
+					children: SHORT[lang.code]
+				})]
+			}) }, lang.code))
+		})]
+	});
+}
 function Preferences() {
 	const [dark, setDark] = useState(false);
 	const { pathname, search, hash } = useLocation();
@@ -2692,7 +1853,7 @@ function Preferences() {
 		const sync = () => {
 			let saved;
 			try {
-				saved = localStorage.getItem("tyt-theme");
+				if (allowPreferences()) saved = localStorage.getItem("tyt-theme");
 			} catch {}
 			const active = saved === "dark" || saved !== "light" && system.matches;
 			document.documentElement.dataset.theme = active ? "dark" : "light";
@@ -2701,9 +1862,11 @@ function Preferences() {
 		sync();
 		system.addEventListener("change", sync);
 		window.addEventListener("storage", sync);
+		window.addEventListener("tyt-consent-change", sync);
 		return () => {
 			system.removeEventListener("change", sync);
 			window.removeEventListener("storage", sync);
+			window.removeEventListener("tyt-consent-change", sync);
 		};
 	}, []);
 	const toggle = () => {
@@ -2711,11 +1874,10 @@ function Preferences() {
 		document.documentElement.dataset.theme = next ? "dark" : "light";
 		setDark(next);
 		document.querySelector("meta[name=\"theme-color\"]")?.setAttribute("content", next ? "#171A18" : "#FAF8F5");
-		try {
+		if (allowPreferences()) try {
 			localStorage.setItem("tyt-theme", next ? "dark" : "light");
 		} catch {}
 	};
-	const destination = language() === "en" ? "es" : "en";
 	return /* @__PURE__ */ jsxs$1("div", {
 		className: "site-preferences",
 		children: [/* @__PURE__ */ jsx$1("button", {
@@ -2738,14 +1900,351 @@ function Preferences() {
 					r: "4"
 				}), /* @__PURE__ */ jsx$1("path", { d: "M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" })] }) : /* @__PURE__ */ jsx$1("path", { d: "M20 15A8.5 8.5 0 0 1 9 4a8.5 8.5 0 1 0 11 11Z" })
 			})
-		}), /* @__PURE__ */ jsx$1("a", {
-			className: "language-toggle",
-			href: languagePath(pathname, destination) + search + hash,
-			hrefLang: destination,
-			lang: destination,
-			"aria-label": destination === "en" ? "Read this page in English" : "Leer esta página en español",
-			children: destination.toUpperCase()
-		})]
+		}), /* @__PURE__ */ jsx$1(LanguageMenu, {})]
+	});
+}
+//#endregion
+//#region src/Consent.jsx
+function ConsentLink() {
+	return /* @__PURE__ */ jsx$1("button", {
+		className: "consent-link",
+		type: "button",
+		onClick: openConsent,
+		children: "Cookies y preferencias"
+	});
+}
+var CookieIcon = () => /* @__PURE__ */ jsxs$1("svg", {
+	"aria-hidden": "true",
+	width: "26",
+	height: "26",
+	viewBox: "0 0 24 24",
+	fill: "none",
+	stroke: "currentColor",
+	strokeWidth: "1.6",
+	strokeLinecap: "round",
+	strokeLinejoin: "round",
+	children: [
+		/* @__PURE__ */ jsx$1("path", { d: "M12 3a9 9 0 1 0 9 9 4 4 0 0 1-4-4 4 4 0 0 1-4-4 1 1 0 0 0-1-1Z" }),
+		/* @__PURE__ */ jsx$1("circle", {
+			cx: "8.5",
+			cy: "11",
+			r: ".9",
+			fill: "currentColor"
+		}),
+		/* @__PURE__ */ jsx$1("circle", {
+			cx: "12.5",
+			cy: "15.5",
+			r: ".9",
+			fill: "currentColor"
+		}),
+		/* @__PURE__ */ jsx$1("circle", {
+			cx: "15.5",
+			cy: "12",
+			r: ".9",
+			fill: "currentColor"
+		})
+	]
+});
+function Consent() {
+	const [ready, setReady] = useState(false), [chosen, setChosen] = useState(false), [leaving, setLeaving] = useState(false), [draft, setDraft] = useState(false), [notice, setNotice] = useState("");
+	const banner = useRef(null), dialog = useRef(null), returnFocus = useRef(null);
+	useEffect(() => {
+		setChosen(Boolean(readConsent()));
+		setReady(true);
+		const open = () => {
+			setDraft(readConsent()?.preferences === true);
+			returnFocus.current = document.activeElement;
+			dialog.current?.showModal();
+		};
+		const sync = () => setChosen(Boolean(readConsent()));
+		window.addEventListener("tyt-open-consent", open);
+		window.addEventListener("storage", sync);
+		return () => {
+			window.removeEventListener("tyt-open-consent", open);
+			window.removeEventListener("storage", sync);
+		};
+	}, []);
+	useEffect(() => {
+		if (!ready || chosen) {
+			document.documentElement.style.removeProperty("--consent-space");
+			return;
+		}
+		const el = banner.current, narrow = matchMedia("(max-width:767px)");
+		const size = () => {
+			if (narrow.matches) document.documentElement.style.setProperty("--consent-space", `${Math.ceil(el.getBoundingClientRect().height) + 24}px`);
+			else document.documentElement.style.removeProperty("--consent-space");
+		};
+		const ro = new ResizeObserver(size);
+		ro.observe(el);
+		narrow.addEventListener("change", size);
+		size();
+		return () => {
+			ro.disconnect();
+			narrow.removeEventListener("change", size);
+			document.documentElement.style.removeProperty("--consent-space");
+		};
+	}, [ready, chosen]);
+	const close = () => dialog.current?.close();
+	const choose = (value) => {
+		const persisted = saveConsent(value);
+		setNotice(persisted ? "" : "La configuración no pudo guardarse. Se aplicará durante esta visita.");
+		close();
+		if (banner.current && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+			setLeaving(true);
+			setTimeout(() => {
+				setChosen(true);
+				setLeaving(false);
+			}, 200);
+		} else setChosen(true);
+	};
+	if (!ready) return null;
+	return /* @__PURE__ */ jsxs$1(Fragment, { children: [
+		!chosen && /* @__PURE__ */ jsxs$1("section", {
+			ref: banner,
+			className: `consent-banner${leaving ? " is-leaving" : ""}`,
+			"aria-labelledby": "privacy-banner-title",
+			children: [
+				/* @__PURE__ */ jsxs$1("div", {
+					className: "consent-top",
+					children: [/* @__PURE__ */ jsx$1("span", {
+						className: "consent-icon",
+						children: /* @__PURE__ */ jsx$1(CookieIcon, {})
+					}), /* @__PURE__ */ jsx$1("h2", {
+						id: "privacy-banner-title",
+						children: "Tu privacidad"
+					})]
+				}),
+				/* @__PURE__ */ jsx$1("p", { children: "Usamos almacenamiento local para recordar ajustes del sitio. No usamos analítica ni publicidad. Tú decides si guardamos tu tema preferido." }),
+				/* @__PURE__ */ jsxs$1("div", {
+					className: "consent-actions",
+					children: [
+						/* @__PURE__ */ jsx$1("button", {
+							type: "button",
+							onClick: () => choose(true),
+							children: "Aceptar"
+						}),
+						/* @__PURE__ */ jsx$1("button", {
+							type: "button",
+							onClick: () => choose(false),
+							children: "Rechazar"
+						}),
+						/* @__PURE__ */ jsx$1("button", {
+							type: "button",
+							onClick: openConsent,
+							children: "Configurar"
+						})
+					]
+				})
+			]
+		}),
+		/* @__PURE__ */ jsxs$1("dialog", {
+			ref: dialog,
+			className: "consent-dialog",
+			"aria-labelledby": "privacy-title",
+			"aria-describedby": "privacy-description",
+			onClose: () => {
+				if (returnFocus.current?.isConnected) returnFocus.current.focus({ preventScroll: true });
+				else document.querySelector(".consent-link")?.focus({ preventScroll: true });
+			},
+			children: [
+				/* @__PURE__ */ jsxs$1("div", {
+					className: "consent-head",
+					children: [
+						/* @__PURE__ */ jsx$1("span", {
+							className: "consent-icon",
+							children: /* @__PURE__ */ jsx$1(CookieIcon, {})
+						}),
+						/* @__PURE__ */ jsx$1("h2", {
+							id: "privacy-title",
+							children: "Preferencias de privacidad"
+						}),
+						/* @__PURE__ */ jsx$1("button", {
+							type: "button",
+							onClick: close,
+							"aria-label": "Cerrar preferencias",
+							children: "×"
+						})
+					]
+				}),
+				/* @__PURE__ */ jsx$1("p", {
+					id: "privacy-description",
+					children: "Tu elección se guarda durante seis meses en este navegador."
+				}),
+				/* @__PURE__ */ jsxs$1("section", { children: [
+					/* @__PURE__ */ jsx$1("h3", { children: "Necesarias" }),
+					/* @__PURE__ */ jsx$1("strong", { children: "Siempre activas" }),
+					/* @__PURE__ */ jsx$1("p", { children: "Guardan tu decisión de privacidad y ajustes funcionales, como reducir el movimiento y la ayuda de navegación." })
+				] }),
+				/* @__PURE__ */ jsxs$1("section", { children: [/* @__PURE__ */ jsxs$1("label", {
+					className: "consent-option",
+					children: [/* @__PURE__ */ jsx$1("input", {
+						type: "checkbox",
+						checked: draft,
+						onChange: (e) => setDraft(e.target.checked)
+					}), /* @__PURE__ */ jsx$1("strong", { children: "Preferencias" })]
+				}), /* @__PURE__ */ jsx$1("p", { children: "Recordar el tema claro u oscuro entre visitas." })] }),
+				/* @__PURE__ */ jsxs$1("section", { children: [/* @__PURE__ */ jsx$1("h3", { children: "Analítica y publicidad" }), /* @__PURE__ */ jsx$1("p", { children: "No utilizadas actualmente" })] }),
+				/* @__PURE__ */ jsx$1(Link, {
+					className: "consent-policy",
+					to: "/privacidad",
+					onClick: close,
+					children: "Privacidad"
+				}),
+				/* @__PURE__ */ jsxs$1("div", {
+					className: "consent-actions",
+					children: [/* @__PURE__ */ jsx$1("button", {
+						type: "button",
+						onClick: () => choose(draft),
+						children: "Guardar preferencias"
+					}), /* @__PURE__ */ jsx$1("button", {
+						type: "button",
+						onClick: () => choose(false),
+						children: "Retirar consentimiento"
+					})]
+				})
+			]
+		}),
+		notice && /* @__PURE__ */ jsx$1("p", {
+			className: "consent-notice",
+			role: "status",
+			children: notice
+		})
+	] });
+}
+//#endregion
+//#region src/Welcome.jsx
+var KEY = "tyt-bienvenida";
+var EXCLUDED = /^\/(cotizar|contacto)\/?$/;
+var DELAY = 3500;
+var shownInMemory = false;
+var seen = () => {
+	if (shownInMemory) return true;
+	if (!allowPreferences()) return false;
+	try {
+		return sessionStorage.getItem(KEY) === "1";
+	} catch {
+		return false;
+	}
+};
+var markSeen = () => {
+	shownInMemory = true;
+	if (allowPreferences()) try {
+		sessionStorage.setItem(KEY, "1");
+	} catch {}
+};
+var Sun = () => /* @__PURE__ */ jsxs$1("svg", {
+	"aria-hidden": "true",
+	width: "28",
+	height: "28",
+	viewBox: "0 0 24 24",
+	fill: "none",
+	stroke: "currentColor",
+	strokeWidth: "1.8",
+	strokeLinecap: "round",
+	children: [/* @__PURE__ */ jsx$1("circle", {
+		cx: "12",
+		cy: "12",
+		r: "4.2",
+		fill: "currentColor",
+		fillOpacity: ".22"
+	}), /* @__PURE__ */ jsx$1("path", { d: "M12 2.5v2.3M12 19.2v2.3M2.5 12h2.3M19.2 12h2.3M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" })]
+});
+function Welcome() {
+	const { pathname } = useLocation();
+	const [resolved, setResolved] = useState(false), [open, setOpen] = useState(false), [leaving, setLeaving] = useState(false);
+	const card = useRef(null), blocked = EXCLUDED.test(pathname);
+	useEffect(() => {
+		const sync = () => setResolved(Boolean(readConsent()));
+		sync();
+		window.addEventListener("tyt-consent-change", sync);
+		window.addEventListener("storage", sync);
+		return () => {
+			window.removeEventListener("tyt-consent-change", sync);
+			window.removeEventListener("storage", sync);
+		};
+	}, []);
+	useEffect(() => {
+		if (!resolved || blocked || open || seen()) return;
+		let timer, tries = 0;
+		const attempt = () => {
+			if (document.querySelector("dialog[open], .menu-open, .consent-banner") && tries++ < 20) {
+				timer = setTimeout(attempt, 1500);
+				return;
+			}
+			if (tries >= 20) return;
+			const header = document.querySelector(".site-header");
+			document.documentElement.style.setProperty("--welcome-top", `${Math.round((header?.getBoundingClientRect().bottom || 0) + 12)}px`);
+			markSeen();
+			setOpen(true);
+		};
+		timer = setTimeout(attempt, DELAY);
+		return () => clearTimeout(timer);
+	}, [
+		resolved,
+		blocked,
+		open,
+		pathname
+	]);
+	const close = () => {
+		if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+			setOpen(false);
+			return;
+		}
+		setLeaving(true);
+		setTimeout(() => {
+			setOpen(false);
+			setLeaving(false);
+		}, 200);
+	};
+	useEffect(() => {
+		if (!open) return;
+		const key = (e) => {
+			if (e.key === "Escape" && !e.defaultPrevented && !document.querySelector("dialog[open], .menu-open, .language-list")) close();
+		};
+		document.addEventListener("keydown", key);
+		return () => document.removeEventListener("keydown", key);
+	}, [open]);
+	return /* @__PURE__ */ jsx$1("div", {
+		className: "welcome-live",
+		role: "status",
+		"aria-live": "polite",
+		children: open && !blocked && /* @__PURE__ */ jsxs$1("aside", {
+			ref: card,
+			className: `welcome${leaving ? " is-leaving" : ""}`,
+			"aria-labelledby": "welcome-title",
+			children: [
+				/* @__PURE__ */ jsx$1("button", {
+					type: "button",
+					className: "welcome-close",
+					onClick: close,
+					"aria-label": "Cerrar mensaje de bienvenida",
+					children: /* @__PURE__ */ jsx$1("span", {
+						"aria-hidden": "true",
+						children: "×"
+					})
+				}),
+				/* @__PURE__ */ jsx$1("span", {
+					className: "welcome-icon",
+					children: /* @__PURE__ */ jsx$1(Sun, {})
+				}),
+				/* @__PURE__ */ jsxs$1("div", {
+					className: "welcome-body",
+					children: [
+						/* @__PURE__ */ jsx$1("h2", {
+							id: "welcome-title",
+							children: "No dejes para mañana lo que puedes disfrutar hoy"
+						}),
+						/* @__PURE__ */ jsx$1("p", { children: "Elige un destino y cotiza por WhatsApp en un minuto." }),
+						/* @__PURE__ */ jsx$1(Link, {
+							className: "welcome-cta",
+							to: "/experiencias",
+							onClick: () => setOpen(false),
+							children: "Ver destinos"
+						})
+					]
+				})
+			]
+		})
 	});
 }
 //#endregion
@@ -2783,7 +2282,7 @@ function WhatsAppFab() {
 		}), /* @__PURE__ */ jsx$1("span", {
 			className: "wa-label",
 			"aria-hidden": "true",
-			children: language() === "en" ? "Let's talk?" : "¿Hablamos?"
+			children: language() === "pt-BR" ? "Vamos conversar?" : language() === "en" ? "Shall we talk?" : "¿Hablamos?"
 		})]
 	});
 }
@@ -2820,21 +2319,21 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-DxikqNaR.js");
+var company_ = () => import("./assets/Company-DV785C7V.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-V_0rkEoE.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-D42_5exw.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-kkjik22e.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-i2XsI7sL.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-BMrjd_3x.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-SR8Nmjcu.js").then((m) => m.default)),
 	fleet: lazyRoute(() => import("./assets/Fleet-DO59oc98.js").then((m) => m.default)),
-	blog: lazyRoute(pick(() => import("./assets/Blog-Bo2Z3Wuu.js"), "Blog")),
-	article: lazyRoute(() => import("./assets/Blog-Bo2Z3Wuu.js").then((m) => m.default)),
+	blog: lazyRoute(pick(() => import("./assets/Blog-BhpXLRlf.js"), "Blog")),
+	article: lazyRoute(() => import("./assets/Blog-BhpXLRlf.js").then((m) => m.default)),
 	about: lazyRoute(pick(company_, "About")),
 	services: lazyRoute(pick(company_, "Services")),
 	contact: lazyRoute(pick(company_, "Contact")),
 	quote: lazyRoute(pick(company_, "QuotePage")),
 	privacy: lazyRoute(pick(company_, "Privacy")),
 	ratings: lazyRoute(pick(company_, "Ratings")),
-	dataPolicy: lazyRoute(() => import("./assets/DataPolicy-B7Vcm_LU.js").then((m) => m.default)),
+	dataPolicy: lazyRoute(() => import("./assets/DataPolicy-CXUZnR_L.js").then((m) => m.default)),
 	notFound: lazyRoute(() => import("./assets/NotFound-DqRFEl7f.js").then((m) => m.default))
 };
 R.home, R.catalog, R.tour, R.fleet, R.blog, R.article, R.about, R.services, R.contact, R.quote, R.privacy, R.dataPolicy, R.ratings;
@@ -2849,22 +2348,10 @@ var nav = [
 	["Contacto", "/contacto"]
 ];
 function PageEffects() {
-	const { pathname, hash } = useLocation();
-	const first = useRef(true);
-	useEffect(() => {
-		if (hash) requestAnimationFrame(() => document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: reduced() ? "auto" : "smooth" }));
-		else {
-			window.scrollTo({
-				top: 0,
-				behavior: "instant"
-			});
-			if (!first.current) document.querySelector("main")?.focus({ preventScroll: true });
-		}
-		first.current = false;
-	}, [pathname, hash]);
+	const { pathname } = useLocation();
 	useEffect(() => {
 		if (/^\/(experiencias|blog)\/[^/]+\/?$/.test(pathname)) return;
-		const page = staticMeta[pathname] || NOT_FOUND;
+		const page = staticMeta[pathname.replace(/\/+$/, "") || "/"] || NOT_FOUND;
 		applyMeta(page[0], page[1]);
 	}, [pathname]);
 	return null;
@@ -3090,7 +2577,8 @@ function Footer() {
 						/* @__PURE__ */ jsx$1(Link, {
 							to: "/calificaciones",
 							children: "Calificaciones"
-						})
+						}),
+						/* @__PURE__ */ jsx$1(ConsentLink, {})
 					]
 				})
 			]
@@ -3110,9 +2598,9 @@ function Layout() {
 		/* @__PURE__ */ jsx$1("main", {
 			id: "contenido",
 			tabIndex: -1,
-			children: /* @__PURE__ */ jsx$1(Suspense, {
+			children: /* @__PURE__ */ jsxs$1(Suspense, {
 				fallback: null,
-				children: /* @__PURE__ */ jsxs$1(Routes, { children: [
+				children: [/* @__PURE__ */ jsxs$1(Routes, { children: [
 					/* @__PURE__ */ jsx$1(Route, {
 						path: "/",
 						element: /* @__PURE__ */ jsx$1(R.home, {})
@@ -3183,12 +2671,14 @@ function Layout() {
 						path: "*",
 						element: /* @__PURE__ */ jsx$1(R.notFound, {})
 					})
-				] })
+				] }), /* @__PURE__ */ jsx$1(RouteScroll, {})]
 			})
 		}, pathname),
 		/* @__PURE__ */ jsx$1(Allies, {}),
 		/* @__PURE__ */ jsx$1(Footer, {}),
-		/* @__PURE__ */ jsx$1(WhatsAppFab, {})
+		/* @__PURE__ */ jsx$1(WhatsAppFab, {}),
+		/* @__PURE__ */ jsx$1(Consent, {}),
+		/* @__PURE__ */ jsx$1(Welcome, {})
 	] });
 }
 function Website() {
@@ -4594,7 +4084,7 @@ var rawTours = [
 		"City Tour & Comuna 13",
 		"Ciudad",
 		"Una ciudad que vuelve a dibujarse.",
-		"De las plazas a los murales, descubre Medellín a través de las personas y las historias que le dan forma.",
+		"Descubre las plazas de Medellín y el arte urbano de la Comuna 13. Planeamos contigo un recorrido privado para acercarte a la ciudad y sus historias.",
 		[
 			"La ciudad como punto de partida",
 			"El color cuenta una historia",
@@ -4613,7 +4103,7 @@ var rawTours = [
 		"Guatapé & Piedra del Peñol",
 		"Pueblos",
 		"El horizonte tiene otro color.",
-		"Agua entre montañas, una piedra que domina el paisaje y un pueblo que narra su vida en cada zócalo.",
+		"Desde Medellín, descubre los zócalos de Guatapé y el paisaje de la Piedra del Peñol. Acordamos el recorrido contigo; consulta entradas y opciones de ascenso.",
 		[
 			"Mirar desde lo alto",
 			"Caminar entre colores",
@@ -4632,7 +4122,7 @@ var rawTours = [
 		"Noche en Medellín",
 		"Noche",
 		"Cuando el valle enciende sus luces.",
-		"La noche cambia las distancias, los colores y la forma de sentir Medellín. Recorre su otra cara con un plan coordinado.",
+		"Conoce Medellín de noche entre luces, vistas del valle y ambiente local. Coordinamos la salida y el regreso; los horarios y las paradas se acuerdan contigo.",
 		[
 			"El día se despide",
 			"La ciudad se ilumina",
@@ -4651,7 +4141,7 @@ var rawTours = [
 		"Vuelta a Oriente",
 		"Pueblos",
 		"El camino también es el destino.",
-		"Pueblos, plazas y montañas: una salida desde Medellín para mirar Antioquia a un ritmo más tranquilo.",
+		"Sal de Medellín hacia los pueblos y las montañas del Oriente Antioqueño. Cuéntanos tus intereses para acordar las paradas y disfrutar las plazas con calma.",
 		[
 			"Salir hacia las montañas",
 			"La vida alrededor de una plaza",
@@ -4670,7 +4160,7 @@ var rawTours = [
 		"Tour del Café",
 		"Naturaleza",
 		"Una historia que empieza en la tierra.",
-		"Acércate al cultivo y al trabajo detrás de una taza. Un encuentro con la cultura cafetera desde Medellín.",
+		"Descubre la cultura cafetera en una visita desde Medellín: del cultivo al oficio detrás de una taza. La finca y la degustación se confirman en tu propuesta.",
 		[
 			"Entre hojas y granos",
 			"El oficio detrás del aroma",
@@ -4689,7 +4179,7 @@ var rawTours = [
 		"Hacienda Nápoles",
 		"Familia",
 		"Un día para volver a sorprenderse.",
-		"Una salida al parque temático para compartir naturaleza y actividades en familia, con transporte coordinado desde Medellín.",
+		"Planea un día en Hacienda Nápoles con transporte desde Medellín. Comparte naturaleza y actividades en familia; confirma el pasaporte y las entradas al cotizar.",
 		[
 			"Poner rumbo a un día distinto",
 			"Explorar juntos",
@@ -4708,7 +4198,7 @@ var rawTours = [
 		"Salto del Buey",
 		"Naturaleza",
 		"Sigue el sonido del agua.",
-		"Senderos y vegetación conducen a una cascada que cambia la escala de todo lo que la rodea.",
+		"Camina entre senderos y vegetación hasta el Salto del Buey en una salida desde Medellín. Revisamos contigo las condiciones del recorrido y las actividades opcionales.",
 		[
 			"Entrar en el verde",
 			"Encontrarse con la cascada",
@@ -4727,7 +4217,7 @@ var rawTours = [
 		"Santa Fe de Antioquia",
 		"Pueblos",
 		"Hay lugares que enseñan a ir despacio.",
-		"Calles coloniales, plazas y el Puente de Occidente en una escapada para acercarte a la historia de Antioquia.",
+		"Recorre Santa Fe de Antioquia desde Medellín: calles coloniales, plazas y el Puente de Occidente. Organiza con nosotros las paradas y los tiempos de caminata.",
 		[
 			"Un puente entre paisajes",
 			"Caminar la memoria",
@@ -4746,7 +4236,7 @@ var rawTours = [
 		"Jardín",
 		"Pueblos",
 		"El color se vive sin prisa.",
-		"Fachadas, conversaciones de plaza y cultura cafetera en uno de los recorridos por Antioquia que parten de Medellín.",
+		"Viaja de Medellín a Jardín para conocer sus fachadas de color, su plaza y su cultura cafetera. Coordinamos el recorrido considerando el trayecto y a tu grupo.",
 		[
 			"Tomar el camino del pueblo",
 			"Encontrar color en lo cotidiano",
@@ -4765,7 +4255,7 @@ var rawTours = [
 		"Tour de Compras",
 		"Ciudad",
 		"Tus hallazgos, a tu ritmo.",
-		"Organiza una jornada por El Hueco, outlets y tiendas locales con los lugares que realmente te interesan.",
+		"Organiza tu tour de compras en Medellín por El Hueco, outlets y tiendas locales. Cuéntanos qué buscas para acordar las paradas y el espacio para tus compras.",
 		[
 			"Definir qué estás buscando",
 			"Recorrer y comparar",
@@ -4784,7 +4274,7 @@ var rawTours = [
 		"Tour Miradores",
 		"Noche",
 		"Una ciudad. Infinitas perspectivas.",
-		"Contempla el valle y las montañas mientras la luz transforma el paisaje de Medellín.",
+		"Descubre Medellín desde sus miradores y observa cómo cambia la luz sobre el valle. Acordamos las paradas contigo; la visibilidad depende del clima.",
 		[
 			"Buscar una nueva perspectiva",
 			"Esperar el cambio de luz",
@@ -4803,7 +4293,7 @@ var rawTours = [
 		"Traslados Aeropuerto JMC",
 		"Traslados",
 		"Aterriza. Nosotros conectamos el camino.",
-		"El enlace entre el Aeropuerto José María Córdova y tu alojamiento en Medellín, organizado desde antes de llegar.",
+		"Coordina tu traslado entre el Aeropuerto José María Córdova y Medellín. Comparte vuelo, dirección y equipaje: seguimos tu vuelo y acordamos el punto de encuentro.",
 		[
 			"Antes de aterrizar",
 			"Un encuentro coordinado",
@@ -4877,7 +4367,7 @@ var vehicles = [
 	[
 		"Sedán Ejecutivo",
 		"1–3",
-		"Ideal para viajes ejecutivos y traslados al aeropuerto. Máximo confort y elegancia para una a tres personas.",
+		"Para viajes ejecutivos y traslados al aeropuerto de una a tres personas. Confirma el espacio de equipaje según tu viaje.",
 		[
 			"ac",
 			"cuero",
@@ -4889,7 +4379,7 @@ var vehicles = [
 	[
 		"SUV Ejecutiva",
 		"1–4",
-		"Perfecta para grupos pequeños que buscan espacio y comodidad superior, con altura y versatilidad para rutas regionales.",
+		"Para grupos pequeños que buscan comodidad en traslados y rutas regionales. Consulta la unidad adecuada para tu recorrido.",
 		[
 			"equipaje",
 			"cuero",
@@ -4901,7 +4391,7 @@ var vehicles = [
 	[
 		"Van Ejecutiva",
 		"1–8",
-		"Excelente para grupos familiares o pequeños equipos de trabajo, con asientos individuales y sitio de sobra para el equipaje.",
+		"Para familias o equipos pequeños, con asientos individuales. Comparte cuántas maletas llevan para confirmar el espacio disponible.",
 		[
 			"reclinables",
 			"equipaje",
@@ -4923,7 +4413,7 @@ var vehicles = [
 	[
 		"Van Sprinter",
 		"1–17",
-		"Diseñada especialmente para tours grupales con máxima visibilidad. Consulta su disponibilidad para el recorrido que tienes en mente.",
+		"Para recorridos en grupo, con ventanas panorámicas. Consulta la disponibilidad y el espacio de equipaje para tu salida.",
 		[
 			"reclinables",
 			"sonido",
@@ -4957,7 +4447,8 @@ var vehicles = [
 var articles = [
 	{
 		slug: "preparar-tu-recorrido",
-		title: "El buen viaje empieza con cinco datos.",
+		imageAlt: "Grupo de viajeros en una plaza empedrada, con iglesia blanca y fachadas de balcones al fondo",
+		title: "Cómo preparar tu recorrido desde Medellín",
 		tag: "Planeación",
 		image: tours[0].images[0],
 		intro: "Organizar un recorrido es más sencillo cuando la conversación empieza por lo importante.",
@@ -4969,7 +4460,8 @@ var articles = [
 	},
 	{
 		slug: "elegir-tu-experiencia",
-		title: "¿Ciudad, pueblos o naturaleza?",
+		imageAlt: "Tres viajeras frente a la base de la Piedra del Peñol y su escalera",
+		title: "Qué experiencia elegir desde Medellín",
 		tag: "Inspiración",
 		image: tours[1].images[0],
 		intro: "No hay una única forma de descubrir Medellín y los recorridos que parten desde aquí. Elige según lo que quieras sentir.",
@@ -4981,7 +4473,8 @@ var articles = [
 	},
 	{
 		slug: "viajar-en-grupo",
-		title: "Viajar juntos sin improvisar cada parada.",
+		imageAlt: "Grupo de personas junto a automóviles y vans en una calle de Medellín",
+		title: "Cómo organizar un viaje en grupo desde Medellín",
 		tag: "En grupo",
 		image: photos("equipo")[0],
 		intro: "Una familia, una agencia o un equipo de trabajo: cada grupo tiene su propio ritmo.",
@@ -5006,10 +4499,12 @@ var paths = [
 	"/politica-de-tratamiento-de-datos",
 	...tours.map((t) => `/experiencias/${t.slug}`),
 	...articles.map((a) => `/blog/${a.slug}`)
-].flatMap((path) => [path, "/en" + (path === "/" ? "/" : path)]);
-function metaFor(path) {
-	setLanguage(/^\/en(?:\/|$)/.test(path) ? "en" : "es");
-	path = unprefix(path);
+].flatMap((path) => LANGUAGES.map((lang) => pathForLanguage(path, lang.code)));
+async function metaFor(path) {
+	const lang = languageFromPath(path);
+	await prepareLanguage(lang);
+	setLanguage(lang);
+	path = unprefix(path).replace(/\/+$/, "") || "/";
 	const tour = tours.find((t) => path === `/experiencias/${t.slug}`), article = articles.find((a) => path === `/blog/${a.slug}`);
 	if (tour) return [t(tour.name), t(tour.description)];
 	if (article) return [t(article.title), t(article.intro)];
@@ -5017,10 +4512,11 @@ function metaFor(path) {
 }
 async function render(url) {
 	await preloadAllRoutes();
-	const en = /^\/en(?:\/|$)/.test(url);
-	setLanguage(en ? "en" : "es");
+	const lang = languageFromPath(url);
+	await prepareLanguage(lang);
+	setLanguage(lang);
 	return renderToString(/* @__PURE__ */ jsx$1(StaticRouter, {
-		basename: en ? "/en" : "/",
+		basename: languageInfo(lang).prefix || "/",
 		location: url,
 		children: /* @__PURE__ */ jsx$1(Website, {})
 	}));
