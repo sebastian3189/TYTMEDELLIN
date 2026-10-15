@@ -1,9 +1,128 @@
-import { F as jsx, I as jsxs, L as company, N as Socials, P as Fragment, R as whatsapp, _ as Manifesto, c as Eyebrow, d as QuoteSection, h as Arrow, i as values, l as PageTitle, n as photos, s as Button, u as Picture } from "../entry-server.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-v6rDM-IO.js";
-import { t as Reviews } from "./Reviews-Cp4j-Pnr.js";
-import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-DaJGWog5.js";
+import { B as whatsapp, F as Socials, I as Fragment, L as jsx, R as jsxs, _ as Arrow, d as PageTitle, f as Picture, i as values, l as Button, n as photos, p as QuoteSection, u as Eyebrow, y as Manifesto, z as company } from "../entry-server.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-BzuM0C8h.js";
+import { t as Reviews } from "./Reviews-DTAhOVPL.js";
+import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-CNC61Ks6.js";
 import { Link, useLocation } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+//#region src/AboutFx.jsx
+function AboutFx() {
+	useLayoutEffect(() => {
+		if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return void 0;
+		const root = document.querySelector("main");
+		if (!root) return void 0;
+		const groups = [
+			[".ac-card", "card"],
+			[".timeline", "line"],
+			[".timeline article", "rise"],
+			[".values-grid article", "rise"],
+			[".gallery-main, .gallery-feature", "card"]
+		];
+		const els = [];
+		groups.forEach(([sel, kind]) => root.querySelectorAll(sel).forEach((el, i) => {
+			el.classList.add("afx", `afx-${kind}`);
+			el.style.setProperty("--afx-i", String(i % 6));
+			els.push(el);
+		}));
+		const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+			if (e.isIntersecting) {
+				e.target.classList.add("afx-in");
+				io.unobserve(e.target);
+			}
+		}), {
+			threshold: .15,
+			rootMargin: "0px 0px -8% 0px"
+		});
+		els.forEach((el) => io.observe(el));
+		const cards = [...root.querySelectorAll(".ac-card")];
+		let raf = 0;
+		const tick = () => {
+			raf = 0;
+			if (innerWidth < 700) return;
+			for (const c of cards) {
+				const r = c.getBoundingClientRect(), k = (r.top + r.height / 2 - innerHeight / 2) / innerHeight;
+				c.style.setProperty("--afx-py", `${(k * -Number(c.dataset.depth || 20)).toFixed(1)}px`);
+			}
+		};
+		const onScroll = () => {
+			if (!raf) raf = requestAnimationFrame(tick);
+		};
+		if (cards.length) {
+			window.addEventListener("scroll", onScroll, { passive: true });
+			tick();
+		}
+		return () => {
+			io.disconnect();
+			cancelAnimationFrame(raf);
+			window.removeEventListener("scroll", onScroll);
+			els.forEach((el) => {
+				el.classList.remove("afx", "afx-card", "afx-line", "afx-rise", "afx-in");
+				el.style.removeProperty("--afx-i");
+			});
+			cards.forEach((c) => c.style.removeProperty("--afx-py"));
+		};
+	}, []);
+	return null;
+}
+var LAYOUT = [
+	{
+		l: 0,
+		t: 9,
+		w: 52,
+		r: -2.4,
+		d: 14
+	},
+	{
+		l: 46,
+		t: 0,
+		w: 22,
+		r: 3.6,
+		d: 34
+	},
+	{
+		l: 66,
+		t: 25,
+		w: 20,
+		r: -3.2,
+		d: 22
+	},
+	{
+		l: 82,
+		t: 2,
+		w: 18,
+		r: 5,
+		d: 44
+	}
+];
+function AboutCollage({ items, alt }) {
+	return /* @__PURE__ */ jsx("section", {
+		className: "about-collage wrap",
+		"aria-label": alt,
+		children: /* @__PURE__ */ jsx("div", {
+			className: "ac-wrap",
+			children: items.slice(0, LAYOUT.length).map((p, i) => {
+				const L = LAYOUT[i];
+				return /* @__PURE__ */ jsx("figure", {
+					className: "ac-card",
+					"data-depth": L.d,
+					style: {
+						"--l": `${L.l}%`,
+						"--t": `${L.t}%`,
+						"--w": `${L.w}%`,
+						"--r": `${L.r}deg`,
+						"--z": i === 0 ? 1 : 2 + i
+					},
+					children: /* @__PURE__ */ jsx(Picture, {
+						photo: p,
+						alt,
+						priority: i === 0,
+						sizes: "(max-width: 699px) 70vw, 30vw"
+					})
+				}, p.src);
+			})
+		})
+	});
+}
+//#endregion
 //#region src/Contact.jsx
 var MAP = {
 	lat: 6.2085691,
@@ -118,6 +237,7 @@ function ContactPlace() {
 var Gallery = ({ tour }) => /* @__PURE__ */ jsx(FeaturedGallery, { tour });
 function About() {
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
+		/* @__PURE__ */ jsx(AboutFx, {}),
 		/* @__PURE__ */ jsx(PageTitle, {
 			photo: photos("historia")[0],
 			floating: photos("historia").slice(1, 3),
@@ -130,13 +250,9 @@ function About() {
 			] }),
 			text: "Nacimos con la intención de recibir bien. Crecemos escuchando a las personas que nos acompañan."
 		}),
-		/* @__PURE__ */ jsx("section", {
-			className: "about-photo wrap",
-			children: /* @__PURE__ */ jsx(Picture, {
-				photo: photos("equipo")[0],
-				alt: "Equipo de T&T Medellín",
-				priority: true
-			})
+		/* @__PURE__ */ jsx(AboutCollage, {
+			items: photos("equipo"),
+			alt: "Equipo de T&T Medellín"
 		}),
 		/* @__PURE__ */ jsxs("section", {
 			className: "wrap section history",

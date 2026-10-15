@@ -47,6 +47,14 @@ export const vehicles = [
  ['Van Sprinter','1–17','Diseñada especialmente para tours grupales con máxima visibilidad. Consulta su disponibilidad para el recorrido que tienes en mente.',['reclinables','sonido','panoramicas','equipaje','microfono']],
  ['Buses','25–40','Ideal para grupos grandes, eventos corporativos y excursiones extendidas. Disponibles en configuraciones de 25, 35 y 40 pasajeros.',['reclinables','entretenimiento','nevera','led']],
 ].map(([name,capacity,use,features],i)=>({name,capacity,use,features:features.map(k=>({key:k,icon:FEATURES[k][0],label:FEATURES[k][1]})),image:photos('vehiculos')[i]}));
+/*
+ * ARTÍCULOS DEL BLOG: único archivo de datos del blog (el índice /blog, la fila «Recientes», el libro del inicio, el prerender y el sitemap leen este arreglo).
+ * Para añadir una nota agrega un objeto (el PRIMERO es el artículo destacado):
+ *   { slug:'mi-nota', title:'…', tag:'Categoría', image:<foto de media.json: tours[i].images[0] o photos('equipo')[0]>, intro:'resumen de 1–2 frases',
+ *     sections:[['Subtítulo','Párrafo'], …], date:'2026-10-14' (opcional, ISO), minutes:4 (opcional) }
+ * Las categorías (`tag`) se vuelven filtros solas cuando hay 2 o más. Fecha y tiempo de lectura solo se muestran si existen (hoy: PENDIENTE CLIENTE).
+ * Con más de 12 notas aparece «Cargar más»; la ruta /blog/<slug> y el sitemap se generan solos.
+ */
 export const articles = [
  {slug:'preparar-tu-recorrido',title:'El buen viaje empieza con cinco datos.',tag:'Planeación',image:tours[0].images[0],intro:'Organizar un recorrido es más sencillo cuando la conversación empieza por lo importante.',sections:[['La fecha y el punto de partida','Comparte el día y la dirección desde la que quieres salir. Si llegas en avión, incluye tu número de vuelo cuando hables con el equipo.'],['Quiénes van contigo','La cantidad de personas, el equipaje y las necesidades de movilidad ayudan a proponer un vehículo y un ritmo adecuados.'],['Lo que esperas del día','Cuéntanos qué te interesa y cuánto tiempo tienes. Antes de confirmar, revisa las paradas, los servicios incluidos, el valor y las condiciones de cambio.']]},
  {slug:'elegir-tu-experiencia',title:'¿Ciudad, pueblos o naturaleza?',tag:'Inspiración',image:tours[1].images[0],intro:'No hay una única forma de descubrir Medellín y los recorridos que parten desde aquí. Elige según lo que quieras sentir.',sections:[['Ciudad para escuchar historias','El City Tour y la Comuna 13 acercan arte y vida urbana. El recorrido de compras pone el acento en el comercio local.'],['Pueblos para cambiar de ritmo','Guatapé, Santa Fe, Jardín y Oriente ofrecen maneras diferentes de acercarse al territorio. Consulta tiempos de traslado antes de llenar tu agenda.'],['Naturaleza para mirar de cerca','El café y el Salto del Buey proponen experiencias al aire libre distintas. Describe tus preferencias y condición para que el equipo oriente el plan.']]},

@@ -65,3 +65,10 @@
  .site-header .brand:hover::before{animation:logo-shine 700ms ease-in-out 1}
 }
 @media(prefers-reduced-motion:reduce){.site-header .brand,.site-header .brand::before,.site-header .brand::after,.site-header .logo-mark{animation:none!important}}
+
+/* /contacto (ronda 3): ritmo consistente entre bloques (sin huecos de ~250 px) y columnas alineadas */
+.contact-place{align-items:center;padding-block:48px 32px}
+.contact-place + .quote-section{padding-top:32px;padding-bottom:64px}
+.contact-place .map-links,.contact-place .map-frame + p{margin-top:16px}
+@media(min-width:900px){.quote-section .quote-copy{position:sticky;top:120px}}
+@media(max-width:899px){.contact-place{padding-block:32px 24px}.contact-place + .quote-section{padding-top:24px}}

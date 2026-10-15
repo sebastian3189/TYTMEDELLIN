@@ -793,7 +793,9 @@ var en_default = {
 	"Según itinerario contratado": "According to the contracted itinerary",
 	"Según lugar de salida e itinerario": "Depending on departure point and itinerary",
 	"Los horarios pueden modificarse dependiendo del lugar de recogida, tráfico, condiciones climáticas e itinerario.": "Schedules may change depending on the pickup location, traffic, weather conditions and itinerary.",
-	"Toca la foto para ampliar": "Tap the photo to enlarge"
+	"Toca la foto para ampliar": "Tap the photo to enlarge",
+	"Política de tratamiento de datos": "Personal data processing policy",
+	"Qué datos personales recogemos, con qué finalidad, cuánto tiempo los conservamos y cómo ejercer tus derechos (Ley 1581 de 2012).": "What personal data we collect, what for, how long we keep it and how to exercise your rights (Law 1581 of 2012)."
 };
 //#endregion
 //#region src/i18n.js
@@ -2061,7 +2063,7 @@ function ShareMenu({ name, path, className = "" }) {
 }
 //#endregion
 //#region src/shared.jsx
-var Quote = lazy(() => import("./assets/Quote-Dg6iKVvu.js"));
+var Quote = lazy(() => import("./assets/Quote-D-YuBR_E.js"));
 var reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 function Picture({ photo, alt, priority = false, className = "", native = false, sizes = "(max-width: 700px) 100vw, 65vw" }) {
 	if (!photo) return null;
@@ -2344,15 +2346,9 @@ function WhatsAppFab() {
 			attributes: true,
 			attributeFilter: ["class", "open"]
 		});
-		const pulse = setInterval(() => {
-			if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-			el.classList.add("wa-pulse");
-			setTimeout(() => el.classList.remove("wa-pulse"), 1900);
-		}, 12e3);
 		check();
 		return () => {
 			mo.disconnect();
-			clearInterval(pulse);
 		};
 	}, []);
 	return /* @__PURE__ */ jsxs$1("a", {
@@ -2374,7 +2370,7 @@ function WhatsAppFab() {
 	});
 }
 //#endregion
-//#region src/Website.jsx
+//#region src/Logo.jsx
 var LOGO_SRCSET = "/media/marca/logo/logo-40.webp 40w, /media/marca/logo/logo-44.webp 44w, /media/marca/logo/logo-56.webp 56w, /media/marca/logo/logo-80.webp 80w, /media/marca/logo/logo-88.webp 88w, /media/marca/logo/logo-112.webp 112w, /media/marca/logo/logo-120.webp 120w, /media/marca/logo/logo-132.webp 132w, /media/marca/logo/logo-168.webp 168w, /media/marca/logo/logo-224.webp 224w, /media/marca/logo/logo-240.webp 240w, /media/marca/logo/logo-336.webp 336w, /media/marca/logo/logo-360.webp 360w, /media/marca/logo/logo-400.webp 400w";
 function Logo({ size, sizes, className = "", lazy = false }) {
 	return /* @__PURE__ */ jsx$1("img", {
@@ -2390,6 +2386,8 @@ function Logo({ size, sizes, className = "", lazy = false }) {
 		decoding: "async"
 	});
 }
+//#endregion
+//#region src/Website.jsx
 function lazyRoute(loader) {
 	let Loaded = null, promise = null;
 	const preload = () => promise || (promise = loader().then((component) => {
@@ -2404,22 +2402,22 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-CzS3cs36.js");
+var company_ = () => import("./assets/Company-CWiOTrRc.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-ppWlLTEr.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-BJ5-kXzD.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-CF9hgNOw.js").then((m) => m.default)),
-	fleet: lazyRoute(() => import("./assets/Fleet-BqOX0yS6.js").then((m) => m.default)),
-	blog: lazyRoute(pick(() => import("./assets/Blog-MHmkENqc.js"), "Blog")),
-	article: lazyRoute(() => import("./assets/Blog-MHmkENqc.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-Cp_btW82.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-B6qylHLF.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-vx3Etzdn.js").then((m) => m.default)),
+	fleet: lazyRoute(() => import("./assets/Fleet-BZjMsdTV.js").then((m) => m.default)),
+	blog: lazyRoute(pick(() => import("./assets/Blog-C8NR8mUV.js"), "Blog")),
+	article: lazyRoute(() => import("./assets/Blog-C8NR8mUV.js").then((m) => m.default)),
 	about: lazyRoute(pick(company_, "About")),
 	services: lazyRoute(pick(company_, "Services")),
 	contact: lazyRoute(pick(company_, "Contact")),
 	quote: lazyRoute(pick(company_, "QuotePage")),
 	privacy: lazyRoute(pick(company_, "Privacy")),
 	ratings: lazyRoute(pick(company_, "Ratings")),
-	dataPolicy: lazyRoute(() => import("./assets/DataPolicy-MQ0YP_H3.js").then((m) => m.default)),
-	notFound: lazyRoute(() => import("./assets/NotFound-DTLybyfR.js").then((m) => m.default))
+	dataPolicy: lazyRoute(() => import("./assets/DataPolicy-1Cst0ADf.js").then((m) => m.default)),
+	notFound: lazyRoute(() => import("./assets/NotFound-BJlW82fM.js").then((m) => m.default))
 };
 R.home, R.catalog, R.tour, R.fleet, R.blog, R.article, R.about, R.services, R.contact, R.quote, R.privacy, R.dataPolicy, R.ratings;
 var preloadAllRoutes = () => Promise.all(Object.values(R).map((route) => route.preload()));
@@ -4055,7 +4053,120 @@ var media_default = {
 		"height": 400,
 		"srcset": "/media/marca/logo/logo-40.webp 40w, /media/marca/logo/logo-44.webp 44w, /media/marca/logo/logo-56.webp 56w, /media/marca/logo/logo-80.webp 80w, /media/marca/logo/logo-88.webp 88w, /media/marca/logo/logo-112.webp 112w, /media/marca/logo/logo-120.webp 120w, /media/marca/logo/logo-132.webp 132w, /media/marca/logo/logo-168.webp 168w, /media/marca/logo/logo-224.webp 224w, /media/marca/logo/logo-240.webp 240w, /media/marca/logo/logo-336.webp 336w, /media/marca/logo/logo-360.webp 360w, /media/marca/logo/logo-400.webp 400w",
 		"source": "IMAGENES/logo/logo-tyt-medellin-aportado.png: aportado por el usuario 2026-10-12; maestro vectorial PENDIENTE. Uso tal cual, solo reducido."
-	}]
+	}],
+	"instagram-posts": [
+		{
+			"shortCode": "C6j0AcQuJNN",
+			"url": "https://www.instagram.com/p/C6j0AcQuJNN/",
+			"type": "reel",
+			"pinned": true,
+			"alt": "¿Por qué elegirnos?",
+			"src": "/media/instagram/C6j0AcQuJNN-540.webp",
+			"width": 540,
+			"height": 540,
+			"srcset": "/media/instagram/C6j0AcQuJNN-320.webp 320w, /media/instagram/C6j0AcQuJNN-540.webp 540w",
+			"source": "Instagram @transporteenmedellin, contenido propio, instantánea 2026-10-14 (https://www.instagram.com/p/C6j0AcQuJNN/). Recorte cuadrado centrado (foco vertical 0.4), WebP sin EXIF."
+		},
+		{
+			"shortCode": "C6jgprQuTNw",
+			"url": "https://www.instagram.com/p/C6jgprQuTNw/",
+			"type": "reel",
+			"pinned": true,
+			"alt": "Razones para visitar Medellín",
+			"src": "/media/instagram/C6jgprQuTNw-540.webp",
+			"width": 540,
+			"height": 540,
+			"srcset": "/media/instagram/C6jgprQuTNw-320.webp 320w, /media/instagram/C6jgprQuTNw-540.webp 540w",
+			"source": "Instagram @transporteenmedellin, contenido propio, instantánea 2026-10-14 (https://www.instagram.com/p/C6jgprQuTNw/). Recorte cuadrado centrado (foco vertical 0.4), WebP sin EXIF."
+		},
+		{
+			"shortCode": "C6jQepfu1bO",
+			"url": "https://www.instagram.com/p/C6jQepfu1bO/",
+			"type": "reel",
+			"pinned": true,
+			"alt": "Tours y servicios imperdibles",
+			"src": "/media/instagram/C6jQepfu1bO-540.webp",
+			"width": 540,
+			"height": 540,
+			"srcset": "/media/instagram/C6jQepfu1bO-320.webp 320w, /media/instagram/C6jQepfu1bO-540.webp 540w",
+			"source": "Instagram @transporteenmedellin, contenido propio, instantánea 2026-10-14 (https://www.instagram.com/p/C6jQepfu1bO/). Recorte cuadrado centrado (foco vertical 0.4), WebP sin EXIF."
+		},
+		{
+			"shortCode": "DefYPNpp6HL",
+			"url": "https://www.instagram.com/p/DefYPNpp6HL/",
+			"type": "reel",
+			"pinned": false,
+			"alt": "Aprender y recibir en Medellín",
+			"src": "/media/instagram/DefYPNpp6HL-540.webp",
+			"width": 540,
+			"height": 540,
+			"srcset": "/media/instagram/DefYPNpp6HL-320.webp 320w, /media/instagram/DefYPNpp6HL-540.webp 540w",
+			"source": "Instagram @transporteenmedellin, contenido propio, instantánea 2026-10-14 (https://www.instagram.com/p/DefYPNpp6HL/). Recorte cuadrado centrado (foco vertical 0.4), WebP sin EXIF."
+		},
+		{
+			"shortCode": "Dec1OOUibqi",
+			"url": "https://www.instagram.com/p/Dec1OOUibqi/",
+			"type": "carousel",
+			"pinned": false,
+			"alt": "Sus palabras, nuestro mejor recuerdo",
+			"src": "/media/instagram/Dec1OOUibqi-640.webp",
+			"width": 640,
+			"height": 640,
+			"srcset": "/media/instagram/Dec1OOUibqi-320.webp 320w, /media/instagram/Dec1OOUibqi-540.webp 540w, /media/instagram/Dec1OOUibqi-640.webp 640w",
+			"source": "Instagram @transporteenmedellin, contenido propio, instantánea 2026-10-14 (https://www.instagram.com/p/Dec1OOUibqi/). Recorte cuadrado centrado (foco vertical 0.4), WebP sin EXIF."
+		},
+		{
+			"shortCode": "DeShg7YJ-3j",
+			"url": "https://www.instagram.com/p/DeShg7YJ-3j/",
+			"type": "reel",
+			"pinned": false,
+			"alt": "Preguntas sobre transporte en Medellín",
+			"src": "/media/instagram/DeShg7YJ-3j-540.webp",
+			"width": 540,
+			"height": 540,
+			"srcset": "/media/instagram/DeShg7YJ-3j-320.webp 320w, /media/instagram/DeShg7YJ-3j-540.webp 540w",
+			"source": "Instagram @transporteenmedellin, contenido propio, instantánea 2026-10-14 (https://www.instagram.com/p/DeShg7YJ-3j/). Recorte cuadrado centrado (foco vertical 0.4), WebP sin EXIF."
+		},
+		{
+			"shortCode": "DePyyGOJaYy",
+			"url": "https://www.instagram.com/p/DePyyGOJaYy/",
+			"type": "reel",
+			"pinned": false,
+			"alt": "Un golpe de realidad",
+			"src": "/media/instagram/DePyyGOJaYy-640.webp",
+			"width": 640,
+			"height": 640,
+			"srcset": "/media/instagram/DePyyGOJaYy-320.webp 320w, /media/instagram/DePyyGOJaYy-540.webp 540w, /media/instagram/DePyyGOJaYy-640.webp 640w",
+			"source": "Instagram @transporteenmedellin, contenido propio, instantánea 2026-10-14 (https://www.instagram.com/p/DePyyGOJaYy/). Recorte cuadrado centrado (foco vertical 0.4), WebP sin EXIF."
+		},
+		{
+			"shortCode": "DeNcCtMiYdb",
+			"url": "https://www.instagram.com/p/DeNcCtMiYdb/",
+			"type": "carousel",
+			"pinned": false,
+			"alt": "Tours únicos, fotos únicas",
+			"src": "/media/instagram/DeNcCtMiYdb-640.webp",
+			"width": 640,
+			"height": 640,
+			"srcset": "/media/instagram/DeNcCtMiYdb-320.webp 320w, /media/instagram/DeNcCtMiYdb-540.webp 540w, /media/instagram/DeNcCtMiYdb-640.webp 640w",
+			"source": "Instagram @transporteenmedellin, contenido propio, instantánea 2026-10-14 (https://www.instagram.com/p/DeNcCtMiYdb/). Recorte cuadrado centrado (foco vertical 0.5), WebP sin EXIF."
+		}
+	],
+	"hero-inicio": {
+		"desktop": {
+			"src": "/media/hero/hero-d-1920.webp",
+			"srcset": "/media/hero/hero-d-1280.webp 1280w, /media/hero/hero-d-1920.webp 1920w, /media/hero/hero-d-2560.webp 2560w",
+			"width": 1920,
+			"height": 1080
+		},
+		"mobile": {
+			"src": "/media/hero/hero-m-750.webp",
+			"srcset": "/media/hero/hero-m-540.webp 540w, /media/hero/hero-m-750.webp 750w, /media/hero/hero-m-1080.webp 1080w",
+			"width": 750,
+			"height": 1625
+		},
+		"source": "IMAGENES/FotosMedellin/City Tour/IMG_3722.jpg (foto propia, panorámica 7818×3940): recorte 16:9 sin la antena (escritorio) y vertical ~9:19,5 centrado en el valle (móvil). WebP sin EXIF."
+	}
 };
 //#endregion
 //#region src/tours-text.js
@@ -4497,4 +4608,4 @@ async function render(url) {
 	}));
 }
 //#endregion
-export { usePageMeta as A, t as B, useMounted as C, inicioTextos as D, CHAPTERS as E, jsx$1 as F, jsxs$1 as I, company as L, SocialIcon as M, Socials as N, textoFase as O, Fragment as P, whatsapp as R, useMedia as S, watchScroll as T, Manifesto as _, vehicles as a, useFlipGrid as b, Eyebrow as c, QuoteSection as d, Rail as f, QuoteCopy as g, Arrow as h, values as i, Icon as j, NOT_FOUND as k, PageTitle as l, GoogleBadgeStatic as m, metaFor, photos as n, rawTours as o, TourCard as p, paths, tours as r, render, Button as s, articles as t, Picture as u, Marquee as v, docTop as w, useLightMotion as x, Trust as y, language as z };
+export { textoFase as A, whatsapp as B, useLightMotion as C, watchScroll as D, docTop as E, Socials as F, t as H, Fragment as I, jsx$1 as L, usePageMeta as M, Icon as N, CHAPTERS as O, SocialIcon as P, jsxs$1 as R, useFlipGrid as S, useMounted as T, language as V, Arrow as _, vehicles as a, Marquee as b, Logo as c, PageTitle as d, Picture as f, GoogleBadgeStatic as g, TourCard as h, values as i, NOT_FOUND as j, inicioTextos as k, Button as l, Rail as m, metaFor, photos as n, rawTours as o, QuoteSection as p, paths, tours as r, render, media_default as s, articles as t, Eyebrow as u, QuoteCopy as v, useMedia as w, Trust as x, Manifesto as y, company as z };

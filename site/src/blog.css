@@ -1,0 +1,47 @@
+/* Blog (ronda 3): destacado grande, filtros, cuadrícula 4/3/2/1 y fila arrastrable. Tokens del sistema (claro/oscuro); solo transform/opacity en el movimiento. */
+.blog-featured{padding-block:8px 24px}
+.bf-card{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:clamp(24px,4vw,56px);align-items:center;color:inherit}
+.bf-media{display:block;overflow:hidden;border-radius:28px;aspect-ratio:4/3;background:var(--surface-1);box-shadow:var(--shadow-2);transition:box-shadow 300ms ease}
+.bf-media img{width:100%;height:100%;object-fit:cover;transition:transform 700ms var(--ease-out-strong)}
+.bf-copy{display:flex;flex-direction:column;align-items:flex-start;gap:14px;min-width:0}
+.bf-copy h2{font-size:clamp(28px,3.4vw,52px);line-height:1.04;letter-spacing:-.035em}
+.bf-intro{font-size:18px;line-height:1.6;color:var(--text)}
+.bc-tag{font:600 12px/1.2 var(--font);letter-spacing:.12em;text-transform:uppercase;color:var(--brand-text)}
+.bc-meta{font-size:14px;color:var(--text-muted)}
+.bc-more{display:inline-flex;align-items:center;gap:8px;font-weight:600;color:var(--text-strong);text-decoration:underline;text-underline-offset:5px}
+@media(hover:hover) and (pointer:fine){.bf-card:hover .bf-media img{transform:scale(1.04)}.bf-card:hover .bf-media{box-shadow:0 0 0 1px rgba(238,122,18,.35),0 24px 60px -16px var(--brand-glow)}}
+.bf-card:focus-visible,.blog-card:focus-visible{outline:3px solid var(--focus);outline-offset:4px;border-radius:24px}
+@media(max-width:899px){.bf-card{grid-template-columns:minmax(0,1fr)}}
+
+.blog-all{padding-block:56px 24px}
+.blog-tools{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px}
+.blog-tools h2{font-size:var(--fs-h3)}
+.blog-all .result-count{margin:16px 0 20px;font-size:14px;color:var(--text-muted)}
+.blog-grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+@media(max-width:1199px){.blog-grid-4{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:899px){.blog-grid-4{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}}
+@media(max-width:559px){.blog-grid-4{grid-template-columns:minmax(0,1fr)}}
+.blog-more{display:flex;justify-content:center;margin-top:36px}
+.empty-note{margin:24px 0;color:var(--text)}
+
+/* Tarjeta: toda clicable; imagen que se acerca un poco y brillo contenido al pasar el puntero */
+.blog-card{display:flex;flex-direction:column;height:100%;overflow:hidden;border:1px solid var(--line);border-radius:24px;background:var(--surface-2);box-shadow:var(--shadow-1);color:inherit;transition:transform 240ms var(--ease-out-strong),box-shadow 240ms ease,border-color 240ms ease}
+.bc-media{display:block;overflow:hidden;aspect-ratio:4/3;background:var(--surface-1)}
+.bc-media img{width:100%;height:100%;object-fit:cover;transition:transform 600ms var(--ease-out-strong)}
+.bc-body{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:18px 20px 22px;flex:1}
+.blog-card h3{font-size:clamp(18px,1.5vw,22px);line-height:1.18}
+.blog-card .bc-more{margin-top:auto;padding-top:6px;font-size:15px}
+@media(hover:hover) and (pointer:fine){.blog-card:hover{transform:translateY(-4px);border-color:rgba(238,122,18,.35);box-shadow:0 0 0 1px rgba(238,122,18,.35),0 18px 44px -14px var(--brand-glow)}.blog-card:hover .bc-media img{transform:scale(1.06)}}
+
+/* Fila arrastrable «Recientes» */
+.blog-recent{padding-block:48px 120px}
+.blog-rail-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+.blog-rail-head h2{font-size:var(--fs-h3)}
+.blog-rail-arrows{display:flex;gap:12px}
+.blog-rail-arrows button{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1.5px solid var(--text-strong);border-radius:50%;background:var(--surface-2);color:var(--text-strong)}
+.blog-rail-arrows button:disabled{opacity:.35}
+.blog-rail{display:flex;gap:20px;overflow-x:auto;padding:10px 4px 22px;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;cursor:grab;outline-offset:6px}
+.blog-rail::-webkit-scrollbar{display:none}
+.blog-rail[data-drag=true]{scroll-snap-type:none;cursor:grabbing;user-select:none}
+.blog-rail-item{flex:0 0 min(340px,78vw);scroll-snap-align:start}
+@media(prefers-reduced-motion:reduce){.blog-card,.bc-media img,.bf-media img{transition:none}}

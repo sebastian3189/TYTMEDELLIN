@@ -85,6 +85,7 @@ function HeroSlides({ slides, paused, still }) {
 export function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = false, labelId = 'hero-titulo' }) {
   const light = useLightMotion(), media = useRef(null), section = useRef(null);
   const hasSlides = !video.src && Boolean(slides?.length);
+  const img = !video.src && !hasSlides ? video.image : null; // imagen fija provisional (p. ej. la panorámica del inicio) mientras no haya video
   const [playing, toggle] = useHeroPlayback(media, light, Boolean(video.src));
   const [slidesPaused, setSlidesPaused] = useState(false);
   const onSlidesToggle = useCallback(() => setSlidesPaused((v) => !v), []);
@@ -95,12 +96,22 @@ export function HeroBlock({ video, slides, eyebrow, title, support, actions, tou
     observer.observe(section.current);
     return () => { observer.disconnect(); delete html.dataset.hero; };
   }, []);
-  const shade = Boolean(video.src) || hasSlides;
+  const shade = Boolean(video.src) || hasSlides || Boolean(img);
   return (
-    <section ref={section} className={`home-hero${tour ? ' is-tour' : ''}`} data-hero data-video={video.src ? 'on' : hasSlides ? 'slides' : 'off'} aria-labelledby={labelId}>
+    <section ref={section} className={`home-hero${tour ? ' is-tour' : ''}`} data-hero data-video={video.src ? 'on' : hasSlides ? 'slides' : img ? 'image' : 'off'} aria-labelledby={labelId}>
       <div className="hero-media" aria-hidden="true">
         {video.src && <video ref={media} src={video.src} poster={video.poster || undefined} muted loop playsInline autoPlay={!light} preload="metadata" tabIndex={-1} />}
         {hasSlides && <HeroSlides slides={slides} paused={slidesPaused} still={light} />}
+        {img && <>
+          <link rel="preload" as="image" href={img.desktop.src} imageSrcSet={img.desktop.srcset} imageSizes="100vw" media="(min-width: 800px)" fetchPriority="high" />
+          <link rel="preload" as="image" href={img.mobile.src} imageSrcSet={img.mobile.srcset} imageSizes="100vw" media="(max-width: 799px)" fetchPriority="high" />
+        </>}
+        {img && (
+          <picture>
+            <source media="(max-width: 799px)" srcSet={img.mobile.srcset} sizes="100vw" />
+            <img className="hero-img" src={img.desktop.src} srcSet={img.desktop.srcset} sizes="100vw" width={img.desktop.width} height={img.desktop.height} alt="" loading="eager" fetchPriority="high" decoding="async" />
+          </picture>
+        )}
       </div>
       {shade && <div className="hero-shade" aria-hidden="true" />}
       <div className="hero-copy">

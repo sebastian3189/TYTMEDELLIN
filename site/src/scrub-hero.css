@@ -136,7 +136,10 @@
 
 /* ---------- Miniaturas flotantes (P8): fotos reales 4:5 de 120–180 px, rotadas ±4°, ocultas por debajo de 1100 px ---------- */
 .bd-floats{position:absolute;inset:0;pointer-events:none}
-.bd-float{position:absolute;left:0;top:0;display:block;border-radius:20px;background-size:cover;background-position:center;border:1px solid var(--line);box-shadow:var(--shadow-2);opacity:0}
+.bd-float{position:absolute;left:0;top:0;display:block;border-radius:20px;background-size:cover;background-position:center;border:1px solid var(--line);box-shadow:var(--shadow-2);opacity:0;filter:blur(var(--bl,0px));
+ translate:calc(var(--mx,0) * var(--md,12) * 1px) calc(var(--my,0) * var(--md,12) * 1px);transition:translate 800ms cubic-bezier(.2,.7,.2,1),scale 280ms var(--ease-out-strong),box-shadow 280ms ease,filter 280ms ease}
+/* Elevación + brillo al pasar el puntero (el JS marca data-hover; las cartas no reciben eventos) */
+.bd-float[data-hover=true]{scale:1.09;filter:none;box-shadow:0 0 0 1px rgba(238,122,18,.45),0 18px 44px -10px var(--brand-glow),var(--shadow-3)}
 @media(max-width:1099px){.bd-floats{display:none}}
 .scrub-hero.is-static .bd-floats{display:none}
 

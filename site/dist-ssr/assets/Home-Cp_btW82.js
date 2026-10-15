@@ -1,7 +1,8 @@
-import { B as t, D as inicioTextos, E as CHAPTERS, F as jsx, I as jsxs, M as SocialIcon, O as textoFase, P as Fragment, R as whatsapp, S as useMedia, c as Eyebrow, h as Arrow, j as Icon, m as GoogleBadgeStatic, n as photos, r as tours, s as Button, t as articles, u as Picture, x as useLightMotion, z as language } from "../entry-server.js";
-import { c as instagram, i as HeroBlock, n as useGlassPill, o as tourEntry, s as inicioVideos, t as GlassPill } from "./glass-LFuY4k0e.js";
-import { t as Reviews } from "./Reviews-Cp4j-Pnr.js";
-import { a as FAQ_HOME, l as Faq } from "./faq-data-DaJGWog5.js";
+import { A as textoFase, B as whatsapp, C as useLightMotion, H as t, I as Fragment, L as jsx, N as Icon, O as CHAPTERS, P as SocialIcon, R as jsxs, V as language, _ as Arrow, c as Logo, f as Picture, g as GoogleBadgeStatic, k as inicioTextos, l as Button, n as photos, r as tours, t as articles, u as Eyebrow, w as useMedia } from "../entry-server.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-Co7vR3yh.js";
+import { a as inicioVideos, i as tourEntry, n as HeroBlock, o as instagram } from "./Hero-DRC0OTlC.js";
+import { t as Reviews } from "./Reviews-DTAhOVPL.js";
+import { a as FAQ_HOME, l as Faq } from "./faq-data-CNC61Ks6.js";
 import { a as smooth$1, r as placePhotos } from "./mobile-motion-o2zoinXe.js";
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -313,7 +314,9 @@ var FLOATS = [
 		130,
 		.3,
 		2,
-		-4
+		-4,
+		0,
+		16
 	],
 	[
 		.2,
@@ -321,7 +324,9 @@ var FLOATS = [
 		120,
 		.15,
 		7,
-		3
+		3,
+		0,
+		12
 	],
 	[
 		.8,
@@ -329,7 +334,9 @@ var FLOATS = [
 		140,
 		.2,
 		4,
-		4
+		4,
+		0,
+		14
 	],
 	[
 		.9,
@@ -337,7 +344,59 @@ var FLOATS = [
 		124,
 		.3,
 		10,
-		-3
+		-3,
+		0,
+		16
+	],
+	[
+		.015,
+		.3,
+		92,
+		.55,
+		1,
+		5,
+		1.6,
+		30
+	],
+	[
+		.05,
+		.74,
+		110,
+		.1,
+		5,
+		-5,
+		0,
+		8
+	],
+	[
+		.7,
+		.76,
+		108,
+		.45,
+		0,
+		3,
+		1.2,
+		26
+	],
+	[
+		.86,
+		.68,
+		98,
+		.6,
+		8,
+		-6,
+		1.8,
+		34
+	],
+	[
+		.73,
+		.07,
+		88,
+		.5,
+		9,
+		4,
+		1.8,
+		30
 	]
 ];
 var clamp$2 = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -631,10 +690,11 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 			if (floatEls.length && lastFx.f !== fk) {
 				lastFx.f = fk;
 				for (const el of floatEls) {
-					const dp = Number(el.dataset.dp), x = Number(el.dataset.fx) * dims.W, y = Number(el.dataset.fy) * dims.H - dp * 720 * fp;
-					el.style.transform = `translate3d(${x}px,${y}px,0) rotate(${Number(el.dataset.rot)}deg)`;
-					el.style.opacity = st.D.toFixed(3);
-					el.style.visibility = st.D < .01 ? "hidden" : "visible";
+					const dp = Number(el.dataset.dp), x = Number(el.dataset.fx) * dims.W, y = Number(el.dataset.fy) * dims.H - dp * 720 * fp, k = Number(el.dataset.k);
+					const e = smooth(clamp$2(st.D * 1.7 - k * .1));
+					el.style.transform = `translate3d(${x}px,${y + (1 - e) * 26}px,0) rotate(${Number(el.dataset.rot) * (.4 + .6 * e)}deg) scale(${(.82 + .18 * e).toFixed(3)})`;
+					el.style.opacity = e.toFixed(3);
+					el.style.visibility = e < .01 ? "hidden" : "visible";
 				}
 			}
 			const fadeKey = st.fade.toFixed(3);
@@ -808,7 +868,44 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 			}
 		}, { rootMargin: "60% 0px" });
 		near.observe(section);
+		let pmRaf = 0, pmX = 0, pmY = 0, hovered = null;
+		const fine = matchMedia("(hover: hover) and (pointer: fine)").matches && floatEls.length > 0;
+		const pmTick = () => {
+			pmRaf = 0;
+			const box = stageEl.getBoundingClientRect();
+			floatRef.current?.style.setProperty("--mx", (((pmX - box.left) / box.width - .5) * 2).toFixed(3));
+			floatRef.current?.style.setProperty("--my", (((pmY - box.top) / box.height - .5) * 2).toFixed(3));
+			let hit = null;
+			for (const el of floatEls) {
+				if (el.style.visibility === "hidden" || Number(el.style.opacity) < .6) continue;
+				const r = el.getBoundingClientRect();
+				if (pmX >= r.left && pmX <= r.right && pmY >= r.top && pmY <= r.bottom) hit = el;
+			}
+			if (hit !== hovered) {
+				hovered?.removeAttribute("data-hover");
+				hit?.setAttribute("data-hover", "true");
+				hovered = hit;
+			}
+		};
+		const onPointer = (e) => {
+			pmX = e.clientX;
+			pmY = e.clientY;
+			if (!pmRaf) pmRaf = requestAnimationFrame(pmTick);
+		};
+		const onLeave = () => {
+			floatRef.current?.style.setProperty("--mx", "0");
+			floatRef.current?.style.setProperty("--my", "0");
+			hovered?.removeAttribute("data-hover");
+			hovered = null;
+		};
+		if (fine) {
+			stageEl.addEventListener("pointermove", onPointer, { passive: true });
+			stageEl.addEventListener("pointerleave", onLeave);
+		}
 		return () => {
+			cancelAnimationFrame(pmRaf);
+			stageEl.removeEventListener("pointermove", onPointer);
+			stageEl.removeEventListener("pointerleave", onLeave);
 			destroyed = true;
 			controller.abort();
 			cancelAnimationFrame(raf);
@@ -1095,8 +1192,9 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 						ref: floatRef,
 						className: "bd-floats",
 						"aria-hidden": "true",
-						children: FLOATS.map(([fx, fy, w, dp, ci, rot], k) => /* @__PURE__ */ jsx("i", {
+						children: FLOATS.map(([fx, fy, w, dp, ci, rot, bl, md], k) => /* @__PURE__ */ jsx("i", {
 							className: "bd-float",
+							"data-k": k,
 							"data-fx": fx,
 							"data-fy": fy,
 							"data-dp": dp,
@@ -1104,7 +1202,9 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 							"data-bg": cardImg(cards[ci].slug, "t"),
 							style: {
 								width: w,
-								height: w * 1.25
+								height: w * 1.25,
+								"--bl": `${bl}px`,
+								"--md": md
 							}
 						}, k))
 					}),
@@ -1460,8 +1560,8 @@ function TravelHand() {
 			deck.style.setProperty("--dy", `${R.y - R.h / 2}px`);
 			const hr = hand.getBoundingClientRect(), sr = stageEl.getBoundingClientRect();
 			keep = mob ? {
-				l: innerWidth - 16 - 58 - 8 - (hr.left - sr.left),
-				t: innerHeight - 16 - 58 - 8 - stageTop - (hr.top - sr.top)
+				l: innerWidth - 16 - 58 - 30 - (hr.left - sr.left),
+				t: innerHeight - 16 - 58 - 30 - stageTop - (hr.top - sr.top)
 			} : null;
 			lastKey = "";
 		};
@@ -1803,7 +1903,11 @@ function TravelHand() {
 							children: /* @__PURE__ */ jsx("h3", {
 								className: "th-title",
 								style: { fontSize: `${fit.size.toFixed(2)}px` },
-								children: fit.lines.map((l) => /* @__PURE__ */ jsx("span", { children: l }, l))
+								children: /* @__PURE__ */ jsx(Link, {
+									className: "th-title-link",
+									to: `/experiencias/${entry.slug}`,
+									children: fit.lines.map((l) => /* @__PURE__ */ jsx("span", { children: l }, l))
+								})
 							})
 						}),
 						/* @__PURE__ */ jsxs("nav", {
@@ -1926,6 +2030,28 @@ function TravelHand() {
 							className: "th-panel",
 							"aria-label": "Detalle de la experiencia",
 							children: [
+								/* @__PURE__ */ jsxs(Link, {
+									className: "button",
+									to: `/experiencias/${entry.slug}#consulta`,
+									children: ["Planea esta experiencia", /* @__PURE__ */ jsx(Arrow, {})]
+								}),
+								/* @__PURE__ */ jsx("div", {
+									className: "th-row",
+									children: /* @__PURE__ */ jsxs("div", {
+										className: "th-arrows th-arrows--in",
+										children: [/* @__PURE__ */ jsx("button", {
+											type: "button",
+											"aria-label": "Fotografía anterior",
+											onClick: () => select(active, nowFront - 1, true),
+											children: /* @__PURE__ */ jsx(Arrow, { dir: "left" })
+										}), /* @__PURE__ */ jsx("button", {
+											type: "button",
+											"aria-label": "Fotografía siguiente",
+											onClick: () => select(active, nowFront + 1, true),
+											children: /* @__PURE__ */ jsx(Arrow, { dir: "right" })
+										})]
+									})
+								}),
 								/* @__PURE__ */ jsxs("p", {
 									className: "th-count",
 									children: [
@@ -1943,32 +2069,6 @@ function TravelHand() {
 										" ",
 										entry.frase
 									]
-								}),
-								/* @__PURE__ */ jsxs("div", {
-									className: "th-row",
-									children: [/* @__PURE__ */ jsxs(Link, {
-										className: "text-link",
-										to: `/experiencias/${entry.slug}`,
-										children: ["Ver experiencia", /* @__PURE__ */ jsx(Arrow, {})]
-									}), /* @__PURE__ */ jsxs("div", {
-										className: "th-arrows th-arrows--in",
-										children: [/* @__PURE__ */ jsx("button", {
-											type: "button",
-											"aria-label": "Fotografía anterior",
-											onClick: () => select(active, nowFront - 1, true),
-											children: /* @__PURE__ */ jsx(Arrow, { dir: "left" })
-										}), /* @__PURE__ */ jsx("button", {
-											type: "button",
-											"aria-label": "Fotografía siguiente",
-											onClick: () => select(active, nowFront + 1, true),
-											children: /* @__PURE__ */ jsx(Arrow, { dir: "right" })
-										})]
-									})]
-								}),
-								/* @__PURE__ */ jsxs(Link, {
-									className: "button",
-									to: `/experiencias/${entry.slug}#consulta`,
-									children: ["Planea esta experiencia", /* @__PURE__ */ jsx(Arrow, {})]
 								})
 							]
 						}),
@@ -3052,30 +3152,80 @@ function HomeHero() {
 		})] })
 	});
 }
+function StoryVideo({ v }) {
+	const light = useLightMotion(), ref = useRef(null), manual = useRef(false), [playing, setPlaying] = useState(false);
+	useEffect(() => {
+		const el = ref.current;
+		if (!v.src || !el) return void 0;
+		const sync = () => setPlaying(!el.paused);
+		el.addEventListener("play", sync);
+		el.addEventListener("pause", sync);
+		const io = new IntersectionObserver(([e]) => {
+			if (light || manual.current) return;
+			if (e.isIntersecting) el.play().catch(() => {});
+			else el.pause();
+		}, { threshold: .5 });
+		io.observe(el);
+		return () => {
+			io.disconnect();
+			el.removeEventListener("play", sync);
+			el.removeEventListener("pause", sync);
+		};
+	}, [v.src, light]);
+	const toggle = () => {
+		const el = ref.current;
+		manual.current = true;
+		if (el.paused) el.play().catch(() => {});
+		else el.pause();
+	};
+	if (!v.src) return /* @__PURE__ */ jsx("div", {
+		className: "vframe vframe--story",
+		children: /* @__PURE__ */ jsx(Provisional, {})
+	});
+	return /* @__PURE__ */ jsxs("figure", {
+		className: "story-media",
+		children: [/* @__PURE__ */ jsxs("div", {
+			className: "vframe vframe--story",
+			children: [/* @__PURE__ */ jsx("video", {
+				ref,
+				src: v.src,
+				poster: v.poster || void 0,
+				muted: true,
+				loop: true,
+				playsInline: true,
+				preload: "none",
+				disablePictureInPicture: true,
+				"aria-label": v.alt
+			}), /* @__PURE__ */ jsx("button", {
+				type: "button",
+				className: "vplay",
+				"data-playing": playing,
+				onClick: toggle,
+				"aria-label": playing ? "Pausar video" : "Reproducir video",
+				children: /* @__PURE__ */ jsx("span", {
+					"aria-hidden": "true",
+					children: playing ? "❚❚" : "▶"
+				})
+			})]
+		}), /* @__PURE__ */ jsxs("figcaption", { children: [v.alt, v.instagramUrl && /* @__PURE__ */ jsxs(Fragment, { children: [" · ", /* @__PURE__ */ jsxs("a", {
+			className: "text-link",
+			href: v.instagramUrl,
+			target: "_blank",
+			rel: "noopener noreferrer",
+			children: ["Ver en Instagram", /* @__PURE__ */ jsx("span", {
+				className: "sr-only",
+				children: " (se abre en una pestaña nueva)"
+			})]
+		})] })] })]
+	});
+}
 function HomeStory() {
 	const v = inicioVideos.historia;
 	return /* @__PURE__ */ jsxs("section", {
 		className: "home-story wrap",
 		id: "historia",
 		"aria-labelledby": "historia-titulo",
-		children: [/* @__PURE__ */ jsx("div", {
-			className: "vframe vframe--story",
-			children: v.src ? /* @__PURE__ */ jsx("video", {
-				src: v.src,
-				poster: v.poster || void 0,
-				controls: true,
-				playsInline: true,
-				preload: "none",
-				"aria-label": "Video de presentación de T&T Medellín",
-				children: v.captions && /* @__PURE__ */ jsx("track", {
-					kind: "captions",
-					srcLang: "es",
-					label: "Español",
-					src: v.captions,
-					default: true
-				})
-			}) : /* @__PURE__ */ jsx(Provisional, {})
-		}), /* @__PURE__ */ jsxs("div", {
+		children: [/* @__PURE__ */ jsx(StoryVideo, { v }), /* @__PURE__ */ jsxs("div", {
 			className: "story-copy",
 			children: [
 				/* @__PURE__ */ jsx(Eyebrow, { children: "Más que llegar" }),
@@ -3159,16 +3309,11 @@ function HomeSocial() {
 			/* @__PURE__ */ jsxs("div", {
 				className: "ig-head",
 				children: [
-					/* @__PURE__ */ jsx("img", {
-						className: "ig-avatar",
-						src: "/media/marca/logo/logo-112.webp",
-						srcSet: "/media/marca/logo/logo-112.webp 112w, /media/marca/logo/logo-168.webp 168w, /media/marca/logo/logo-224.webp 224w",
+					/* @__PURE__ */ jsx(Logo, {
+						size: 112,
 						sizes: "112px",
-						width: "112",
-						height: "112",
-						alt: "",
-						loading: "lazy",
-						decoding: "async"
+						className: "ig-avatar",
+						lazy: true
 					}),
 					/* @__PURE__ */ jsx("p", {
 						className: "ig-name",
@@ -3206,9 +3351,11 @@ function HomeSocial() {
 					"aria-label": `${post.alt || `${TYPE_LABEL[post.type] || "Publicación"} ${i + 1} de Instagram`} (se abre en una pestaña nueva)`,
 					children: [post.image && /* @__PURE__ */ jsx("img", {
 						src: post.image,
-						alt: "",
-						width: "640",
-						height: "640",
+						srcSet: post.srcSet,
+						sizes: "(max-width: 699px) 50vw, 25vw",
+						alt: post.alt || "",
+						width: post.width || 640,
+						height: post.height || 640,
 						loading: "lazy",
 						decoding: "async"
 					}), (post.type === "reel" || post.type === "carousel") && /* @__PURE__ */ jsx("svg", {

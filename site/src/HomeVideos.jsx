@@ -1,4 +1,6 @@
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useLightMotion } from './PremiumMotion';
 import { inicioTextos } from './inicio-textos';
 import { inicioVideos, instagram } from './inicio-videos';
 import { whatsapp } from './company';
@@ -24,15 +26,34 @@ export function HomeHero() {
   );
 }
 
+/* Video vertical 9:16 (290×516, §J): reproduce solo al entrar en pantalla y se pausa al salir; sin sonido ni control de volumen; con movimiento reducido no se reproduce solo. */
+function StoryVideo({ v }) {
+  const light = useLightMotion(), ref = useRef(null), manual = useRef(false), [playing, setPlaying] = useState(false);
+  useEffect(() => {
+    const el = ref.current; if (!v.src || !el) return undefined;
+    const sync = () => setPlaying(!el.paused); el.addEventListener('play', sync); el.addEventListener('pause', sync);
+    const io = new IntersectionObserver(([e]) => { if (light || manual.current) return; if (e.isIntersecting) el.play().catch(() => {}); else el.pause(); }, { threshold: 0.5 });
+    io.observe(el);
+    return () => { io.disconnect(); el.removeEventListener('play', sync); el.removeEventListener('pause', sync); };
+  }, [v.src, light]);
+  const toggle = () => { const el = ref.current; manual.current = true; if (el.paused) el.play().catch(() => {}); else el.pause(); };
+  if (!v.src) return <div className="vframe vframe--story"><Provisional /></div>;
+  return (
+    <figure className="story-media">
+      <div className="vframe vframe--story">
+        <video ref={ref} src={v.src} poster={v.poster || undefined} muted loop playsInline preload="none" disablePictureInPicture aria-label={v.alt} />
+        <button type="button" className="vplay" data-playing={playing} onClick={toggle} aria-label={playing ? 'Pausar video' : 'Reproducir video'}><span aria-hidden="true">{playing ? '❚❚' : '▶'}</span></button>
+      </div>
+      <figcaption>{v.alt}{v.instagramUrl && <> · <a className="text-link" href={v.instagramUrl} target="_blank" rel="noopener noreferrer">Ver en Instagram<span className="sr-only"> (se abre en una pestaña nueva)</span></a></>}</figcaption>
+    </figure>
+  );
+}
+
 export function HomeStory() {
   const v = inicioVideos.historia;
   return (
     <section className="home-story wrap" id="historia" aria-labelledby="historia-titulo">
-      <div className="vframe vframe--story">
-        {v.src
-          ? <video src={v.src} poster={v.poster || undefined} controls playsInline preload="none" aria-label="Video de presentación de T&T Medellín">{v.captions && <track kind="captions" srcLang="es" label="Español" src={v.captions} default />}</video>
-          : <Provisional />}
-      </div>
+      <StoryVideo v={v} />
       <div className="story-copy">
         <Eyebrow>Más que llegar</Eyebrow>
         <h2 id="historia-titulo">Hay una Medellín que se mira.<br />Y otra que se <em>vive.</em></h2>
@@ -80,7 +101,7 @@ export function HomeSocial() {
         {posts.map((post, i) => (
           <li key={i}>
             <a className="ig-tile" href={post.url} target="_blank" rel="noopener noreferrer" aria-label={`${post.alt || `${TYPE_LABEL[post.type] || 'Publicación'} ${i + 1} de Instagram`} (se abre en una pestaña nueva)`}>
-              {post.image && <img src={post.image} alt="" width="640" height="640" loading="lazy" decoding="async" />}
+              {post.image && <img src={post.image} srcSet={post.srcSet} sizes="(max-width: 699px) 50vw, 25vw" alt={post.alt || ""} width={post.width || 640} height={post.height || 640} loading="lazy" decoding="async" />}
               {(post.type === 'reel' || post.type === 'carousel') && (
                 <svg className="ig-type" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d={post.type === 'reel' ? REEL : CAROUSEL} /></svg>
               )}

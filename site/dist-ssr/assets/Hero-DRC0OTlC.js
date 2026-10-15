@@ -1,16 +1,19 @@
-import { D as inicioTextos, F as jsx, I as jsxs, L as company, P as Fragment, h as Arrow, r as tours, x as useLightMotion } from "../entry-server.js";
+import { C as useLightMotion, I as Fragment, L as jsx, R as jsxs, _ as Arrow, k as inicioTextos, r as tours, s as media_default, z as company } from "../entry-server.js";
 import { Link } from "react-router-dom";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 //#region src/inicio-videos.js
 var inicioVideos = {
 	hero: {
 		src: null,
-		poster: null
+		poster: null,
+		image: media_default["hero-inicio"]
 	},
 	historia: {
-		src: null,
-		poster: null,
-		captions: null
+		src: "/media/videos/reel-tour-privado.mp4",
+		poster: "/media/videos/reel-tour-privado-poster.webp",
+		captions: null,
+		instagramUrl: "https://www.instagram.com/p/DdXYS5gJ-GH/",
+		alt: "Reel: viajar por Medellín a tu propio ritmo, en tour privado"
 	}
 };
 var catalogoVideo = {
@@ -71,7 +74,7 @@ var videoDeTour = (slug) => toursVideos[slug] || {
 	src: null,
 	poster: null
 };
-var perfil = company.instagram;
+company.instagram;
 var instagram = {
 	profile: {
 		name: "Transporte y Turismo Medellín",
@@ -83,56 +86,15 @@ var instagram = {
 		handle: "@tytmedellin",
 		url: company.tiktok
 	},
-	posts: [
-		{
-			url: perfil,
-			image: null,
-			type: "reel",
-			alt: ""
-		},
-		{
-			url: perfil,
-			image: null,
-			type: "carousel",
-			alt: ""
-		},
-		{
-			url: perfil,
-			image: null,
-			type: "reel",
-			alt: ""
-		},
-		{
-			url: perfil,
-			image: null,
-			type: "photo",
-			alt: ""
-		},
-		{
-			url: perfil,
-			image: null,
-			type: "carousel",
-			alt: ""
-		},
-		{
-			url: perfil,
-			image: null,
-			type: "reel",
-			alt: ""
-		},
-		{
-			url: perfil,
-			image: null,
-			type: "photo",
-			alt: ""
-		},
-		{
-			url: perfil,
-			image: null,
-			type: "reel",
-			alt: ""
-		}
-	]
+	posts: media_default["instagram-posts"].map((p) => ({
+		url: p.url,
+		image: p.src,
+		srcSet: p.srcset,
+		width: p.width,
+		height: p.height,
+		type: p.type,
+		alt: p.alt
+	}))
 };
 //#endregion
 //#region src/tour-entry.js
@@ -321,6 +283,7 @@ function HeroSlides({ slides, paused, still }) {
 function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = false, labelId = "hero-titulo" }) {
 	const light = useLightMotion(), media = useRef(null), section = useRef(null);
 	const hasSlides = !video.src && Boolean(slides?.length);
+	const img = !video.src && !hasSlides ? video.image : null;
 	const [playing, toggle] = useHeroPlayback(media, light, Boolean(video.src));
 	const [slidesPaused, setSlidesPaused] = useState(false);
 	const onSlidesToggle = useCallback(() => setSlidesPaused((v) => !v), []);
@@ -335,32 +298,51 @@ function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = fal
 			delete html.dataset.hero;
 		};
 	}, []);
-	const shade = Boolean(video.src) || hasSlides;
+	const shade = Boolean(video.src) || hasSlides || Boolean(img);
 	return /* @__PURE__ */ jsxs("section", {
 		ref: section,
 		className: `home-hero${tour ? " is-tour" : ""}`,
 		"data-hero": true,
-		"data-video": video.src ? "on" : hasSlides ? "slides" : "off",
+		"data-video": video.src ? "on" : hasSlides ? "slides" : img ? "image" : "off",
 		"aria-labelledby": labelId,
 		children: [
 			/* @__PURE__ */ jsxs("div", {
 				className: "hero-media",
 				"aria-hidden": "true",
-				children: [video.src && /* @__PURE__ */ jsx("video", {
-					ref: media,
-					src: video.src,
-					poster: video.poster || void 0,
-					muted: true,
-					loop: true,
-					playsInline: true,
-					autoPlay: !light,
-					preload: "metadata",
-					tabIndex: -1
-				}), hasSlides && /* @__PURE__ */ jsx(HeroSlides, {
-					slides,
-					paused: slidesPaused,
-					still: light
-				})]
+				children: [
+					video.src && /* @__PURE__ */ jsx("video", {
+						ref: media,
+						src: video.src,
+						poster: video.poster || void 0,
+						muted: true,
+						loop: true,
+						playsInline: true,
+						autoPlay: !light,
+						preload: "metadata",
+						tabIndex: -1
+					}),
+					hasSlides && /* @__PURE__ */ jsx(HeroSlides, {
+						slides,
+						paused: slidesPaused,
+						still: light
+					}),
+					img && /* @__PURE__ */ jsxs("picture", { children: [/* @__PURE__ */ jsx("source", {
+						media: "(max-width: 799px)",
+						srcSet: img.mobile.srcset,
+						sizes: "100vw"
+					}), /* @__PURE__ */ jsx("img", {
+						className: "hero-img",
+						src: img.desktop.src,
+						srcSet: img.desktop.srcset,
+						sizes: "100vw",
+						width: img.desktop.width,
+						height: img.desktop.height,
+						alt: "",
+						loading: "eager",
+						fetchPriority: "high",
+						decoding: "async"
+					})] })
+				]
 			}),
 			shade && /* @__PURE__ */ jsx("div", {
 				className: "hero-shade",
@@ -460,38 +442,4 @@ function CatalogHero() {
 	});
 }
 //#endregion
-//#region src/glass.jsx
-var GlassPill = () => /* @__PURE__ */ jsx("span", {
-	className: "glass-pill",
-	"aria-hidden": "true"
-});
-function useGlassPill(ref, signal, enabled = true) {
-	useLayoutEffect(() => {
-		const box = ref.current;
-		if (!enabled || !box) return void 0;
-		const place = () => {
-			const el = box.querySelector("[aria-pressed=\"true\"],[aria-selected=\"true\"],[aria-current=\"location\"]");
-			if (!el) return;
-			box.style.setProperty("--px", `${el.offsetLeft}px`);
-			box.style.setProperty("--py", `${el.offsetTop}px`);
-			box.style.setProperty("--pw", `${el.offsetWidth}px`);
-			box.style.setProperty("--ph", `${el.offsetHeight}px`);
-			if (box.scrollWidth > box.clientWidth + 1) box.scrollTo({
-				left: el.offsetLeft - (box.clientWidth - el.offsetWidth) / 2,
-				behavior: box.classList.contains("is-ready") ? "smooth" : "instant"
-			});
-			if (!box.classList.contains("is-ready")) requestAnimationFrame(() => box.classList.add("is-ready"));
-		};
-		place();
-		document.fonts?.ready.then(place);
-		const ro = new ResizeObserver(place);
-		ro.observe(box);
-		return () => ro.disconnect();
-	}, [
-		ref,
-		signal,
-		enabled
-	]);
-}
-//#endregion
-export { TourHeroVideo as a, instagram as c, HeroBlock as i, useGlassPill as n, tourEntry as o, CatalogHero as r, inicioVideos as s, GlassPill as t };
+export { inicioVideos as a, tourEntry as i, HeroBlock as n, instagram as o, TourHeroVideo as r, CatalogHero as t };

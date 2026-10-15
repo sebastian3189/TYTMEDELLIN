@@ -28,7 +28,9 @@ const ANCHOR = 8; // cada 8.º fotograma se conserva además a media resolución
 const TAU = { desktop: 60, mobile: 50 }; // suavizado corto, sin inercia que se quede atrás
 const JUMP = 0.12, SETTLE = 0.0003;
 // Miniaturas flotantes decorativas (x, y en fracción del escenario, ancho px, profundidad, carta, rotación): paralaje a distintas profundidades.
-const FLOATS = [[0.06, 0.5, 130, 0.3, 2, -4], [0.2, 0.66, 120, 0.15, 7, 3], [0.8, 0.22, 140, 0.2, 4, 4], [0.9, 0.46, 124, 0.3, 10, -3]];
+// [x, y (fracción del escenario), ancho px, profundidad (velocidad de paralaje), carta, rotación, desenfoque px (las más lejanas), amplitud del paralaje del ratón px]. Fotos de tours distintos, sin repetir y sin la portada del traslado JMC (carta 11).
+const FLOATS = [[0.06, 0.5, 130, 0.3, 2, -4, 0, 16], [0.2, 0.66, 120, 0.15, 7, 3, 0, 12], [0.8, 0.22, 140, 0.2, 4, 4, 0, 14], [0.9, 0.46, 124, 0.3, 10, -3, 0, 16],
+  [0.015, 0.3, 92, 0.55, 1, 5, 1.6, 30], [0.05, 0.74, 110, 0.1, 5, -5, 0, 8], [0.7, 0.76, 108, 0.45, 0, 3, 1.2, 26], [0.86, 0.68, 98, 0.6, 8, -6, 1.8, 34], [0.73, 0.07, 88, 0.5, 9, 4, 1.8, 30]];
 
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const readReduce = () => { try { return localStorage.getItem(REDUCE_KEY) === '1'; } catch { return false; } };
@@ -250,9 +252,10 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
       if (floatEls.length && lastFx.f !== fk) {
         lastFx.f = fk;
         for (const el of floatEls) {
-          const dp = Number(el.dataset.dp), x = Number(el.dataset.fx) * dims.W, y = Number(el.dataset.fy) * dims.H - dp * 720 * fp;
-          el.style.transform = `translate3d(${x}px,${y}px,0) rotate(${Number(el.dataset.rot)}deg)`;
-          el.style.opacity = st.D.toFixed(3); el.style.visibility = st.D < 0.01 ? 'hidden' : 'visible';
+          const dp = Number(el.dataset.dp), x = Number(el.dataset.fx) * dims.W, y = Number(el.dataset.fy) * dims.H - dp * 720 * fp, k = Number(el.dataset.k);
+          const e = smooth(clamp(st.D * 1.7 - k * 0.1)); // entrada escalonada: cada carta suelta aparece un poco después de la anterior
+          el.style.transform = `translate3d(${x}px,${y + (1 - e) * 26}px,0) rotate(${Number(el.dataset.rot) * (0.4 + 0.6 * e)}deg) scale(${(0.82 + 0.18 * e).toFixed(3)})`;
+          el.style.opacity = e.toFixed(3); el.style.visibility = e < 0.01 ? 'hidden' : 'visible';
         }
       }
       // Fundido final del escenario sobre el de «La mano de viaje» (Spec 03 §K3).
@@ -369,8 +372,22 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
     };
     const near = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { start(); near.disconnect(); } }, { rootMargin: '60% 0px' });
     near.observe(section);
+    // Cartas sueltas (ronda 3): paralaje con el ratón (puntero fino; `translate` independiente del transform de scroll) y elevación + brillo al pasar el puntero.
+    // Las cartas no reciben eventos (no tapan nada): el cursor se compara con sus cajas, una vez por cuadro.
+    let pmRaf = 0, pmX = 0, pmY = 0, hovered = null;
+    const fine = matchMedia('(hover: hover) and (pointer: fine)').matches && floatEls.length > 0;
+    const pmTick = () => {
+      pmRaf = 0; const box = stageEl.getBoundingClientRect();
+      floatRef.current?.style.setProperty('--mx', (((pmX - box.left) / box.width - 0.5) * 2).toFixed(3)); floatRef.current?.style.setProperty('--my', (((pmY - box.top) / box.height - 0.5) * 2).toFixed(3));
+      let hit = null; for (const el of floatEls) { if (el.style.visibility === 'hidden' || Number(el.style.opacity) < 0.6) continue; const r = el.getBoundingClientRect(); if (pmX >= r.left && pmX <= r.right && pmY >= r.top && pmY <= r.bottom) hit = el; }
+      if (hit !== hovered) { hovered?.removeAttribute('data-hover'); hit?.setAttribute('data-hover', 'true'); hovered = hit; }
+    };
+    const onPointer = (e) => { pmX = e.clientX; pmY = e.clientY; if (!pmRaf) pmRaf = requestAnimationFrame(pmTick); };
+    const onLeave = () => { floatRef.current?.style.setProperty('--mx', '0'); floatRef.current?.style.setProperty('--my', '0'); hovered?.removeAttribute('data-hover'); hovered = null; };
+    if (fine) { stageEl.addEventListener('pointermove', onPointer, { passive: true }); stageEl.addEventListener('pointerleave', onLeave); }
 
     return () => {
+      cancelAnimationFrame(pmRaf); stageEl.removeEventListener('pointermove', onPointer); stageEl.removeEventListener('pointerleave', onLeave);
       destroyed = true; controller.abort();
       cancelAnimationFrame(raf); observer.disconnect(); resize.disconnect(); near.disconnect();
       window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll);
@@ -455,7 +472,7 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
           </div>
           {animated && !mobile && (
             <div ref={floatRef} className="bd-floats" aria-hidden="true">
-              {FLOATS.map(([fx, fy, w, dp, ci, rot], k) => <i key={k} className="bd-float" data-fx={fx} data-fy={fy} data-dp={dp} data-rot={rot} data-bg={cardImg(cards[ci].slug, 't')} style={{ width: w, height: w * 1.25 }} />)}
+              {FLOATS.map(([fx, fy, w, dp, ci, rot, bl, md], k) => <i key={k} className="bd-float" data-k={k} data-fx={fx} data-fy={fy} data-dp={dp} data-rot={rot} data-bg={cardImg(cards[ci].slug, 't')} style={{ width: w, height: w * 1.25, '--bl': `${bl}px`, '--md': md }} />)}
             </div>
           )}
           <div ref={deckRef} className="bd-deck">

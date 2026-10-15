@@ -1,4 +1,5 @@
 import { company } from './company';
+import media from './media.json' with { type: 'json' };
 
 /*
  * Videos del inicio (Spec 03 §J2). UNICO archivo que hay que tocar para reemplazar los espacios provisionales.
@@ -12,8 +13,10 @@ import { company } from './company';
  * redes[i].url: PENDIENTE CLIENTE la dirección de cada reel; mientras tanto, el perfil de la red.
  */
 export const inicioVideos = {
-  hero: { src: null, poster: null },
-  historia: { src: null, poster: null, captions: null },
+  // hero.image: fondo provisional (panorámica real, scripts/prepare-hero.py) MIENTRAS `src` sea null; al poner un `src` el video lo sustituye solo.
+  hero: { src: null, poster: null, image: media['hero-inicio'] },
+  // historia: el reel propio del tour privado (sin audio: la música original tiene derechos y solo está licenciada dentro de Instagram; NO añadir audio ni usar el archivo original).
+  historia: { src: '/media/videos/reel-tour-privado.mp4', poster: '/media/videos/reel-tour-privado-poster.webp', captions: null, instagramUrl: 'https://www.instagram.com/p/DdXYS5gJ-GH/', alt: 'Reel: viajar por Medellín a tu propio ritmo, en tour privado' },
 };
 /*
  * Video de cabecera de CADA ficha de experiencia (Spec 03 §M, pedido del usuario 2026-10-14): mismo espacio y mismas dimensiones que el hero del inicio
@@ -50,15 +53,7 @@ const perfil = company.instagram;
 export const instagram = {
   profile: { name: 'Transporte y Turismo Medellín', handle: '@transporteenmedellin', url: company.instagram, stats: null },
   tiktok: { handle: '@tytmedellin', url: company.tiktok },
-  posts: [
-    { url: perfil, image: null, type: 'reel', alt: '' },
-    { url: perfil, image: null, type: 'carousel', alt: '' },
-    { url: perfil, image: null, type: 'reel', alt: '' },
-    { url: perfil, image: null, type: 'photo', alt: '' },
-    { url: perfil, image: null, type: 'carousel', alt: '' },
-    { url: perfil, image: null, type: 'reel', alt: '' },
-    { url: perfil, image: null, type: 'photo', alt: '' },
-    { url: perfil, image: null, type: 'reel', alt: '' },
-  ],
+  // Instantánea fija de las últimas 8 publicaciones (contenido propio). Para refrescarla: scripts/prepare-instagram.py (instrucciones en su cabecera); lee src/media.json → «instagram-posts».
+  posts: media['instagram-posts'].map((p) => ({ url: p.url, image: p.src, srcSet: p.srcset, width: p.width, height: p.height, type: p.type, alt: p.alt })),
 };
 export const REDES_NOMBRE = { instagram: 'Instagram', tiktok: 'TikTok' };
