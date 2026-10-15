@@ -2,9 +2,11 @@ import { StrictMode } from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import Website, { preloadRoute } from './Website.jsx';
-import { language } from './i18n';
+import { language, prepareLanguage } from './i18n';
+import { languageInfo } from './languages';
+await prepareLanguage(language());
 
-const app = <StrictMode><BrowserRouter basename={language()==='en'?'/en':'/'}><Website /></BrowserRouter></StrictMode>;
+const app = <StrictMode><BrowserRouter basename={languageInfo(language()).prefix || '/'}><Website /></BrowserRouter></StrictMode>;
 const root = document.getElementById('root');
 // Rutas prerenderizadas (scripts/prerender.mjs): se hidratan tras dejar resuelto el chunk de la ruta. Sin HTML (404 real, /site, /flota): render normal.
 // Hosts con reescritura SPA (cualquier ruta → un mismo index.html): el HTML del #root puede ser de OTRA ruta (data-path); hidratarlo daría React #418.

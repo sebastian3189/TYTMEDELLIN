@@ -6,7 +6,7 @@ import indicativos from './indicativos.json';
 import QuoteCopy from './QuoteCopy';
 import { language, t } from './i18n';
 import Arrow from './Arrow';
-const countryLabel = row => language()==='en' ? new Intl.DisplayNames(['en'],{type:'region'}).of(row[1]) : row[2];
+const countryLabel = row => language()!=='es' ? new Intl.DisplayNames([language()],{type:'region'}).of(row[1]) : row[2];
 
 /*
  * Formulario de cotización (Spec 02 «Conversión», Spec 04 «Formularios», Spec 03 §I).
@@ -48,10 +48,10 @@ const MAX_MESSAGE = 1800;
 function buildMessage(v, plan, withType, pais) {
   const en = language() === 'en', tipo = TIPOS.find(([id]) => id === v.tipo)[1];
   const phone = `${v.indicativo} ${v.telefono.trim()}${pais ? ` (${countryLabel(pais)})` : ''}`;
-  const L = en
+  const L = language()==='pt-BR' ? {hi:plan?'Olá, Transporte y Turismo Medellín. Gostaria de solicitar um orçamento:':`Olá, Transporte y Turismo Medellín. Minha solicitação (${t(tipo)}):`,type:'Tipo de solicitação',exp:'Experiência',date:'Data',people:'Viajantes',pickup:'Ponto de embarque',tbd:'A combinar',lang:'Idioma',langName:'Português (Brasil)',notes:plan?'Observações':'Mensagem',name:'Nome',company:'Empresa',phone:'Telefone',email:'E-mail',none:'Gostaria de conhecer as opções disponíveis.',sent:'Enviado pelo site'} : en
     ? { hi: plan ? "Hello, Transporte y Turismo Medellín. I'd like a quote:" : `Hello, Transporte y Turismo Medellín. My request (${t(tipo)}):`, type: 'Inquiry type', exp: 'Experience', date: 'Date', people: 'Travelers', pickup: 'Pickup point', tbd: 'To be arranged', lang: 'Language', langName: 'English', notes: plan ? 'Notes' : 'Message', name: 'Name', company: 'Company', phone: 'Phone', email: 'Email', none: "I'd like to know what options are available.", sent: 'Sent from the website' }
     : { hi: plan ? 'Hola, Transporte y Turismo Medellín. Quiero cotizar:' : `Hola, Transporte y Turismo Medellín. Mi solicitud (${tipo}):`, type: 'Tipo de solicitud', exp: 'Experiencia', date: 'Fecha', people: 'Viajeros', pickup: 'Punto de recogida', tbd: 'Por acordar', lang: 'Idioma', langName: 'Español', notes: plan ? 'Notas' : 'Mensaje', name: 'Nombre', company: 'Empresa', phone: 'Teléfono', email: 'Correo', none: 'Me gustaría conocer las opciones disponibles.', sent: 'Enviado desde la web' };
-  const build = (notes) => [L.hi, withType && `${L.type}: ${en ? t(tipo) : tipo}`, plan && `${L.exp}: ${en ? t(v.experiencia) : v.experiencia}`, plan && `${L.date}: ${v.fecha}`, plan && `${L.people}: ${Number(v.personas)}`, plan && `${L.pickup}: ${v.salida.trim() || L.tbd}`, `${L.lang}: ${L.langName}`, `${L.notes}: ${notes}`, `${L.name}: ${v.nombre.trim()}`, v.empresa.trim() && `${L.company}: ${v.empresa.trim()}`, `${L.phone}: ${phone}`, v.correo.trim() && `${L.email}: ${v.correo.trim()}`, `
+  const build = (notes) => [L.hi, withType && `${L.type}: ${t(tipo)}`, plan && `${L.exp}: ${t(v.experiencia)}`, plan && `${L.date}: ${v.fecha}`, plan && `${L.people}: ${Number(v.personas)}`, plan && `${L.pickup}: ${v.salida.trim() || L.tbd}`, `${L.lang}: ${L.langName}`, `${L.notes}: ${notes}`, `${L.name}: ${v.nombre.trim()}`, v.empresa.trim() && `${L.company}: ${v.empresa.trim()}`, `${L.phone}: ${phone}`, v.correo.trim() && `${L.email}: ${v.correo.trim()}`, `
 ${L.sent}`].filter(Boolean).join('\n');
   let notes = v.mensaje.trim().replace(/\s*\n\s*/g, ' ') || L.none, text = build(notes);
   if (text.length > MAX_MESSAGE) { notes = notes.slice(0, Math.max(0, notes.length - (text.length - MAX_MESSAGE) - 1)).trimEnd() + '…'; text = build(notes); }
@@ -117,7 +117,7 @@ export default function Quote({ context = 'Un recorrido a mi medida', mode = 'co
         <div className="field full"><label htmlFor="correo">Correo electrónico (opcional)</label><input {...attrs('correo')} type="email" autoComplete="email" maxLength={120} value={v.correo} onChange={set('correo')}/>{error('correo')}</div>
         <div className="field full"><label htmlFor="mensaje">{plan ? '¿Qué haría especial este viaje?' : 'Cuéntanos tu consulta *'}</label><textarea {...attrs('mensaje', 'mensaje-ayuda')} rows={4} maxLength={800} value={v.mensaje} onChange={set('mensaje')}/><small id="mensaje-ayuda" className="hint">{plan ? 'Opcional: intereses, equipaje o necesidades del grupo. ' : ''}{v.mensaje.length}/800</small>{error('mensaje')}</div>
       </div></fieldset>
-      <div className="consent full"><input {...attrs('consentimiento')} type="checkbox" checked={v.consentimiento} onChange={set('consentimiento')} required/><label htmlFor="consentimiento">He leído el <Link to="/politica-de-tratamiento-de-datos" target="_blank">política de tratamiento de datos</Link> y autorizo enviar esta solicitud a T&T por WhatsApp.</label>{error('consentimiento')}</div>
+      <div className="consent full"><input {...attrs('consentimiento')} type="checkbox" checked={v.consentimiento} onChange={set('consentimiento')} required/><label htmlFor="consentimiento">He leído la <Link to="/politica-de-tratamiento-de-datos" target="_blank">política de tratamiento de datos</Link> y autorizo enviar esta solicitud a T&T por WhatsApp.</label>{error('consentimiento')}</div>
       {retry && <div className="form-errors full" role="alert"><strong>No pudimos preparar tu consulta.</strong> Inténtalo de nuevo en unos segundos.</div>}
       {!retry && errorList.length > 0 && <div className="form-errors full" role="alert"><strong>Revisa {errorList.length === 1 ? 'este campo' : `estos ${errorList.length} campos`}:</strong> {errorList.map((name, i) => <span key={name}>{i > 0 && ', '}<a href={`#${name}`} onClick={(e) => { e.preventDefault(); form.current.querySelector(`#${name}`)?.focus(); }}>{LABEL[name]}</a></span>)}.</div>}
       <button className="button full" type="submit">Enviar por WhatsApp<Arrow/></button>

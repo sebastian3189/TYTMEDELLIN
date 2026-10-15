@@ -2274,7 +2274,8 @@ var TEXT = {
 		message: "Check out this experience from T&T Medellín:"
 	}
 };
-function ShareMenu({ name, path, className = "" }) {
+function ShareMenu({ name: rawName, path, className = "" }) {
+	const name = t(rawName);
 	const tx = TEXT[language() === "en" ? "en" : "es"];
 	const [open, setOpen] = useState(false), [pos, setPos] = useState(null), [native, setNative] = useState(false), [notice, setNotice] = useState("");
 	const btn = useRef(null), menu = useRef(null), timer = useRef(0);

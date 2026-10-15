@@ -11,8 +11,8 @@ import '../policy.css';
  * REQUIERE REVISIÓN DEL ASESOR LEGAL antes de considerarse vigente (igual que la fuente). Versión en inglés: DataPolicyEn (traducción de cortesía, también por revisar por el asesor; prevalece el español).
  * Modificación 2026-10-15 (decisión del usuario, Spec 04 «Excepción WhatsApp»): se añade el apartado «Envío de tu solicitud por WhatsApp» y se
  * precisa el apartado 2 porque los formularios ya no copian un resumen, sino que abren WhatsApp con el mensaje prellenado. Revisar con el asesor.
- * Nota para el asesor: los apartados 8 y 9 (cookies y medición) se conservan literales de la fuente; confirmar si aplican a esta sede, porque este sitio hoy no carga
- * herramientas de medición ni muestra aviso de cookies.
+ * Auditoría técnica autorizada 2026-10-15: apartados 9 y 10 actualizados al almacenamiento real, consentimiento de preferencias y ausencia de analítica.
+ * Traducción portuguesa de cortesía mediante i18n. La clasificación técnica y ambas traducciones siguen pendientes de validación jurídica.
  */
 const SECTIONS = [
   ['responsable', '1. Responsable del tratamiento'], ['datos', '2. Datos que recogemos'], ['whatsapp', '3. Envío de tu solicitud por WhatsApp'], ['finalidad', '4. Finalidad'], ['autorizacion', '5. Autorización'],
@@ -28,6 +28,7 @@ export default function DataPolicy() {
         <ol>{SECTIONS.map(([id, label]) => <li key={id}><a href={`#${id}`}>{label}</a></li>)}</ol>
       </nav>
       <article className="policy-body">
+        {language()==='pt-BR'&&<p className="policy-note" lang="pt-BR">Esta versão em português é uma tradução de cortesia. Em caso de divergência, prevalece a versão em espanhol. A validação jurídica permanece pendente.</p>}
         <p className="policy-note"><strong>Documento pendiente de validación legal.</strong> El contenido siguiente es un borrador técnico que recoge lo que exige la Ley 1581 de 2012. Debe ser revisado y aprobado por el asesor jurídico de la empresa antes de considerarse vigente.</p>
         <section id="responsable"><h2>1. Responsable del tratamiento</h2>
           <p>Transporte y Turismo Medellín, con domicilio en Carrera 79AA #1A Sur-280, Medellín, correo <a href={`mailto:${company.email}`}>{company.email}</a> y teléfono +57 304 496 1698.</p>
@@ -47,13 +48,8 @@ export default function DataPolicy() {
           <p>Escribiendo a <a href={`mailto:${company.email}`}>{company.email}</a> con el asunto «Protección de datos». Atendemos consultas en un plazo máximo de diez días hábiles y reclamos en quince, conforme a la ley.</p></section>
         <section id="retencion"><h2>8. Retención</h2>
           <p>Conservamos los datos mientras dure la relación comercial y, después, durante el plazo legal aplicable a las obligaciones contables y fiscales. Cumplido ese plazo, se suprimen.</p></section>
-        <section id="cookies"><h2>9. Cookies</h2>
-          <p>Usamos dos clases de cookies propias. Las <strong>necesarias</strong> solo guardan tus preferencias en este navegador —el idioma, el tema claro u oscuro y tu propia decisión sobre cookies— y sin ellas el sitio no puede recordarte cómo lo dejaste. Las <strong>de medición</strong> nos dicen qué páginas se visitan y qué botones se pulsan.</p>
-          <p>Las de medición <strong>no se activan hasta que las aceptas</strong> en el aviso que aparece al entrar. Si eliges «solo las necesarias», no se descarga ninguna herramienta de terceros y no se envía ningún dato. Puedes cambiar de opinión cuando quieras borrando las cookies de este sitio en tu navegador: el aviso volverá a aparecer.</p></section>
-        <section id="medicion"><h2>10. Medición del sitio</h2>
-          <p>Si aceptas las cookies de medición, usamos Google Tag Manager y Google Analytics para entender cómo se usa el sitio: qué páginas se ven, en qué idioma, qué destinos despiertan más interés y desde dónde se nos escribe por WhatsApp. Lo hacemos para mejorar la web, no para perseguirte.</p>
-          <p><strong>Nunca enviamos a esas herramientas tu nombre, tu correo, tu teléfono ni el contenido de tu mensaje.</strong> Lo que se registra es la página y el botón, nunca quién eres. La dirección IP se anonimiza y la información se conserva un máximo de catorce meses, tras los cuales se elimina.</p>
-          <p className="policy-muted">Google actúa como encargado del tratamiento y puede almacenar esos datos fuera de Colombia. Al aceptar, autorizas esa transferencia internacional.</p></section>
+        <section id="cookies"><h2>9. Cookies</h2><p>Este sitio no instala cookies de analítica ni publicidad. Usa almacenamiento local para guardar tu decisión de privacidad durante seis meses y ajustes funcionales de accesibilidad; la ayuda de navegación se recuerda solo durante la sesión.</p><p>Guardar el tema claro u oscuro entre visitas es opcional y requiere tu aceptación. El idioma se determina por la dirección de la página. Puedes configurar o retirar tu consentimiento desde «Cookies y preferencias» en el pie del sitio.</p></section>
+        <section id="medicion"><h2>10. Medición del sitio</h2><p>No usamos Google Analytics, Google Tag Manager ni otras herramientas de medición o publicidad. No enviamos eventos ni datos de los formularios a servicios de analítica.</p><p>El mapa de OpenStreetMap solo se carga cuando pulsas el botón para mostrarlo. Ese clic establece una conexión con el proveedor del mapa. Los enlaces a WhatsApp y otras plataformas se abren cuando tú los eliges.</p></section>
       </article>
     </div>
   </>;
@@ -93,13 +89,8 @@ function DataPolicyEn() {
           <p>By writing to <a href={`mailto:${company.email}`}>{company.email}</a> with the subject "Protección de datos" (data protection). We answer enquiries within a maximum of ten business days and claims within fifteen, in accordance with the law.</p></section>
         <section id="retention"><h2>8. Retention</h2>
           <p>We keep the data for as long as the commercial relationship lasts and, afterwards, for the legal period applicable to accounting and tax obligations. Once that period has elapsed, the data is deleted.</p></section>
-        <section id="cookies"><h2>9. Cookies</h2>
-          <p>We use two kinds of first-party cookies. The <strong>necessary</strong> ones only store your preferences in this browser —the language, the light or dark theme and your own decision about cookies— and without them the site cannot remember how you left it. The <strong>measurement</strong> ones tell us which pages are visited and which buttons are pressed.</p>
-          <p>Measurement cookies <strong>are not activated until you accept them</strong> in the notice that appears when you arrive. If you choose "only the necessary ones", no third-party tool is downloaded and no data is sent. You can change your mind whenever you want by deleting this site's cookies in your browser: the notice will appear again.</p></section>
-        <section id="measurement"><h2>10. Site measurement</h2>
-          <p>If you accept measurement cookies, we use Google Tag Manager and Google Analytics to understand how the site is used: which pages are viewed, in which language, which destinations arouse the most interest and from where we are written to on WhatsApp. We do this to improve the website, not to chase you.</p>
-          <p><strong>We never send those tools your name, your email, your telephone or the content of your message.</strong> What is recorded is the page and the button, never who you are. The IP address is anonymized and the information is kept for a maximum of fourteen months, after which it is deleted.</p>
-          <p className="policy-muted">Google acts as data processor and may store that data outside Colombia. By accepting, you authorize that international transfer.</p></section>
+        <section id="cookies"><h2>9. Cookies</h2><p>This site does not install analytics or advertising cookies. It uses local storage to remember your privacy choice for six months and functional accessibility settings; navigation guidance is remembered only during the session.</p><p>Saving your light or dark theme between visits is optional and requires your acceptance. The language is determined by the page address. You can configure or withdraw consent through “Cookies and preferences” in the footer.</p></section>
+        <section id="measurement"><h2>10. Site measurement</h2><p>We do not use Google Analytics, Google Tag Manager or other measurement or advertising tools. We do not send events or form data to analytics services.</p><p>The OpenStreetMap map loads only when you press the button to show it. That click connects to the map provider. Links to WhatsApp and other platforms open when you choose them.</p></section>
       </article>
     </div>
   </>;

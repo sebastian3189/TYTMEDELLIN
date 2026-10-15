@@ -9,7 +9,7 @@ http.createServer((req, res) => {
   if (!isFile(f)) {
     if (mode === 'spa') f = resolve(root, 'index.html');
     else if (isFile(resolve(f, 'index.html'))) f = resolve(f, 'index.html');
-    else { f = resolve(root, '404.html'); status = 404; }
+    else { f = resolve(root, /^\/pt-br(?:\/|$)/.test(p)?'pt-br/404.html':/^\/en(?:\/|$)/.test(p)?'en/404.html':'404.html'); status = 404; }
   }
   let body = readFileSync(f); const type = T[extname(f)] || 'application/octet-stream'; const h = { 'Content-Type': type, 'Cache-Control': p.startsWith('/assets/') ? 'public, max-age=31536000, immutable' : 'no-cache' };
   if (/text|javascript|json|svg|xml/.test(type) && /gzip/.test(req.headers['accept-encoding'] || '')) { body = gzipSync(body, { level: 6 }); h['Content-Encoding'] = 'gzip'; h.Vary = 'Accept-Encoding'; }

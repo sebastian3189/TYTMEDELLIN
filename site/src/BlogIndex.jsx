@@ -1,3 +1,4 @@
+import { language } from './i18n';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { articles } from './content';
@@ -15,7 +16,7 @@ import './blog.css';
 const PAGE = 12;
 const MIN_RAIL = 5; // la fila «Recientes» solo aparece con 5 o más notas (con menos repetiría lo que ya se ve arriba)
 const reduced = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-const fmt = (iso) => { try { return new Date(`${iso}T12:00:00`).toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' }); } catch { return iso; } };
+const fmt = (iso) => { try { return new Date(`${iso}T12:00:00`).toLocaleDateString(language()==='es'?'es-CO':language(), { day: 'numeric', month: 'long', year: 'numeric' }); } catch { return iso; } };
 
 function Meta({ a }) {
   const bits = [a.date && <time key="d" dateTime={a.date}>{fmt(a.date)}</time>, a.minutes && <span key="m">{a.minutes} min de lectura</span>].filter(Boolean);
@@ -95,7 +96,7 @@ export default function BlogIndex() {
               <h2 id="blog-destacado">{featured.title}</h2>
               <Meta a={featured} />
               <span className="bf-intro">{featured.intro}</span>
-              <span className="bc-more">Leer más<Arrow /></span>
+              <span className="bc-more">Leer la nota<Arrow /></span>
             </span>
           </Link>
         </section>

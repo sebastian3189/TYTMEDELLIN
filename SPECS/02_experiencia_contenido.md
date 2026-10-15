@@ -433,3 +433,10 @@ Instagram no cubre el uso en la web y del riesgo de reclamos de derechos de auto
 usuario asume ese riesgo. Pendiente: sustituirlo por la versión con solo la voz cuando
 el cliente la aporte. Reproducción: silenciado por defecto (requisito de autoplay) con
 botón para activar el sonido.
+
+## Itinerarios por parada — aportado por el usuario 2026-10-15
+
+Anexo de datos del cliente (no es un spec nuevo): [`SPECS/anexos/instrucciones_scroll_experiencias_TT.md`](anexos/instrucciones_scroll_experiencias_TT.md).
+La sección «La experiencia» de cada ficha muestra una parada por escena (texto visible literal del anexo). Datos editables en `site/src/itinerarios.js`;
+fotos en `site/public/media/itinerarios` (`site/scripts/prepare-itinerarios.py`). Jardín y Traslados JMC no figuran en el anexo: sus paradas/etapas
+salen solo de datos ya verificados (sedes.ts oficial, tour-info.json, FAQ y diferenciadores aprobados) y requieren aprobación del cliente.

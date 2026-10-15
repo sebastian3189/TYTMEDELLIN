@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Medellín, a otro nivel. Transporte privado y experiencias desde Medellín con un equipo local." />
   <meta name="theme-color" content="#FAF8F5" />
-  <script>(function(){var s;try{s=localStorage.getItem('tyt-theme')}catch(e){}var d=s==='dark'||(s!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.js='1';document.documentElement.dataset.theme=d?'dark':'light';document.documentElement.lang=/^\/en(?:\/|$)/.test(location.pathname)?'en':'es-CO';document.querySelector('meta[name="theme-color"]').content=d?'#171A18':'#FAF8F5'})()</script>
+  <script>(function(){history.scrollRestoration='manual';var s;try{var c=JSON.parse(localStorage.getItem('tyt-privacy-v1'));if(c&&c.version===1&&c.preferences&&c.expires>Date.now())s=localStorage.getItem('tyt-theme')}catch(e){}var d=s==='dark'||(s!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.js='1';document.documentElement.dataset.theme=d?'dark':'light';document.documentElement.lang=/^\/pt-br(?:\/|$)/.test(location.pathname)?'pt-BR':/^\/en(?:\/|$)/.test(location.pathname)?'en':'es-CO';document.querySelector('meta[name="theme-color"]').content=d?'#171A18':'#FAF8F5'})()</script>
   <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
@@ -15,7 +15,7 @@
        no compite con el póster del LCP. El respaldo métrico de website.css (Montserrat/Inter Fallback) evita saltos mientras llega cada fuente. -->
   <link rel="preload" href="/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin />
   <!--inter:start-->
-  <script>if(!/^\/(en\/?)?$/.test(location.pathname)){var l=document.createElement('link');l.rel='preload';l.as='font';l.type='font/woff2';l.href='/fonts/inter.woff2';l.crossOrigin='anonymous';document.head.appendChild(l)}</script>
+  <script>if(!/^\/((en|pt-br)\/?)?$/.test(location.pathname)){var l=document.createElement('link');l.rel='preload';l.as='font';l.type='font/woff2';l.href='/fonts/inter.woff2';l.crossOrigin='anonymous';document.head.appendChild(l)}</script>
   <!--inter:end-->
   <style>html,body{margin:0;background:#FAF8F5}</style>
   <title>T&amp;T Medellín | Medellín, a otro nivel</title>

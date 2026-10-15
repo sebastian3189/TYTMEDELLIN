@@ -1,5 +1,5 @@
 .site-preferences{display:flex;align-items:center;gap:6px;margin-left:auto}
-.site-preferences button,.site-preferences a{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 10px;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface-2);color:var(--text-strong);font:600 13px var(--font)}
+.site-preferences button,.site-preferences a,.site-preferences select{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 10px;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface-2);color:var(--text-strong);font:600 13px var(--font)}
 @media(min-width:1100px){.site-preferences{order:3;margin-left:16px}.site-header{gap:12px}.site-header nav{gap:clamp(10px,1.3vw,24px)}.header-socials{display:none}}
 @media(max-width:1099px){.site-header{gap:10px}.menu-toggle{margin-left:0}.site-preferences{gap:6px}}
 /* Modo oscuro (Spec 03 §J3 + §I.2): tokens por escala; `.tone-dark` aplica los mismos al pie, que es oscuro en ambos modos. */
@@ -29,3 +29,5 @@ html[data-theme="dark"] input,html[data-theme="dark"] textarea,html[data-theme="
 .socials a{color:var(--text-strong)}
 html[lang="en"] .home-hero h1{font-size:clamp(48px,min(9vw,14svh),160px)}
 @media(max-width:799px){html[lang="en"] .home-hero h1{font-size:clamp(30px,calc((100vw - 40px) / 9.8),54px)}}
+
+.site-preferences select{width:76px;cursor:pointer;appearance:auto}.site-preferences select:focus-visible{outline:3px solid var(--focus);outline-offset:3px}

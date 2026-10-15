@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { company } from './company';
-import { language } from './i18n';
+import { languageInfo, pathForLanguage } from './languages';
+import { t, language } from './i18n';
 import { SocialIcon } from './Socials';
 import Icon from './icons';
 
@@ -13,8 +14,8 @@ import Icon from './icons';
  */
 const RATING = 5.0;
 export function GoogleBadge({ className = '' }) {
-  const figure = RATING.toLocaleString(language() === 'en' ? 'en-US' : 'es-CO', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-  const label = language() === 'en' ? `Company rating on Google: ${figure} out of 5` : `Valoración de la empresa en Google: ${figure} de 5`;
+  const figure = RATING.toLocaleString(languageInfo(language()).html, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const label = language() === 'pt-BR' ? `Avaliação da empresa no Google: ${figure} de 5` : language() === 'en' ? `Company rating on Google: ${figure} out of 5` : `Valoración de la empresa en Google: ${figure} de 5`;
   return (
     <a className={`card-google ${className}`} href={company.reviews} target="_blank" rel="noopener noreferrer" aria-label={label} title={label}>
       <span className="card-google-stars" aria-hidden="true">★★★★★</span>
@@ -25,8 +26,8 @@ export function GoogleBadge({ className = '' }) {
 }
 
 export function GoogleBadgeStatic({ className = '' }) {
-  const figure = RATING.toLocaleString(language() === 'en' ? 'en-US' : 'es-CO', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-  const label = language() === 'en' ? `Company rating on Google: ${figure} out of 5` : `Valoración de la empresa en Google: ${figure} de 5`;
+  const figure = RATING.toLocaleString(languageInfo(language()).html, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const label = language() === 'pt-BR' ? `Avaliação da empresa no Google: ${figure} de 5` : language() === 'en' ? `Company rating on Google: ${figure} out of 5` : `Valoración de la empresa en Google: ${figure} de 5`;
   return (
     <span className={`card-google card-google--static ${className}`} role="img" aria-label={label}>
       <span className="card-google-stars" aria-hidden="true">★★★★★</span>
@@ -45,15 +46,17 @@ const Brand = ({ d, size = 18 }) => <svg className="ico" viewBox="0 0 24 24" wid
 function shareUrl(path) {
   let origin = location.origin;
   try { const c = document.querySelector('link[rel="canonical"]')?.href; if (c) { const u = new URL(c); if (!/\.invalid$/.test(u.hostname)) origin = u.origin; } } catch { /* se usa el origen actual */ }
-  return origin + (language() === 'en' ? '/en' : '') + path;
+  return origin + pathForLanguage(path,language());
 }
 const TEXT = {
+  'pt-BR': { button:'Compartilhar esta experiência',title:'Compartilhar por',copy:'Copiar link',copied:'Link copiado',error:'Não foi possível copiar. Copie o endereço da barra do navegador.',more:'Mais opções…',paste:'Link copiado. Cole no seu story ou mensagem do {red}.',mail:'E-mail',message:'Confira esta experiência da T&T Medellín:' },
   es: { button: 'Compartir esta experiencia', title: 'Compartir por', copy: 'Copiar enlace', copied: 'Enlace copiado', error: 'No se pudo copiar. Copia la dirección de la barra del navegador.', more: 'Más opciones…', paste: 'Enlace copiado. Pégalo en tu historia o mensaje de {red}.', mail: 'Correo', message: 'Mira esta experiencia de T&T Medellín:' },
   en: { button: 'Share this experience', title: 'Share via', copy: 'Copy link', copied: 'Link copied', error: "Couldn't copy. Copy the address from the browser bar instead.", more: 'More options…', paste: 'Link copied. Paste it into your {red} story or message.', mail: 'Email', message: 'Check out this experience from T&T Medellín:' },
 };
 
-export function ShareMenu({ name, path, className = '' }) {
-  const tx = TEXT[language() === 'en' ? 'en' : 'es'];
+export function ShareMenu({ name: rawName, path, className = '' }) {
+  const name = t(rawName); // nombre de la experiencia en el idioma activo (etiqueta, mensaje, asunto)
+  const tx = TEXT[language()];
   const [open, setOpen] = useState(false), [pos, setPos] = useState(null), [native, setNative] = useState(false), [notice, setNotice] = useState('');
   const btn = useRef(null), menu = useRef(null), timer = useRef(0);
   useEffect(() => { setNative(typeof navigator.share === 'function'); }, []);

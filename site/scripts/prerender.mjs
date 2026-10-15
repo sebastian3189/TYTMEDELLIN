@@ -5,6 +5,7 @@
 // Además escribe sitemap.xml, robots.txt, 200.html (cáscara vacía para hosts con reescritura SPA) y un canonical absoluto por ruta.
 // Dominio (PENDIENTE CLIENTE, Spec 06): TYT_SITE_URL=https://dominio-final; indexación: TYT_INDEXABLE=1 (sin él, el prototipo conserva noindex y robots.txt cierra todo).
 // Uso: `npm run build` (vite build && vite build --ssr … && node scripts/prerender.mjs).
+import { LANGUAGES, languageFromPath, languageInfo, stripLanguage, pathForLanguage } from '../src/languages.js';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -24,7 +25,7 @@ const esc = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 const strip = (html, name) => html.replace(new RegExp(`[ \\t]*<!--${name}:start-->[\\s\\S]*?<!--${name}:end-->\\n?`), '');
 const attr = (tag, name) => tag.match(new RegExp(`\\s${name}="([^"]*)"`, 'i'))?.[1];
 const chunkFor = (path) => {
-  path=path.replace(/^\/en(?=\/|$)/,'')||'/';
+  path=stripLanguage(path);
   if (path === '/') return 'Home';
   if (path === '/experiencias') return 'Catalog';
   if (path.startsWith('/experiencias/')) return 'Tour';
@@ -60,13 +61,17 @@ if(d.readyState==='loading')d.addEventListener('DOMContentLoaded',arm);else arm(
 // Compone el HTML de una ruta a partir de la cáscara. `mark` marca el root: 404 → el cliente lo renderiza con createRoot (no se hidrata: el mismo HTML
 // sirve para cualquier URL desconocida, p. ej. /experiencias/inexistente, donde el menú activo difiere).
 function compose({ path, body, title, description, chunk, mark }) {
-  const en=/^\/en(?:\/|$)/.test(path),localPath=path.replace(/^\/en(?=\/|$)/,'')||'/';
+  const info=languageInfo(languageFromPath(path)),localPath=stripLanguage(path);
   // renderToString no falla ante un error de render: cae a render de cliente y deja una plantilla. Aquí sí debe fallar el build.
   if (/Switched to client rendering|<template data-msg/.test(body)) throw new Error(`prerender ${path}: el servidor cayó a render de cliente: ${body.match(/data-msg="([^"]*)"/)?.[1]}`);
   if ((body.match(/<h1[\s>]/g) || []).length !== 1) throw new Error(`prerender ${path}: se esperaba exactamente un h1`);
-  let html = shell;
-  html=html.replace('lang="es-CO"',en?'lang="en"':'lang="es-CO"');
-  if(!mark) html=html.replace('</head>',`<link rel="canonical" href="${abs(path)}"/><link rel="alternate" hreflang="es" href="${abs(localPath)}"/><link rel="alternate" hreflang="en" href="${abs('/en'+(localPath==='/'?'/':localPath))}"/><link rel="alternate" hreflang="x-default" href="${abs(localPath)}"/></head>`);
+  let html = shell.replace('</head>',`<meta name="tyt-site-origin" content="${esc(SITE)}"/></head>`);
+  html=html.replace('lang="es-CO"',`lang="${info.html}"`);
+  if(!mark) html=html.replace('</head>',`<link rel="canonical" href="${abs(path)}"/>${LANGUAGES.map(l=>`<link rel="alternate" hreflang="${l.code}" href="${abs(pathForLanguage(localPath,l.code))}"/>`).join('')}<link rel="alternate" hreflang="x-default" href="${abs(localPath)}"/></head>`);
+  // Texto social desde la misma fuente que title/description; no se inventa una imagen social.
+  const social = [['property','og:title',`${title} | T&T Medellín`], ['property','og:description',description], ['property','og:type','website'], ['property','og:locale',info.og], ['name','twitter:title',`${title} | T&T Medellín`], ['name','twitter:description',description]];
+  if (!mark) social.push(['property','og:url',abs(path)]);
+  html = html.replace('</head>', () => social.map(([attribute,key,value]) => `<meta ${attribute}="${key}" content="${esc(value)}"/>`).join('') + '</head>');
   if (INDEXABLE) html = html.replace(/[ \t]*<meta name="robots" content="noindex, nofollow" \/>\n?/, '');
   html = html.replace(/<title>[\s\S]*?<\/title>/, () => `<title>${esc(`${title} | T&T Medellín`)}</title>`);
   html = html.replace(/(<meta name="description" content=")[^"]*(")/, (_, a, b) => `${a}${esc(description)}${b}`);
@@ -95,7 +100,7 @@ function compose({ path, body, title, description, chunk, mark }) {
 
 const pages = [];
 for (const path of paths) {
-  const [title, description] = metaFor(path);
+  const [title, description] = await metaFor(path);
   const html = compose({ path, body: await render(path), title, description, chunk: chunkFor(path) });
   const out = path === '/' ? join(dist, 'index.html') : join(dist, ...path.split('/').filter(Boolean), 'index.html');
   await mkdir(dirname(out), { recursive: true });
@@ -103,24 +108,26 @@ for (const path of paths) {
   pages.push({ path, kb: +(Buffer.byteLength(html) / 1024).toFixed(1) });
 }
 // 404 real: la página «Este recorrido no está aquí» prerenderizada (h1 sin JS; el servidor la entrega con estado 404).
-{
-  const [title, description] = metaFor('/__404__');
-  const html = compose({ path: '/__404__', body: await render('/__404__'), title, description, chunk: 'NotFound', mark: '404' });
-  await writeFile(join(dist, '404.html'), html);
-  pages.push({ path: '/404.html', kb: +(Buffer.byteLength(html) / 1024).toFixed(1) });
+for (const lang of LANGUAGES) {
+  const path=pathForLanguage('/__404__',lang.code);
+  const [title, description] = await metaFor(path);
+  const html = compose({ path, body: await render(path), title, description, chunk: 'NotFound', mark: '404' });
+  const out=join(dist,lang.prefix,'404.html');
+  await mkdir(dirname(out),{recursive:true}); await writeFile(out,html);
+  pages.push({path:lang.prefix+'/404.html',kb:+(Buffer.byteLength(html)/1024).toFixed(1)});
 }
 // /site y /flota redirigen en el cliente: se publica la cáscara (sin HTML de servidor, createRoot) para que un host estático los sirva con 200.
-for (const path of ['/site', '/flota']) {
+for (const path of LANGUAGES.flatMap(l=>['/site','/flota'].map(p=>pathForLanguage(p,l.code)))) {
   const out = join(dist, ...path.split('/').filter(Boolean), 'index.html');
   await mkdir(dirname(out), { recursive: true });
-  await writeFile(out, shell);
+  await writeFile(out, shell.replace('</head>',`<meta name="tyt-site-origin" content="${esc(SITE)}"/></head>`));
 }
 // Cáscara vacía para hosts que solo saben reescribir a un HTML (Netlify/Surge `200.html`): el cliente la renderiza con createRoot (sin hidratar HTML ajeno).
 await writeFile(join(dist, '200.html'), shell);
 // sitemap.xml: solo las rutas 200 indexables (sin /site, /flota ni 404), con alternos es/en.
 const urls = paths.map((path) => {
-  const local = path.replace(/^\/en(?=\/|$)/, '') || '/';
-  return `  <url><loc>${abs(path)}</loc><xhtml:link rel="alternate" hreflang="es" href="${abs(local)}"/><xhtml:link rel="alternate" hreflang="en" href="${abs('/en' + (local === '/' ? '/' : local))}"/></url>`;
+  const local = stripLanguage(path);
+  return `  <url><loc>${abs(path)}</loc>${LANGUAGES.map(l=>`<xhtml:link rel="alternate" hreflang="${l.code}" href="${abs(pathForLanguage(local,l.code))}"/>`).join('')}<xhtml:link rel="alternate" hreflang="x-default" href="${abs(local)}"/></url>`;
 });
 await writeFile(join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls.join('\n')}\n</urlset>\n`);
 await writeFile(join(dist, 'robots.txt'), INDEXABLE ? `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n` : `# Prototipo: sin indexación hasta la publicación (Spec 01/06).\nUser-agent: *\nDisallow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);

@@ -296,3 +296,14 @@ PENDIENTE CLIENTE) y `TYT_INDEXABLE=1` (quita `noindex`, abre `robots.txt`; por 
 
 Pruebas: `check-prerender.mjs` (25 rutas, canonical, sitemap, robots y reescritura SPA), `check-experience-book.mjs`, `check-fab.mjs`, `check-scrub-hero.mjs`
 (actualizada: la baraja ya no vive en la cabecera del inicio), `capture-ronda-j.mjs`; capturas en `site/test-results/ronda-j/`.
+
+
+## Auditoría técnica autorizada — 2026-10-15
+
+Compuertas ENCUADRAR/DISEÑAR: petición de auditoría de rutas, consentimiento y portugués; contrato visual del director limitado a selector y privacidad. CONSTRUIR: `RouteScroll` coordina historial manual tras resolver la ruta y alinea anclas con cabecera, ajustando cambios de altura durante 2,5 s hasta una interacción. No se modifican motores de escenas ni datos de itinerarios.
+
+Idiomas ES, EN y PT-BR: 26 páginas equivalentes por idioma (78), diccionario cargado solo para idioma activo, selector conserva query/hash. Prerender y cliente comparten rutas, canonical, cuatro alternos (es/en/pt-BR/x-default) y localización social. Tres respuestas404 localizadas. Dominio final PENDIENTE CLIENTE; noindex y robots cerrado se conservan.
+
+Consentimiento operativo, sin rastreadores: `tyt-privacy-v1` guarda decisión180d; accesibilidad `tyt-reducir-movimiento` y ayuda de sesión `tyt-libro-gesto` son funcionales; único opcional actual, `tyt-theme`, se escribe solo con aceptación. Rechazar y retirar eliminan esa preferencia; revocación sincronizada entre pestañas. Diálogo nativo, Escape descarta borrador, enlace permanente en pie; almacenamiento bloqueado usa memoria de visita. No se añade analítica ni publicidad. Mapa OSM sigue condicionado a clic. La clasificación técnica y la traducción no sustituyen validación jurídica.
+
+AUDITAR/CERRAR: evidencias y resultado independiente en `AUDITORIA_TECNICA_2026-10-15.md`; regresión reproducible `site/scripts/check-technical.mjs` y artefactos en `site/test-results/technical-audit/`. Estas notas actualizan los recuentos y el contrato de esta ronda; no autorizan publicación.

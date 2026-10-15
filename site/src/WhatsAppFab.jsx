@@ -23,5 +23,5 @@ export default function WhatsAppFab() {
     check();
     return () => { mo.disconnect(); };
   }, []);
-  return <a ref={ref} className="wa-fab" data-hidden="false" href={whatsapp()} target="_blank" rel="noopener noreferrer" aria-label="Escribir por WhatsApp"><SocialIcon id="whatsapp" size={32} /><span className="wa-label" aria-hidden="true">{language() === 'en' ? "Let's talk?" : '¿Hablamos?'}</span></a>;
+  return <a ref={ref} className="wa-fab" data-hidden="false" href={whatsapp()} target="_blank" rel="noopener noreferrer" aria-label="Escribir por WhatsApp"><SocialIcon id="whatsapp" size={32} /><span className="wa-label" aria-hidden="true">{language() === 'pt-BR' ? 'Vamos conversar?' : language() === 'en' ? "Shall we talk?" : '¿Hablamos?'}</span></a>;
 }

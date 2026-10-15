@@ -9,4 +9,4 @@ export const company = {
   instagram: 'https://www.instagram.com/transporteenmedellin',
   tiktok: 'https://www.tiktok.com/@tytmedellin',
 };
-export const whatsapp = (context = 'mi recorrido') => `https://wa.me/${company.whatsapp}?text=${encodeURIComponent(language()==='en'?`Hello, I'd like to ask T&T Medellín about ${t(context)}.`:`Hola, quiero consultar con T&T Medellín sobre ${context}.`)}`;
+export const whatsapp = (context = 'mi recorrido') => `https://wa.me/${company.whatsapp}?text=${encodeURIComponent(language()==='pt-BR'?`Olá, gostaria de consultar a T&T Medellín sobre ${t(context)}.`:language()==='en'?`Hello, I'd like to ask T&T Medellín about ${t(context)}.`:`Hola, quiero consultar con T&T Medellín sobre ${context}.`)}`;

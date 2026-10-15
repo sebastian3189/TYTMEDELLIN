@@ -7,14 +7,15 @@ import { resolve } from 'node:path';
 import { tours, articles } from './src/content.js';
 
 const paths = new Set(['/', '/site', '/experiencias', '/servicios', '/vehiculos', '/flota', '/nosotros', '/blog', '/contacto', '/cotizar', '/calificaciones', '/privacidad', '/politica-de-tratamiento-de-datos', ...tours.map(t => `/experiencias/${t.slug}`), ...articles.map(a => `/blog/${a.slug}`)]);
-for(const path of [...paths]) paths.add('/en'+(path==='/'?'':path));
+for(const path of [...paths]) for(const prefix of ['/en','/pt-br']) paths.add(prefix+(path==='/'?'':path));
 // 404 real (Spec 05): rutas desconocidas devuelven 404 con la cáscara de la app (`dist/404.html`, sin HTML prerenderizado; el cliente la renderiza con createRoot).
 function routeStatus() {
   const middleware = (root, file, transform) => async (req, res, next) => {
     const pathname = new URL(req.url, 'http://localhost').pathname.replace(/\/$/, '') || '/';
     if (!req.headers.accept?.includes('text/html') || paths.has(pathname) || /\.[a-z0-9]+$/i.test(pathname) || pathname.startsWith('/@')) return next();
     try {
-      const html = await readFile(resolve(root, file), 'utf8');
+      const localized = file==='404.html' ? (/^\/pt-br(?:\/|$)/.test(pathname)?'pt-br/404.html':/^\/en(?:\/|$)/.test(pathname)?'en/404.html':file) : file;
+      const html = await readFile(resolve(root, localized), 'utf8');
       res.statusCode = 404;
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.end(transform ? await transform(req.url, html) : html);
@@ -58,5 +59,5 @@ export default defineConfig(({ isSsrBuild }) => ({
   resolve: {alias:{'@tt-i18n':resolve(import.meta.dirname,'src/i18n-runtime')}},
   server: { host: '127.0.0.1' },
   preview: { host: '127.0.0.1' },
-  build: { manifest: !isSsrBuild, cssCodeSplit: false, copyPublicDir: !isSsrBuild },
+  build: { target:'esnext', manifest: !isSsrBuild, cssCodeSplit: false, copyPublicDir: !isSsrBuild },
 }));

@@ -13,14 +13,14 @@ import './different.css';
  */
 export const DIFERENTES = [
   { icon: 'planeLanding', t: 'Monitoreamos tu vuelo.', d: 'Seguimos el estado de tu vuelo hasta su aterrizaje en Medellín para coordinar tu recogida y estar preparados ante posibles cambios de horario.' },
-  { icon: 'carFront', t: 'Flota propia y vehículos certificados.', d: 'Contamos con vehículos modernos, habilitados y en óptimas condiciones, con mantenimiento preventivo y documentación al día para ofrecerte comodidad y seguridad.' },
-  { icon: 'users', t: 'Un equipo que responde por ti.', d: 'Guías, conductores y personal logístico trabajan bajo nuestros estándares de servicio. Coordinamos directamente cada experiencia, sin intermediarios innecesarios, para garantizar el control de calidad.' },
-  { icon: 'droplet', t: 'Hidratación incluida.', d: 'Durante nuestras experiencias te ofrecemos agua e hidratación sin costo adicional. Porque los pequeños detalles también hacen grandes diferencias.' },
-  { icon: 'globe', t: 'Experiencias 100 % privadas.', d: 'Nada de grupos desconocidos ni recorridos masivos. Tu vehículo y tu experiencia son exclusivos para ti y tus acompañantes.' },
-  { icon: 'clock', t: 'Flexibilidad en tus horarios.', d: 'Adaptamos nuestros recorridos a tus intereses y necesidades. Queremos que disfrutes cada destino a tu ritmo.' },
-  { icon: 'camera', t: 'Recuerdos sin costo adicional.', d: 'Capturamos fotografías y videos durante tu experiencia para que te lleves recuerdos especiales de tu visita.' },
+  { icon: 'carFront', t: 'Vehículos para tu recorrido.', d: 'Revisamos contigo la categoría, la capacidad y el equipaje para proponer el vehículo de tu servicio. La unidad y su disponibilidad se confirman al cotizar.' },
+  { icon: 'users', t: 'Un equipo que responde por ti.', d: 'Coordinamos el transporte, las paradas y el acompañamiento de tu recorrido. Antes de contratar, revisamos contigo los servicios incluidos en la propuesta.' },
+  { icon: 'droplet', t: 'Los detalles también cuentan.', d: 'Consulta la hidratación incluida en tu experiencia. Antes de salir, revisa con el equipo qué llevar según el recorrido y las necesidades de tu grupo.' },
+  { icon: 'globe', t: 'Experiencias 100 % privadas.', d: 'Nuestra propuesta son tours privados para ti y tus acompañantes. Confirmamos el vehículo, el acompañamiento y las condiciones de cada recorrido al cotizar.' },
+  { icon: 'clock', t: 'Flexibilidad en tus horarios.', d: 'Cuéntanos tus intereses y el tiempo que tienes. Acordamos los horarios según el recorrido, las condiciones operativas y lo que necesitas.' },
+  { icon: 'camera', t: 'Recuerdos para llevar contigo.', d: 'Consulta las fotografías y los videos incluidos en tu recorrido. La propuesta detalla estos servicios para que sepas qué esperar antes de salir.' },
   { icon: 'shieldCheck', t: 'Seguridad y respaldo legal.', d: 'Somos una empresa legalmente constituida, con Registro Nacional de Turismo (RNT 176384). Operamos con vehículos habilitados y las coberturas y pólizas aplicables a nuestros servicios.' },
-  { icon: 'messageCircle', t: 'Acompañamiento por WhatsApp 24/7.', d: 'Contamos con un canal de atención para ayudarte ante imprevistos, cambios de planes o cualquier situación relacionada con tu servicio.' },
+  { icon: 'messageCircle', t: 'Conversemos por WhatsApp.', d: 'Escríbenos para organizar tu viaje o consultar sobre tu servicio. La operación de transporte las 24 horas requiere reserva previa; la asesoría depende de la disponibilidad del equipo.' },
   { icon: 'heart', t: 'Atención desde el primer contacto.', d: 'No solo organizamos recorridos. Escuchamos tus necesidades, te asesoramos y diseñamos experiencias que se ajustan a lo que realmente buscas.' },
 ];
 const two = (n) => String(n).padStart(2, '0');
@@ -99,8 +99,8 @@ export default function Different() {
             <span className="df-l2"><Words text="diferentes?" from={3} /></span>
           </h2>
           <div className="df-intro">
-            <p className="df-lead" data-rv>No solo te llevamos a conocer Medellín. Nos encargamos de que vivas una experiencia a otro nivel.</p>
-            <p className="df-para" data-rv style={{ '--d': '60ms' }}>En Transporte y Turismo Medellín creemos que una experiencia extraordinaria comienza mucho antes de subir al vehículo. Por eso, cuidamos cada detalle de tu viaje, brindándote seguridad, comodidad, atención personalizada y el respaldo de un equipo comprometido contigo.</p>
+            <p className="df-lead" data-rv>Queremos que conozcas Medellín con la tranquilidad de tener un equipo local a tu lado.</p>
+            <p className="df-para" data-rv style={{ '--d': '60ms' }}>Todo empieza por escucharte: quién viaja, qué quiere conocer y cuánto tiempo tiene. Con esa información coordinamos el transporte y el recorrido, y te explicamos las condiciones antes de contratar.</p>
           </div>
         </header>
         <div ref={host} className="df-host">
