@@ -17,9 +17,7 @@ import Preferences from './Preferences';
 import WhatsAppFab from './WhatsAppFab';
 import { unprefix } from './i18n';
 
-// Logo aportado por el usuario, TAL CUAL (SPECS/01): solo se reduce; la máscara de esquinas redondeadas es CSS (.logo-mark). Maestro vectorial PENDIENTE.
-const LOGO_SRCSET = '/media/marca/logo/logo-40.webp 40w, /media/marca/logo/logo-44.webp 44w, /media/marca/logo/logo-56.webp 56w, /media/marca/logo/logo-80.webp 80w, /media/marca/logo/logo-88.webp 88w, /media/marca/logo/logo-112.webp 112w, /media/marca/logo/logo-120.webp 120w, /media/marca/logo/logo-132.webp 132w, /media/marca/logo/logo-168.webp 168w, /media/marca/logo/logo-224.webp 224w, /media/marca/logo/logo-240.webp 240w, /media/marca/logo/logo-336.webp 336w, /media/marca/logo/logo-360.webp 360w, /media/marca/logo/logo-400.webp 400w';
-function Logo({ size, sizes, className = '', lazy = false }) { return <img className={`logo-mark ${className}`} fetchPriority={lazy ? undefined : "low"} loading={lazy ? "lazy" : undefined} src="/media/marca/logo/logo-400.png" srcSet={LOGO_SRCSET} sizes={sizes} width={size} height={size} alt="Transporte y Turismo Medellín" decoding="async"/>; }
+import Logo from './Logo';
 
 /*
  * Cáscara de la app (Spec 04 «Prerender»): cabecera, pie, rutas y efectos de página. Cada ruta es un chunk propio (React.lazy) y TODAS se

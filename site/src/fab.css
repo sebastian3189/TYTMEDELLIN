@@ -6,13 +6,20 @@
 .wa-fab:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
 html[data-theme="dark"] .wa-fab{box-shadow:0 10px 26px rgba(0,0,0,.65),0 0 0 1px rgba(245,245,240,.18)}
 .wa-fab[data-hidden="true"]{opacity:0;pointer-events:none}
-.wa-fab::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:0 0 0 0 rgba(37,211,102,.5);pointer-events:none;animation:wa-pulse 1.8s ease-out 1.2s 2}
-.wa-fab.wa-pulse::after{animation:wa-pulse 1.8s ease-out 1}
-@keyframes wa-pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.5)}70%,100%{box-shadow:0 0 0 18px rgba(37,211,102,0)}}
+/* Animación (pedido del usuario, ronda 3): entrada con rebote al cargar, latido suave (propiedad `scale`, compone con el hover), dos anillos de onda verdes que se expanden y se desvanecen,
+   y un leve balanceo del icono cada ~10 s. Solo transform/scale/rotate/opacity; los anillos no tapan nada (pointer-events:none, dentro del radio de 16 px de margen). */
+.wa-fab{animation:wa-in 900ms cubic-bezier(.3,.7,.3,1) 700ms backwards,wa-beat 3.6s ease-in-out 1.8s infinite}
+.wa-fab::before,.wa-fab::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid rgba(37,211,102,.7);pointer-events:none;opacity:0;animation:wa-ring 3.6s ease-out 1.8s infinite}
+.wa-fab::after{animation-delay:2.7s}
+.wa-fab svg{transform-origin:50% 55%;animation:wa-sway 10s ease-in-out 4s infinite}
+@keyframes wa-in{0%{opacity:0;transform:translateY(36px) scale(.4)}55%{opacity:1;transform:translateY(-8px) scale(1.12)}75%{transform:translateY(2px) scale(.96)}100%{opacity:1;transform:none}}
+@keyframes wa-beat{0%,100%{scale:1}12%{scale:1.06}24%{scale:1}36%{scale:1.04}48%{scale:1}}
+@keyframes wa-ring{0%{transform:scale(1);opacity:.6}60%,100%{transform:scale(1.75);opacity:0}}
+@keyframes wa-sway{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-14deg)}92%{transform:rotate(12deg)}95%{transform:rotate(-7deg)}97.5%{transform:rotate(3deg)}}
 .wa-label{position:absolute;right:calc(100% + 10px);top:50%;transform:translate(10px,-50%);opacity:0;white-space:nowrap;padding:9px 16px;border-radius:999px;background:var(--surface-3);color:var(--text-strong);font:600 15px/1 var(--font);box-shadow:var(--shadow-2);border:1px solid var(--border-subtle);pointer-events:none;transition:opacity 180ms ease,transform 220ms var(--ease-out-strong)}
 @media(hover:hover) and (pointer:fine){.wa-fab:hover{transform:scale(1.06)}.wa-fab:hover .wa-label,.wa-fab:focus-visible .wa-label{opacity:1;transform:translate(0,-50%)}}
 @media(max-width:899px){.wa-fab{width:58px;height:58px}.wa-label{display:none}}
-@media(prefers-reduced-motion:reduce){.wa-fab{transition:none}.wa-fab::after{animation:none!important}.wa-label{transition:none}}
+@media(prefers-reduced-motion:reduce){.wa-fab{transition:none}.wa-fab,.wa-fab::before,.wa-fab::after,.wa-fab svg{animation:none!important}.wa-label{transition:none}}
 
 /* Barra de ficha (móvil): mientras se ve, el botón flotante se oculta */
 html[data-tourbar="on"] .wa-fab{opacity:0;pointer-events:none}

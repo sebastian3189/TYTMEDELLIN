@@ -5,6 +5,7 @@ import { whatsapp } from './company';
 import { SocialIcon } from './Socials';
 import { Arrow, Eyebrow } from './shared';
 import { HeroBlock } from './Hero';
+import Logo from './Logo';
 import './home.css';
 
 /*
@@ -69,7 +70,7 @@ export function HomeSocial() {
     <section className="home-social wrap section" aria-labelledby="redes-titulo">
       <h2 id="redes-titulo">Síguenos en redes</h2>
       <div className="ig-head">
-        <img className="ig-avatar" src="/media/marca/logo/logo-112.webp" srcSet="/media/marca/logo/logo-112.webp 112w, /media/marca/logo/logo-168.webp 168w, /media/marca/logo/logo-224.webp 224w" sizes="112px" width="112" height="112" alt="" loading="lazy" decoding="async" />
+        <Logo size={112} sizes="112px" className="ig-avatar" lazy />
         <p className="ig-name">{profile.name}</p>
         <p className="ig-handle">{profile.handle}</p>
         {stats.length > 0 && <dl className="ig-stats">{stats.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>}

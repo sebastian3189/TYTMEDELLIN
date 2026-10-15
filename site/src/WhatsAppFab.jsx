@@ -20,9 +20,8 @@ export default function WhatsAppFab() {
     const el = ref.current;
     const check = () => { const value = document.querySelector('.menu-open, dialog[open]') ? 'true' : 'false'; if (el.dataset.hidden !== value) el.dataset.hidden = value; };
     const mo = new MutationObserver(check); mo.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class', 'open'] });
-    const pulse = setInterval(() => { if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; el.classList.add('wa-pulse'); setTimeout(() => el.classList.remove('wa-pulse'), 1900); }, 12000); // un pulso suave cada ~12 s (los dos primeros los hace el CSS al cargar)
     check();
-    return () => { mo.disconnect(); clearInterval(pulse); };
+    return () => { mo.disconnect(); };
   }, []);
   return <a ref={ref} className="wa-fab" data-hidden="false" href={whatsapp()} target="_blank" rel="noopener noreferrer" aria-label="Escribir por WhatsApp"><SocialIcon id="whatsapp" size={32} /><span className="wa-label" aria-hidden="true">{language() === 'en' ? "Let's talk?" : '¿Hablamos?'}</span></a>;
 }

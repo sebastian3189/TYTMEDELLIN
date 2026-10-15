@@ -51,3 +51,17 @@
 .quote-form-frame{min-height:1440px}
 @media(max-width:899px){.quote-form-frame{min-height:1420px}}
 @media(max-width:699px){.quote-form-frame{min-height:1720px}}
+
+/* Logo de la cabecera — animación (ronda 3, regla de marca: toda animación termina en el logo original intacto). Entrada: escala .9→1 + giro ligero del círculo y un reflejo que lo barre una vez;
+   hover (solo puntero fino): giro breve y un segundo reflejo. Solo transform/opacity; el <img> nunca cambia. Sin animación con movimiento reducido. */
+.site-header .brand{position:relative;overflow:hidden;border-radius:50%;animation:logo-in 900ms cubic-bezier(.22,1,.36,1) 150ms backwards}
+.site-header .brand::before,.site-header .brand::after{content:"";position:absolute;top:-10%;bottom:-10%;left:0;width:45%;pointer-events:none;opacity:0;background:linear-gradient(100deg,transparent 0%,rgba(255,255,255,.55) 50%,transparent 100%);transform:translateX(-140%) skewX(-18deg)}
+.site-header .brand::after{animation:logo-shine 900ms ease-in-out 650ms 1}
+@keyframes logo-in{from{opacity:0;transform:scale(.9) rotate(-18deg)}to{opacity:1;transform:none}}
+@keyframes logo-shine{0%{opacity:0;transform:translateX(-140%) skewX(-18deg)}15%{opacity:1}85%{opacity:1}100%{opacity:0;transform:translateX(330%) skewX(-18deg)}}
+@keyframes logo-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@media(hover:hover) and (pointer:fine){
+ .site-header .brand:hover .logo-mark,.site-header .brand:focus-visible .logo-mark{animation:logo-spin 700ms cubic-bezier(.45,0,.2,1) 1}
+ .site-header .brand:hover::before{animation:logo-shine 700ms ease-in-out 1}
+}
+@media(prefers-reduced-motion:reduce){.site-header .brand,.site-header .brand::before,.site-header .brand::after,.site-header .logo-mark{animation:none!important}}

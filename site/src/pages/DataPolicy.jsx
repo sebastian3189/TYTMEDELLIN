@@ -1,5 +1,6 @@
 import { PageTitle } from '../shared';
 import { company } from '../company';
+import { language } from '../i18n';
 import '../policy.css';
 
 /*
@@ -7,7 +8,7 @@ import '../policy.css';
  * tnt-colombia-connect (src/routes/privacidad.tsx, solo lectura), adaptando ÚNICAMENTE la identificación y el contacto del responsable a la sede
  * Medellín (Transporte y Turismo Medellín, NIT 901738550-6, RNT 176384, Carrera 79AA #1A Sur-280, Medellín, correo y WhatsApp de esta sede). No se
  * cambian obligaciones, finalidades, derechos, plazos ni procedimientos.
- * REQUIERE REVISIÓN DEL ASESOR LEGAL antes de considerarse vigente (igual que la fuente). PENDIENTE: versión en inglés (no hay una oficial).
+ * REQUIERE REVISIÓN DEL ASESOR LEGAL antes de considerarse vigente (igual que la fuente). Versión en inglés: DataPolicyEn (traducción de cortesía, también por revisar por el asesor; prevalece el español).
  * Nota para el asesor: los apartados 8 y 9 (cookies y medición) se conservan literales de la fuente; confirmar si aplican a esta sede, porque este sitio hoy no carga
  * herramientas de medición ni muestra aviso de cookies.
  */
@@ -16,6 +17,7 @@ const SECTIONS = [
   ['derechos', '5. Tus derechos'], ['ejercer', '6. Cómo ejercerlos'], ['retencion', '7. Retención'], ['cookies', '8. Cookies'], ['medicion', '9. Medición del sitio'],
 ];
 export default function DataPolicy() {
+  if (language() === 'en') return <DataPolicyEn />;
   return <>
     <PageTitle tag="Ley 1581 de 2012 · Habeas Data" title="Política de tratamiento de datos personales" text="Qué datos nos compartes, con qué finalidad los usamos, cuánto tiempo los conservamos y cómo puedes ejercer tus derechos." />
     <div className="policy wrap">
@@ -47,6 +49,49 @@ export default function DataPolicy() {
           <p>Si aceptas las cookies de medición, usamos Google Tag Manager y Google Analytics para entender cómo se usa el sitio: qué páginas se ven, en qué idioma, qué destinos despiertan más interés y desde dónde se nos escribe por WhatsApp. Lo hacemos para mejorar la web, no para perseguirte.</p>
           <p><strong>Nunca enviamos a esas herramientas tu nombre, tu correo, tu teléfono ni el contenido de tu mensaje.</strong> Lo que se registra es la página y el botón, nunca quién eres. La dirección IP se anonimiza y la información se conserva un máximo de catorce meses, tras los cuales se elimina.</p>
           <p className="policy-muted">Google actúa como encargado del tratamiento y puede almacenar esos datos fuera de Colombia. Al aceptar, autorizas esa transferencia internacional.</p></section>
+      </article>
+    </div>
+  </>;
+}
+
+/* English courtesy translation (literal; no obligations, rights, deadlines or procedures added, removed or softened). Requires review by the legal consultant. */
+const SECTIONS_EN = [
+  ['controller', '1. Data controller'], ['data', '2. Data we collect'], ['purpose', '3. Purpose'], ['authorization', '4. Authorization'],
+  ['rights', '5. Your rights'], ['exercise', '6. How to exercise them'], ['retention', '7. Retention'], ['cookies', '8. Cookies'], ['measurement', '9. Site measurement'],
+];
+function DataPolicyEn() {
+  return <>
+    <PageTitle tag="Law 1581 of 2012 · Habeas Data" title="Personal data processing policy" text="What data you share with us, what we use it for, how long we keep it and how you can exercise your rights." />
+    <div className="policy wrap">
+      <nav className="policy-index" aria-label="Policy contents">
+        <p className="eyebrow">On this page</p>
+        <ol>{SECTIONS_EN.map(([id, label]) => <li key={id}><a href={`#${id}`}>{label}</a></li>)}</ol>
+      </nav>
+      <article className="policy-body">
+        <p className="policy-note" lang="en"><strong>This English version is a courtesy translation. In case of discrepancy, the Spanish version prevails.</strong> It also requires review by the company's legal consultant (see the legal validation note below).</p>
+        <p className="policy-note"><strong>Document pending legal validation.</strong> The following content is a technical draft that reflects what Law 1581 of 2012 requires. It must be reviewed and approved by the company's legal counsel before it is considered in force.</p>
+        <section id="controller"><h2>1. Data controller</h2>
+          <p>Transporte y Turismo Medellín, domiciled at Carrera 79AA #1A Sur-280, Medellín, email <a href={`mailto:${company.email}`}>{company.email}</a> and telephone +57 304 496 1698.</p>
+          <p>NIT 901738550-6. RNT 176384.</p></section>
+        <section id="data"><h2>2. Data we collect</h2>
+          <p>Only what you write to us in the contact form: name, company or organization, email address, telephone, type of enquiry, number of people, travel date and the message. We do not collect sensitive data or data of minors.</p></section>
+        <section id="purpose"><h2>3. Purpose</h2>
+          <p>To answer your enquiry, prepare the quotation or proposal you request and maintain the commercial contact arising from that request. We do not use your data for anything else and we do not transfer it to third parties for advertising purposes.</p></section>
+        <section id="authorization"><h2>4. Authorization</h2>
+          <p>Processing requires your prior, express and informed authorization, which you give by ticking the corresponding box in the form. The box is never ticked in advance, and you may withdraw your authorization at any time.</p></section>
+        <section id="rights"><h2>5. Your rights</h2>
+          <p>As the data subject you may know, update and rectify your data; request proof of the authorization; be informed of the use we make of it; file complaints with the Superintendencia de Industria y Comercio (Superintendence of Industry and Commerce); and revoke the authorization or request the deletion of your data.</p></section>
+        <section id="exercise"><h2>6. How to exercise them</h2>
+          <p>By writing to <a href={`mailto:${company.email}`}>{company.email}</a> with the subject "Protección de datos" (data protection). We answer enquiries within a maximum of ten business days and claims within fifteen, in accordance with the law.</p></section>
+        <section id="retention"><h2>7. Retention</h2>
+          <p>We keep the data for as long as the commercial relationship lasts and, afterwards, for the legal period applicable to accounting and tax obligations. Once that period has elapsed, the data is deleted.</p></section>
+        <section id="cookies"><h2>8. Cookies</h2>
+          <p>We use two kinds of first-party cookies. The <strong>necessary</strong> ones only store your preferences in this browser —the language, the light or dark theme and your own decision about cookies— and without them the site cannot remember how you left it. The <strong>measurement</strong> ones tell us which pages are visited and which buttons are pressed.</p>
+          <p>Measurement cookies <strong>are not activated until you accept them</strong> in the notice that appears when you arrive. If you choose "only the necessary ones", no third-party tool is downloaded and no data is sent. You can change your mind whenever you want by deleting this site's cookies in your browser: the notice will appear again.</p></section>
+        <section id="measurement"><h2>9. Site measurement</h2>
+          <p>If you accept measurement cookies, we use Google Tag Manager and Google Analytics to understand how the site is used: which pages are viewed, in which language, which destinations arouse the most interest and from where we are written to on WhatsApp. We do this to improve the website, not to chase you.</p>
+          <p><strong>We never send those tools your name, your email, your telephone or the content of your message.</strong> What is recorded is the page and the button, never who you are. The IP address is anonymized and the information is kept for a maximum of fourteen months, after which it is deleted.</p>
+          <p className="policy-muted">Google acts as data processor and may store that data outside Colombia. By accepting, you authorize that international transfer.</p></section>
       </article>
     </div>
   </>;

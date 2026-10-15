@@ -152,7 +152,7 @@ export default function TravelHand() {
       deck.style.setProperty('--dw', `${R.w}px`); deck.style.setProperty('--dh', `${R.h}px`); deck.style.setProperty('--dx', `${R.x - R.w / 2}px`); deck.style.setProperty('--dy', `${R.y - R.h / 2}px`);
       // Zona de exclusión del botón flotante de WhatsApp en coordenadas de la mano (solo móvil, con el escenario fijado).
       const hr = hand.getBoundingClientRect(), sr = stageEl.getBoundingClientRect();
-      keep = mob ? { l: innerWidth - 16 - 58 - 8 - (hr.left - sr.left), t: innerHeight - 16 - 58 - 8 - stageTop - (hr.top - sr.top) } : null;
+      keep = mob ? { l: innerWidth - 16 - 58 - 30 - (hr.left - sr.left), t: innerHeight - 16 - 58 - 30 - stageTop - (hr.top - sr.top) } : null;
       lastKey = '';
     };
     let lastKey = '', keep = null;
@@ -308,7 +308,7 @@ export default function TravelHand() {
           <div className="th-mq-clip" aria-hidden="true"><div ref={mqEl} className="th-mq"><span>{entry.lugar}</span></div></div>
           {header}
           <div ref={titleHost} className="th-title-host">
-            <h3 className="th-title" style={{ fontSize: `${fit.size.toFixed(2)}px` }}>{fit.lines.map((l) => <span key={l}>{l}</span>)}</h3>
+            <h3 className="th-title" style={{ fontSize: `${fit.size.toFixed(2)}px` }}><Link className="th-title-link" to={`/experiencias/${entry.slug}`}>{fit.lines.map((l) => <span key={l}>{l}</span>)}</Link></h3>
           </div>
           <nav className="th-index" aria-label="Experiencias">
             <div ref={tabList} role="tablist" className={layout === 'compact' ? 'glass-tabs' : ''} aria-orientation={layout === 'wide' ? 'vertical' : 'horizontal'}>
@@ -345,16 +345,15 @@ export default function TravelHand() {
             </div>
           </div>
           <aside className="th-panel" aria-label="Detalle de la experiencia">
-            <p className="th-count">{two(shown + 1)} / {two(N)} · {entry.category}</p>
-            <p className="th-line"><b>{entry.emocion}:</b> {entry.frase}</p>
+            <Link className="button" to={`/experiencias/${entry.slug}#consulta`}>Planea esta experiencia<Arrow /></Link>
             <div className="th-row">
-              <Link className="text-link" to={`/experiencias/${entry.slug}`}>Ver experiencia<Arrow /></Link>
               <div className="th-arrows th-arrows--in">
                 <button type="button" aria-label="Fotografía anterior" onClick={() => select(active, nowFront - 1, true)}><Arrow dir="left" /></button>
                 <button type="button" aria-label="Fotografía siguiente" onClick={() => select(active, nowFront + 1, true)}><Arrow dir="right" /></button>
               </div>
             </div>
-            <Link className="button" to={`/experiencias/${entry.slug}#consulta`}>Planea esta experiencia<Arrow /></Link>
+            <p className="th-count">{two(shown + 1)} / {two(N)} · {entry.category}</p>
+            <p className="th-line"><b>{entry.emocion}:</b> {entry.frase}</p>
           </aside>
           <div ref={deckEl} className="th-deck" aria-hidden="true" inert>
             {ENTRIES.slice(active + 1, active + 6).map((e, i) => { const pose = deckPose(i); return <img key={e.slug} src={e.photos[0].small} alt="" width="120" height="150" style={{ transform: `translate(${pose.dx * 0.5}px,${pose.dy * 0.5}px) rotate(${pose.r}deg)`, zIndex: 9 - i }} />; })}

@@ -22,6 +22,9 @@ html[data-theme="dark"] .th-mq{color:rgba(245,245,240,.06)}
 .th-title-host{grid-area:1/2/2/4;position:relative;z-index:2;min-width:0;align-self:end;min-height:clamp(72px,11vh,110px);display:flex;align-items:flex-end;transition:opacity 420ms var(--ease-out-strong),transform 420ms var(--ease-out-strong)}
 .th-title{margin:0;font-family:var(--heading);font-weight:800;letter-spacing:-.04em;line-height:.92;color:var(--text-strong);white-space:nowrap}
 .th-title span{display:block}
+.th-title-link{display:block;color:inherit;text-decoration:none;transition:color 200ms ease}
+.th-title-link:focus-visible{outline:3px solid var(--focus);outline-offset:6px;border-radius:8px}
+@media(hover:hover) and (pointer:fine){.th-title-link:hover{color:var(--brand-text)}}
 
 /* Índice tipográfico agrupado */
 .th-index{grid-area:2/1/4/2;position:relative;z-index:2;min-width:0;overflow:auto;scrollbar-width:thin}
@@ -56,12 +59,18 @@ html[data-theme="dark"] .th-mq{color:rgba(245,245,240,.06)}
 .th-panel .button{width:100%;justify-content:space-between;padding-inline:20px}
 .th-panel>*{transition:opacity 420ms var(--ease-out-strong),transform 420ms var(--ease-out-strong)}
 .th-panel>:nth-child(2){transition-delay:60ms}.th-panel>:nth-child(3){transition-delay:120ms}.th-panel>:nth-child(4){transition-delay:180ms}
+/* Escritorio (ronda 3): el CTA naranja va ARRIBA del bloque (CTA → «09 / 11 · CATEGORÍA» → emoción → Ver experiencia + flechas), lejos de las fotos satélite y del botón de WhatsApp */
 .th-stage[data-swap=out] .th-title-host{opacity:0;transform:translateY(-8px);transition-duration:220ms}
 .th-stage[data-swap=out] .th-panel>*{opacity:0;transform:translateY(8px);transition-duration:220ms;transition-delay:0s}
 
 /* Mazo de portadas pendientes (misma caja que el relevo de la película) */
 .th-deck{position:absolute;z-index:3;left:var(--dx,80%);top:var(--dy,80%);width:var(--dw,120px);height:var(--dh,150px);pointer-events:none}
 .th-deck img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px;border:1px solid var(--line);box-shadow:var(--shadow-2)}
+
+/* Escritorio (ronda 3): las portadas pendientes se corren 32 px a la izquierda para que nunca toquen el botón de WhatsApp (64 px + 16 px de margen); compacto no las muestra */
+@media(min-width:1100px){.th-deck{translate:-32px 0}}
+/* Ventanas bajas (≤860 px de alto): el panel sube al inicio de su columna para que las portadas pendientes (abajo a la derecha) nunca lo toquen */
+@media(min-width:1100px) and (max-height:860px){.th-panel{align-self:start}}
 
 /* Compacto (<1100 px): chips arriba, mano a lo ancho y banda inferior */
 @media(max-width:1099px){
@@ -84,6 +93,7 @@ html[data-theme="dark"] .th-mq{color:rgba(245,245,240,.06)}
  .th-hand{grid-area:5/1}
  .th-foot{grid-area:6/1;min-height:40px}
  .th-panel .th-count{display:none}
+
  .th-panel .th-line{font-size:15px;line-height:1.35}
  .th-panel .button{min-height:44px;white-space:nowrap;font-size:15px;padding:10px 16px;width:100%}
  .th-arrows{margin-left:auto}
@@ -150,9 +160,12 @@ html[data-theme="dark"] .th-photo{outline:1px solid rgba(245,245,240,.35);outlin
 
 /* Compacto: las flechas viven en la fila de «Ver experiencia» (más alto útil para la composición); la fila inferior desaparece */
 .th-row{display:contents}
-.th-arrows--in{display:none}
+.th-arrows--in{display:flex;gap:12px}
+@media(min-width:1100px){.th-foot .th-arrows{display:none}}
 @media(max-width:1099px){
  .th-row{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%}
+ .th-row{justify-content:flex-end}
+ .th-row{order:1}.th-panel .button{order:2}
  .th-arrows--in{display:flex;gap:10px}
  .th-arrows--in button{width:44px;height:44px}
  .th-foot{display:none}
