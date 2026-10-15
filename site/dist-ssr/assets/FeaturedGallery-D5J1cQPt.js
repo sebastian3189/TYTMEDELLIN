@@ -1,4 +1,4 @@
-import { C as useLightMotion, L as jsx, R as jsxs, _ as Arrow } from "../entry-server.js";
+import { B as jsxs, C as useLightMotion, _ as Arrow, z as jsx } from "../entry-server.js";
 import { useLayoutEffect, useRef, useState } from "react";
 //#region src/FeaturedGallery.jsx
 function FeaturedGallery({ tour }) {

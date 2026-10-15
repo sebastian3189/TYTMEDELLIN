@@ -1,8 +1,8 @@
-import { A as textoFase, B as whatsapp, C as useLightMotion, H as t, I as Fragment, L as jsx, N as Icon, O as CHAPTERS, P as SocialIcon, R as jsxs, V as language, _ as Arrow, c as Logo, f as Picture, g as GoogleBadgeStatic, k as inicioTextos, l as Button, n as photos, r as tours, t as articles, u as Eyebrow, w as useMedia } from "../entry-server.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-Co7vR3yh.js";
-import { a as inicioVideos, i as tourEntry, n as HeroBlock, o as instagram } from "./Hero-DRC0OTlC.js";
-import { t as Reviews } from "./Reviews-DTAhOVPL.js";
-import { a as FAQ_HOME, l as Faq } from "./faq-data-CNC61Ks6.js";
+import { A as textoFase, B as jsxs, C as useLightMotion, F as Icon, H as whatsapp, I as SocialIcon, N as PlayIcon, O as CHAPTERS, P as SoundIcon, R as Fragment, U as language, W as t, _ as Arrow, c as Logo, f as Picture, g as GoogleBadgeStatic, k as inicioTextos, l as Button, n as photos, r as tours, t as articles, u as Eyebrow, w as useMedia, z as jsx } from "../entry-server.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-BONCV8ov.js";
+import { a as inicioVideos, c as safePlay, i as tourEntry, n as HeroBlock, o as instagram, s as prepVideo } from "./Hero-8hnWkv8g.js";
+import { t as Reviews } from "./Reviews-BiAb3-Ib.js";
+import { a as FAQ_HOME, l as Faq } from "./faq-data-CXHnHuQT.js";
 import { a as smooth$1, r as placePhotos } from "./mobile-motion-o2zoinXe.js";
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -397,6 +397,38 @@ var FLOATS = [
 		4,
 		1.8,
 		30
+	]
+];
+var FLOATS_M = [
+	[
+		.04,
+		.7,
+		72,
+		.06,
+		5,
+		-5,
+		0,
+		0
+	],
+	[
+		.7,
+		.72,
+		66,
+		.1,
+		8,
+		5,
+		1.4,
+		0
+	],
+	[
+		.76,
+		.215,
+		52,
+		.05,
+		0,
+		4,
+		1.2,
+		0
 	]
 ];
 var clamp$2 = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -1174,6 +1206,23 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 							})
 						})]
 					}),
+					staticMode && /* @__PURE__ */ jsx("ul", {
+						className: "scrub-static-cards",
+						role: "list",
+						"aria-label": "Experiencias",
+						children: cards.filter((c) => c.slug !== "traslados-aeropuerto-jmc").map((c) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsxs(Link, {
+							to: `/experiencias/${c.slug}`,
+							className: "ssc-card",
+							children: [/* @__PURE__ */ jsx("img", {
+								src: cardImg(c.slug, "t"),
+								width: "320",
+								height: "400",
+								alt: c.name,
+								loading: "lazy",
+								decoding: "async"
+							}), /* @__PURE__ */ jsx("span", { children: c.name })]
+						}) }, c.slug))
+					}),
 					/* @__PURE__ */ jsxs("div", {
 						className: "scrub-ctl",
 						children: [animated && /* @__PURE__ */ jsxs("button", {
@@ -1188,11 +1237,11 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 							}), /* @__PURE__ */ jsx(Arrow, { dir: "down" })]
 						}), bar]
 					}),
-					animated && !mobile && /* @__PURE__ */ jsx("div", {
+					animated && /* @__PURE__ */ jsx("div", {
 						ref: floatRef,
 						className: "bd-floats",
 						"aria-hidden": "true",
-						children: FLOATS.map(([fx, fy, w, dp, ci, rot, bl, md], k) => /* @__PURE__ */ jsx("i", {
+						children: (mobile ? FLOATS_M : FLOATS).map(([fx, fy, w, dp, ci, rot, bl, md], k) => /* @__PURE__ */ jsx("i", {
 							className: "bd-float",
 							"data-k": k,
 							"data-fx": fx,
@@ -1324,7 +1373,7 @@ var readReduce = () => {
 };
 var prefersStatic = () => {
 	if (typeof window === "undefined") return true;
-	if (readReduce() || window.matchMedia(REDUCE).matches || window.matchMedia(LOW).matches) return true;
+	if (readReduce() || window.matchMedia(REDUCE).matches || window.matchMedia(WIDE).matches && window.matchMedia(LOW).matches) return true;
 	const c = navigator.connection;
 	return Boolean(c && (c.saveData || [
 		"slow-2g",
@@ -1415,7 +1464,7 @@ function TravelHand() {
 	useLayoutEffect(() => {
 		const decide = () => {
 			const head = document.querySelector(".site-header")?.offsetHeight || 92, wide = window.matchMedia(WIDE).matches;
-			const fits = window.innerHeight - head >= (wide ? 560 : 640);
+			const fits = !wide || window.innerHeight - head >= 560;
 			setLayout(wide ? "wide" : "compact");
 			setMode(prefersStatic() || !fits ? "static" : "scrub");
 		};
@@ -3153,16 +3202,17 @@ function HomeHero() {
 	});
 }
 function StoryVideo({ v }) {
-	const light = useLightMotion(), ref = useRef(null), manual = useRef(false), [playing, setPlaying] = useState(false);
+	const light = useLightMotion(), ref = useRef(null), manual = useRef(false), [playing, setPlaying] = useState(false), [sound, setSound] = useState(false);
 	useEffect(() => {
 		const el = ref.current;
 		if (!v.src || !el) return void 0;
+		prepVideo(el, true);
 		const sync = () => setPlaying(!el.paused);
 		el.addEventListener("play", sync);
 		el.addEventListener("pause", sync);
 		const io = new IntersectionObserver(([e]) => {
 			if (light || manual.current) return;
-			if (e.isIntersecting) el.play().catch(() => {});
+			if (e.isIntersecting) safePlay(el);
 			else el.pause();
 		}, { threshold: .5 });
 		io.observe(el);
@@ -3175,8 +3225,34 @@ function StoryVideo({ v }) {
 	const toggle = () => {
 		const el = ref.current;
 		manual.current = true;
-		if (el.paused) el.play().catch(() => {});
+		if (el.paused) safePlay(el);
 		else el.pause();
+	};
+	const toggleSound = async () => {
+		const el = ref.current;
+		if (!el) return;
+		if (el.muted) {
+			el.muted = false;
+			el.removeAttribute("muted");
+			el.defaultMuted = false;
+			el.volume = 1;
+			setSound(true);
+			if (el.paused) {
+				manual.current = false;
+				try {
+					await el.play();
+				} catch {
+					el.muted = true;
+					el.setAttribute("muted", "");
+					setSound(false);
+					await el.play().catch(() => {});
+				}
+			}
+		} else {
+			el.muted = true;
+			el.setAttribute("muted", "");
+			setSound(false);
+		}
 	};
 	if (!v.src) return /* @__PURE__ */ jsx("div", {
 		className: "vframe vframe--story",
@@ -3186,27 +3262,38 @@ function StoryVideo({ v }) {
 		className: "story-media",
 		children: [/* @__PURE__ */ jsxs("div", {
 			className: "vframe vframe--story",
-			children: [/* @__PURE__ */ jsx("video", {
-				ref,
-				src: v.src,
-				poster: v.poster || void 0,
-				muted: true,
-				loop: true,
-				playsInline: true,
-				preload: "none",
-				disablePictureInPicture: true,
-				"aria-label": v.alt
-			}), /* @__PURE__ */ jsx("button", {
-				type: "button",
-				className: "vplay",
-				"data-playing": playing,
-				onClick: toggle,
-				"aria-label": playing ? "Pausar video" : "Reproducir video",
-				children: /* @__PURE__ */ jsx("span", {
-					"aria-hidden": "true",
-					children: playing ? "❚❚" : "▶"
+			children: [
+				/* @__PURE__ */ jsx("video", {
+					ref,
+					src: v.src,
+					poster: v.poster || void 0,
+					muted: true,
+					loop: true,
+					playsInline: true,
+					preload: "none",
+					disablePictureInPicture: true,
+					"aria-label": v.alt
+				}),
+				/* @__PURE__ */ jsx("button", {
+					type: "button",
+					className: "vsound",
+					"aria-pressed": sound,
+					onClick: toggleSound,
+					"aria-label": sound ? "Silenciar" : "Activar sonido",
+					children: /* @__PURE__ */ jsx(SoundIcon, { on: sound })
+				}),
+				/* @__PURE__ */ jsx("button", {
+					type: "button",
+					className: "vplay",
+					"data-playing": playing,
+					onClick: toggle,
+					"aria-label": playing ? "Pausar video" : "Reproducir video",
+					children: /* @__PURE__ */ jsx(PlayIcon, {
+						playing,
+						size: playing ? 16 : 24
+					})
 				})
-			})]
+			]
 		}), /* @__PURE__ */ jsxs("figcaption", { children: [v.alt, v.instagramUrl && /* @__PURE__ */ jsxs(Fragment, { children: [" · ", /* @__PURE__ */ jsxs("a", {
 			className: "text-link",
 			href: v.instagramUrl,

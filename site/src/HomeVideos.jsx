@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import PlayIcon, { SoundIcon } from './PlayIcon';
+import { prepVideo, safePlay } from './videoPrep';
 import { Link } from 'react-router-dom';
 import { useLightMotion } from './PremiumMotion';
 import { inicioTextos } from './inicio-textos';
@@ -28,21 +30,32 @@ export function HomeHero() {
 
 /* Video vertical 9:16 (290×516, §J): reproduce solo al entrar en pantalla y se pausa al salir; sin sonido ni control de volumen; con movimiento reducido no se reproduce solo. */
 function StoryVideo({ v }) {
-  const light = useLightMotion(), ref = useRef(null), manual = useRef(false), [playing, setPlaying] = useState(false);
+  const light = useLightMotion(), ref = useRef(null), manual = useRef(false), [playing, setPlaying] = useState(false), [sound, setSound] = useState(false);
   useEffect(() => {
     const el = ref.current; if (!v.src || !el) return undefined;
+    prepVideo(el, true);
     const sync = () => setPlaying(!el.paused); el.addEventListener('play', sync); el.addEventListener('pause', sync);
-    const io = new IntersectionObserver(([e]) => { if (light || manual.current) return; if (e.isIntersecting) el.play().catch(() => {}); else el.pause(); }, { threshold: 0.5 });
+    const io = new IntersectionObserver(([e]) => { if (light || manual.current) return; if (e.isIntersecting) safePlay(el); else el.pause(); }, { threshold: 0.5 });
     io.observe(el);
     return () => { io.disconnect(); el.removeEventListener('play', sync); el.removeEventListener('pause', sync); };
   }, [v.src, light]);
-  const toggle = () => { const el = ref.current; manual.current = true; if (el.paused) el.play().catch(() => {}); else el.pause(); };
+  const toggle = () => { const el = ref.current; manual.current = true; if (el.paused) safePlay(el); else el.pause(); };
+  // Sonido (el reel conserva su audio original por decisión del usuario): arranca SIEMPRE en silencio (requisito de iOS/Chrome) y solo suena tras tocar este botón.
+  // Si el navegador rechaza reproducir con sonido, vuelve a silencio y sigue reproduciendo.
+  const toggleSound = async () => {
+    const el = ref.current; if (!el) return;
+    if (el.muted) {
+      el.muted = false; el.removeAttribute('muted'); el.defaultMuted = false; el.volume = 1; setSound(true);
+      if (el.paused) { manual.current = false; try { await el.play(); } catch { el.muted = true; el.setAttribute('muted', ''); setSound(false); await el.play().catch(() => {}); } }
+    } else { el.muted = true; el.setAttribute('muted', ''); setSound(false); }
+  };
   if (!v.src) return <div className="vframe vframe--story"><Provisional /></div>;
   return (
     <figure className="story-media">
       <div className="vframe vframe--story">
         <video ref={ref} src={v.src} poster={v.poster || undefined} muted loop playsInline preload="none" disablePictureInPicture aria-label={v.alt} />
-        <button type="button" className="vplay" data-playing={playing} onClick={toggle} aria-label={playing ? 'Pausar video' : 'Reproducir video'}><span aria-hidden="true">{playing ? '❚❚' : '▶'}</span></button>
+        <button type="button" className="vsound" aria-pressed={sound} onClick={toggleSound} aria-label={sound ? 'Silenciar' : 'Activar sonido'}><SoundIcon on={sound} /></button>
+        <button type="button" className="vplay" data-playing={playing} onClick={toggle} aria-label={playing ? 'Pausar video' : 'Reproducir video'}><PlayIcon playing={playing} size={playing ? 16 : 24} /></button>
       </div>
       <figcaption>{v.alt}{v.instagramUrl && <> · <a className="text-link" href={v.instagramUrl} target="_blank" rel="noopener noreferrer">Ver en Instagram<span className="sr-only"> (se abre en una pestaña nueva)</span></a></>}</figcaption>
     </figure>

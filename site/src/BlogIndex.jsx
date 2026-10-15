@@ -13,6 +13,7 @@ import './blog.css';
  * Fecha y tiempo de lectura se muestran SOLO si el artículo trae `date` (ISO, p. ej. '2026-10-14') o `minutes`; hoy ninguno los trae (PENDIENTE CLIENTE).
  */
 const PAGE = 12;
+const MIN_RAIL = 5; // la fila «Recientes» solo aparece con 5 o más notas (con menos repetiría lo que ya se ve arriba)
 const reduced = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fmt = (iso) => { try { return new Date(`${iso}T12:00:00`).toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' }); } catch { return iso; } };
 
@@ -38,8 +39,8 @@ function Card({ a, sizes, eager }) {
 /* Fila arrastrable: ratón (arrastre con inercia), táctil (scroll nativo con snap), teclado (← → Inicio Fin) y flechas. */
 function Rail({ items }) {
   const rail = useRef(null), drag = useRef({ on: false, moved: 0, x: 0, left: 0, v: 0, t: 0, raf: 0 });
-  const [edge, setEdge] = useState({ start: true, end: false });
-  const sync = useCallback(() => { const el = rail.current; if (el) setEdge({ start: el.scrollLeft < 4, end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 4 }); }, []);
+  const [edge, setEdge] = useState({ start: true, end: false }), [cur, setCur] = useState(0);
+  const sync = useCallback(() => { const el = rail.current; if (!el) return; setEdge({ start: el.scrollLeft < 4, end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 4 }); const it = el.firstElementChild; if (it) setCur(Math.min(el.children.length - 1, Math.round(el.scrollLeft / (it.offsetWidth + 14)))); }, []);
   useEffect(() => { sync(); const el = rail.current, ro = new ResizeObserver(sync), d = drag.current; ro.observe(el); return () => { ro.disconnect(); cancelAnimationFrame(d.raf); }; }, [sync, items.length]);
   const step = (dir) => { const el = rail.current; el.scrollBy({ left: dir * Math.max(240, el.clientWidth * 0.8), behavior: reduced() ? 'auto' : 'smooth' }); };
   const down = (e) => { if (e.pointerType !== 'mouse' || e.button !== 0) return; const d = drag.current, el = rail.current; cancelAnimationFrame(d.raf); Object.assign(d, { on: true, moved: 0, x: e.clientX, left: el.scrollLeft, v: 0, t: performance.now() }); el.dataset.drag = 'true'; };
@@ -69,8 +70,9 @@ function Rail({ items }) {
       </div>
       <div ref={rail} className="blog-rail" role="region" aria-roledescription="carrusel" aria-label="Notas recientes" tabIndex={0} onKeyDown={key} onScroll={sync}
         onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onClickCapture={(e) => { if (drag.current.moved > 6) { e.preventDefault(); e.stopPropagation(); drag.current.moved = 0; } }}>
-        {items.map((a) => <div className="blog-rail-item" key={a.slug}><Card a={a} sizes="(max-width: 699px) 78vw, 340px" /></div>)}
+        {items.map((a) => <div className="blog-rail-item" key={a.slug}><Card a={a} sizes="(max-width: 699px) 82vw, 340px" /></div>)}
       </div>
+      <div className="blog-rail-dots" aria-hidden="true">{items.map((a, i) => <i key={a.slug} data-on={i === cur} />)}</div>
     </div>
   );
 }
@@ -107,7 +109,7 @@ export default function BlogIndex() {
         {list.length ? <div className="blog-grid-4">{list.map((a, i) => <Card key={a.slug} a={a} sizes="(max-width: 559px) 100vw, (max-width: 1199px) 50vw, 25vw" eager={i < 2} />)}</div> : <p className="empty-note">Aún no hay notas en esta categoría.</p>}
         {pool.length > shown && <div className="blog-more"><button type="button" className="button secondary" onClick={() => setShown((n) => n + PAGE)}>Cargar más</button></div>}
       </section>
-      {articles.length > 1 && <section className="wrap blog-recent"><Rail items={articles} /></section>}
+      {articles.length >= MIN_RAIL && <section className="wrap blog-recent"><Rail items={articles} /></section>}
     </>
   );
 }

@@ -795,7 +795,11 @@ var en_default = {
 	"Los horarios pueden modificarse dependiendo del lugar de recogida, tráfico, condiciones climáticas e itinerario.": "Schedules may change depending on the pickup location, traffic, weather conditions and itinerary.",
 	"Toca la foto para ampliar": "Tap the photo to enlarge",
 	"Política de tratamiento de datos": "Personal data processing policy",
-	"Qué datos personales recogemos, con qué finalidad, cuánto tiempo los conservamos y cómo ejercer tus derechos (Ley 1581 de 2012).": "What personal data we collect, what for, how long we keep it and how to exercise your rights (Law 1581 of 2012)."
+	"Qué datos personales recogemos, con qué finalidad, cuánto tiempo los conservamos y cómo ejercer tus derechos (Ley 1581 de 2012).": "What personal data we collect, what for, how long we keep it and how to exercise your rights (Law 1581 of 2012).",
+	"Activar sonido": "Turn sound on",
+	Silenciar: "Mute",
+	"Pausar video": "Pause video",
+	"Reproducir video": "Play video"
 };
 //#endregion
 //#region src/i18n.js
@@ -1122,6 +1126,40 @@ function Skyline() {
 	});
 }
 //#endregion
+//#region src/PlayIcon.jsx
+function PlayIcon({ playing, size = 16 }) {
+	return /* @__PURE__ */ jsx$1("svg", {
+		className: "ico-play",
+		viewBox: "0 0 24 24",
+		width: size,
+		height: size,
+		fill: "currentColor",
+		"aria-hidden": "true",
+		focusable: "false",
+		children: playing ? /* @__PURE__ */ jsx$1("path", { d: "M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" }) : /* @__PURE__ */ jsx$1("path", { d: "M8 5.5v13l10.5-6.5z" })
+	});
+}
+function SoundIcon({ on, size = 20 }) {
+	return /* @__PURE__ */ jsxs$1("svg", {
+		className: "ico-sound",
+		viewBox: "0 0 24 24",
+		width: size,
+		height: size,
+		fill: "none",
+		stroke: "currentColor",
+		strokeWidth: "1.8",
+		strokeLinecap: "round",
+		strokeLinejoin: "round",
+		"aria-hidden": "true",
+		focusable: "false",
+		children: [/* @__PURE__ */ jsx$1("path", {
+			d: "M4 9.5h3.5L12 6v12l-4.5-3.5H4z",
+			fill: "currentColor",
+			stroke: "none"
+		}), on ? /* @__PURE__ */ jsx$1("path", { d: "M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" }) : /* @__PURE__ */ jsx$1("path", { d: "M16 9.5l5 5M21 9.5l-5 5" })]
+	});
+}
+//#endregion
 //#region src/Allies.jsx
 var ITEMS = [
 	{
@@ -1226,10 +1264,7 @@ function Allies() {
 			"aria-pressed": paused,
 			"aria-label": paused ? "Reanudar el movimiento de los aliados" : "Pausar el movimiento de los aliados",
 			onClick: () => setPaused(!paused),
-			children: /* @__PURE__ */ jsx$1("span", {
-				"aria-hidden": "true",
-				children: paused ? "▶" : "❚❚"
-			})
+			children: /* @__PURE__ */ jsx$1(PlayIcon, { playing: !paused })
 		})]
 	});
 }
@@ -2063,7 +2098,7 @@ function ShareMenu({ name, path, className = "" }) {
 }
 //#endregion
 //#region src/shared.jsx
-var Quote = lazy(() => import("./assets/Quote-D-YuBR_E.js"));
+var Quote = lazy(() => import("./assets/Quote-CKw6CFB_.js"));
 var reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 function Picture({ photo, alt, priority = false, className = "", native = false, sizes = "(max-width: 700px) 100vw, 65vw" }) {
 	if (!photo) return null;
@@ -2402,22 +2437,22 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-CWiOTrRc.js");
+var company_ = () => import("./assets/Company-BqZ-YeOl.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-Cp_btW82.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-B6qylHLF.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-vx3Etzdn.js").then((m) => m.default)),
-	fleet: lazyRoute(() => import("./assets/Fleet-BZjMsdTV.js").then((m) => m.default)),
-	blog: lazyRoute(pick(() => import("./assets/Blog-C8NR8mUV.js"), "Blog")),
-	article: lazyRoute(() => import("./assets/Blog-C8NR8mUV.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-BZ14uEJ4.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-D42_5exw.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-CbScvnYt.js").then((m) => m.default)),
+	fleet: lazyRoute(() => import("./assets/Fleet-DO59oc98.js").then((m) => m.default)),
+	blog: lazyRoute(pick(() => import("./assets/Blog-Bo2Z3Wuu.js"), "Blog")),
+	article: lazyRoute(() => import("./assets/Blog-Bo2Z3Wuu.js").then((m) => m.default)),
 	about: lazyRoute(pick(company_, "About")),
 	services: lazyRoute(pick(company_, "Services")),
 	contact: lazyRoute(pick(company_, "Contact")),
 	quote: lazyRoute(pick(company_, "QuotePage")),
 	privacy: lazyRoute(pick(company_, "Privacy")),
 	ratings: lazyRoute(pick(company_, "Ratings")),
-	dataPolicy: lazyRoute(() => import("./assets/DataPolicy-1Cst0ADf.js").then((m) => m.default)),
-	notFound: lazyRoute(() => import("./assets/NotFound-BJlW82fM.js").then((m) => m.default))
+	dataPolicy: lazyRoute(() => import("./assets/DataPolicy-C5Lhpe4k.js").then((m) => m.default)),
+	notFound: lazyRoute(() => import("./assets/NotFound-DqRFEl7f.js").then((m) => m.default))
 };
 R.home, R.catalog, R.tour, R.fleet, R.blog, R.article, R.about, R.services, R.contact, R.quote, R.privacy, R.dataPolicy, R.ratings;
 var preloadAllRoutes = () => Promise.all(Object.values(R).map((route) => route.preload()));
@@ -4163,9 +4198,9 @@ var media_default = {
 			"src": "/media/hero/hero-m-750.webp",
 			"srcset": "/media/hero/hero-m-540.webp 540w, /media/hero/hero-m-750.webp 750w, /media/hero/hero-m-1080.webp 1080w",
 			"width": 750,
-			"height": 1625
+			"height": 1626
 		},
-		"source": "IMAGENES/FotosMedellin/City Tour/IMG_3722.jpg (foto propia, panorámica 7818×3940): recorte 16:9 sin la antena (escritorio) y vertical ~9:19,5 centrado en el valle (móvil). WebP sin EXIF."
+		"source": "IMAGENES/FotosMedellin/City Tour/dji_fly_20260522_162510_854_1779485191655_photo_optimized.jpg (foto propia, dron, 4000×2250): completa 16:9 (escritorio) y vertical ~9:19,5 centrado en el grupo (móvil). WebP sin EXIF."
 	}
 };
 //#endregion
@@ -4608,4 +4643,4 @@ async function render(url) {
 	}));
 }
 //#endregion
-export { textoFase as A, whatsapp as B, useLightMotion as C, watchScroll as D, docTop as E, Socials as F, t as H, Fragment as I, jsx$1 as L, usePageMeta as M, Icon as N, CHAPTERS as O, SocialIcon as P, jsxs$1 as R, useFlipGrid as S, useMounted as T, language as V, Arrow as _, vehicles as a, Marquee as b, Logo as c, PageTitle as d, Picture as f, GoogleBadgeStatic as g, TourCard as h, values as i, NOT_FOUND as j, inicioTextos as k, Button as l, Rail as m, metaFor, photos as n, rawTours as o, QuoteSection as p, paths, tours as r, render, media_default as s, articles as t, Eyebrow as u, QuoteCopy as v, useMedia as w, Trust as x, Manifesto as y, company as z };
+export { textoFase as A, jsxs$1 as B, useLightMotion as C, watchScroll as D, docTop as E, Icon as F, whatsapp as H, SocialIcon as I, Socials as L, usePageMeta as M, PlayIcon as N, CHAPTERS as O, SoundIcon as P, Fragment as R, useFlipGrid as S, useMounted as T, language as U, company as V, t as W, Arrow as _, vehicles as a, Marquee as b, Logo as c, PageTitle as d, Picture as f, GoogleBadgeStatic as g, TourCard as h, values as i, NOT_FOUND as j, inicioTextos as k, Button as l, Rail as m, metaFor, photos as n, rawTours as o, QuoteSection as p, paths, tours as r, render, media_default as s, articles as t, Eyebrow as u, QuoteCopy as v, useMedia as w, Trust as x, Manifesto as y, jsx$1 as z };

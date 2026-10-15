@@ -1,6 +1,25 @@
-import { C as useLightMotion, I as Fragment, L as jsx, R as jsxs, _ as Arrow, k as inicioTextos, r as tours, s as media_default, z as company } from "../entry-server.js";
+import { B as jsxs, C as useLightMotion, N as PlayIcon, R as Fragment, V as company, _ as Arrow, k as inicioTextos, r as tours, s as media_default, z as jsx } from "../entry-server.js";
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
+//#region src/videoPrep.js
+function prepVideo(el, muted = true) {
+	if (!el) return;
+	if (muted) {
+		el.muted = true;
+		el.defaultMuted = true;
+		el.setAttribute("muted", "");
+	}
+	el.setAttribute("playsinline", "");
+	el.setAttribute("webkit-playsinline", "");
+	el.playsInline = true;
+	el.disableRemotePlayback = true;
+}
+function safePlay(el) {
+	prepVideo(el, el.muted);
+	const p = el.play();
+	return p && p.catch ? p.catch(() => {}) : Promise.resolve();
+}
+//#endregion
 //#region src/inicio-videos.js
 var inicioVideos = {
 	hero: {
@@ -169,11 +188,12 @@ function useHeroPlayback(ref, light, enabled) {
 		const sync = () => setPlaying(!el.paused);
 		el.addEventListener("play", sync);
 		el.addEventListener("pause", sync);
+		prepVideo(el);
 		if (light) el.pause();
-		else el.play().catch(() => {});
+		else safePlay(el);
 		const observer = new IntersectionObserver(([entry]) => {
 			if (light || manual.current) return;
-			if (entry.isIntersecting) el.play().catch(() => {});
+			if (entry.isIntersecting) safePlay(el);
 			else el.pause();
 		});
 		observer.observe(el);
@@ -191,7 +211,7 @@ function useHeroPlayback(ref, light, enabled) {
 		const el = ref.current;
 		if (!el) return;
 		manual.current = true;
-		if (el.paused) el.play().catch(() => {});
+		if (el.paused) safePlay(el);
 		else el.pause();
 	};
 	return [playing, toggle];
@@ -326,6 +346,23 @@ function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = fal
 						paused: slidesPaused,
 						still: light
 					}),
+					img && /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx("link", {
+						rel: "preload",
+						as: "image",
+						href: img.desktop.src,
+						imageSrcSet: img.desktop.srcset,
+						imageSizes: "100vw",
+						media: "(min-width: 800px)",
+						fetchPriority: "high"
+					}), /* @__PURE__ */ jsx("link", {
+						rel: "preload",
+						as: "image",
+						href: img.mobile.src,
+						imageSrcSet: img.mobile.srcset,
+						imageSizes: "100vw",
+						media: "(max-width: 799px)",
+						fetchPriority: "high"
+					})] }),
 					img && /* @__PURE__ */ jsxs("picture", { children: [/* @__PURE__ */ jsx("source", {
 						media: "(max-width: 799px)",
 						srcSet: img.mobile.srcset,
@@ -371,10 +408,7 @@ function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = fal
 				className: "hero-pause",
 				onClick: toggle,
 				"aria-label": playing ? "Pausar video" : "Reproducir video",
-				children: /* @__PURE__ */ jsx("span", {
-					"aria-hidden": "true",
-					children: playing ? "❚❚" : "▶"
-				})
+				children: /* @__PURE__ */ jsx(PlayIcon, { playing })
 			}),
 			hasSlides && slides.length > 1 && !light && /* @__PURE__ */ jsx("button", {
 				type: "button",
@@ -382,10 +416,7 @@ function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = fal
 				onClick: onSlidesToggle,
 				"aria-pressed": slidesPaused,
 				"aria-label": slidesPaused ? "Reproducir imágenes" : "Pausar imágenes",
-				children: /* @__PURE__ */ jsx("span", {
-					"aria-hidden": "true",
-					children: slidesPaused ? "▶" : "❚❚"
-				})
+				children: /* @__PURE__ */ jsx(PlayIcon, { playing: !slidesPaused })
 			})
 		]
 	});
@@ -442,4 +473,4 @@ function CatalogHero() {
 	});
 }
 //#endregion
-export { inicioVideos as a, tourEntry as i, HeroBlock as n, instagram as o, TourHeroVideo as r, CatalogHero as t };
+export { inicioVideos as a, safePlay as c, tourEntry as i, HeroBlock as n, instagram as o, TourHeroVideo as r, prepVideo as s, CatalogHero as t };

@@ -1,7 +1,7 @@
-import { B as whatsapp, F as Socials, I as Fragment, L as jsx, R as jsxs, _ as Arrow, d as PageTitle, f as Picture, i as values, l as Button, n as photos, p as QuoteSection, u as Eyebrow, y as Manifesto, z as company } from "../entry-server.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-BzuM0C8h.js";
-import { t as Reviews } from "./Reviews-DTAhOVPL.js";
-import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-CNC61Ks6.js";
+import { B as jsxs, H as whatsapp, L as Socials, R as Fragment, V as company, _ as Arrow, d as PageTitle, f as Picture, i as values, l as Button, n as photos, p as QuoteSection, u as Eyebrow, y as Manifesto, z as jsx } from "../entry-server.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-D5J1cQPt.js";
+import { t as Reviews } from "./Reviews-BiAb3-Ib.js";
+import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-CXHnHuQT.js";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 //#region src/AboutFx.jsx

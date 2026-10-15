@@ -116,5 +116,10 @@ html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .socials a{col
 .vframe--story video{object-fit:cover}
 
 /* Hero con la foto aérea «PARCE MEDELLIN»: velo base ≥ 0,60 + oscurecimiento extra detrás del titular y los botones para que el letrero pintado no compita (AA) */
-.home-hero[data-video="image"] .hero-shade{background:radial-gradient(ellipse 78% 62% at 50% 54%,rgba(15,17,15,.5) 0%,rgba(15,17,15,.28) 60%,rgba(15,17,15,0) 100%),linear-gradient(to top,rgba(15,17,15,.4) 0%,rgba(15,17,15,0) 55%),rgba(15,17,15,.64)}
+.home-hero[data-video="image"] .hero-shade{background:radial-gradient(ellipse 82% 66% at 50% 56%,rgba(15,17,15,.56) 0%,rgba(15,17,15,.32) 62%,rgba(15,17,15,0) 100%),linear-gradient(to top,rgba(15,17,15,.4) 0%,rgba(15,17,15,0) 55%),rgba(15,17,15,.62)}
 .home-hero[data-video="image"] .hero-copy h1,.home-hero[data-video="image"] .hero-support{text-shadow:0 2px 24px rgba(15,17,15,.55)}
+.home-hero[data-video="image"] .hero-img{filter:blur(2px) saturate(.92);transform:scale(1.04)} /* desenfoque leve: el letrero pintado queda como textura y no compite con el titular */
+@media(prefers-reduced-motion:reduce){.home-hero[data-video="image"] .hero-img{transform:none}}
+.vsound{position:absolute;left:12px;bottom:12px;z-index:2;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1.5px solid rgba(245,245,240,.8);border-radius:50%;background:rgba(15,17,15,.6);color:#F5F5F0}
+.vsound[aria-pressed=true]{background:#FF7E08;border-color:#FF7E08;color:#1E201D}
+.vsound:hover{background:rgba(245,245,240,.2)}.vsound[aria-pressed=true]:hover{background:#FF983F}

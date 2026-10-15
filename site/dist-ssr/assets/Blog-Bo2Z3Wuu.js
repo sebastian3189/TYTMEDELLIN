@@ -1,10 +1,11 @@
-import { I as Fragment, L as jsx, M as usePageMeta, R as jsxs, _ as Arrow, d as PageTitle, f as Picture, l as Button, t as articles } from "../entry-server.js";
-import NotFound from "./NotFound-BJlW82fM.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-Co7vR3yh.js";
+import { B as jsxs, M as usePageMeta, R as Fragment, _ as Arrow, d as PageTitle, f as Picture, l as Button, t as articles, z as jsx } from "../entry-server.js";
+import NotFound from "./NotFound-DqRFEl7f.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-BONCV8ov.js";
 import { Link, useParams } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
 //#region src/BlogIndex.jsx
 var PAGE = 12;
+var MIN_RAIL = 5;
 var reduced = () => typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 var fmt = (iso) => {
 	try {
@@ -74,13 +75,16 @@ function Rail({ items }) {
 	const [edge, setEdge] = useState({
 		start: true,
 		end: false
-	});
+	}), [cur, setCur] = useState(0);
 	const sync = useCallback(() => {
 		const el = rail.current;
-		if (el) setEdge({
+		if (!el) return;
+		setEdge({
 			start: el.scrollLeft < 4,
 			end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 4
 		});
+		const it = el.firstElementChild;
+		if (it) setCur(Math.min(el.children.length - 1, Math.round(el.scrollLeft / (it.offsetWidth + 14))));
 	}, []);
 	useEffect(() => {
 		sync();
@@ -161,52 +165,60 @@ function Rail({ items }) {
 	};
 	return /* @__PURE__ */ jsxs("div", {
 		className: "blog-rail-wrap",
-		children: [/* @__PURE__ */ jsxs("div", {
-			className: "blog-rail-head",
-			children: [/* @__PURE__ */ jsx("h2", { children: "Recientes" }), /* @__PURE__ */ jsxs("div", {
-				className: "blog-rail-arrows",
-				children: [/* @__PURE__ */ jsx("button", {
-					type: "button",
-					"aria-label": "Notas anteriores",
-					disabled: edge.start,
-					onClick: () => step(-1),
-					children: /* @__PURE__ */ jsx(Arrow, { dir: "left" })
-				}), /* @__PURE__ */ jsx("button", {
-					type: "button",
-					"aria-label": "Notas siguientes",
-					disabled: edge.end,
-					onClick: () => step(1),
-					children: /* @__PURE__ */ jsx(Arrow, { dir: "right" })
+		children: [
+			/* @__PURE__ */ jsxs("div", {
+				className: "blog-rail-head",
+				children: [/* @__PURE__ */ jsx("h2", { children: "Recientes" }), /* @__PURE__ */ jsxs("div", {
+					className: "blog-rail-arrows",
+					children: [/* @__PURE__ */ jsx("button", {
+						type: "button",
+						"aria-label": "Notas anteriores",
+						disabled: edge.start,
+						onClick: () => step(-1),
+						children: /* @__PURE__ */ jsx(Arrow, { dir: "left" })
+					}), /* @__PURE__ */ jsx("button", {
+						type: "button",
+						"aria-label": "Notas siguientes",
+						disabled: edge.end,
+						onClick: () => step(1),
+						children: /* @__PURE__ */ jsx(Arrow, { dir: "right" })
+					})]
 				})]
-			})]
-		}), /* @__PURE__ */ jsx("div", {
-			ref: rail,
-			className: "blog-rail",
-			role: "region",
-			"aria-roledescription": "carrusel",
-			"aria-label": "Notas recientes",
-			tabIndex: 0,
-			onKeyDown: key,
-			onScroll: sync,
-			onPointerDown: down,
-			onPointerMove: move,
-			onPointerUp: up,
-			onPointerCancel: up,
-			onClickCapture: (e) => {
-				if (drag.current.moved > 6) {
-					e.preventDefault();
-					e.stopPropagation();
-					drag.current.moved = 0;
-				}
-			},
-			children: items.map((a) => /* @__PURE__ */ jsx("div", {
-				className: "blog-rail-item",
-				children: /* @__PURE__ */ jsx(Card, {
-					a,
-					sizes: "(max-width: 699px) 78vw, 340px"
-				})
-			}, a.slug))
-		})]
+			}),
+			/* @__PURE__ */ jsx("div", {
+				ref: rail,
+				className: "blog-rail",
+				role: "region",
+				"aria-roledescription": "carrusel",
+				"aria-label": "Notas recientes",
+				tabIndex: 0,
+				onKeyDown: key,
+				onScroll: sync,
+				onPointerDown: down,
+				onPointerMove: move,
+				onPointerUp: up,
+				onPointerCancel: up,
+				onClickCapture: (e) => {
+					if (drag.current.moved > 6) {
+						e.preventDefault();
+						e.stopPropagation();
+						drag.current.moved = 0;
+					}
+				},
+				children: items.map((a) => /* @__PURE__ */ jsx("div", {
+					className: "blog-rail-item",
+					children: /* @__PURE__ */ jsx(Card, {
+						a,
+						sizes: "(max-width: 699px) 82vw, 340px"
+					})
+				}, a.slug))
+			}),
+			/* @__PURE__ */ jsx("div", {
+				className: "blog-rail-dots",
+				"aria-hidden": "true",
+				children: items.map((a, i) => /* @__PURE__ */ jsx("i", { "data-on": i === cur }, a.slug))
+			})
+		]
 	});
 }
 function BlogIndex() {
@@ -312,7 +324,7 @@ function BlogIndex() {
 				})
 			]
 		}),
-		articles.length > 1 && /* @__PURE__ */ jsx("section", {
+		articles.length >= MIN_RAIL && /* @__PURE__ */ jsx("section", {
 			className: "wrap blog-recent",
 			children: /* @__PURE__ */ jsx(Rail, { items: articles })
 		})

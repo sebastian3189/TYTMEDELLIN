@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PlayIcon from './PlayIcon';
 
 // Aliados y referencias (sitio oficial: MarcaConfianza.tsx). Los logos identifican entidades y plataformas; no declaran certificaciones.
 // Tira continua lenta que se pausa con el cursor o el foco y con el botón; en movimiento reducido es una rejilla estática.
@@ -28,6 +29,6 @@ export default function Allies() {
         <ul role="list" aria-hidden="true" className="allies-copy">{ITEMS.map(i => <Item key={i.name} item={i} hidden />)}</ul>
       </div>
     </div>
-    <button type="button" className="allies-pause" aria-pressed={paused} aria-label={paused ? 'Reanudar el movimiento de los aliados' : 'Pausar el movimiento de los aliados'} onClick={() => setPaused(!paused)}><span aria-hidden="true">{paused ? '▶' : '❚❚'}</span></button>
+    <button type="button" className="allies-pause" aria-pressed={paused} aria-label={paused ? 'Reanudar el movimiento de los aliados' : 'Pausar el movimiento de los aliados'} onClick={() => setPaused(!paused)}><PlayIcon playing={!paused} /></button>
   </section>;
 }

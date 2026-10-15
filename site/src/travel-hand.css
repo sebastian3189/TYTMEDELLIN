@@ -177,7 +177,7 @@ html[data-theme="dark"] .th-photo{outline:1px solid rgba(245,245,240,.35);outlin
 @media(max-width:1099px){
  .th:not(.th--static){margin-top:0}
  .th-track{height:auto}
- .th-stage{position:relative;top:auto;height:min(calc(100svh - var(--th-top)),780px);opacity:1;background:var(--bg)}
+ .th-stage{position:relative;top:auto;height:clamp(640px,calc(100svh - var(--th-top)),780px);opacity:1;background:var(--bg)}
  .th-marker{top:0!important}
  .th-all{position:static;padding:10px 0 28px}
 }

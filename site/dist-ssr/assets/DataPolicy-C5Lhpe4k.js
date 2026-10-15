@@ -1,4 +1,4 @@
-import { I as Fragment, L as jsx, R as jsxs, V as language, d as PageTitle, z as company } from "../entry-server.js";
+import { B as jsxs, R as Fragment, U as language, V as company, d as PageTitle, z as jsx } from "../entry-server.js";
 //#region src/pages/DataPolicy.jsx
 var SECTIONS = [
 	["responsable", "1. Responsable del tratamiento"],

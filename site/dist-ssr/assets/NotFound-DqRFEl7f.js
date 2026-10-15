@@ -1,4 +1,4 @@
-import { I as Fragment, L as jsx, M as usePageMeta, R as jsxs, _ as Arrow, d as PageTitle, h as TourCard, j as NOT_FOUND, r as tours } from "../entry-server.js";
+import { B as jsxs, M as usePageMeta, R as Fragment, _ as Arrow, d as PageTitle, h as TourCard, j as NOT_FOUND, r as tours, z as jsx } from "../entry-server.js";
 import { Link } from "react-router-dom";
 //#region src/pages/NotFound.jsx
 function NotFound() {

@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import PlayIcon from './PlayIcon';
+import { prepVideo, safePlay } from './videoPrep';
 import { Link } from 'react-router-dom';
 import { useLightMotion } from './PremiumMotion';
 import Arrow from './Arrow';
@@ -22,10 +24,11 @@ function useHeroPlayback(ref, light, enabled) {
     if (!enabled || !el) return undefined;
     const sync = () => setPlaying(!el.paused);
     el.addEventListener('play', sync); el.addEventListener('pause', sync);
-    if (light) el.pause(); else el.play().catch(() => {});
+    prepVideo(el);
+    if (light) el.pause(); else safePlay(el);
     const observer = new IntersectionObserver(([entry]) => {
       if (light || manual.current) return;
-      if (entry.isIntersecting) el.play().catch(() => {}); else el.pause();
+      if (entry.isIntersecting) safePlay(el); else el.pause();
     });
     observer.observe(el);
     return () => { observer.disconnect(); el.removeEventListener('play', sync); el.removeEventListener('pause', sync); };
@@ -33,7 +36,7 @@ function useHeroPlayback(ref, light, enabled) {
   const toggle = () => {
     const el = ref.current; if (!el) return;
     manual.current = true;
-    if (el.paused) el.play().catch(() => {}); else el.pause();
+    if (el.paused) safePlay(el); else el.pause();
   };
   return [playing, toggle];
 }
@@ -122,12 +125,12 @@ export function HeroBlock({ video, slides, eyebrow, title, support, actions, tou
       </div>
       {video.src && (
         <button type="button" className="hero-pause" onClick={toggle} aria-label={playing ? 'Pausar video' : 'Reproducir video'}>
-          <span aria-hidden="true">{playing ? '❚❚' : '▶'}</span>
+          <PlayIcon playing={playing} />
         </button>
       )}
       {hasSlides && slides.length > 1 && !light && (
         <button type="button" className="hero-pause" onClick={onSlidesToggle} aria-pressed={slidesPaused} aria-label={slidesPaused ? 'Reproducir imágenes' : 'Pausar imágenes'}>
-          <span aria-hidden="true">{slidesPaused ? '▶' : '❚❚'}</span>
+          <PlayIcon playing={!slidesPaused} />
         </button>
       )}
     </section>

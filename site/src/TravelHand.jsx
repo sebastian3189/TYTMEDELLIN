@@ -34,7 +34,7 @@ const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const readReduce = () => { try { return localStorage.getItem(REDUCE_KEY) === '1'; } catch { return false; } };
 const prefersStatic = () => {
   if (typeof window === 'undefined') return true;
-  if (readReduce() || window.matchMedia(REDUCE).matches || window.matchMedia(LOW).matches) return true;
+  if (readReduce() || window.matchMedia(REDUCE).matches || (window.matchMedia(WIDE).matches && window.matchMedia(LOW).matches)) return true;
   const c = navigator.connection; return Boolean(c && (c.saveData || ['slow-2g', '2g', '3g'].includes(c.effectiveType)));
 };
 
@@ -78,7 +78,7 @@ export default function TravelHand() {
   useLayoutEffect(() => {
     const decide = () => {
       const head = document.querySelector('.site-header')?.offsetHeight || 92, wide = window.matchMedia(WIDE).matches;
-      const fits = window.innerHeight - head >= (wide ? 560 : 640);
+      const fits = !wide || window.innerHeight - head >= 560; // compacto (móvil/tablet): el escenario no está fijado y crece si la ventana es baja (iPhone: Safari deja ~660 px de alto útil), así que nunca pasa a estático por altura
       setLayout(wide ? 'wide' : 'compact'); setMode(prefersStatic() || !fits ? 'static' : 'scrub');
     };
     decide(); setReady(true);
