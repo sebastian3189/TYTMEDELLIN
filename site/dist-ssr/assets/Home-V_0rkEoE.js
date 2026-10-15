@@ -50,17 +50,18 @@ var smooth = (t) => {
 /** Límites del recorrido en svh. Fase del clip: 165 svh escritorio / 140 svh móvil (ajuste aprobado, se conserva). Tras la contracción (t4) solo queda el relevo (t4→t5) y el fundido final. */
 function timeline(mobile) {
 	if (mobile) {
-		const t0 = 24, t1 = 64, t2 = 204, t3 = 228, t4 = 276, t5 = 306;
+		const t0 = 24, t1 = 64, t2 = 204, t3 = 248;
 		return {
 			t0,
 			t1,
 			t2,
 			t3,
-			t4,
-			t5,
-			t6: t5,
-			total: 310,
-			clip: 140
+			t4: t3,
+			t5: t3,
+			t6: t3,
+			total: t3,
+			clip: 140,
+			film: true
 		};
 	}
 	const t0 = 30, t1 = 80, t2 = 245, t3 = 260, t4 = 305, t5 = 335;
@@ -121,6 +122,15 @@ var DY = [
 var FRAME_ROT = -2.4;
 /** Estado derivado de u: fase de interfaz, ventana del marco y relevo. */
 function stateAt(u, T, mobile) {
+	if (T.film) return {
+		ui: u >= T.t1 ? "clip" : u >= T.t0 ? "flip" : "deck",
+		w: u < T.t0 ? 0 : u < T.t1 ? smooth((u - T.t0) / (T.t1 - T.t0)) : 1,
+		D: u < T.t1 ? 1 - smooth((u - T.t0) / (.45 * (T.t1 - T.t0))) : 0,
+		clipT: clamp$3((u - T.t1) / (T.t2 - T.t1)),
+		rel: 0,
+		fade: 0,
+		sh: clamp$3(u / T.t0)
+	};
 	let ui = "deck";
 	if (u >= T.t0) ui = "flip";
 	if (u >= T.t1) ui = "clip";
@@ -537,7 +547,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 		let dir = 1, prevCenter = 0;
 		const count = set.count;
 		const PLAZA = T.t1 + .7 * (T.t2 - T.t1), CAP_C1 = [T.t0 + .5 * (T.t1 - T.t0), PLAZA];
-		const CAP_C2 = [PLAZA, T.t3 + .5 * (T.t4 - T.t3)];
+		const CAP_C2 = [PLAZA, T.film ? Infinity : T.t3 + .5 * (T.t4 - T.t3)];
 		const blobs = new Array(count).fill(null), full = new Array(count).fill(null), low = new Array(count).fill(null);
 		const pending = /* @__PURE__ */ new Set(), controller = new AbortController();
 		let raf = 0, visible = true, destroyed = false, lastKey = "", ui = "", cap = "", chapter = 0, loaded = 0, failures = 0;

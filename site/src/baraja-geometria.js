@@ -19,8 +19,10 @@ export const RELAY_SVH = 30, FADE_SVH = 4;
 /** Límites del recorrido en svh. Fase del clip: 165 svh escritorio / 140 svh móvil (ajuste aprobado, se conserva). Tras la contracción (t4) solo queda el relevo (t4→t5) y el fundido final. */
 export function timeline(mobile) {
   if (mobile) {
-    const t0 = 24, t1 = t0 + 40, t2 = t1 + 140, t3 = t2 + 24, t4 = t3 + 48, t5 = t4 + RELAY_SVH;
-    return { t0, t1, t2, t3, t4, t5, t6: t5, total: t5 + FADE_SVH, clip: 140 };
+    // Móvil (pedido del usuario 2026-10-15): la película TERMINA en su último fotograma («02 / 02 · Plaza Botero»). Sin retorno al mazo, relevo ni fundido:
+    // el scroll termina al llegar a `total` y la página continúa con la siguiente sección. `film` activa la rama móvil de stateAt.
+    const t0 = 24, t1 = t0 + 40, t2 = t1 + 140, t3 = t2 + 44;
+    return { t0, t1, t2, t3, t4: t3, t5: t3, t6: t3, total: t3, clip: 140, film: true };
   }
   const t0 = 30, t1 = t0 + 50, t2 = t1 + 165, t3 = t2 + 15, t4 = t3 + 45, t5 = t4 + RELAY_SVH;
   return { t0, t1, t2, t3, t4, t5, t6: t5, total: t5 + FADE_SVH, clip: 165 };
@@ -34,6 +36,12 @@ export const FRAME_ROT = -2.4;
 
 /** Estado derivado de u: fase de interfaz, ventana del marco y relevo. */
 export function stateAt(u, T, mobile) {
+  if (T.film) { // móvil: baraja → Flip → película y se queda en el último fotograma (w = 1, sin shrink/relay/fade)
+    const ui = u >= T.t1 ? 'clip' : u >= T.t0 ? 'flip' : 'deck';
+    const w = u < T.t0 ? 0 : u < T.t1 ? smooth((u - T.t0) / (T.t1 - T.t0)) : 1;
+    const D = u < T.t1 ? 1 - smooth((u - T.t0) / (0.45 * (T.t1 - T.t0))) : 0;
+    return { ui, w, D, clipT: clamp((u - T.t1) / (T.t2 - T.t1)), rel: 0, fade: 0, sh: clamp(u / T.t0) };
+  }
   let ui = 'deck';
   if (u >= T.t0) ui = 'flip';
   if (u >= T.t1) ui = 'clip';

@@ -2821,7 +2821,7 @@ function lazyRoute(loader) {
 var pick = (loader, name) => () => loader().then((m) => m[name]);
 var company_ = () => import("./assets/Company-DxikqNaR.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-BZ14uEJ4.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-V_0rkEoE.js").then((m) => m.default)),
 	catalog: lazyRoute(() => import("./assets/Catalog-D42_5exw.js").then((m) => m.default)),
 	tour: lazyRoute(() => import("./assets/Tour-kkjik22e.js").then((m) => m.default)),
 	fleet: lazyRoute(() => import("./assets/Fleet-DO59oc98.js").then((m) => m.default)),

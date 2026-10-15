@@ -111,7 +111,7 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
     const count = set.count;
     // Rótulos sin huecos: c1 entra a mitad del Flip y dura hasta que entra c2 (PLAZA); c2 dura hasta media contracción.
     const PLAZA = T.t1 + 0.7 * (T.t2 - T.t1), CAP_C1 = [T.t0 + 0.5 * (T.t1 - T.t0), PLAZA];
-    const CAP_C2 = [PLAZA, T.t3 + 0.5 * (T.t4 - T.t3)];
+    const CAP_C2 = [PLAZA, T.film ? Infinity : T.t3 + 0.5 * (T.t4 - T.t3)]; // móvil: el rótulo «Plaza Botero» se queda hasta el final
     // Comprimidos: Blob de cada fotograma (≈ 8 MB). Decodificados: ImageBitmap solo en ventana (se cierran al salir).
     const blobs = new Array(count).fill(null), full = new Array(count).fill(null), low = new Array(count).fill(null);
     const pending = new Set(), controller = new AbortController();
