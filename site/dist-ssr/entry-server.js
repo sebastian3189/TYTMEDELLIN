@@ -856,7 +856,7 @@ function localizedProps(type, props) {
 var company = {
 	phone: "+57 304 496 1698",
 	whatsapp: "573044961698",
-	email: "transporteturismocolombia@gmail.com",
+	email: "transporteyturismomedellin@gmail.com",
 	address: "Carrera 79AA #1A Sur-280, Medellín",
 	reviews: "https://www.google.com/maps/place/Transporte+%26+Turismo+Medellin/data=!4m2!3m1!1s0x0:0x676cebadb662a88a",
 	instagram: "https://www.instagram.com/transporteenmedellin",
@@ -1243,6 +1243,7 @@ var staticMeta = {
 	"/contacto": ["Contacto", "Habla con el equipo de T&T Medellín por teléfono, correo o WhatsApp."],
 	"/cotizar": ["Planea tu viaje", "Prepara tu consulta de transporte o turismo para recibir una propuesta del equipo de Medellín."],
 	"/calificaciones": ["Calificaciones", "Consulta la referencia histórica de calificaciones y las reseñas actuales de T&T Medellín en Google."],
+	"/politica-de-tratamiento-de-datos": ["Política de tratamiento de datos", "Qué datos personales recogemos, con qué finalidad, cuánto tiempo los conservamos y cómo ejercer tus derechos (Ley 1581 de 2012)."],
 	"/privacidad": ["Privacidad", "Conoce cómo se prepara tu consulta y qué información decides compartir con T&T Medellín."]
 };
 var NOT_FOUND = ["Página no encontrada", "Regresa a las experiencias de T&T Medellín para encontrar tu recorrido."];
@@ -2060,7 +2061,7 @@ function ShareMenu({ name, path, className = "" }) {
 }
 //#endregion
 //#region src/shared.jsx
-var Quote = lazy(() => import("./assets/Quote-A-bfdhMl.js"));
+var Quote = lazy(() => import("./assets/Quote-Dg6iKVvu.js"));
 var reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 function Picture({ photo, alt, priority = false, className = "", native = false, sizes = "(max-width: 700px) 100vw, 65vw" }) {
 	if (!photo) return null;
@@ -2329,50 +2330,15 @@ function Preferences() {
 }
 //#endregion
 //#region src/WhatsAppFab.jsx
-var BLOCKERS = "a,button,input,select,textarea,label,summary,[role=tab],.site-footer";
 function WhatsAppFab() {
 	const ref = useRef(null);
 	useEffect(() => {
 		const el = ref.current;
-		let timer0 = 0, lastRun = 0, box = null;
-		const touch = matchMedia("(pointer:coarse)").matches, GAP = touch ? 220 : 100, POINTS = touch ? 5 : 9;
-		const measureBox = () => {
-			const r = el.getBoundingClientRect();
-			box = {
-				cx: r.left + r.width / 2,
-				cy: r.top + r.height / 2,
-				r: r.width / 2 + 8
-			};
-		};
 		const check = () => {
-			timer0 = 0;
-			if (document.hidden) return;
-			lastRun = performance.now();
-			let blocked = Boolean(document.querySelector(".menu-open, dialog[open]"));
-			if (!blocked) outer: for (let k = -1; k < POINTS - 1; k++) {
-				const a = k * 2 * Math.PI / (POINTS - 1), x = box.cx + (k < 0 ? 0 : box.r * Math.cos(a)), y = box.cy + (k < 0 ? 0 : box.r * Math.sin(a));
-				for (const hit of document.elementsFromPoint(x, y)) {
-					if (hit.closest(".wa-fab")) continue;
-					if (hit.closest(BLOCKERS)) {
-						blocked = true;
-						break outer;
-					}
-				}
-			}
-			const value = blocked ? "true" : "false";
+			const value = document.querySelector(".menu-open, dialog[open]") ? "true" : "false";
 			if (el.dataset.hidden !== value) el.dataset.hidden = value;
 		};
-		const schedule = () => {
-			if (!timer0) timer0 = setTimeout(check, Math.max(0, GAP - (performance.now() - lastRun)));
-		};
-		const onResize = () => {
-			measureBox();
-			schedule();
-		};
-		measureBox();
-		window.addEventListener("scroll", schedule, { passive: true });
-		window.addEventListener("resize", onResize);
-		const mo = new MutationObserver(schedule);
+		const mo = new MutationObserver(check);
 		mo.observe(document.body, {
 			subtree: true,
 			attributes: true,
@@ -2383,15 +2349,10 @@ function WhatsAppFab() {
 			el.classList.add("wa-pulse");
 			setTimeout(() => el.classList.remove("wa-pulse"), 1900);
 		}, 12e3);
-		const timer = setInterval(schedule, 1500);
-		schedule();
+		check();
 		return () => {
-			window.removeEventListener("scroll", schedule);
-			window.removeEventListener("resize", onResize);
 			mo.disconnect();
-			clearInterval(timer);
 			clearInterval(pulse);
-			clearTimeout(timer0);
 		};
 	}, []);
 	return /* @__PURE__ */ jsxs$1("a", {
@@ -2443,11 +2404,11 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-DlDxi1Wn.js");
+var company_ = () => import("./assets/Company-CzS3cs36.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-Cjbrh3Oh.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-BzmNhryx.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-Dw6XXhgR.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-ppWlLTEr.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-BJ5-kXzD.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-CF9hgNOw.js").then((m) => m.default)),
 	fleet: lazyRoute(() => import("./assets/Fleet-BqOX0yS6.js").then((m) => m.default)),
 	blog: lazyRoute(pick(() => import("./assets/Blog-MHmkENqc.js"), "Blog")),
 	article: lazyRoute(() => import("./assets/Blog-MHmkENqc.js").then((m) => m.default)),
@@ -2457,9 +2418,10 @@ var R = {
 	quote: lazyRoute(pick(company_, "QuotePage")),
 	privacy: lazyRoute(pick(company_, "Privacy")),
 	ratings: lazyRoute(pick(company_, "Ratings")),
+	dataPolicy: lazyRoute(() => import("./assets/DataPolicy-MQ0YP_H3.js").then((m) => m.default)),
 	notFound: lazyRoute(() => import("./assets/NotFound-DTLybyfR.js").then((m) => m.default))
 };
-R.home, R.catalog, R.tour, R.fleet, R.blog, R.article, R.about, R.services, R.contact, R.quote, R.privacy, R.ratings;
+R.home, R.catalog, R.tour, R.fleet, R.blog, R.article, R.about, R.services, R.contact, R.quote, R.privacy, R.dataPolicy, R.ratings;
 var preloadAllRoutes = () => Promise.all(Object.values(R).map((route) => route.preload()));
 var nav = [
 	["Inicio", "/"],
@@ -2706,6 +2668,10 @@ function Footer() {
 							children: "Privacidad"
 						}),
 						/* @__PURE__ */ jsx$1(Link, {
+							to: "/politica-de-tratamiento-de-datos",
+							children: "Tratamiento de datos"
+						}),
+						/* @__PURE__ */ jsx$1(Link, {
 							to: "/calificaciones",
 							children: "Calificaciones"
 						})
@@ -2792,6 +2758,10 @@ function Layout() {
 					/* @__PURE__ */ jsx$1(Route, {
 						path: "/privacidad",
 						element: /* @__PURE__ */ jsx$1(R.privacy, {})
+					}),
+					/* @__PURE__ */ jsx$1(Route, {
+						path: "/politica-de-tratamiento-de-datos",
+						element: /* @__PURE__ */ jsx$1(R.dataPolicy, {})
 					}),
 					/* @__PURE__ */ jsx$1(Route, {
 						path: "*",
@@ -4504,6 +4474,7 @@ var paths = [
 	"/cotizar",
 	"/calificaciones",
 	"/privacidad",
+	"/politica-de-tratamiento-de-datos",
 	...tours.map((t) => `/experiencias/${t.slug}`),
 	...articles.map((a) => `/blog/${a.slug}`)
 ].flatMap((path) => [path, "/en" + (path === "/" ? "/" : path)]);

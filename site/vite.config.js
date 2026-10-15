@@ -6,7 +6,7 @@ import { gzipSync } from 'node:zlib';
 import { resolve } from 'node:path';
 import { tours, articles } from './src/content.js';
 
-const paths = new Set(['/', '/site', '/experiencias', '/servicios', '/vehiculos', '/flota', '/nosotros', '/blog', '/contacto', '/cotizar', '/calificaciones', '/privacidad', ...tours.map(t => `/experiencias/${t.slug}`), ...articles.map(a => `/blog/${a.slug}`)]);
+const paths = new Set(['/', '/site', '/experiencias', '/servicios', '/vehiculos', '/flota', '/nosotros', '/blog', '/contacto', '/cotizar', '/calificaciones', '/privacidad', '/politica-de-tratamiento-de-datos', ...tours.map(t => `/experiencias/${t.slug}`), ...articles.map(a => `/blog/${a.slug}`)]);
 for(const path of [...paths]) paths.add('/en'+(path==='/'?'':path));
 // 404 real (Spec 05): rutas desconocidas devuelven 404 con la cáscara de la app (`dist/404.html`, sin HTML prerenderizado; el cliente la renderiza con createRoot).
 function routeStatus() {

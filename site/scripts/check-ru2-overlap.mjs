@@ -10,7 +10,7 @@ for (const [w, h] of sizes) {
   const mode = await p.evaluate(() => document.querySelector('.th').className + '|' + document.querySelector('.th').dataset.layout);
   if (mode.includes('static')) { console.log(w + 'x' + h, 'ESTÁTICO (lista), sin mano'); await c.close(); continue; }
   for (const i of tours) {
-    await p.evaluate(() => scrollTo({ top: document.querySelector('.th').getBoundingClientRect().top + scrollY - 40, behavior: 'instant' })); await p.waitForTimeout(500);
+    await p.evaluate(() => scrollTo({ top: document.querySelector('.th').getBoundingClientRect().top + scrollY + (document.querySelector('.th').dataset.layout === 'wide' ? innerHeight * 0.45 : -40), behavior: 'instant' })); await p.waitForTimeout(500);
     await p.locator(`#th-tab-${i}`).click({ force: true }).catch(() => {}); await p.waitForTimeout(1600);
     const m = await p.evaluate(() => {
       const R = (e) => e.getBoundingClientRect(), inter = (a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));

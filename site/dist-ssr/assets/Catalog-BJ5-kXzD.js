@@ -1,5 +1,5 @@
 import { F as jsx, I as jsxs, P as Fragment, b as useFlipGrid, p as TourCard, r as tours, v as Marquee, y as Trust } from "../entry-server.js";
-import { n as useGlassPill, r as CatalogHero, t as GlassPill } from "./glass-ndxeIHtl.js";
+import { n as useGlassPill, r as CatalogHero, t as GlassPill } from "./glass-LFuY4k0e.js";
 import { useRef, useState } from "react";
 //#region src/pages/Catalog.jsx
 function Catalog() {

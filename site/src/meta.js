@@ -12,6 +12,7 @@ export const staticMeta = {
   '/contacto': ['Contacto', 'Habla con el equipo de T&T Medellín por teléfono, correo o WhatsApp.'],
   '/cotizar': ['Planea tu viaje', 'Prepara tu consulta de transporte o turismo para recibir una propuesta del equipo de Medellín.'],
   '/calificaciones': ['Calificaciones', 'Consulta la referencia histórica de calificaciones y las reseñas actuales de T&T Medellín en Google.'],
+  '/politica-de-tratamiento-de-datos': ['Política de tratamiento de datos', 'Qué datos personales recogemos, con qué finalidad, cuánto tiempo los conservamos y cómo ejercer tus derechos (Ley 1581 de 2012).'],
   '/privacidad': ['Privacidad', 'Conoce cómo se prepara tu consulta y qué información decides compartir con T&T Medellín.'],
 };
 export const NOT_FOUND = ['Página no encontrada', 'Regresa a las experiencias de T&T Medellín para encontrar tu recorrido.'];

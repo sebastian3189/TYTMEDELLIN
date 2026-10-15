@@ -2,7 +2,7 @@ import { F as jsx, I as jsxs, L as company, N as Socials, P as Fragment, R as wh
 import { t as FeaturedGallery } from "./FeaturedGallery-v6rDM-IO.js";
 import { t as Reviews } from "./Reviews-Cp4j-Pnr.js";
 import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-DaJGWog5.js";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 //#region src/Contact.jsx
 var MAP = {
@@ -385,10 +385,8 @@ function Privacy() {
 				}),
 				". WhatsApp y los sitios externos aplican sus propias políticas al abrirlos."
 			] }),
-			/* @__PURE__ */ jsxs("p", { children: ["Responsable identificado en el sitio de la marca: T&T, NIT 901738550-6. ", /* @__PURE__ */ jsxs("a", {
-				href: "https://www.transporteyturismocolombia.com/privacidad",
-				target: "_blank",
-				rel: "noreferrer",
+			/* @__PURE__ */ jsxs("p", { children: ["Responsable identificado en el sitio de la marca: T&T, NIT 901738550-6. ", /* @__PURE__ */ jsxs(Link, {
+				to: "/politica-de-tratamiento-de-datos",
 				children: ["Consultar la política de tratamiento de datos de la empresa", /* @__PURE__ */ jsx(Arrow, {})]
 			})] }),
 			/* @__PURE__ */ jsx("p", { children: "Este sitio no incorpora analítica publicitaria ni almacenamiento de solicitudes. Las fotografías y las fuentes se sirven desde el proyecto." })

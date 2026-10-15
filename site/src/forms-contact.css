@@ -37,7 +37,7 @@
 @media(max-width:699px){.form-grid{grid-template-columns:1fr}.phone-row{grid-template-columns:6.5rem minmax(0,1fr)}.summary-actions .button{width:100%}.map-frame{aspect-ratio:4/5;min-height:360px}}
 .footer-brand{display:inline-flex;align-items:center;min-height:44px}
 /* Logo (aportado por el usuario, tal cual): cuadrado naranja completo; solo se enmascara con esquinas redondeadas ~20 %. */
-.logo-mark{display:block;width:56px;height:56px;border-radius:20%;object-fit:contain}
+.logo-mark{display:block;width:56px;height:56px;border-radius:50%;object-fit:contain;box-sizing:border-box;padding:5%;background:#FF7E08}
 @media(max-width:899px){.brand .logo-mark{width:44px;height:44px}}
 .logo-footer{width:112px;height:112px;margin-bottom:8px}
 /* Ronda de cierre (2026-10-12). Contacto: el correo no se parte a mitad de palabra (tamaño por contenedor + salto solo en «@»); Vehículos: el medio de la

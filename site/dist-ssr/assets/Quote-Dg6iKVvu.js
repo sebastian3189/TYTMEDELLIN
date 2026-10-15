@@ -1472,9 +1472,9 @@ function Quote({ context = "Un recorrido a mi medida", mode = "cotizar" }) {
 							children: [
 								"He leído el ",
 								/* @__PURE__ */ jsx(Link, {
-									to: "/privacidad",
+									to: "/politica-de-tratamiento-de-datos",
 									target: "_blank",
-									children: "aviso de privacidad"
+									children: "política de tratamiento de datos"
 								}),
 								" y autorizo compartir esta solicitud con T&T cuando la envíe."
 							]

@@ -15,7 +15,8 @@ html[data-theme="dark"] .wa-fab{box-shadow:0 10px 26px rgba(0,0,0,.65),0 0 0 1px
 @media(prefers-reduced-motion:reduce){.wa-fab{transition:none}.wa-fab::after{animation:none!important}.wa-label{transition:none}}
 
 /* Barra de ficha (móvil): mientras se ve, el botón flotante se oculta */
-html[data-tourbar="on"] .wa-fab{opacity:0;visibility:hidden;pointer-events:none}
+html[data-tourbar="on"] .wa-fab{opacity:0;pointer-events:none}
+.wa-fab{transition:opacity 160ms ease,transform 140ms ease}
 .tour-bar{position:fixed;z-index:90;left:0;right:0;bottom:0;display:flex;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));background:var(--surface-3);border-top:1px solid var(--border-subtle);box-shadow:0 -8px 24px rgba(30,32,29,.10);transform:translateY(100%);visibility:hidden;transition:transform 220ms var(--ease-out-strong),visibility 0s linear 220ms}
 .tour-bar[data-on="true"]{transform:none;visibility:visible;transition-delay:0s}
 .tour-bar-name{flex:1;min-width:0;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-strong);font:700 15px/1.2 var(--heading)}

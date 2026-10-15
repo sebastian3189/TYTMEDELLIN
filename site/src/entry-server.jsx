@@ -6,7 +6,7 @@ import { staticMeta, NOT_FOUND } from './meta';
 import { setLanguage, unprefix, t } from './i18n';
 
 // Prerender (Spec 04): HTML de una ruta y sus metadatos. Se compila con `vite build --ssr` y lo invoca scripts/prerender.mjs.
-const spanishPaths = ['/', '/experiencias', '/servicios', '/vehiculos', '/nosotros', '/blog', '/contacto', '/cotizar', '/calificaciones', '/privacidad',
+const spanishPaths = ['/', '/experiencias', '/servicios', '/vehiculos', '/nosotros', '/blog', '/contacto', '/cotizar', '/calificaciones', '/privacidad', '/politica-de-tratamiento-de-datos',
   ...tours.map((t) => `/experiencias/${t.slug}`), ...articles.map((a) => `/blog/${a.slug}`)];
 export const paths = spanishPaths.flatMap(path=>[path,'/en'+(path==='/'?'/':path)]);
 export function metaFor(path) {

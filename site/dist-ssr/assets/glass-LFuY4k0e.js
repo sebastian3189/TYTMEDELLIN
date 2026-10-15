@@ -240,6 +240,13 @@ function HeroSlides({ slides, paused, still }) {
 	const box = useRef(null), curRef = useRef(0), imgs = useRef([]);
 	const n = slides.length;
 	useEffect(() => {
+		const io = new IntersectionObserver(([e]) => {
+			box.current.dataset.off = e.isIntersecting ? "false" : "true";
+		});
+		io.observe(box.current);
+		return () => io.disconnect();
+	}, []);
+	useEffect(() => {
 		if (still || paused || n < 2) return void 0;
 		let visible = true, busy = false;
 		const io = new IntersectionObserver(([e]) => {
