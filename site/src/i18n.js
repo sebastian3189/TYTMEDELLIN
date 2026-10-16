@@ -1,16 +1,20 @@
 import { languageFromPath, languageInfo, stripLanguage, pathForLanguage } from './languages.js';
-let locale = typeof window !== 'undefined' ? languageFromPath(window.location.pathname) : 'es';
-const dictionaries = { es: {} };
+// Estado compartido en globalThis: en desarrollo, el optimizador de Vite empaqueta el runtime JSX (@tt-i18n) con su PROPIA copia de este módulo;
+// sin estado compartido, el diccionario se cargaba en una copia y el runtime traducía con la otra (vacía) → /en y /pt-br salían en español en local.
+const S = globalThis.__ttI18n || (globalThis.__ttI18n = { locale: typeof window !== 'undefined' ? languageFromPath(window.location.pathname) : 'es', dictionaries: { es: {} } });
+const dictionaries = S.dictionaries;
+// El runtime JSX (src/i18n-runtime) traduce leyendo esta función desde globalThis (declaración elevada: ya existe aquí).
+S.localizedProps = localizedProps;
 const loaders = { en: () => import('./locales/en.json'), 'pt-BR': () => import('./locales/pt-BR.json') };
-export const language = () => locale;
-export const setLanguage = value => { locale = languageInfo(value).code; };
+export const language = () => S.locale;
+export const setLanguage = value => { S.locale = languageInfo(value).code; };
 export async function prepareLanguage(value) {
   const code=languageInfo(value).code;
   if(!dictionaries[code]) dictionaries[code]=(await loaders[code]()).default;
 }
 // Cambio de idioma sin recargar (Spec 04): carga el diccionario, actualiza la URL (/en, /pt-br) y avisa a la aplicación para que se vuelva a montar.
 export async function switchLanguage(value) {
-  const code=languageInfo(value).code; if(code===locale) return;
+  const code=languageInfo(value).code; if(code===S.locale) return;
   await prepareLanguage(code);
   const {pathname,search,hash}=window.location, next=pathForLanguage(pathname,code)+search+hash;
   history.pushState(null,'',next); setLanguage(code); document.documentElement.lang=languageInfo(code).html;
@@ -20,9 +24,9 @@ export const unprefix = stripLanguage;
 export const languagePath = pathForLanguage;
 const normalize = value => value.replace(/\s+/g, ' ').trim();
 export function t(value) {
-  if (locale === 'es' || typeof value !== 'string' || !value.trim()) return value;
+  if (S.locale === 'es' || typeof value !== 'string' || !value.trim()) return value;
   const key = normalize(value);
-  const english = dictionaries[locale] || {};
+  const english = dictionaries[S.locale] || {};
   if (Object.hasOwn(english, key)) return value.replace(value.trim(), english[key]);
   // Repeated accessible labels and counters, with translated tour names.
   const patterns = [
@@ -75,14 +79,14 @@ export function t(value) {
     [/^Categoría (.+)$/, name=>`Categoria: ${t(name)}`],
     [/^(.+) \| T&T Medellín$/, title=>`${t(title)} | T&T Medellín`],
   ];
-  for(const [pattern,convert] of (locale === 'pt-BR' ? portuguesePatterns : patterns)) { const match=key.match(pattern);if(match)return convert(...match.slice(1)); }
+  for(const [pattern,convert] of (S.locale === 'pt-BR' ? portuguesePatterns : patterns)) { const match=key.match(pattern);if(match)return convert(...match.slice(1)); }
   // JSX splits sentences at inline elements/numbers; preserve punctuation and whitespace.
   const punctuation=key.match(/^(.+?)([.:*→↗↓]+)$/);
   if(punctuation && Object.hasOwn(english,punctuation[1].trim())) return english[punctuation[1].trim()]+punctuation[2];
   return value;
 }
 export function localizedProps(type, props) {
-  if (locale === 'es' || !props || props.translate === 'no') return props;
+  if (S.locale === 'es' || !props || props.translate === 'no') return props;
   const next = {...props};
   const children = value => Array.isArray(value) ? value.map(children) : typeof value === 'string' ? t(value) : value;
   if(type !== 'script' && type !== 'style' && type !== 'textarea') next.children=children(props.children);

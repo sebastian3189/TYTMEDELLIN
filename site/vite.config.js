@@ -57,6 +57,8 @@ function routeStatus() {
 export default defineConfig(({ isSsrBuild }) => ({
   plugins: [react({jsxImportSource:'@tt-i18n'}), routeStatus()],
   resolve: {alias:{'@tt-i18n':resolve(import.meta.dirname,'src/i18n-runtime')}},
+  // Runtime JSX de traducción: se pre-empaqueta (lo pide plugin-react) pero ya no contiene copia de i18n.js; ver src/i18n-runtime.
+  optimizeDeps: { include: ['@tt-i18n/jsx-dev-runtime', '@tt-i18n/jsx-runtime'] },
   server: { host: '127.0.0.1' },
   preview: { host: '127.0.0.1' },
   build: { target:'esnext', manifest: !isSsrBuild, cssCodeSplit: false, copyPublicDir: !isSsrBuild },
