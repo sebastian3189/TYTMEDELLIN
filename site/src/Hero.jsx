@@ -41,6 +41,62 @@ function useHeroPlayback(ref, light, enabled) {
   return [playing, toggle];
 }
 
+/*
+ * Video de dron ADAPTATIVO del inicio (2026-10-16): una sola etiqueta <video> cuya fuente se elige por JS según orientación, ancho y densidad
+ * (vertical → 9:16 · horizontal ≤ 1599 → 720p · ≥ 1600 o DPR ≥ 2 en ≥ 1280 → 1080p) y se re-evalúa al girar o redimensionar SIN reiniciar: solo cambia
+ * al cruzar de orientación o al subir de nivel (nunca baja de nivel por redimensionar) y retoma el tiempo actual. Sin src en el HTML prerenderizado: el
+ * póster (<picture>, LCP) se ve primero y el video entra con fundido al empezar a reproducir. Movimiento reducido, ahorro de datos o 2g/3g → solo póster.
+ */
+const SLOW_NET = ['slow-2g', '2g', '3g'];
+const RANK = { movil: 0, hd720: 1, hd1080: 2 };
+export function pickHeroTier() {
+  if (window.matchMedia('(orientation: portrait)').matches) return 'movil';
+  const w = window.innerWidth, dpr = window.devicePixelRatio || 1;
+  return w >= 1600 || (dpr >= 2 && w >= 1280) ? 'hd1080' : 'hd720';
+}
+function useAdaptiveHero(ref, sources, light) {
+  const [playing, setPlaying] = useState(false), [mode, setMode] = useState('init'), [failed, setFailed] = useState(false);
+  const manual = useRef(false), api = useRef({});
+  useEffect(() => {
+    const el = ref.current;
+    if (!sources || !el) return undefined;
+    prepVideo(el);
+    if (light || SLOW_NET.includes(navigator.connection?.effectiveType)) { setMode('poster'); return undefined; }
+    setMode('video');
+    let tier = null, visible = true, resume = 0, timer = 0;
+    const want = () => visible && !manual.current && !document.hidden;
+    const sync = () => { if (want()) safePlay(el); else el.pause(); };
+    const choose = () => {
+      const next = pickHeroTier();
+      if (tier && (tier === 'movil') === (next === 'movil') && RANK[next] <= RANK[tier]) return;
+      resume = tier ? el.currentTime : 0; tier = next;
+      el.src = sources[next]; sync();
+    };
+    const onMeta = () => { if (resume > 0 && el.duration) { try { el.currentTime = resume % el.duration; } catch { /* sin retomar */ } } resume = 0; };
+    const onPlaying = () => { el.dataset.ready = 'true'; };
+    const onState = () => setPlaying(!el.paused);
+    const onError = () => { if (!el.dataset.ready) setFailed(true); };
+    const onResize = () => { clearTimeout(timer); timer = setTimeout(choose, 250); };
+    el.addEventListener('loadedmetadata', onMeta); el.addEventListener('playing', onPlaying); el.addEventListener('play', onState); el.addEventListener('pause', onState); el.addEventListener('error', onError);
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; sync(); });
+    io.observe(el);
+    window.addEventListener('resize', onResize); window.addEventListener('orientationchange', onResize); document.addEventListener('visibilitychange', sync);
+    api.current.sync = sync;
+    choose();
+    return () => {
+      clearTimeout(timer); io.disconnect();
+      window.removeEventListener('resize', onResize); window.removeEventListener('orientationchange', onResize); document.removeEventListener('visibilitychange', sync);
+      for (const [n, f] of [['loadedmetadata', onMeta], ['playing', onPlaying], ['play', onState], ['pause', onState], ['error', onError]]) el.removeEventListener(n, f);
+      el.pause(); el.removeAttribute('src'); delete el.dataset.ready; el.load();
+    };
+  }, [ref, sources, light]);
+  const toggle = () => {
+    const el = ref.current; if (!el) return;
+    if (el.paused) { manual.current = false; safePlay(el); } else { manual.current = true; el.pause(); }
+  };
+  return [playing, toggle, mode, failed];
+}
+
 const SLIDE_MS = 5800; // tiempo por foto (5–6 s); el fundido cruzado dura 1,2 s dentro de ese tiempo
 
 /* Diaporama provisional: una sola capa activa + la saliente (fundido cruzado). Se decodifica la siguiente antes de mostrarla y solo corre a la vista. */
@@ -86,10 +142,14 @@ function HeroSlides({ slides, paused, still }) {
  * `tour` = true en las fichas: el h1 admite nombres largos (varias líneas equilibradas).
  */
 export function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = false, labelId = 'hero-titulo' }) {
-  const light = useLightMotion(), media = useRef(null), section = useRef(null);
-  const hasSlides = !video.src && Boolean(slides?.length);
-  const img = !video.src && !hasSlides ? video.image : null; // imagen fija provisional (p. ej. la panorámica del inicio) mientras no haya video
+  const light = useLightMotion(), media = useRef(null), adaptiveRef = useRef(null), section = useRef(null);
+  const adaptive = !video.src && Boolean(video.adaptive);
   const [playing, toggle] = useHeroPlayback(media, light, Boolean(video.src));
+  const [aPlaying, aToggle, aMode, aFailed] = useAdaptiveHero(adaptiveRef, adaptive ? video.adaptive : null, light);
+  const hasSlides = !video.src && !adaptive && Boolean(slides?.length);
+  const img = adaptive ? (aFailed ? video.image : video.poster) : !video.src && !hasSlides ? video.image : null; // imagen fija provisional (p. ej. la panorámica del inicio) mientras no haya video
+  // Con video adaptativo el póster se elige por ORIENTACIÓN (coincide con el recorte del video); en el resto, por ancho.
+  const mqMobile = adaptive ? '(orientation: portrait)' : '(max-width: 799px)', mqDesktop = adaptive ? '(orientation: landscape)' : '(min-width: 800px)';
   const [slidesPaused, setSlidesPaused] = useState(false);
   const onSlidesToggle = useCallback(() => setSlidesPaused((v) => !v), []);
   // La cabecera es transparente sobre el hero y vuelve a su material sólido al salir de él (umbral = alto de la cabecera).
@@ -99,22 +159,23 @@ export function HeroBlock({ video, slides, eyebrow, title, support, actions, tou
     observer.observe(section.current);
     return () => { observer.disconnect(); delete html.dataset.hero; };
   }, []);
-  const shade = Boolean(video.src) || hasSlides || Boolean(img);
+  const shade = Boolean(video.src) || adaptive || hasSlides || Boolean(img);
   return (
-    <section ref={section} className={`home-hero${tour ? ' is-tour' : ''}`} data-hero data-video={video.src ? 'on' : hasSlides ? 'slides' : img ? 'image' : 'off'} aria-labelledby={labelId}>
+    <section ref={section} className={`home-hero${tour ? ' is-tour' : ''}`} data-hero data-video={video.src || adaptive ? 'on' : hasSlides ? 'slides' : img ? 'image' : 'off'} aria-labelledby={labelId}>
       <div className="hero-media" aria-hidden="true">
         {video.src && <video ref={media} src={video.src} poster={video.poster || undefined} muted loop playsInline autoPlay={!light} preload="metadata" tabIndex={-1} />}
         {hasSlides && <HeroSlides slides={slides} paused={slidesPaused} still={light} />}
         {img && <>
-          <link rel="preload" as="image" href={img.desktop.src} imageSrcSet={img.desktop.srcset} imageSizes="100vw" media="(min-width: 800px)" fetchPriority="high" />
-          <link rel="preload" as="image" href={img.mobile.src} imageSrcSet={img.mobile.srcset} imageSizes="100vw" media="(max-width: 799px)" fetchPriority="high" />
+          <link rel="preload" as="image" href={img.desktop.src} imageSrcSet={img.desktop.srcset} imageSizes="100vw" media={mqDesktop} fetchPriority="high" />
+          <link rel="preload" as="image" href={img.mobile.src} imageSrcSet={img.mobile.srcset} imageSizes="100vw" media={mqMobile} fetchPriority="high" />
         </>}
         {img && (
           <picture>
-            <source media="(max-width: 799px)" srcSet={img.mobile.srcset} sizes="100vw" />
+            <source media={mqMobile} srcSet={img.mobile.srcset} sizes="100vw" />
             <img className="hero-img" src={img.desktop.src} srcSet={img.desktop.srcset} sizes="100vw" width={img.desktop.width} height={img.desktop.height} alt="" loading="eager" fetchPriority="high" decoding="async" />
           </picture>
         )}
+        {adaptive && <video ref={adaptiveRef} className="hero-dron" muted loop playsInline preload="metadata" tabIndex={-1} disablePictureInPicture />}
       </div>
       {shade && <div className="hero-shade" aria-hidden="true" />}
       <div className="hero-copy">
@@ -126,6 +187,11 @@ export function HeroBlock({ video, slides, eyebrow, title, support, actions, tou
       {video.src && (
         <button type="button" className="hero-pause" onClick={toggle} aria-label={playing ? 'Pausar video' : 'Reproducir video'}>
           <PlayIcon playing={playing} />
+        </button>
+      )}
+      {adaptive && aMode === 'video' && !aFailed && (
+        <button type="button" className="hero-pause" onClick={aToggle} aria-label={aPlaying ? 'Pausar video' : 'Reproducir video'}>
+          <PlayIcon playing={aPlaying} />
         </button>
       )}
       {hasSlides && slides.length > 1 && !light && (

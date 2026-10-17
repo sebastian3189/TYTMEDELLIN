@@ -24,7 +24,8 @@ function safePlay(el) {
 var inicioVideos = {
 	hero: {
 		src: null,
-		poster: null,
+		adaptive: null,
+		poster: media_default["hero-dron"].poster,
 		image: media_default["hero-inicio"]
 	},
 	historia: {
@@ -216,6 +217,120 @@ function useHeroPlayback(ref, light, enabled) {
 	};
 	return [playing, toggle];
 }
+var SLOW_NET = [
+	"slow-2g",
+	"2g",
+	"3g"
+];
+var RANK = {
+	movil: 0,
+	hd720: 1,
+	hd1080: 2
+};
+function pickHeroTier() {
+	if (window.matchMedia("(orientation: portrait)").matches) return "movil";
+	const w = window.innerWidth, dpr = window.devicePixelRatio || 1;
+	return w >= 1600 || dpr >= 2 && w >= 1280 ? "hd1080" : "hd720";
+}
+function useAdaptiveHero(ref, sources, light) {
+	const [playing, setPlaying] = useState(false), [mode, setMode] = useState("init"), [failed, setFailed] = useState(false);
+	const manual = useRef(false), api = useRef({});
+	useEffect(() => {
+		const el = ref.current;
+		if (!sources || !el) return void 0;
+		prepVideo(el);
+		if (light || SLOW_NET.includes(navigator.connection?.effectiveType)) {
+			setMode("poster");
+			return;
+		}
+		setMode("video");
+		let tier = null, visible = true, resume = 0, timer = 0;
+		const want = () => visible && !manual.current && !document.hidden;
+		const sync = () => {
+			if (want()) safePlay(el);
+			else el.pause();
+		};
+		const choose = () => {
+			const next = pickHeroTier();
+			if (tier && tier === "movil" === (next === "movil") && RANK[next] <= RANK[tier]) return;
+			resume = tier ? el.currentTime : 0;
+			tier = next;
+			el.src = sources[next];
+			sync();
+		};
+		const onMeta = () => {
+			if (resume > 0 && el.duration) try {
+				el.currentTime = resume % el.duration;
+			} catch {}
+			resume = 0;
+		};
+		const onPlaying = () => {
+			el.dataset.ready = "true";
+		};
+		const onState = () => setPlaying(!el.paused);
+		const onError = () => {
+			if (!el.dataset.ready) setFailed(true);
+		};
+		const onResize = () => {
+			clearTimeout(timer);
+			timer = setTimeout(choose, 250);
+		};
+		el.addEventListener("loadedmetadata", onMeta);
+		el.addEventListener("playing", onPlaying);
+		el.addEventListener("play", onState);
+		el.addEventListener("pause", onState);
+		el.addEventListener("error", onError);
+		const io = new IntersectionObserver(([e]) => {
+			visible = e.isIntersecting;
+			sync();
+		});
+		io.observe(el);
+		window.addEventListener("resize", onResize);
+		window.addEventListener("orientationchange", onResize);
+		document.addEventListener("visibilitychange", sync);
+		api.current.sync = sync;
+		choose();
+		return () => {
+			clearTimeout(timer);
+			io.disconnect();
+			window.removeEventListener("resize", onResize);
+			window.removeEventListener("orientationchange", onResize);
+			document.removeEventListener("visibilitychange", sync);
+			for (const [n, f] of [
+				["loadedmetadata", onMeta],
+				["playing", onPlaying],
+				["play", onState],
+				["pause", onState],
+				["error", onError]
+			]) el.removeEventListener(n, f);
+			el.pause();
+			el.removeAttribute("src");
+			delete el.dataset.ready;
+			el.load();
+		};
+	}, [
+		ref,
+		sources,
+		light
+	]);
+	const toggle = () => {
+		const el = ref.current;
+		if (!el) return;
+		if (el.paused) {
+			manual.current = false;
+			safePlay(el);
+		} else {
+			manual.current = true;
+			el.pause();
+		}
+	};
+	return [
+		playing,
+		toggle,
+		mode,
+		failed
+	];
+}
 var SLIDE_MS = 5800;
 function HeroSlides({ slides, paused, still }) {
 	const [cur, setCur] = useState(0), [prev, setPrev] = useState(-1), [reach, setReach] = useState(1);
@@ -301,10 +416,13 @@ function HeroSlides({ slides, paused, still }) {
 * `tour` = true en las fichas: el h1 admite nombres largos (varias líneas equilibradas).
 */
 function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = false, labelId = "hero-titulo" }) {
-	const light = useLightMotion(), media = useRef(null), section = useRef(null);
-	const hasSlides = !video.src && Boolean(slides?.length);
-	const img = !video.src && !hasSlides ? video.image : null;
+	const light = useLightMotion(), media = useRef(null), adaptiveRef = useRef(null), section = useRef(null);
+	const adaptive = !video.src && Boolean(video.adaptive);
 	const [playing, toggle] = useHeroPlayback(media, light, Boolean(video.src));
+	const [aPlaying, aToggle, aMode, aFailed] = useAdaptiveHero(adaptiveRef, adaptive ? video.adaptive : null, light);
+	const hasSlides = !video.src && !adaptive && Boolean(slides?.length);
+	const img = adaptive ? aFailed ? video.image : video.poster : !video.src && !hasSlides ? video.image : null;
+	const mqMobile = adaptive ? "(orientation: portrait)" : "(max-width: 799px)", mqDesktop = adaptive ? "(orientation: landscape)" : "(min-width: 800px)";
 	const [slidesPaused, setSlidesPaused] = useState(false);
 	const onSlidesToggle = useCallback(() => setSlidesPaused((v) => !v), []);
 	useEffect(() => {
@@ -318,12 +436,12 @@ function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = fal
 			delete html.dataset.hero;
 		};
 	}, []);
-	const shade = Boolean(video.src) || hasSlides || Boolean(img);
+	const shade = Boolean(video.src) || adaptive || hasSlides || Boolean(img);
 	return /* @__PURE__ */ jsxs("section", {
 		ref: section,
 		className: `home-hero${tour ? " is-tour" : ""}`,
 		"data-hero": true,
-		"data-video": video.src ? "on" : hasSlides ? "slides" : img ? "image" : "off",
+		"data-video": video.src || adaptive ? "on" : hasSlides ? "slides" : img ? "image" : "off",
 		"aria-labelledby": labelId,
 		children: [
 			/* @__PURE__ */ jsxs("div", {
@@ -352,7 +470,7 @@ function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = fal
 						href: img.desktop.src,
 						imageSrcSet: img.desktop.srcset,
 						imageSizes: "100vw",
-						media: "(min-width: 800px)",
+						media: mqDesktop,
 						fetchPriority: "high"
 					}), /* @__PURE__ */ jsx("link", {
 						rel: "preload",
@@ -360,11 +478,11 @@ function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = fal
 						href: img.mobile.src,
 						imageSrcSet: img.mobile.srcset,
 						imageSizes: "100vw",
-						media: "(max-width: 799px)",
+						media: mqMobile,
 						fetchPriority: "high"
 					})] }),
 					img && /* @__PURE__ */ jsxs("picture", { children: [/* @__PURE__ */ jsx("source", {
-						media: "(max-width: 799px)",
+						media: mqMobile,
 						srcSet: img.mobile.srcset,
 						sizes: "100vw"
 					}), /* @__PURE__ */ jsx("img", {
@@ -378,7 +496,17 @@ function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = fal
 						loading: "eager",
 						fetchPriority: "high",
 						decoding: "async"
-					})] })
+					})] }),
+					adaptive && /* @__PURE__ */ jsx("video", {
+						ref: adaptiveRef,
+						className: "hero-dron",
+						muted: true,
+						loop: true,
+						playsInline: true,
+						preload: "metadata",
+						tabIndex: -1,
+						disablePictureInPicture: true
+					})
 				]
 			}),
 			shade && /* @__PURE__ */ jsx("div", {
@@ -409,6 +537,13 @@ function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = fal
 				onClick: toggle,
 				"aria-label": playing ? "Pausar video" : "Reproducir video",
 				children: /* @__PURE__ */ jsx(PlayIcon, { playing })
+			}),
+			adaptive && aMode === "video" && !aFailed && /* @__PURE__ */ jsx("button", {
+				type: "button",
+				className: "hero-pause",
+				onClick: aToggle,
+				"aria-label": aPlaying ? "Pausar video" : "Reproducir video",
+				children: /* @__PURE__ */ jsx(PlayIcon, { playing: aPlaying })
 			}),
 			hasSlides && slides.length > 1 && !light && /* @__PURE__ */ jsx("button", {
 				type: "button",

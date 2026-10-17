@@ -1,6 +1,6 @@
 import { A as textoFase, B as jsxs, C as useLightMotion, F as Icon, H as whatsapp, I as SocialIcon, N as PlayIcon, O as CHAPTERS, P as SoundIcon, R as Fragment, U as language, W as t, _ as Arrow, c as Logo, f as Picture, g as GoogleBadgeStatic, k as inicioTextos, l as Button, n as photos, r as tours, t as articles, u as Eyebrow, w as useMedia, z as jsx } from "../entry-server.js";
 import { n as useGlassPill, t as GlassPill } from "./glass-BONCV8ov.js";
-import { a as inicioVideos, c as safePlay, i as tourEntry, n as HeroBlock, o as instagram, s as prepVideo } from "./Hero-CdSWi4nq.js";
+import { a as inicioVideos, c as safePlay, i as tourEntry, n as HeroBlock, o as instagram, s as prepVideo } from "./Hero-CwPycoWY.js";
 import { t as Reviews } from "./Reviews-BiAb3-Ib.js";
 import { a as FAQ_HOME, l as Faq } from "./faq-data-CXHnHuQT.js";
 import { a as smooth$1, r as placePhotos } from "./mobile-motion-o2zoinXe.js";

@@ -33,15 +33,19 @@ var stripLanguage = (path) => path.replace(/^\/(?:en|pt-br)(?=\/|$)/i, "") || "/
 var pathForLanguage = (path, code) => languageInfo(code).prefix + (stripLanguage(path) === "/" ? "/" : stripLanguage(path));
 //#endregion
 //#region src/i18n.js
-var locale = typeof window !== "undefined" ? languageFromPath(window.location.pathname) : "es";
-var dictionaries = { es: {} };
+var S = globalThis.__ttI18n || (globalThis.__ttI18n = {
+	locale: typeof window !== "undefined" ? languageFromPath(window.location.pathname) : "es",
+	dictionaries: { es: {} }
+});
+var dictionaries = S.dictionaries;
+S.localizedProps = localizedProps;
 var loaders = {
 	en: () => import("./assets/en-BfTFsgZ_.js"),
 	"pt-BR": () => import("./assets/pt-BR-DZ9XAYy_.js")
 };
-var language = () => locale;
+var language = () => S.locale;
 var setLanguage = (value) => {
-	locale = languageInfo(value).code;
+	S.locale = languageInfo(value).code;
 };
 async function prepareLanguage(value) {
 	const code = languageInfo(value).code;
@@ -49,7 +53,7 @@ async function prepareLanguage(value) {
 }
 async function switchLanguage(value) {
 	const code = languageInfo(value).code;
-	if (code === locale) return;
+	if (code === S.locale) return;
 	await prepareLanguage(code);
 	const { pathname, search, hash } = window.location, next = pathForLanguage(pathname, code) + search + hash;
 	history.pushState(null, "", next);
@@ -61,9 +65,9 @@ var unprefix = stripLanguage;
 var languagePath = pathForLanguage;
 var normalize = (value) => value.replace(/\s+/g, " ").trim();
 function t(value) {
-	if (locale === "es" || typeof value !== "string" || !value.trim()) return value;
+	if (S.locale === "es" || typeof value !== "string" || !value.trim()) return value;
 	const key = normalize(value);
-	const english = dictionaries[locale] || {};
+	const english = dictionaries[S.locale] || {};
 	if (Object.hasOwn(english, key)) return value.replace(value.trim(), english[key]);
 	const patterns = [
 		[/^estos (\d+) campos$/, (n) => `these ${n} fields`],
@@ -115,7 +119,7 @@ function t(value) {
 		[/^Categoría (.+)$/, (name) => `Categoria: ${t(name)}`],
 		[/^(.+) \| T&T Medellín$/, (title) => `${t(title)} | T&T Medellín`]
 	];
-	for (const [pattern, convert] of locale === "pt-BR" ? portuguesePatterns : patterns) {
+	for (const [pattern, convert] of S.locale === "pt-BR" ? portuguesePatterns : patterns) {
 		const match = key.match(pattern);
 		if (match) return convert(...match.slice(1));
 	}
@@ -124,7 +128,7 @@ function t(value) {
 	return value;
 }
 function localizedProps(type, props) {
-	if (locale === "es" || !props || props.translate === "no") return props;
+	if (S.locale === "es" || !props || props.translate === "no") return props;
 	const next = { ...props };
 	const children = (value) => Array.isArray(value) ? value.map(children) : typeof value === "string" ? t(value) : value;
 	if (type !== "script" && type !== "style" && type !== "textarea") next.children = children(props.children);
@@ -152,8 +156,12 @@ var company = {
 var whatsapp = (context = "mi recorrido") => `https://wa.me/${company.whatsapp}?text=${encodeURIComponent(language() === "pt-BR" ? `Olá, gostaria de consultar a T&T Medellín sobre ${t(context)}.` : language() === "en" ? `Hello, I'd like to ask T&T Medellín about ${t(context)}.` : `Hola, quiero consultar con T&T Medellín sobre ${context}.`)}`;
 //#endregion
 //#region src/i18n-runtime/jsx-runtime.js
-var jsx$1 = (type, props, key) => jsx(type, localizedProps(type, props), key);
-var jsxs$1 = (type, props, key) => jsxs(type, localizedProps(type, props), key);
+var localize = (type, props) => {
+	const f = globalThis.__ttI18n && globalThis.__ttI18n.localizedProps;
+	return f ? f(type, props) : props;
+};
+var jsx$1 = (type, props, key) => jsx(type, localize(type, props), key);
+var jsxs$1 = (type, props, key) => jsxs(type, localize(type, props), key);
 //#endregion
 //#region src/Socials.jsx
 var PATHS$1 = {
@@ -2321,9 +2329,9 @@ function lazyRoute(loader) {
 var pick = (loader, name) => () => loader().then((m) => m[name]);
 var company_ = () => import("./assets/Company-DV785C7V.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-i2XsI7sL.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-BMrjd_3x.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-SR8Nmjcu.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-C57vw9Ld.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-Bb5kDD5c.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-CBCmCG7f.js").then((m) => m.default)),
 	fleet: lazyRoute(() => import("./assets/Fleet-DO59oc98.js").then((m) => m.default)),
 	blog: lazyRoute(pick(() => import("./assets/Blog-BhpXLRlf.js"), "Blog")),
 	article: lazyRoute(() => import("./assets/Blog-BhpXLRlf.js").then((m) => m.default)),
@@ -4074,6 +4082,28 @@ var media_default = {
 			"height": 1626
 		},
 		"source": "IMAGENES/FotosMedellin/City Tour/dji_fly_20260522_162510_854_1779485191655_photo_optimized.jpg (foto propia, dron, 4000×2250): completa 16:9 (escritorio) y vertical ~9:19,5 centrado en el grupo (móvil). WebP sin EXIF."
+	},
+	"hero-dron": {
+		"poster": {
+			"desktop": {
+				"src": "/media/hero/hero-dron-poster-1920.webp",
+				"srcset": "/media/hero/hero-dron-poster-1280.webp 1280w, /media/hero/hero-dron-poster-1920.webp 1920w",
+				"width": 1920,
+				"height": 1080
+			},
+			"mobile": {
+				"src": "/media/hero/hero-dron-poster-movil.webp",
+				"srcset": "/media/hero/hero-dron-poster-movil.webp 540w",
+				"width": 540,
+				"height": 960
+			}
+		},
+		"videos": {
+			"movil": "/media/videos/hero-dron-movil.mp4",
+			"hd720": "/media/videos/hero-dron-720.mp4",
+			"hd1080": "/media/videos/hero-dron-1080.mp4"
+		},
+		"source": "video de dron aportado por el usuario 2026-10-16 (Comuna 13, letrero «PARCE Medellín»), acelerado ×2 (25,9 s), sin audio, H.264 faststart: 1920×1080, 1280×720 y 540×960 (recorte central 9:16). Pósters = primer fotograma, WebP."
 	}
 };
 //#endregion

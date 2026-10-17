@@ -1390,5 +1390,27 @@
       "height": 1626
     },
     "source": "IMAGENES/FotosMedellin/City Tour/dji_fly_20260522_162510_854_1779485191655_photo_optimized.jpg (foto propia, dron, 4000×2250): completa 16:9 (escritorio) y vertical ~9:19,5 centrado en el grupo (móvil). WebP sin EXIF."
+  },
+  "hero-dron": {
+    "poster": {
+      "desktop": {
+        "src": "/media/hero/hero-dron-poster-1920.webp",
+        "srcset": "/media/hero/hero-dron-poster-1280.webp 1280w, /media/hero/hero-dron-poster-1920.webp 1920w",
+        "width": 1920,
+        "height": 1080
+      },
+      "mobile": {
+        "src": "/media/hero/hero-dron-poster-movil.webp",
+        "srcset": "/media/hero/hero-dron-poster-movil.webp 540w",
+        "width": 540,
+        "height": 960
+      }
+    },
+    "videos": {
+      "movil": "/media/videos/hero-dron-movil.mp4",
+      "hd720": "/media/videos/hero-dron-720.mp4",
+      "hd1080": "/media/videos/hero-dron-1080.mp4"
+    },
+    "source": "video de dron aportado por el usuario 2026-10-16 (Comuna 13, letrero «PARCE Medellín»), acelerado ×2 (25,9 s), sin audio, H.264 faststart: 1920×1080, 1280×720 y 540×960 (recorte central 9:16). Pósters = primer fotograma, WebP."
   }
 }
