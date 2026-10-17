@@ -1,0 +1,739 @@
+- generic [ref=e2]:
+  - link "Saltar al contenido" [ref=e3] [cursor=pointer]:
+    - /url: "#contenido"
+  - banner [ref=e4]:
+    - link "Transporte y Turismo Medellín, inicio" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - img "Transporte y Turismo Medellín" [ref=e6]
+    - generic [ref=e7]:
+      - button "Activar modo oscuro" [ref=e8] [cursor=pointer]
+      - 'button "Idioma del sitio: Español" [ref=e12] [cursor=pointer]':
+        - generic [ref=e16]: ES
+    - button "Menú" [ref=e17] [cursor=pointer]: Menú +
+  - main [ref=e18]:
+    - region [ref=e19]:
+      - generic [ref=e24]:
+        - paragraph [ref=e25]: Experiencias a otro nivel
+        - heading "Medellín, a otro nivel" [level=1] [ref=e26]:
+          - generic [ref=e27]: Medellín,
+          - generic [ref=e28]: a otro nivel
+        - paragraph [ref=e29]: Tours 100% privados · Guía-conductor exclusivo · Horarios flexibles
+        - generic [ref=e30]:
+          - link "Explorar experiencias" [ref=e31] [cursor=pointer]:
+            - /url: /experiencias
+          - link "Planeemos tu viaje" [ref=e34] [cursor=pointer]:
+            - /url: /cotizar
+    - region [ref=e37]:
+      - figure [ref=e38]:
+        - generic [ref=e39]:
+          - 'generic "Reel: viajar por Medellín a tu propio ritmo, en tour privado" [ref=e40]'
+          - button "Activar sonido" [ref=e41] [cursor=pointer]
+          - button "Reproducir video" [ref=e45] [cursor=pointer]
+        - generic [ref=e48]:
+          - text: "Reel: viajar por Medellín a tu propio ritmo, en tour privado ·"
+          - link "Ver en Instagram (se abre en una pestaña nueva)" [ref=e49] [cursor=pointer]:
+            - /url: https://www.instagram.com/p/DdXYS5gJ-GH/
+            - text: Ver en Instagram
+            - generic [ref=e50]: (se abre en una pestaña nueva)
+      - generic [ref=e51]:
+        - paragraph [ref=e52]: Más que llegar
+        - heading [level=2] [ref=e53]:
+          - text: Hay una Medellín que se mira.Y otra que se
+          - emphasis [ref=e54]: vive
+        - paragraph [ref=e55]: La encuentras en una conversación, en el color de una calle y en la curva que abre un nuevo paisaje. Queremos acompañarte a descubrirla con el cuidado de un equipo local.
+        - link "Conoce al equipo" [ref=e56] [cursor=pointer]:
+          - /url: /nosotros
+    - region "Elige tu próximo recuerdo" [ref=e59]:
+      - generic [ref=e61]:
+        - img "Vista de Medellín desde la ladera de la Comuna 13" [ref=e64]
+        - generic [ref=e65]:
+          - paragraph [ref=e66]: Experiencias
+          - heading "Elige tu próximo recuerdo" [level=2] [ref=e67]
+        - generic [ref=e70]:
+          - generic:
+            - paragraph: No solo visites Medellín. Vívela
+            - paragraph: Una mirada al valle desde la ladera
+        - list "Experiencias" [ref=e71]:
+          - listitem [ref=e72]:
+            - link "City Tour & Comuna 13 City Tour & Comuna 13" [ref=e73] [cursor=pointer]:
+              - /url: /experiencias/city-tour-comuna-13
+              - img "City Tour & Comuna 13" [ref=e74]
+              - generic [ref=e75]: City Tour & Comuna 13
+          - listitem [ref=e76]:
+            - link "Guatapé & Piedra del Peñol Guatapé & Piedra del Peñol" [ref=e77] [cursor=pointer]:
+              - /url: /experiencias/guatape-piedra-del-penol
+              - img "Guatapé & Piedra del Peñol" [ref=e78]
+              - generic [ref=e79]: Guatapé & Piedra del Peñol
+          - listitem [ref=e80]:
+            - link "Noche en Medellín Noche en Medellín" [ref=e81] [cursor=pointer]:
+              - /url: /experiencias/tour-nocturno-medellin
+              - img "Noche en Medellín" [ref=e82]
+              - generic [ref=e83]: Noche en Medellín
+          - listitem [ref=e84]:
+            - link "Vuelta a Oriente Vuelta a Oriente" [ref=e85] [cursor=pointer]:
+              - /url: /experiencias/vuelta-a-oriente
+              - img "Vuelta a Oriente" [ref=e86]
+              - generic [ref=e87]: Vuelta a Oriente
+          - listitem [ref=e88]:
+            - link "Tour del Café Tour del Café" [ref=e89] [cursor=pointer]:
+              - /url: /experiencias/tour-del-cafe-medellin
+              - img "Tour del Café" [ref=e90]
+              - generic [ref=e91]: Tour del Café
+          - listitem [ref=e92]:
+            - link "Hacienda Nápoles Hacienda Nápoles" [ref=e93] [cursor=pointer]:
+              - /url: /experiencias/hacienda-napoles
+              - img "Hacienda Nápoles" [ref=e94]
+              - generic [ref=e95]: Hacienda Nápoles
+          - listitem [ref=e96]:
+            - link "Salto del Buey Salto del Buey" [ref=e97] [cursor=pointer]:
+              - /url: /experiencias/salto-del-buey
+              - img "Salto del Buey" [ref=e98]
+              - generic [ref=e99]: Salto del Buey
+          - listitem [ref=e100]:
+            - link "Santa Fe de Antioquia Santa Fe de Antioquia" [ref=e101] [cursor=pointer]:
+              - /url: /experiencias/santa-fe-de-antioquia
+              - img "Santa Fe de Antioquia" [ref=e102]
+              - generic [ref=e103]: Santa Fe de Antioquia
+          - listitem [ref=e104]:
+            - link "Jardín Jardín" [ref=e105] [cursor=pointer]:
+              - /url: /experiencias/jardin-antioquia
+              - img "Jardín" [ref=e106]
+              - generic [ref=e107]: Jardín
+          - listitem [ref=e108]:
+            - link "Tour de Compras Tour de Compras" [ref=e109] [cursor=pointer]:
+              - /url: /experiencias/tour-de-compras
+              - img "Tour de Compras" [ref=e110]
+              - generic [ref=e111]: Tour de Compras
+          - listitem [ref=e112]:
+            - link "Tour de Miradores Tour de Miradores" [ref=e113] [cursor=pointer]:
+              - /url: /experiencias/tour-miradores
+              - img "Tour de Miradores" [ref=e114]
+              - generic [ref=e115]: Tour de Miradores
+        - button "Reducir movimiento" [ref=e117] [cursor=pointer]
+      - paragraph [ref=e121]: "Apertura: una baraja de doce experiencias. La carta superior se abre en una transición cinematográfica sobre Medellín que termina en la Plaza Botero y luego se despliegan las doce experiencias, cada una con su enlace."
+    - region [ref=e122]:
+      - generic:
+        - generic [ref=e124]:
+          - paragraph [ref=e125]: Elige tu próximo recuerdo
+          - heading [level=2] [ref=e126]:
+            - text: Un lugar para cada
+            - emphasis [ref=e127]: forma de viajar
+        - link "Ver las 12 experiencias" [ref=e128] [cursor=pointer]:
+          - /url: /experiencias
+      - list [ref=e131]:
+        - listitem [ref=e132]:
+          - 'link "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026 01 / 11 · Ciudad City Tour & Comuna 13 Descubre: plazas, murales e historias de Medellín" [ref=e133] [cursor=pointer]':
+            - /url: /experiencias/city-tour-comuna-13
+            - img "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026" [ref=e135]:
+              - generic [aria-hidden] [ref=e136]: ★★★★★
+              - generic [aria-hidden] [ref=e137]: 5,0
+              - generic [aria-hidden] [ref=e138]: · 265 reseñas en Google
+            - generic [ref=e139]: 01 / 11 · Ciudad
+            - heading "City Tour & Comuna 13" [level=3] [ref=e140]
+            - paragraph [ref=e141]:
+              - generic [ref=e142]: "Descubre:"
+              - text: plazas, murales e historias de Medellín
+        - listitem [ref=e143]:
+          - 'link "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026 02 / 11 · Ciudad Tour de Compras Descubre: El Hueco, outlets y tiendas locales" [ref=e144] [cursor=pointer]':
+            - /url: /experiencias/tour-de-compras
+            - img "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026" [ref=e146]:
+              - generic [aria-hidden] [ref=e147]: ★★★★★
+              - generic [aria-hidden] [ref=e148]: 5,0
+              - generic [aria-hidden] [ref=e149]: · 265 reseñas en Google
+            - generic [ref=e150]: 02 / 11 · Ciudad
+            - heading "Tour de Compras" [level=3] [ref=e151]
+            - paragraph [ref=e152]:
+              - generic [ref=e153]: "Descubre:"
+              - text: El Hueco, outlets y tiendas locales
+        - listitem [ref=e154]:
+          - 'link "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026 03 / 11 · Pueblos Guatapé & Piedra del Peñol Explora: agua entre montañas y zócalos de color" [ref=e155] [cursor=pointer]':
+            - /url: /experiencias/guatape-piedra-del-penol
+            - img "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026" [ref=e157]:
+              - generic [aria-hidden] [ref=e158]: ★★★★★
+              - generic [aria-hidden] [ref=e159]: 5,0
+              - generic [aria-hidden] [ref=e160]: · 265 reseñas en Google
+            - generic [ref=e161]: 03 / 11 · Pueblos
+            - heading "Guatapé & Piedra del Peñol" [level=3] [ref=e162]
+            - paragraph [ref=e163]:
+              - generic [ref=e164]: "Explora:"
+              - text: agua entre montañas y zócalos de color
+        - listitem [ref=e165]:
+          - 'link "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026 04 / 11 · Pueblos Vuelta a Oriente Conecta: con pueblos y plazas, sin carreras" [ref=e166] [cursor=pointer]':
+            - /url: /experiencias/vuelta-a-oriente
+            - img "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026" [ref=e168]:
+              - generic [aria-hidden] [ref=e169]: ★★★★★
+              - generic [aria-hidden] [ref=e170]: 5,0
+              - generic [aria-hidden] [ref=e171]: · 265 reseñas en Google
+            - generic [ref=e172]: 04 / 11 · Pueblos
+            - heading "Vuelta a Oriente" [level=3] [ref=e173]
+            - paragraph [ref=e174]:
+              - generic [ref=e175]: "Conecta:"
+              - text: con pueblos y plazas, sin carreras
+        - listitem [ref=e176]:
+          - 'link "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026 05 / 11 · Pueblos Santa Fe de Antioquia Recuerda: calles coloniales y el Puente de Occidente" [ref=e177] [cursor=pointer]':
+            - /url: /experiencias/santa-fe-de-antioquia
+            - img "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026" [ref=e179]:
+              - generic [aria-hidden] [ref=e180]: ★★★★★
+              - generic [aria-hidden] [ref=e181]: 5,0
+              - generic [aria-hidden] [ref=e182]: · 265 reseñas en Google
+            - generic [ref=e183]: 05 / 11 · Pueblos
+            - heading "Santa Fe de Antioquia" [level=3] [ref=e184]
+            - paragraph [ref=e185]:
+              - generic [ref=e186]: "Recuerda:"
+              - text: calles coloniales y el Puente de Occidente
+        - listitem [ref=e187]:
+          - 'link "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026 06 / 11 · Pueblos Jardín Enamórate: fachadas de color y plaza sin prisa" [ref=e188] [cursor=pointer]':
+            - /url: /experiencias/jardin-antioquia
+            - img "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026" [ref=e190]:
+              - generic [aria-hidden] [ref=e191]: ★★★★★
+              - generic [aria-hidden] [ref=e192]: 5,0
+              - generic [aria-hidden] [ref=e193]: · 265 reseñas en Google
+            - generic [ref=e194]: 06 / 11 · Pueblos
+            - heading "Jardín" [level=3] [ref=e195]
+            - paragraph [ref=e196]:
+              - generic [ref=e197]: "Enamórate:"
+              - text: fachadas de color y plaza sin prisa
+        - listitem [ref=e198]:
+          - 'link "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026 07 / 11 · Naturaleza Tour del Café Vive: el oficio detrás de cada taza" [ref=e199] [cursor=pointer]':
+            - /url: /experiencias/tour-del-cafe-medellin
+            - img "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026" [ref=e201]:
+              - generic [aria-hidden] [ref=e202]: ★★★★★
+              - generic [aria-hidden] [ref=e203]: 5,0
+              - generic [aria-hidden] [ref=e204]: · 265 reseñas en Google
+            - generic [ref=e205]: 07 / 11 · Naturaleza
+            - heading "Tour del Café" [level=3] [ref=e206]
+            - paragraph [ref=e207]:
+              - generic [ref=e208]: "Vive:"
+              - text: el oficio detrás de cada taza
+        - listitem [ref=e209]:
+          - 'link "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026 08 / 11 · Naturaleza Salto del Buey Sorpréndete: una cascada al final del sendero" [ref=e210] [cursor=pointer]':
+            - /url: /experiencias/salto-del-buey
+            - img "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026" [ref=e212]:
+              - generic [aria-hidden] [ref=e213]: ★★★★★
+              - generic [aria-hidden] [ref=e214]: 5,0
+              - generic [aria-hidden] [ref=e215]: · 265 reseñas en Google
+            - generic [ref=e216]: 08 / 11 · Naturaleza
+            - heading "Salto del Buey" [level=3] [ref=e217]
+            - paragraph [ref=e218]:
+              - generic [ref=e219]: "Sorpréndete:"
+              - text: una cascada al final del sendero
+        - listitem [ref=e220]:
+          - 'link "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026 09 / 11 · Noche Noche en Medellín Siente: el valle cuando enciende sus luces" [ref=e221] [cursor=pointer]':
+            - /url: /experiencias/tour-nocturno-medellin
+            - img "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026" [ref=e223]:
+              - generic [aria-hidden] [ref=e224]: ★★★★★
+              - generic [aria-hidden] [ref=e225]: 5,0
+              - generic [aria-hidden] [ref=e226]: · 265 reseñas en Google
+            - generic [ref=e227]: 09 / 11 · Noche
+            - heading "Noche en Medellín" [level=3] [ref=e228]
+            - paragraph [ref=e229]:
+              - generic [ref=e230]: "Siente:"
+              - text: el valle cuando enciende sus luces
+        - listitem [ref=e231]:
+          - 'link "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026 10 / 11 · Noche Tour de Miradores Inspírate: el valle cambia con la luz" [ref=e232] [cursor=pointer]':
+            - /url: /experiencias/tour-miradores
+            - img "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026" [ref=e234]:
+              - generic [aria-hidden] [ref=e235]: ★★★★★
+              - generic [aria-hidden] [ref=e236]: 5,0
+              - generic [aria-hidden] [ref=e237]: · 265 reseñas en Google
+            - generic [ref=e238]: 10 / 11 · Noche
+            - heading "Tour de Miradores" [level=3] [ref=e239]
+            - paragraph [ref=e240]:
+              - generic [ref=e241]: "Inspírate:"
+              - text: el valle cambia con la luz
+        - listitem [ref=e242]:
+          - 'link "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026 11 / 11 · Familia Hacienda Nápoles Disfruta: un día en familia, con transporte coordinado" [ref=e243] [cursor=pointer]':
+            - /url: /experiencias/hacienda-napoles
+            - img "5,0 · 265 reseñas en Google · valoración de la empresa · sept. 2026" [ref=e245]:
+              - generic [aria-hidden] [ref=e246]: ★★★★★
+              - generic [aria-hidden] [ref=e247]: 5,0
+              - generic [aria-hidden] [ref=e248]: · 265 reseñas en Google
+            - generic [ref=e249]: 11 / 11 · Familia
+            - heading "Hacienda Nápoles" [level=3] [ref=e250]
+            - paragraph [ref=e251]:
+              - generic [ref=e252]: "Disfruta:"
+              - text: un día en familia, con transporte coordinado
+    - generic [ref=e253]:
+      - paragraph [ref=e254]: Cómo te acompañamos
+      - heading "Te acompañamos de principio a fin" [level=2] [ref=e255]
+      - generic [ref=e256]:
+        - link "01 Traslados de aeropuerto" [ref=e257] [cursor=pointer]:
+          - /url: /experiencias/traslados-aeropuerto-jmc
+          - generic [ref=e258]: "01"
+          - heading "Traslados de aeropuerto" [level=3] [ref=e259]
+        - link "02 Recorridos privados" [ref=e262] [cursor=pointer]:
+          - /url: /experiencias
+          - generic [ref=e263]: "02"
+          - heading "Recorridos privados" [level=3] [ref=e264]
+        - link "03 Empresas, agencias y grupos" [ref=e267] [cursor=pointer]:
+          - /url: /servicios
+          - generic [ref=e268]: "03"
+          - heading "Empresas, agencias y grupos" [level=3] [ref=e269]
+    - region [ref=e272]:
+      - generic [ref=e273]:
+        - generic [ref=e274]:
+          - paragraph [ref=e275]: Transporte y Turismo Medellín
+          - heading "¿Qué nos hace diferentes?" [level=2] [ref=e276]:
+            - generic [ref=e277]:
+              - generic [ref=e278]: ¿Qué
+              - generic [ref=e281]: nos
+              - generic [ref=e284]: hace
+            - generic [ref=e287]: diferentes?
+          - generic [ref=e291]:
+            - paragraph [ref=e292]: Queremos que conozcas Medellín con la tranquilidad de tener un equipo local a tu lado.
+            - paragraph [ref=e293]: "Todo empieza por escucharte: quién viaja, qué quiere conocer y cuánto tiempo tiene. Con esa información coordinamos el transporte y el recorrido, y te explicamos las condiciones antes de contratar."
+        - generic [ref=e294]:
+          - list [ref=e296]:
+            - listitem [ref=e297]:
+              - generic [aria-hidden] [ref=e302]: "01"
+              - heading "Monitoreamos tu vuelo" [level=3] [ref=e303]
+              - paragraph [ref=e304]: Seguimos el estado de tu vuelo hasta su aterrizaje en Medellín para coordinar tu recogida y estar preparados ante posibles cambios de horario.
+            - listitem [ref=e305]:
+              - generic [aria-hidden] [ref=e311]: "02"
+              - heading "Vehículos para tu recorrido" [level=3] [ref=e312]
+              - paragraph [ref=e313]: Revisamos contigo la categoría, la capacidad y el equipaje para proponer el vehículo de tu servicio. La unidad y su disponibilidad se confirman al cotizar.
+            - listitem [ref=e314]:
+              - generic [aria-hidden] [ref=e322]: "03"
+              - heading "Un equipo que responde por ti" [level=3] [ref=e323]
+              - paragraph [ref=e324]: Coordinamos el transporte, las paradas y el acompañamiento de tu recorrido. Antes de contratar, revisamos contigo los servicios incluidos en la propuesta.
+            - listitem [ref=e325]:
+              - generic [aria-hidden] [ref=e330]: "04"
+              - heading "Los detalles también cuentan" [level=3] [ref=e331]
+              - paragraph [ref=e332]: Consulta la hidratación incluida en tu experiencia. Antes de salir, revisa con el equipo qué llevar según el recorrido y las necesidades de tu grupo.
+            - listitem [ref=e333]:
+              - generic [aria-hidden] [ref=e339]: "05"
+              - heading "Experiencias 100% privadas" [level=3] [ref=e340]
+              - paragraph [ref=e341]: Nuestra propuesta son tours privados para ti y tus acompañantes. Confirmamos el vehículo, el acompañamiento y las condiciones de cada recorrido al cotizar.
+            - listitem [ref=e342]:
+              - generic [aria-hidden] [ref=e348]: "06"
+              - heading "Flexibilidad en tus horarios" [level=3] [ref=e349]
+              - paragraph [ref=e350]: Cuéntanos tus intereses y el tiempo que tienes. Acordamos los horarios según el recorrido, las condiciones operativas y lo que necesitas.
+            - listitem [ref=e351]:
+              - generic [aria-hidden] [ref=e357]: "07"
+              - heading "Recuerdos para llevar contigo" [level=3] [ref=e358]
+              - paragraph [ref=e359]: Consulta las fotografías y los videos incluidos en tu recorrido. La propuesta detalla estos servicios para que sepas qué esperar antes de salir.
+            - listitem [ref=e360]:
+              - generic [aria-hidden] [ref=e366]: "08"
+              - heading "Seguridad y respaldo legal" [level=3] [ref=e367]
+              - paragraph [ref=e368]: Somos una empresa legalmente constituida, con Registro Nacional de Turismo (RNT 176384). Operamos con vehículos habilitados y las coberturas y pólizas aplicables a nuestros servicios.
+            - listitem [ref=e369]:
+              - generic [aria-hidden] [ref=e374]: "09"
+              - heading "Conversemos por WhatsApp" [level=3] [ref=e375]
+              - paragraph [ref=e376]: Escríbenos para organizar tu viaje o consultar sobre tu servicio. La operación de transporte las 24 horas requiere reserva previa; la asesoría depende de la disponibilidad del equipo.
+            - listitem [ref=e377]:
+              - generic [aria-hidden] [ref=e382]: "10"
+              - heading "Atención desde el primer contacto" [level=3] [ref=e383]
+              - paragraph [ref=e384]: No solo organizamos recorridos. Escuchamos tus necesidades, te asesoramos y diseñamos experiencias que se ajustan a lo que realmente buscas.
+          - generic [ref=e385]:
+            - paragraph [ref=e386]: Experiencias a otro nivel
+            - paragraph [ref=e387]:
+              - generic [ref=e388]:
+                - generic [ref=e389]: "No"
+                - generic [ref=e392]: es
+                - generic [ref=e395]: solamente
+                - generic [ref=e398]: a
+                - generic [ref=e401]: dónde
+                - generic [ref=e404]: te
+                - generic [ref=e407]: llevamos
+              - generic [ref=e410]:
+                - generic [ref=e411]: Es
+                - generic [ref=e414]: cómo
+                - generic [ref=e417]: te
+                - generic [ref=e420]: hacemos
+                - generic [ref=e423]: sentir
+                - generic [ref=e426]: durante
+                - generic [ref=e429]: todo
+                - generic [ref=e432]: el
+                - generic [ref=e435]: camino
+                - generic [ref=e438]: .
+    - region [ref=e440]:
+      - generic:
+        - generic [ref=e441]:
+          - heading "Historias de quienes viajaron con nosotros" [level=2] [ref=e442]
+          - paragraph [ref=e443]: "Opiniones sobre Transporte & Turismo Medellín publicadas en Google. Referencia: septiembre de 2026."
+          - generic [ref=e444]:
+            - generic [ref=e445]:
+              - text: "5.0"
+              - generic [ref=e446]: de 5 estrellas en Google
+            - generic [aria-hidden] [ref=e447]: ★★★★★
+            - generic [ref=e448]: 265 reseñas en Google
+          - generic [ref=e449]:
+            - link "Ver todas las reseñas en Google" [ref=e450] [cursor=pointer]:
+              - /url: https://www.google.com/maps/place/Transporte+%26+Turismo+Medellin/data=!4m2!3m1!1s0x0:0x676cebadb662a88a
+            - link "Tripadvisor 5.0 · 5 reseñas" [ref=e453] [cursor=pointer]:
+              - /url: https://www.tripadvisor.es/Attraction_Review-g297478-d25190482-Reviews-Transporte_y_Turismo_Medellin-Medellin_Antioquia_Department.html
+        - generic [ref=e457]:
+          - button "Reseñas anteriores" [ref=e458] [cursor=pointer]
+          - button "Reseñas siguientes" [ref=e461] [cursor=pointer]
+        - region "Reseñas de clientes en Google" [ref=e464]:
+          - article [ref=e465]:
+            - generic [aria-hidden] [ref=e466]: ★★★★★
+            - generic [ref=e467]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e468]: Nuestra experiencia con el tour privado fue sencillamente excepcional. Desde el primer momento, la organización y comunicación fueron impecables, lo que nos brindó mucha confianza y tranquilidad durante todo el proceso. Se nota claramente el excelente manejo administrativo que tienen.
+            - button "Leer más" [ref=e469] [cursor=pointer]
+            - generic [ref=e470]:
+              - strong [ref=e471]: David R.
+              - generic [ref=e472]: Reseña en Google
+          - article [ref=e473]:
+            - generic [aria-hidden] [ref=e474]: ★★★★★
+            - generic [ref=e475]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e476]: "Queremos agradecer a todo el equipo de Transporte y Turismo Medellín por los tours que nos brindaron como grupo. Todo fue excelente: puntualidad, guías muy amables, transporte cómodo y seguro, y las rutas súper bien organizadas. De verdad que la experiencia fue 100% satisfactoria."
+            - button "Leer más" [ref=e477] [cursor=pointer]
+            - generic [ref=e478]:
+              - strong [ref=e479]: Alexandra E.
+              - generic [ref=e480]: Reseña en Google
+          - article [ref=e481]:
+            - generic [aria-hidden] [ref=e482]: ★★★★★
+            - generic [ref=e483]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e484]: Tuve una experiencia espectacular con Alhan de Transporte y Turismo Medellín. Desde el inicio, la organización fue impecable y todo se desarrolló de manera puntual y fluida. La ruta estuvo muy bien planificada, permitiendo disfrutar al máximo cada uno de los lugares visitados.
+            - button "Leer más" [ref=e485] [cursor=pointer]
+            - generic [ref=e486]:
+              - strong [ref=e487]: Narciso O.
+              - generic [ref=e488]: Reseña en Google
+              - generic [ref=e489]: Guía local
+          - article [ref=e490]:
+            - generic [aria-hidden] [ref=e491]: ★★★★★
+            - generic [ref=e492]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e493]: Perfecto con excelente, el city tour comuna 13 excelente servicio, por parte del conductor (Francisco) y el guía (Brian), sin palabras, que Chimba Medellín, ahhh no olviden pedir la bandeja paisa a la hora del almuerzo brutal!!!
+            - button "Leer más" [ref=e494] [cursor=pointer]
+            - generic [ref=e495]:
+              - strong [ref=e496]: Fernando E.
+              - generic [ref=e497]: Reseña en Google
+          - article [ref=e498]:
+            - generic [aria-hidden] [ref=e499]: ★★★★★
+            - generic [ref=e500]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e501]: El servicio prestado superó las expectativas que traía. Tienes un equipo súper, híper, mega genial y profesional. Si regresara en otra ocasión de seguro los escogería y con seguridad lo recomendaré a mis amigos que quieran visitar Colombia.
+            - button "Leer más" [ref=e502] [cursor=pointer]
+            - generic [ref=e503]:
+              - strong [ref=e504]: Clara M.
+              - generic [ref=e505]: Reseña en Google
+          - article [ref=e506]:
+            - generic [aria-hidden] [ref=e507]: ★★★★★
+            - generic [ref=e508]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e509]: ¡Una experiencia increíble de principio a fin! El servicio fue excelente y la comunicación siempre fue rápida, clara y muy profesional. Todo el equipo, especialmente los guías y coordinadores, fue sumamente atento, amable y flexible.
+            - button "Leer más" [ref=e510] [cursor=pointer]
+            - generic [ref=e511]:
+              - strong [ref=e512]: Ileana L.
+              - generic [ref=e513]: Reseña en Google
+          - article [ref=e514]:
+            - generic [aria-hidden] [ref=e515]: ★★★★★
+            - generic [ref=e516]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e517]: Desde el inicio fueron demasiado amables, la atención y seguimiento de cada día fue excelente. Nos sentimos cómodos, seguros y bien recibidos. La experiencia superó nuestras expectativas, volveríamos a contratarlos sin dudar.
+            - button "Leer más" [ref=e518] [cursor=pointer]
+            - generic [ref=e519]:
+              - strong [ref=e520]: Monika M.
+              - generic [ref=e521]: Reseña en Google
+          - article [ref=e522]:
+            - generic [aria-hidden] [ref=e523]: ★★★★★
+            - generic [ref=e524]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e525]: "¡Una experiencia simplemente impecable y de otro nivel! Quiero recomendar con total confianza a Transporte y Turismo Medellín, una empresa que superó todas mis expectativas desde el primer momento. Cada tour fue inolvidable: el Tour a Guatapé, el City Tour y el Tour de Compras estuvieron organizados de manera excelente."
+            - button "Leer más" [ref=e526] [cursor=pointer]
+            - generic [ref=e527]:
+              - strong [ref=e528]: Diego R.
+              - generic [ref=e529]: Reseña en Google
+          - article [ref=e530]:
+            - generic [aria-hidden] [ref=e531]: ★★★★★
+            - generic [ref=e532]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e533]: Fuimos 2 personas y tuvimos una muy buena experiencia con todo el equipo. Todo estuvo bien organizado, el transporte fue puntual y siempre fueron muy atentos. Queremos destacar especialmente al guía Albeiro, quien fue súper amable y excelente guía.
+            - button "Leer más" [ref=e534] [cursor=pointer]
+            - generic [ref=e535]:
+              - strong [ref=e536]: Gabriela G.
+              - generic [ref=e537]: Reseña en Google
+          - article [ref=e538]:
+            - generic [aria-hidden] [ref=e539]: ★★★★★
+            - generic [ref=e540]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e541]: Empresa muy seria, responsable. Sarai fue nuestra asesora comercial y es una persona increíble. En general, todo el personal que tuvimos en cada tour fueron excelentes! Recomendados al 100%. Volveríamos a contratar con ellos.
+            - button "Leer más" [ref=e542] [cursor=pointer]
+            - generic [ref=e543]:
+              - strong [ref=e544]: Elba A.
+              - generic [ref=e545]: Reseña en Google
+          - article [ref=e546]:
+            - generic [aria-hidden] [ref=e547]: ★★★★★
+            - generic [ref=e548]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e549]: Quiero agradecer a la empresa de transporte turismo Medellín, por el excelente servicio que nos brindó durante la celebración de mi cumpleaños. Desde el primer contacto demostraron profesionalismo, puntualidad y una atención impecable.
+            - button "Leer más" [ref=e550] [cursor=pointer]
+            - generic [ref=e551]:
+              - strong [ref=e552]: Sebas
+              - generic [ref=e553]: Reseña en Google
+          - article [ref=e554]:
+            - generic [aria-hidden] [ref=e555]: ★★★★★
+            - generic [ref=e556]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e557]: Excelente experiencia de principio a fin. Desde la planificación del viaje hasta la ejecución de cada actividad, el equipo demostró un alto nivel de profesionalismo, organización y conocimiento. Todo el personal fue sumamente amable y atento.
+            - button "Leer más" [ref=e558] [cursor=pointer]
+            - generic [ref=e559]:
+              - strong [ref=e560]: Kristel A.
+              - generic [ref=e561]: Reseña en Google
+          - article [ref=e562]:
+            - generic [aria-hidden] [ref=e563]: ★★★★★
+            - generic [ref=e564]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e565]: La experiencia fue súper buena. Desde la atención previa a los tours y las recomendaciones, el trato de Sarai siempre fue excepcional. El guía Albeiro fue súper atento, súper amable, súper paciente y con gran conocimiento. Los almuerzos incluidos son muy buenos.
+            - button "Leer más" [ref=e566] [cursor=pointer]
+            - generic [ref=e567]:
+              - strong [ref=e568]: Alexander R.
+              - generic [ref=e569]: Reseña en Google
+          - article [ref=e570]:
+            - generic [aria-hidden] [ref=e571]: ★★★★★
+            - generic [ref=e572]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e573]: Fue un excelente servicio de inicio a fin, la comunicación con Sarai fue excepcional. Nos recogieron de forma muy cumplida y al final del concierto nos recogieron en el lugar acordado. Los vehículos en muy buen estado.
+            - button "Leer más" [ref=e574] [cursor=pointer]
+            - generic [ref=e575]:
+              - strong [ref=e576]: Daniel Z.
+              - generic [ref=e577]: Reseña en Google
+          - article [ref=e578]:
+            - generic [aria-hidden] [ref=e579]: ★★★★★
+            - generic [ref=e580]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e581]: Todo maravilloso. Allan y su equipo nos recogieron en el aeropuerto, nos dieron consejos, fuimos a un espectacular tour nocturno familiar, conocimos la ciudad, Guatapé, Comuna 13 y hasta fuimos a la Hacienda Nápoles. Un saludo desde Guanacaste, Costa Rica.
+            - button "Leer más" [ref=e582] [cursor=pointer]
+            - generic [ref=e583]:
+              - strong [ref=e584]: Meysbol T.
+              - generic [ref=e585]: Reseña en Google
+          - article [ref=e586]:
+            - generic [aria-hidden] [ref=e587]: ★★★★★
+            - generic [ref=e588]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e589]: Otro nivel de servicio. Alan es un tipazo, las unidades están impecables y la atención es impecable de principio a fin. Te resuelven todo y viajas con total tranquilidad. Si vienes a Medellín, este es el contacto que tienes que asegurar.
+            - button "Leer más" [ref=e590] [cursor=pointer]
+            - generic [ref=e591]:
+              - strong [ref=e592]: Christian S.
+              - generic [ref=e593]: Reseña en Google
+          - article [ref=e594]:
+            - generic [aria-hidden] [ref=e595]: ★★★★★
+            - generic [ref=e596]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e597]: Es la segunda vez que utilizamos la compañía, y la seguiremos utilizando en el futuro. Estamos 100% complacidos con el servicio. Yo tengo una lesión en la rodilla y ellos hasta me cargaron en la espalda para ayudarme a bajar escaleras, y me consiguieron silla de ruedas en todos los lugares.
+            - button "Leer más" [ref=e598] [cursor=pointer]
+            - generic [ref=e599]:
+              - strong [ref=e600]: Maria V.
+              - generic [ref=e601]: Reseña en Google
+          - article [ref=e602]:
+            - generic [aria-hidden] [ref=e603]: ★★★★★
+            - generic [ref=e604]: "Calificación: 5.0 de 5 estrellas."
+            - paragraph [ref=e605]: Gracias por tanto calor humano en estas vacaciones, nos cuidaron, siempre estuvieron atentos a lo que necesitamos, nos guiaron y nos aconsejaron. Son un gran equipo, nunca nos vieron como cliente sino nos trataron como si fuéramos grandes amigos de mucho tiempo.
+            - button "Leer más" [ref=e606] [cursor=pointer]
+            - generic [ref=e607]:
+              - strong [ref=e608]: Victor H.
+              - generic [ref=e609]: Reseña en Google
+        - link "Sobre nuestras calificaciones" [ref=e610] [cursor=pointer]:
+          - /url: /calificaciones
+    - generic [ref=e613]:
+      - img "Personas del equipo de T&T Medellín" [ref=e614]
+      - generic [ref=e615]:
+        - paragraph [ref=e616]: Nuestro equipo
+        - heading "Un equipo local que te acompaña" [level=2] [ref=e617]
+        - paragraph [ref=e618]: Desde los primeros traslados, aprendimos a escuchar. Esa cercanía sigue guiando nuestra forma de recibir y acompañar.
+        - link "Conoce al equipo" [ref=e619] [cursor=pointer]:
+          - /url: /nosotros
+    - region [ref=e622]:
+      - generic:
+        - generic [ref=e623]:
+          - paragraph [ref=e624]: Cuaderno de viaje
+          - heading "Ideas y consejos para tu viaje" [level=2] [ref=e625]
+        - link "Todas las notas" [ref=e626] [cursor=pointer]:
+          - /url: /blog
+      - generic [ref=e629]:
+        - generic [ref=e631]:
+          - link "Cómo preparar tu recorrido desde Medellín" [ref=e634] [cursor=pointer]:
+            - /url: /blog/preparar-tu-recorrido
+          - generic [ref=e637]:
+            - paragraph [ref=e638]: Planeación
+            - heading "Cómo preparar tu recorrido desde Medellín" [level=3] [ref=e639]
+            - paragraph [ref=e640]: Organizar un recorrido es más sencillo cuando la conversación empieza por lo importante.
+            - 'link "Leer la nota: Cómo preparar tu recorrido desde Medellín" [ref=e641] [cursor=pointer]':
+              - /url: /blog/preparar-tu-recorrido
+              - text: Leer la nota
+        - generic [ref=e644]:
+          - group "Elegir nota" [ref=e645]:
+            - button "Cómo preparar tu recorrido desde Medellín" [pressed] [ref=e646] [cursor=pointer]:
+              - generic [ref=e647]: "01"
+              - generic [ref=e648]: Planeación
+            - button "Qué experiencia elegir desde Medellín" [ref=e649] [cursor=pointer]:
+              - generic [ref=e650]: "02"
+              - generic [ref=e651]: Inspiración
+            - button "Cómo organizar un viaje en grupo desde Medellín" [ref=e652] [cursor=pointer]:
+              - generic [ref=e653]: "03"
+              - generic [ref=e654]: En grupo
+          - generic [ref=e655]:
+            - status [ref=e656]: 01 / 03
+            - generic [ref=e657]:
+              - button "Nota anterior" [disabled] [ref=e658]
+              - button "Nota siguiente" [ref=e661] [cursor=pointer]
+    - region [ref=e665]:
+      - generic [ref=e666]:
+        - paragraph [ref=e667]: Antes de decidir
+        - heading "Preguntas frecuentes" [level=2] [ref=e668]
+      - generic [ref=e669]:
+        - group [ref=e670]:
+          - generic "¿Cómo cotizo mi viaje?" [ref=e671] [cursor=pointer]
+          - paragraph [ref=e676]: Cuéntanos fechas, número de personas, punto de salida y llegada, y equipaje. Puedes hacerlo desde el formulario de cotización o escribirnos por WhatsApp al +57 304 496 1698.
+        - group [ref=e677]:
+          - generic "¿Cotizar es lo mismo que reservar?" [ref=e678] [cursor=pointer]
+        - group [ref=e681]:
+          - generic "¿Los recorridos son privados?" [ref=e682] [cursor=pointer]
+        - group [ref=e685]:
+          - generic "¿Puedo adaptar el recorrido a mi grupo?" [ref=e686] [cursor=pointer]
+        - group [ref=e689]:
+          - generic "¿Cuál es la política de cancelación, cambios y reembolsos?" [ref=e690] [cursor=pointer]
+        - group [ref=e693]:
+          - generic "¿Cuáles son los medios de pago, el anticipo y la facturación?" [ref=e694] [cursor=pointer]
+    - region [ref=e697]:
+      - generic:
+        - heading [level=2] [ref=e698]:
+          - text: Tu viaje, tus tiempos,tu
+          - emphasis [ref=e699]: experiencia
+        - paragraph [ref=e700]: Cuéntanos tu plan y lo preparamos contigo.
+        - generic [ref=e701]:
+          - link "Planeemos tu viaje" [ref=e702] [cursor=pointer]:
+            - /url: /cotizar
+          - link "Escríbenos por WhatsApp" [ref=e705] [cursor=pointer]:
+            - /url: https://wa.me/573044961698?text=Hola%2C%20quiero%20consultar%20con%20T%26T%20Medell%C3%ADn%20sobre%20mi%20recorrido.
+    - region "Síguenos en redes" [ref=e708]:
+      - heading "Síguenos en redes" [level=2]
+      - generic [ref=e709]:
+        - img "Transporte y Turismo Medellín" [ref=e710]
+        - paragraph [ref=e711]: Transporte y Turismo Medellín
+        - paragraph [ref=e712]: "@transporteenmedellin"
+        - link "Seguir a @transporteenmedellin en Instagram (se abre en una pestaña nueva)" [ref=e713] [cursor=pointer]:
+          - /url: https://www.instagram.com/transporteenmedellin
+          - text: Seguir
+      - list [ref=e716]:
+        - listitem [ref=e717]:
+          - link "¿Por qué elegirnos? (se abre en una pestaña nueva)" [ref=e718] [cursor=pointer]:
+            - /url: https://www.instagram.com/p/C6j0AcQuJNN/
+            - img "¿Por qué elegirnos?" [ref=e719]
+        - listitem [ref=e722]:
+          - link "Razones para visitar Medellín (se abre en una pestaña nueva)" [ref=e723] [cursor=pointer]:
+            - /url: https://www.instagram.com/p/C6jgprQuTNw/
+            - img "Razones para visitar Medellín" [ref=e724]
+        - listitem [ref=e727]:
+          - link "Tours y servicios imperdibles (se abre en una pestaña nueva)" [ref=e728] [cursor=pointer]:
+            - /url: https://www.instagram.com/p/C6jQepfu1bO/
+            - img "Tours y servicios imperdibles" [ref=e729]
+        - listitem [ref=e732]:
+          - link "Aprender y recibir en Medellín (se abre en una pestaña nueva)" [ref=e733] [cursor=pointer]:
+            - /url: https://www.instagram.com/p/DefYPNpp6HL/
+            - img "Aprender y recibir en Medellín" [ref=e734]
+        - listitem [ref=e737]:
+          - link "Sus palabras, nuestro mejor recuerdo (se abre en una pestaña nueva)" [ref=e738] [cursor=pointer]:
+            - /url: https://www.instagram.com/p/Dec1OOUibqi/
+            - img "Sus palabras, nuestro mejor recuerdo" [ref=e739]
+        - listitem [ref=e742]:
+          - link "Preguntas sobre transporte en Medellín (se abre en una pestaña nueva)" [ref=e743] [cursor=pointer]:
+            - /url: https://www.instagram.com/p/DeShg7YJ-3j/
+            - img "Preguntas sobre transporte en Medellín" [ref=e744]
+        - listitem [ref=e747]:
+          - link "Un golpe de realidad (se abre en una pestaña nueva)" [ref=e748] [cursor=pointer]:
+            - /url: https://www.instagram.com/p/DePyyGOJaYy/
+            - img "Un golpe de realidad" [ref=e749]
+        - listitem [ref=e752]:
+          - link "Tours únicos, fotos únicas (se abre en una pestaña nueva)" [ref=e753] [cursor=pointer]:
+            - /url: https://www.instagram.com/p/DeNcCtMiYdb/
+            - img "Tours únicos, fotos únicas" [ref=e754]
+      - link "También en TikTok @tytmedellin (se abre en una pestaña nueva)" [ref=e757] [cursor=pointer]:
+        - /url: https://www.tiktok.com/@tytmedellin
+        - text: También en TikTok @tytmedellin
+  - region "Aliados y reconocimientos" [ref=e760]:
+    - generic [ref=e762]:
+      - list [ref=e763]:
+        - listitem [ref=e764]: RNT Medellín · 176384
+        - listitem [ref=e765]:
+          - img "Google" [ref=e767]
+        - listitem [ref=e768]:
+          - img "Tripadvisor" [ref=e770]
+        - listitem [ref=e771]:
+          - img "ANATO" [ref=e773]
+        - listitem [ref=e774]:
+          - img "COTELCO" [ref=e776]
+        - listitem [ref=e777]:
+          - img "Cámara de Comercio de Medellín" [ref=e779]
+        - listitem [ref=e780]:
+          - img "Alcaldía de Guatapé" [ref=e782]
+        - listitem [ref=e783]:
+          - img "Alcaldía de Medellín" [ref=e785]
+        - listitem [ref=e786]:
+          - img "Hacienda Nápoles" [ref=e788]
+      - list [aria-hidden] [ref=e789]:
+        - listitem [aria-hidden] [ref=e790]: RNT Medellín · 176384
+        - listitem [aria-hidden] [ref=e791]
+        - listitem [aria-hidden] [ref=e793]
+        - listitem [aria-hidden] [ref=e795]
+        - listitem [aria-hidden] [ref=e797]
+        - listitem [aria-hidden] [ref=e799]
+        - listitem [aria-hidden] [ref=e801]
+        - listitem [aria-hidden] [ref=e803]
+        - listitem [aria-hidden] [ref=e805]
+  - contentinfo [ref=e812]:
+    - generic [ref=e813]:
+      - paragraph [ref=e814]:
+        - text: Tu próximo viajeempieza
+        - emphasis [ref=e815]: aquí
+      - link "Encuentra tu experiencia" [ref=e816] [cursor=pointer]:
+        - /url: /experiencias
+    - generic [ref=e819]:
+      - generic [ref=e820]:
+        - link "Transporte y Turismo Medellín, inicio" [ref=e821] [cursor=pointer]:
+          - /url: /
+          - img "Transporte y Turismo Medellín" [ref=e822]
+        - paragraph [ref=e823]: Experiencias a otro nivel
+        - paragraph [ref=e824]: Nos mueve nuestra tierra.Nos importan las personas
+      - navigation "Enlaces rápidos" [ref=e825]:
+        - heading "Enlaces rápidos" [level=2] [ref=e826]
+        - list [ref=e827]:
+          - listitem [ref=e828]:
+            - link "Inicio" [ref=e829] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e830]:
+            - link "Experiencias" [ref=e831] [cursor=pointer]:
+              - /url: /experiencias
+          - listitem [ref=e832]:
+            - link "Vehículos" [ref=e833] [cursor=pointer]:
+              - /url: /vehiculos
+          - listitem [ref=e834]:
+            - link "Nosotros" [ref=e835] [cursor=pointer]:
+              - /url: /nosotros
+          - listitem [ref=e836]:
+            - link "Contacto" [ref=e837] [cursor=pointer]:
+              - /url: /contacto
+      - generic [ref=e838]:
+        - heading "Contacto directo" [level=2] [ref=e839]
+        - list [ref=e840]:
+          - listitem [ref=e841]:
+            - generic [ref=e846]: "Carrera 79AA #1A Sur-280, Medellín"
+          - listitem [ref=e847]:
+            - link "+57 304 496 1698" [ref=e851] [cursor=pointer]:
+              - /url: tel:+573044961698
+          - listitem [ref=e852]:
+            - link "transporteyturismomedellin@gmail.com" [ref=e857] [cursor=pointer]:
+              - /url: mailto:transporteyturismomedellin@gmail.com
+      - generic [ref=e858]:
+        - heading "Síguenos" [level=2] [ref=e859]
+        - list [ref=e860]:
+          - listitem [ref=e861]:
+            - link "Síguenos en Instagram (se abre en una pestaña nueva)" [ref=e862] [cursor=pointer]:
+              - /url: https://www.instagram.com/transporteenmedellin
+              - generic [ref=e866]: "@transporteenmedellin"
+          - listitem [ref=e867]:
+            - link "Síguenos en TikTok (se abre en una pestaña nueva)" [ref=e868] [cursor=pointer]:
+              - /url: https://www.tiktok.com/@tytmedellin
+              - generic [ref=e872]: "@tytmedellin"
+    - generic [ref=e873]:
+      - paragraph [ref=e874]: "Transporte y Turismo Medellín rechaza la explotación y el abuso sexual de niños, niñas y adolescentes. Denuncia: Línea 141 ICBF y Línea 123. Ley 679 de 2001 y Ley 1336 de 2009."
+      - paragraph [ref=e875]:
+        - text: "PQRS:"
+        - link "transporteyturismomedellin@gmail.com" [ref=e876] [cursor=pointer]:
+          - /url: mailto:transporteyturismomedellin@gmail.com
+        - text: ·
+        - link "Superintendencia de Industria y Comercio (sic.gov.co)" [ref=e877] [cursor=pointer]:
+          - /url: https://www.sic.gov.co
+    - generic [ref=e878]:
+      - generic [ref=e879]: RNT 176384
+      - generic [ref=e880]: NIT 901738550-6
+      - generic [ref=e881]: © 2026 Transporte y Turismo Medellín
+      - link "Privacidad" [ref=e882] [cursor=pointer]:
+        - /url: /privacidad
+      - link "Tratamiento de datos" [ref=e883] [cursor=pointer]:
+        - /url: /politica-de-tratamiento-de-datos
+      - link "Calificaciones" [ref=e884] [cursor=pointer]:
+        - /url: /calificaciones
+      - button "Cookies y preferencias" [ref=e885] [cursor=pointer]
+  - link "Escribir por WhatsApp" [ref=e886] [cursor=pointer]:
+    - /url: https://wa.me/573044961698?text=Hola%2C%20quiero%20consultar%20con%20T%26T%20Medell%C3%ADn%20sobre%20mi%20recorrido.
+    - generic [aria-hidden]: ¿Hablamos?
+  - status

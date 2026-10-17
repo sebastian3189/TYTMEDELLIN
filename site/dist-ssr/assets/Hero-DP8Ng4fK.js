@@ -218,11 +218,6 @@ function useHeroPlayback(ref, light, enabled) {
 	};
 	return [playing, toggle];
 }
-var SLOW_NET = [
-	"slow-2g",
-	"2g",
-	"3g"
-];
 var RANK = {
 	movil: 0,
 	hd720: 1,
@@ -233,24 +228,28 @@ function pickHeroTier() {
 	const w = window.innerWidth, dpr = window.devicePixelRatio || 1;
 	return w >= 1600 || dpr >= 2 && w >= 1280 ? "hd1080" : "hd720";
 }
-function useAdaptiveHero(ref, sources, light) {
-	const [playing, setPlaying] = useState(false), [mode, setMode] = useState("init"), [failed, setFailed] = useState(false);
-	const manual = useRef(false), api = useRef({});
+function useAdaptiveHero(ref, sources) {
+	const [failed, setFailed] = useState(false);
 	useEffect(() => {
 		const el = ref.current;
 		if (!sources || !el) return void 0;
 		prepVideo(el);
-		if (light || SLOW_NET.includes(navigator.connection?.effectiveType)) {
-			setMode("poster");
-			return;
-		}
-		setMode("video");
-		let tier = null, visible = true, resume = 0, timer = 0;
-		const want = () => visible && !manual.current && !document.hidden;
+		let tier = null, visible = true, resume = 0, timer = 0, alive = true;
+		const want = () => alive && visible && !document.hidden;
 		const sync = () => {
-			if (want()) safePlay(el);
-			else el.pause();
+			if (want()) {
+				if (el.paused) safePlay(el);
+			} else el.pause();
 		};
+		const retry = () => {
+			if (want() && el.paused) safePlay(el);
+		};
+		const GESTURES = [
+			"pointerdown",
+			"touchstart",
+			"keydown",
+			"scroll"
+		];
 		const choose = () => {
 			const next = pickHeroTier();
 			if (tier && tier === "movil" === (next === "movil") && RANK[next] <= RANK[tier]) return;
@@ -268,7 +267,9 @@ function useAdaptiveHero(ref, sources, light) {
 		const onPlaying = () => {
 			el.dataset.ready = "true";
 		};
-		const onState = () => setPlaying(!el.paused);
+		const onPause = () => {
+			setTimeout(retry, 300);
+		};
 		const onError = () => {
 			if (!el.dataset.ready) setFailed(true);
 		};
@@ -276,11 +277,15 @@ function useAdaptiveHero(ref, sources, light) {
 			clearTimeout(timer);
 			timer = setTimeout(choose, 250);
 		};
-		el.addEventListener("loadedmetadata", onMeta);
-		el.addEventListener("playing", onPlaying);
-		el.addEventListener("play", onState);
-		el.addEventListener("pause", onState);
-		el.addEventListener("error", onError);
+		const media = [
+			["loadedmetadata", onMeta],
+			["playing", onPlaying],
+			["pause", onPause],
+			["canplay", retry],
+			["stalled", retry],
+			["error", onError]
+		];
+		for (const [n, f] of media) el.addEventListener(n, f);
 		const io = new IntersectionObserver(([e]) => {
 			visible = e.isIntersecting;
 			sync();
@@ -289,48 +294,26 @@ function useAdaptiveHero(ref, sources, light) {
 		window.addEventListener("resize", onResize);
 		window.addEventListener("orientationchange", onResize);
 		document.addEventListener("visibilitychange", sync);
-		api.current.sync = sync;
+		for (const g of GESTURES) window.addEventListener(g, retry, { passive: true });
+		window.addEventListener("pageshow", retry);
 		choose();
 		return () => {
+			alive = false;
 			clearTimeout(timer);
 			io.disconnect();
 			window.removeEventListener("resize", onResize);
 			window.removeEventListener("orientationchange", onResize);
 			document.removeEventListener("visibilitychange", sync);
-			for (const [n, f] of [
-				["loadedmetadata", onMeta],
-				["playing", onPlaying],
-				["play", onState],
-				["pause", onState],
-				["error", onError]
-			]) el.removeEventListener(n, f);
+			for (const g of GESTURES) window.removeEventListener(g, retry);
+			window.removeEventListener("pageshow", retry);
+			for (const [n, f] of media) el.removeEventListener(n, f);
 			el.pause();
 			el.removeAttribute("src");
 			delete el.dataset.ready;
 			el.load();
 		};
-	}, [
-		ref,
-		sources,
-		light
-	]);
-	const toggle = () => {
-		const el = ref.current;
-		if (!el) return;
-		if (el.paused) {
-			manual.current = false;
-			safePlay(el);
-		} else {
-			manual.current = true;
-			el.pause();
-		}
-	};
-	return [
-		playing,
-		toggle,
-		mode,
-		failed
-	];
+	}, [ref, sources]);
+	return failed;
 }
 var SLIDE_MS = 5800;
 function HeroSlides({ slides, paused, still }) {
@@ -420,7 +403,7 @@ function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = fal
 	const light = useLightMotion(), media = useRef(null), adaptiveRef = useRef(null), section = useRef(null);
 	const adaptive = !video.src && Boolean(video.adaptive);
 	const [playing, toggle] = useHeroPlayback(media, light, Boolean(video.src));
-	const [aPlaying, aToggle, aMode, aFailed] = useAdaptiveHero(adaptiveRef, adaptive ? video.adaptive : null, light);
+	const aFailed = useAdaptiveHero(adaptiveRef, adaptive ? video.adaptive : null);
 	const hasSlides = !video.src && !adaptive && Boolean(slides?.length);
 	const img = adaptive ? aFailed ? video.image : video.poster : !video.src && !hasSlides ? video.image : null;
 	const mqMobile = adaptive ? "(orientation: portrait)" : "(max-width: 799px)", mqDesktop = adaptive ? "(orientation: landscape)" : "(min-width: 800px)";
@@ -538,13 +521,6 @@ function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = fal
 				onClick: toggle,
 				"aria-label": playing ? "Pausar video" : "Reproducir video",
 				children: /* @__PURE__ */ jsx(PlayIcon, { playing })
-			}),
-			adaptive && aMode === "video" && !aFailed && /* @__PURE__ */ jsx("button", {
-				type: "button",
-				className: "hero-pause",
-				onClick: aToggle,
-				"aria-label": aPlaying ? "Pausar video" : "Reproducir video",
-				children: /* @__PURE__ */ jsx(PlayIcon, { playing: aPlaying })
 			}),
 			hasSlides && slides.length > 1 && !light && /* @__PURE__ */ jsx("button", {
 				type: "button",

@@ -45,27 +45,28 @@ function useHeroPlayback(ref, light, enabled) {
  * Video de dron ADAPTATIVO del inicio (2026-10-16): una sola etiqueta <video> cuya fuente se elige por JS según orientación, ancho y densidad
  * (vertical → 9:16 · horizontal ≤ 1599 → 720p · ≥ 1600 o DPR ≥ 2 en ≥ 1280 → 1080p) y se re-evalúa al girar o redimensionar SIN reiniciar: solo cambia
  * al cruzar de orientación o al subir de nivel (nunca baja de nivel por redimensionar) y retoma el tiempo actual. Sin src en el HTML prerenderizado: el
- * póster (<picture>, LCP) se ve primero y el video entra con fundido al empezar a reproducir. Movimiento reducido, ahorro de datos o 2g/3g → solo póster.
+ * póster (<picture>, LCP) se ve primero y el video entra con fundido al empezar a reproducir. Pedido del usuario 2026-10-17: reproduce SIEMPRE, sin botón de
+ * pausa y sin depender de movimiento reducido, ahorro de datos ni tipo de red; si el navegador rechaza play() (p. ej. iOS en bajo consumo) se reintenta al
+ * cargar datos, al volver a la pestaña y con el primer toque, desplazamiento o tecla de la persona.
  */
-const SLOW_NET = ['slow-2g', '2g', '3g'];
 const RANK = { movil: 0, hd720: 1, hd1080: 2 };
 export function pickHeroTier() {
   if (window.matchMedia('(orientation: portrait)').matches) return 'movil';
   const w = window.innerWidth, dpr = window.devicePixelRatio || 1;
   return w >= 1600 || (dpr >= 2 && w >= 1280) ? 'hd1080' : 'hd720';
 }
-function useAdaptiveHero(ref, sources, light) {
-  const [playing, setPlaying] = useState(false), [mode, setMode] = useState('init'), [failed, setFailed] = useState(false);
-  const manual = useRef(false), api = useRef({});
+function useAdaptiveHero(ref, sources) {
+  const [failed, setFailed] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!sources || !el) return undefined;
     prepVideo(el);
-    if (light || SLOW_NET.includes(navigator.connection?.effectiveType)) { setMode('poster'); return undefined; }
-    setMode('video');
-    let tier = null, visible = true, resume = 0, timer = 0;
-    const want = () => visible && !manual.current && !document.hidden;
-    const sync = () => { if (want()) safePlay(el); else el.pause(); };
+    let tier = null, visible = true, resume = 0, timer = 0, alive = true;
+    const want = () => alive && visible && !document.hidden;
+    const sync = () => { if (want()) { if (el.paused) safePlay(el); } else el.pause(); };
+    // Reintento: si algo lo pausó (o play() fue rechazado) mientras debe verse, vuelve a reproducir.
+    const retry = () => { if (want() && el.paused) safePlay(el); };
+    const GESTURES = ['pointerdown', 'touchstart', 'keydown', 'scroll'];
     const choose = () => {
       const next = pickHeroTier();
       if (tier && (tier === 'movil') === (next === 'movil') && RANK[next] <= RANK[tier]) return;
@@ -74,27 +75,27 @@ function useAdaptiveHero(ref, sources, light) {
     };
     const onMeta = () => { if (resume > 0 && el.duration) { try { el.currentTime = resume % el.duration; } catch { /* sin retomar */ } } resume = 0; };
     const onPlaying = () => { el.dataset.ready = 'true'; };
-    const onState = () => setPlaying(!el.paused);
+    const onPause = () => { setTimeout(retry, 300); };
     const onError = () => { if (!el.dataset.ready) setFailed(true); };
     const onResize = () => { clearTimeout(timer); timer = setTimeout(choose, 250); };
-    el.addEventListener('loadedmetadata', onMeta); el.addEventListener('playing', onPlaying); el.addEventListener('play', onState); el.addEventListener('pause', onState); el.addEventListener('error', onError);
+    const media = [['loadedmetadata', onMeta], ['playing', onPlaying], ['pause', onPause], ['canplay', retry], ['stalled', retry], ['error', onError]];
+    for (const [n, f] of media) el.addEventListener(n, f);
     const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; sync(); });
     io.observe(el);
     window.addEventListener('resize', onResize); window.addEventListener('orientationchange', onResize); document.addEventListener('visibilitychange', sync);
-    api.current.sync = sync;
+    for (const g of GESTURES) window.addEventListener(g, retry, { passive: true });
+    window.addEventListener('pageshow', retry);
     choose();
     return () => {
-      clearTimeout(timer); io.disconnect();
+      alive = false; clearTimeout(timer); io.disconnect();
       window.removeEventListener('resize', onResize); window.removeEventListener('orientationchange', onResize); document.removeEventListener('visibilitychange', sync);
-      for (const [n, f] of [['loadedmetadata', onMeta], ['playing', onPlaying], ['play', onState], ['pause', onState], ['error', onError]]) el.removeEventListener(n, f);
+      for (const g of GESTURES) window.removeEventListener(g, retry);
+      window.removeEventListener('pageshow', retry);
+      for (const [n, f] of media) el.removeEventListener(n, f);
       el.pause(); el.removeAttribute('src'); delete el.dataset.ready; el.load();
     };
-  }, [ref, sources, light]);
-  const toggle = () => {
-    const el = ref.current; if (!el) return;
-    if (el.paused) { manual.current = false; safePlay(el); } else { manual.current = true; el.pause(); }
-  };
-  return [playing, toggle, mode, failed];
+  }, [ref, sources]);
+  return failed;
 }
 
 const SLIDE_MS = 5800; // tiempo por foto (5–6 s); el fundido cruzado dura 1,2 s dentro de ese tiempo
@@ -145,7 +146,7 @@ export function HeroBlock({ video, slides, eyebrow, title, support, actions, tou
   const light = useLightMotion(), media = useRef(null), adaptiveRef = useRef(null), section = useRef(null);
   const adaptive = !video.src && Boolean(video.adaptive);
   const [playing, toggle] = useHeroPlayback(media, light, Boolean(video.src));
-  const [aPlaying, aToggle, aMode, aFailed] = useAdaptiveHero(adaptiveRef, adaptive ? video.adaptive : null, light);
+  const aFailed = useAdaptiveHero(adaptiveRef, adaptive ? video.adaptive : null);
   const hasSlides = !video.src && !adaptive && Boolean(slides?.length);
   const img = adaptive ? (aFailed ? video.image : video.poster) : !video.src && !hasSlides ? video.image : null; // imagen fija provisional (p. ej. la panorámica del inicio) mientras no haya video
   // Con video adaptativo el póster se elige por ORIENTACIÓN (coincide con el recorte del video); en el resto, por ancho.
@@ -187,11 +188,6 @@ export function HeroBlock({ video, slides, eyebrow, title, support, actions, tou
       {video.src && (
         <button type="button" className="hero-pause" onClick={toggle} aria-label={playing ? 'Pausar video' : 'Reproducir video'}>
           <PlayIcon playing={playing} />
-        </button>
-      )}
-      {adaptive && aMode === 'video' && !aFailed && (
-        <button type="button" className="hero-pause" onClick={aToggle} aria-label={aPlaying ? 'Pausar video' : 'Reproducir video'}>
-          <PlayIcon playing={aPlaying} />
         </button>
       )}
       {hasSlides && slides.length > 1 && !light && (

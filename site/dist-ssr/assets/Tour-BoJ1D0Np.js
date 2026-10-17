@@ -1,7 +1,7 @@
 import { B as jsx, D as docTop, E as useMounted, G as t, I as Icon$1, N as usePageMeta, O as watchScroll, S as Trust, T as useMedia, U as whatsapp, V as jsxs, W as language, f as Picture, h as TourCard, m as Rail, p as QuoteSection, r as tours, u as Eyebrow, v as Arrow, w as useLightMotion, x as Marquee, z as Fragment } from "../entry-server.js";
 import NotFound from "./NotFound-Uo5CGhb_.js";
 import { n as useGlassPill, t as GlassPill } from "./glass-C_3Ua-d5.js";
-import { i as tourEntry, r as TourHeroVideo } from "./Hero-qQQeN_TB.js";
+import { i as tourEntry, r as TourHeroVideo } from "./Hero-DP8Ng4fK.js";
 import { t as FeaturedGallery } from "./FeaturedGallery-BKcX_emP.js";
 import { t as Reviews } from "./Reviews-CVU5ZJog.js";
 import { l as Faq, o as FAQ_TOUR, s as FAQ_TRANSFER, t as DURACIONES } from "./faq-data-BdDInLlq.js";
