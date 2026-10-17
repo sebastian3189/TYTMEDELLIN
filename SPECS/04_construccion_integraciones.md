@@ -307,3 +307,10 @@ Idiomas ES, EN y PT-BR: 26 páginas equivalentes por idioma (78), diccionario ca
 Consentimiento operativo, sin rastreadores: `tyt-privacy-v1` guarda decisión180d; accesibilidad `tyt-reducir-movimiento` y ayuda de sesión `tyt-libro-gesto` son funcionales; único opcional actual, `tyt-theme`, se escribe solo con aceptación. Rechazar y retirar eliminan esa preferencia; revocación sincronizada entre pestañas. Diálogo nativo, Escape descarta borrador, enlace permanente en pie; almacenamiento bloqueado usa memoria de visita. No se añade analítica ni publicidad. Mapa OSM sigue condicionado a clic. La clasificación técnica y la traducción no sustituyen validación jurídica.
 
 AUDITAR/CERRAR: evidencias y resultado independiente en `AUDITORIA_TECNICA_2026-10-15.md`; regresión reproducible `site/scripts/check-technical.mjs` y artefactos en `site/test-results/technical-audit/`. Estas notas actualizan los recuentos y el contrato de esta ronda; no autorizan publicación.
+
+## Pendiente legal: /terminos (2026-10-17)
+
+No se creó la página de Términos y Condiciones: requiere datos del cliente/asesor
+(razón social exacta, responsable de PQR, vigencia, postura sobre retracto, cancelación
+por la empresa, fuerza mayor, responsabilidad). Al recibirlos: ruta /terminos (ES/EN/PT),
+enlace desde el pie y desde la casilla del formulario, con fecha de versión.
