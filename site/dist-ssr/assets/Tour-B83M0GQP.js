@@ -1,10 +1,10 @@
-import { B as jsxs, C as useLightMotion, D as watchScroll, E as docTop, F as Icon$1, H as whatsapp, M as usePageMeta, R as Fragment, T as useMounted, U as language, W as t, _ as Arrow, b as Marquee, f as Picture, h as TourCard, m as Rail, p as QuoteSection, r as tours, u as Eyebrow, w as useMedia, x as Trust, z as jsx } from "../entry-server.js";
-import NotFound from "./NotFound-_j84yP7R.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-BONCV8ov.js";
-import { i as tourEntry, r as TourHeroVideo } from "./Hero-CzzBejRf.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-0hQrOj7B.js";
-import { t as Reviews } from "./Reviews-DJ7t3leM.js";
-import { l as Faq, o as FAQ_TOUR, s as FAQ_TRANSFER, t as DURACIONES } from "./faq-data-CXHnHuQT.js";
+import { B as jsx, D as docTop, E as useMounted, G as t, I as Icon$1, N as usePageMeta, O as watchScroll, S as Trust, T as useMedia, U as whatsapp, V as jsxs, W as language, f as Picture, h as TourCard, m as Rail, p as QuoteSection, r as tours, u as Eyebrow, v as Arrow, w as useLightMotion, x as Marquee, z as Fragment } from "../entry-server.js";
+import NotFound from "./NotFound-Uo5CGhb_.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-C_3Ua-d5.js";
+import { i as tourEntry, r as TourHeroVideo } from "./Hero-qQQeN_TB.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-BKcX_emP.js";
+import { t as Reviews } from "./Reviews-CVU5ZJog.js";
+import { l as Faq, o as FAQ_TOUR, s as FAQ_TRANSFER, t as DURACIONES } from "./faq-data-BdDInLlq.js";
 import { i as smallCaps, n as placeLugar, r as placePhotos, t as clamp } from "./mobile-motion-o2zoinXe.js";
 import { useParams } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -454,9 +454,8 @@ function TourArchive({ tour }) {
 							/* @__PURE__ */ jsxs("h2", {
 								id: "ta-titulo",
 								children: [
-									"Esto también",
+									"Así se vive",
 									/* @__PURE__ */ jsx("br", {}),
-									"es ",
 									/* @__PURE__ */ jsx("em", { children: tour.name })
 								]
 							}),
@@ -1597,7 +1596,6 @@ var fotoItinerario = (id) => {
 	if (!m) return null;
 	const set = (ext) => m.w.map((w) => `${DIR}/${id}-${w}.${ext} ${w}w`).join(", ");
 	return {
-		avif: set("avif"),
 		webp: set("webp"),
 		src: `${DIR}/${id}-${m.width}.webp`,
 		width: m.width,
@@ -1666,7 +1664,7 @@ var itinerarios = {
 		]
 	},
 	"tour-nocturno-medellin": {
-		corto: "Medellín de Noche",
+		corto: "Noche en Medellín",
 		tituloSeccion: null,
 		aviso: null,
 		estado: "confirmada",
@@ -1893,18 +1891,15 @@ function Foto({ stop, eager = false }) {
 			/* @__PURE__ */ jsx("span", { children: stop.ubicacion || stop.titulo_corto })
 		]
 	});
-	return /* @__PURE__ */ jsxs("picture", { children: [
-		/* @__PURE__ */ jsx("source", {
-			type: "image/avif",
-			srcSet: f.avif,
-			sizes: SIZES
-		}),
-		/* @__PURE__ */ jsx("source", {
+	const vertical = f.width / f.height < .95;
+	return /* @__PURE__ */ jsxs("picture", {
+		className: vertical ? "pic-fit" : void 0,
+		style: vertical ? { "--ph": `url(${f.src.replace(/-d+.webp$/, "-480.webp")})` } : void 0,
+		children: [/* @__PURE__ */ jsx("source", {
 			type: "image/webp",
 			srcSet: f.webp,
 			sizes: SIZES
-		}),
-		/* @__PURE__ */ jsx("img", {
+		}), /* @__PURE__ */ jsx("img", {
 			src: f.src,
 			width: f.width,
 			height: f.height,
@@ -1912,8 +1907,8 @@ function Foto({ stop, eager = false }) {
 			loading: eager ? "eager" : "lazy",
 			decoding: "async",
 			style: { objectPosition: stop.foco }
-		})
-	] });
+		})]
+	});
 }
 var labelsOf = (s) => [
 	s.estado_parada === "opcional" && "Opcional",
@@ -2303,7 +2298,7 @@ function Tour() {
 				className: "tour-intro tp-band wrap",
 				children: [/* @__PURE__ */ jsxs("div", {
 					className: "ti-l",
-					children: [/* @__PURE__ */ jsx(Eyebrow, { children: "El espíritu del recorrido" }), /* @__PURE__ */ jsx("h2", {
+					children: [/* @__PURE__ */ jsx(Eyebrow, { children: "Sobre esta experiencia" }), /* @__PURE__ */ jsx("h2", {
 						"data-tr": true,
 						children: tour.title
 					})]
@@ -2364,15 +2359,10 @@ function Tour() {
 				id: "preparar",
 				"data-tn": "2",
 				children: [/* @__PURE__ */ jsxs("div", { children: [
-					/* @__PURE__ */ jsx(Eyebrow, { children: "Pequeños detalles, mejor viaje" }),
-					/* @__PURE__ */ jsxs("h2", {
+					/* @__PURE__ */ jsx(Eyebrow, { children: "Antes de viajar" }),
+					/* @__PURE__ */ jsx("h2", {
 						"data-tr": true,
-						children: [
-							"Ven con ganas.",
-							/* @__PURE__ */ jsx("br", {}),
-							"Lo demás, ",
-							/* @__PURE__ */ jsx("em", { children: "planeémoslo" })
-						]
+						children: "Recomendaciones para tu recorrido"
 					}),
 					/* @__PURE__ */ jsx("p", { children: tour.advice }),
 					tour_info_default[tour.slug]?.recomendaciones.length > 0 && /* @__PURE__ */ jsx("ul", {
@@ -2399,13 +2389,8 @@ function Tour() {
 				className: "wrap section tp-band",
 				"data-tr": true,
 				children: [
-					/* @__PURE__ */ jsx(Eyebrow, { children: "El viaje puede continuar" }),
-					/* @__PURE__ */ jsxs("h2", { children: [
-						"Otros caminos",
-						/* @__PURE__ */ jsx("br", {}),
-						"por ",
-						/* @__PURE__ */ jsx("em", { children: "descubrir" })
-					] }),
+					/* @__PURE__ */ jsx(Eyebrow, { children: "Más experiencias" }),
+					/* @__PURE__ */ jsx("h2", { children: "Otras experiencias desde Medellín" }),
 					/* @__PURE__ */ jsx(Rail, {
 						label: "Más experiencias",
 						children: tours.filter((t) => t.slug !== slug).sort((a, b) => Number(b.category === tour.category) - Number(a.category === tour.category)).slice(0, 6).map((t) => /* @__PURE__ */ jsx(TourCard, { tour: t }, t.slug))

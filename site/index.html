@@ -17,6 +17,10 @@
   <!--inter:start-->
   <script>if(!/^\/((en|pt-br)\/?)?$/.test(location.pathname)){var l=document.createElement('link');l.rel='preload';l.as='font';l.type='font/woff2';l.href='/fonts/inter.woff2';l.crossOrigin='anonymous';document.head.appendChild(l)}</script>
   <!--inter:end-->
+  <!--cormorant:start-->
+  <!-- Cormorant cursiva (acento editorial del titular del inicio): solo en el inicio, 500 en escritorio y 600 en móvil; el prerender la pone como <link> con media. -->
+  <script>if(/^\/((en|pt-br)\/?)?$/.test(location.pathname)){var c=document.createElement('link');c.rel='preload';c.as='font';c.type='font/woff2';c.href='/fonts/cormorant-latin-'+(innerWidth>=900?'500':'600')+'-italic.woff2';c.crossOrigin='anonymous';document.head.appendChild(c)}</script>
+  <!--cormorant:end-->
   <style>html,body{margin:0;background:#FAF8F5}</style>
   <title>T&amp;T Medellín | Medellín, a otro nivel</title>
 </head>

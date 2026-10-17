@@ -13,26 +13,29 @@ import Icon from './icons';
  *   Instagram y TikTok no aceptan enlaces por URL: se copia el enlace, se avisa y se abre la red para pegarlo (mismo comportamiento que el oficial).
  */
 const RATING = 5.0;
+// Cifras verificadas por el cliente (septiembre de 2026): valoración de la EMPRESA, no del recorrido. Corto en la tarjeta; texto completo en aria-label/title.
+const reviewsText = () => language() === 'pt-BR' ? '265 avaliações no Google' : language() === 'en' ? '265 Google reviews' : '265 reseñas en Google';
+const fullLabel = (figure) => language() === 'pt-BR' ? `${figure} · 265 avaliações no Google · avaliação da empresa · set. 2026` : language() === 'en' ? `${figure} · 265 Google reviews · company rating · Sept. 2026` : `${figure} · 265 reseñas en Google · valoración de la empresa · sept. 2026`;
 export function GoogleBadge({ className = '' }) {
   const figure = RATING.toLocaleString(languageInfo(language()).html, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-  const label = language() === 'pt-BR' ? `Avaliação da empresa no Google: ${figure} de 5` : language() === 'en' ? `Company rating on Google: ${figure} out of 5` : `Valoración de la empresa en Google: ${figure} de 5`;
+  const label = fullLabel(figure);
   return (
     <a className={`card-google ${className}`} href={company.reviews} target="_blank" rel="noopener noreferrer" aria-label={label} title={label}>
       <span className="card-google-stars" aria-hidden="true">★★★★★</span>
       <span aria-hidden="true">{figure}</span>
-      <span aria-hidden="true" className="card-google-brand">· Google</span>
+      <span aria-hidden="true" className="card-google-brand">· {reviewsText()}</span>
     </a>
   );
 }
 
 export function GoogleBadgeStatic({ className = '' }) {
   const figure = RATING.toLocaleString(languageInfo(language()).html, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-  const label = language() === 'pt-BR' ? `Avaliação da empresa no Google: ${figure} de 5` : language() === 'en' ? `Company rating on Google: ${figure} out of 5` : `Valoración de la empresa en Google: ${figure} de 5`;
+  const label = fullLabel(figure);
   return (
     <span className={`card-google card-google--static ${className}`} role="img" aria-label={label}>
       <span className="card-google-stars" aria-hidden="true">★★★★★</span>
       <span aria-hidden="true">{figure}</span>
-      <span aria-hidden="true" className="card-google-brand">· Google</span>
+      <span aria-hidden="true" className="card-google-brand">· {reviewsText()}</span>
     </span>
   );
 }

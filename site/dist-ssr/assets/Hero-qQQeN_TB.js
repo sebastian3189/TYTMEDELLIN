@@ -1,4 +1,4 @@
-import { B as jsxs, C as useLightMotion, N as PlayIcon, R as Fragment, V as company, _ as Arrow, k as inicioTextos, r as tours, s as media_default, z as jsx } from "../entry-server.js";
+import { A as inicioTextos, B as jsx, H as company, P as PlayIcon, V as jsxs, r as tours, s as media_default, v as Arrow, w as useLightMotion, z as Fragment } from "../entry-server.js";
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
 //#region src/videoPrep.js

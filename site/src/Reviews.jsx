@@ -11,13 +11,15 @@ const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)'
 // Estrellas naranja decorativas (aria-hidden): la calificación va como texto («5.0», sr-only «de 5 estrellas»). Contorno tinta para contraste no textual ≥3:1 (Spec 03 §I).
 const Stars = () => <span className="g-stars" aria-hidden="true">★★★★★</span>;
 
+// Nombre + inicial del primer apellido («Narciso O.»); fuente Google. El texto de la reseña no se altera. La fecha no viene en los datos (PENDIENTE CLIENTE).
+const shortName = (n) => { const p = n.trim().split(/\s+/); return p.length > 1 ? `${p[0]} ${p[1][0].toLocaleUpperCase('es')}.` : p[0]; };
 function Card({ r }) {
   const [open, setOpen] = useState(false);
   return <article className="g-card">
     <Stars /><span className="sr-only">Calificación: 5.0 de 5 estrellas.</span>
     <p className={`g-text ${open ? 'is-open' : ''}`}>{r.texto}</p>
     <button type="button" className="g-more" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? 'Leer menos' : 'Leer más'}</button>
-    <footer className="g-author"><strong>{r.nombre}</strong>{r.local && <span>Guía local</span>}</footer>
+    <footer className="g-author"><strong>{shortName(r.nombre)}</strong><span>Reseña en Google</span>{r.local && <span>Guía local</span>}</footer>
   </article>;
 }
 export default function Reviews({ full = false }) {

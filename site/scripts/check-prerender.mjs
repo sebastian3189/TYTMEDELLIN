@@ -61,7 +61,7 @@ try {
   await page.getByRole('link', { name: 'Experiencias', exact: true }).first().click();
   await page.waitForURL('**/experiencias'); await page.waitForSelector('h1');
   soft(/Experiencias \| T&T/.test(await page.title()), `título tras navegar: ${await page.title()}`);
-  await page.locator('.tour-card').first().click(); await page.waitForURL('**/experiencias/**'); await page.waitForSelector('.tour-hero h1');
+  await page.locator('.tour-card').first().click(); await page.waitForURL('**/experiencias/**'); await page.waitForSelector('#tour-hero-titulo');
   soft(/\| T&T Medellín$/.test(await page.title()), `título de la ficha tras navegar: ${await page.title()}`);
   const missing = await nav.request.get(base + '/experiencias/no-existe', { headers: { accept: 'text/html' } });
   soft(missing.status() === 404, `ficha inexistente: estado ${missing.status()}`);

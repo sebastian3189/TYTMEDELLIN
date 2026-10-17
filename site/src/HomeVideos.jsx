@@ -77,7 +77,7 @@ export function HomeStory() {
       <StoryVideo v={v} />
       <div className="story-copy">
         <Eyebrow>Más que llegar</Eyebrow>
-        <h2 id="historia-titulo">Hay una Medellín que se mira<br />Y otra que se <em>vive</em></h2>
+        <h2 id="historia-titulo">Hay una Medellín que se mira.<br />Y otra que se <em>vive</em></h2>
         <p>La encuentras en una conversación, en el color de una calle y en la curva que abre un nuevo paisaje. Queremos acompañarte a descubrirla con el cuidado de un equipo local.</p>
         <Link className="button secondary" to="/nosotros">Conoce al equipo<Arrow /></Link>
       </div>

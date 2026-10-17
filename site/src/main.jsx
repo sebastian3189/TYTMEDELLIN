@@ -4,6 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import Website, { preloadRoute } from './Website.jsx';
 import { language, prepareLanguage, setLanguage } from './i18n';
 import { languageFromPath, languageInfo } from './languages';
+import { installPageTransitions } from './text-motion';
+installPageTransitions();
 await prepareLanguage(language());
 
 // El idioma activo cambia sin recargar (switchLanguage, desde el selector): la app se vuelve a montar con el diccionario y el prefijo nuevos.

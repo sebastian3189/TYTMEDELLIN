@@ -1,4 +1,4 @@
-import { B as jsxs, C as useLightMotion, _ as Arrow, z as jsx } from "../entry-server.js";
+import { B as jsx, V as jsxs, g as hiddenByCover, v as Arrow, w as useLightMotion } from "../entry-server.js";
 import { useLayoutEffect, useRef, useState } from "react";
 //#region src/FeaturedGallery.jsx
 function FeaturedGallery({ tour }) {
@@ -65,9 +65,8 @@ function FeaturedGallery({ tour }) {
 					className: "eyebrow",
 					children: "El archivo de nuestros viajes"
 				}), /* @__PURE__ */ jsxs("h2", { children: [
-					"Esto también",
+					"Así se vive",
 					/* @__PURE__ */ jsx("br", {}),
-					"es ",
 					/* @__PURE__ */ jsx("em", { children: tour.name })
 				] })] }), /* @__PURE__ */ jsxs("span", { children: [images.length, " fotografías · Toca para ampliar"] })]
 			}),
@@ -75,8 +74,9 @@ function FeaturedGallery({ tour }) {
 				className: "gallery-main",
 				children: [/* @__PURE__ */ jsx("button", {
 					ref: image,
-					className: "gallery-feature",
+					className: `gallery-feature${hiddenByCover(images[index], 1.5) > .3 ? " is-fit" : ""}`,
 					style: {
+						"--ph": `url(${images[index].small || images[index].src})`,
 						maxWidth: `${Math.max(480, images[index].width)}px`,
 						justifySelf: "start",
 						width: "100%"

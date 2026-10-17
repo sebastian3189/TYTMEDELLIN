@@ -1,0 +1,64 @@
+/* Ronda tipografía (2026-10-16, Spec 01 «Tipografía — decisión del usuario» + Spec 03 §I/§I.2).
+   Cormorant (SIL OFL, servida localmente, solo cursiva 500/600, latin + latin-ext) = acento editorial en <em> de titulares y en la 2.ª línea del hero.
+   Montserrat (titulares/UI) e Inter (cuerpo, botones, formularios) siguen intactas. */
+@font-face{font-family:Cormorant;font-style:italic;font-weight:500;font-display:swap;src:url('/fonts/cormorant-latin-500-italic.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:Cormorant;font-style:italic;font-weight:500;font-display:swap;src:url('/fonts/cormorant-latin-ext-500-italic.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Cormorant;font-style:italic;font-weight:600;font-display:swap;src:url('/fonts/cormorant-latin-600-italic.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:Cormorant;font-style:italic;font-weight:600;font-display:swap;src:url('/fonts/cormorant-latin-ext-600-italic.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+/* Respaldo métrico (CLS): Times New Roman cursiva (500 = regular, 600 = negrita) con size-adjust 87,6 %/86,4 % y ascent/descent = métricas de Cormorant (924/287 por 1000) ÷ size-adjust; medido con scripts/_med-cormorant.mjs. */
+@font-face{font-family:'Cormorant Fallback';font-style:italic;font-weight:400 549;src:local('Times New Roman Italic'),local('TimesNewRomanPS-ItalicMT');size-adjust:87.6%;ascent-override:105.5%;descent-override:32.8%;line-gap-override:0%}
+@font-face{font-family:'Cormorant Fallback';font-style:italic;font-weight:550 700;src:local('Times New Roman Bold Italic'),local('TimesNewRomanPS-BoldItalicMT');size-adjust:86.4%;ascent-override:107%;descent-override:33.2%;line-gap-override:0%}
+:root{--serif:Cormorant,'Cormorant Fallback','Times New Roman',Georgia,serif}
+
+/* ---------- Acento editorial: <em> de titulares (y del pie) ---------- */
+h1 em,h2 em,.pie-top em{font-family:var(--serif);font-style:italic;font-weight:600;font-size:1.14em;line-height:.9;letter-spacing:-.012em;font-synthesis:none;font-kerning:normal;text-wrap:balance}
+@media(min-width:900px){h1 em,h2 em{font-weight:500}}
+/* La máscara de palabras (text-motion) recortaría el voladizo de la cursiva: más aire lateral. */
+[data-tx="h"] em .tx-w{padding:.14em .12em;margin:-.14em -.12em}
+.page-title h1 em{padding-right:.08em}
+
+/* Hero del inicio: 2.ª línea «a otro nivel» en Cormorant cursiva (Montserrat 800 en la 1.ª); blanco #F5F5F0 sobre el velo del video >12:1 */
+.home-hero h1 .hero-l2{margin-top:.05em;font-family:var(--serif);font-style:italic;font-weight:600;font-size:1.16em;line-height:.86;letter-spacing:-.015em;padding-right:.08em;font-synthesis:none}
+@media(min-width:900px){.home-hero h1 .hero-l2{font-weight:500}}
+
+/* ---------- Naranja sutil en pequeñas zonas del fondo (Spec 03 §I.2, escala --o-*; petición del usuario 2026-10-16) ----------
+   Reglas: halos suaves que se desvanecen antes del borde de su caja (closest-side: nunca un corte), líneas finas y fondos --brand-soft. Nunca texto naranja sin AA
+   (el texto sigue en tinta/--brand-text); el botón naranja del menú y las CTA primarias siguen siendo lo más saturado de cada pantalla. */
+:root{--halo:rgba(255,127,9,.11);--halo-2:rgba(255,181,112,.20);--rule:var(--o-500)}
+html[data-theme="dark"]{--halo:rgba(255,127,9,.10);--halo-2:rgba(255,127,9,.06)}
+/* 1 · Línea fina naranja antes de cada eyebrow (decorativa; el texto del eyebrow no cambia de color) */
+.eyebrow:not(.hero-eyebrow)::before{content:"";display:inline-block;flex:none;width:22px;height:2px;margin-right:10px;vertical-align:.32em;border-radius:2px;background:var(--rule)}
+.df-close-eyebrow::before,.scrub-title .eyebrow::before{display:none}
+/* 2 · Halos en esquinas de secciones alternas */
+.service-band{background:radial-gradient(closest-side at 92% 14%,var(--halo) 0,transparent 100%) no-repeat,radial-gradient(closest-side at 6% 96%,var(--halo-2) 0,transparent 100%) no-repeat,var(--surface-1)}
+.df{background:radial-gradient(40% 32% at 100% 0%,var(--halo) 0,transparent 100%) no-repeat,radial-gradient(34% 28% at 0% 100%,var(--halo-2) 0,transparent 100%) no-repeat,var(--surface-1)}
+.about-preview{background:radial-gradient(closest-side at 88% 12%,var(--halo-2) 0,transparent 100%) no-repeat}
+.faq-page{background:radial-gradient(closest-side at 90% 10%,var(--halo) 0,transparent 100%) no-repeat}
+.home-close{background:radial-gradient(closest-side at 50% 0%,var(--halo) 0,transparent 100%) no-repeat;background-size:100% 70%}
+.tour-page .tp-band::before{background:radial-gradient(40% 70% at 100% 0%,var(--halo) 0,transparent 100%) no-repeat,var(--surface-1)}
+.quote-section{background:radial-gradient(closest-side at 4% 8%,var(--halo-2) 0,transparent 100%) no-repeat}
+/* 3 · Chips y detalles con --brand-soft */
+.vehicle-features li{background:var(--brand-soft);box-shadow:inset 0 0 0 1px rgba(238,122,18,.22)}
+.filters button:not([aria-pressed=true]){background:var(--brand-soft)}
+.contact-number{text-decoration:underline;text-decoration-color:var(--o-500);text-decoration-thickness:2px;text-underline-offset:.22em}
+.faq-row{border-left:3px solid var(--o-500)}
+.faq-row:not([open]){border-left-color:rgba(255,127,9,.45)}
+
+/* ---------- Encuadre: foto ENTERA sobre su propio fondo difuminado cuando el marco la cortaría demasiado (Spec 03 §I; ronda 2026-10-16) ---------- */
+.pic-fit{position:relative;display:block;width:100%;height:100%;overflow:hidden;isolation:isolate;background:var(--surface-1)}
+.pic-fit::before,.gallery-feature.is-fit::before{content:"";position:absolute;inset:-14%;z-index:0;background:var(--ph) center/cover no-repeat;filter:blur(22px) saturate(1.12) brightness(.94);transform:translateZ(0)}
+.pic-fit>img,.pic-fit>picture>img,.th-card-img.pic-fit>img,.gallery-feature.is-fit img{position:relative;z-index:1;object-fit:contain!important;object-position:50% 50%!important}
+.pic-fit>img,.th-card-img.pic-fit>img{display:block;width:100%;height:100%}
+.pic-fit>picture{position:absolute;inset:0;z-index:1;display:block}
+.pic-fit>picture>img{width:100%;height:100%}
+.it-media>.pic-fit{position:absolute;inset:0}
+.gallery-feature.is-fit{position:relative;isolation:isolate}
+.gallery-feature.is-fit img{display:block;width:100%;height:100%;max-width:100%!important;margin:0!important}
+
+/* ---------- Pie: aviso ESCNNA y canal PQRS/SIC (borrador pendiente del asesor jurídico) ---------- */
+.pie-legal{display:grid;gap:6px;max-width:92ch;margin:28px 0 0;padding-top:20px;border-top:1px solid var(--border-subtle,rgba(245,245,240,.14));color:inherit;font:400 13px/1.55 var(--font)}
+.pie-legal p{margin:0;text-wrap:pretty}
+.pie-legal a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+/* Insignia de Google: con el texto más largo («265 reseñas en Google») puede pasar a dos líneas en tarjetas estrechas */
+.card-google{max-width:calc(100% - 24px);flex-wrap:wrap;row-gap:0}
+.card-google-brand{white-space:nowrap}

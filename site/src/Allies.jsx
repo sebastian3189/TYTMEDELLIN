@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PlayIcon from './PlayIcon';
 
-// Aliados y referencias (sitio oficial: MarcaConfianza.tsx). Los logos identifican entidades y plataformas; no declaran certificaciones.
+// Aliados y reconocimientos (sitio oficial: MarcaConfianza.tsx). Afiliaciones acreditadas por el cliente (2026-10-16); el cliente conserva los soportes documentales.
 // Tira continua lenta que se pausa con el cursor o el foco y con el botón; en movimiento reducido es una rejilla estática.
 // No se usa tyt-logo-96.webp (logo maestro T&T: regla de marca pendiente).
 const ITEMS = [
@@ -22,7 +22,7 @@ function Item({ item, hidden }) {
 }
 export default function Allies() {
   const [paused, setPaused] = useState(false);
-  return <section className="allies wrap" aria-label="Aliados y referencias">
+  return <section className="allies wrap" aria-label="Aliados y reconocimientos">
     <div className={`allies-viewport ${paused ? 'is-paused' : ''}`}>
       <div className="allies-track">
         <ul role="list">{ITEMS.map(i => <Item key={i.name} item={i} />)}</ul>

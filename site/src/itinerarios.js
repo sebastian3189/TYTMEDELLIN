@@ -33,7 +33,7 @@ const DIR = '/media/itinerarios';
 export const fotoItinerario = (id) => {
   const m = id && media[id]; if (!m) return null;
   const set = (ext) => m.w.map((w) => `${DIR}/${id}-${w}.${ext} ${w}w`).join(', ');
-  return { avif: set('avif'), webp: set('webp'), src: `${DIR}/${id}-${m.width}.webp`, width: m.width, height: m.height };
+  return { webp: set('webp'), src: `${DIR}/${id}-${m.width}.webp`, width: m.width, height: m.height };
 };
 
 const p = (orden, titulo_corto, ubicacion, descripcion, en_la_visita, imagen, alt, extra = {}) => ({

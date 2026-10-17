@@ -75,13 +75,15 @@ function compose({ path, body, title, description, chunk, mark }) {
   if (INDEXABLE) html = html.replace(/[ \t]*<meta name="robots" content="noindex, nofollow" \/>\n?/, '');
   html = html.replace(/<title>[\s\S]*?<\/title>/, () => `<title>${esc(`${title} | T&T Medellín`)}</title>`);
   html = html.replace(/(<meta name="description" content=")[^"]*(")/, (_, a, b) => `${a}${esc(description)}${b}`);
-  html = strip(html, 'inter');
+  html = strip(strip(html, 'inter'), 'cormorant');
   html = html.replace(cssLink[0], () => `<style>${css}</style>`);
   html = html.replace(entryTag[0], '');
   for (const link of shellPreloads) html = html.replace(link[0], '');
   // Sin JavaScript: cabecera sólida (no hay observador del hero) y el menú se reduce al enlace «Menú» → pie (ver .menu-nojs en website.css).
   html = html.replace(/<!--noscript:start-->[\s\S]*?<!--noscript:end-->/, '<noscript><style>.site-header.is-home{background:#fff!important;color:#1E201D!important;border-bottom:1px solid rgba(30,32,29,.08)!important}.site-header.is-home *{color:#1E201D!important;border-color:rgba(30,32,29,.4)!important}.home-hero{margin-top:0!important}</style></noscript>');
   const preloads = [], fonts = [];
+  // Inicio: el titular del hero usa Cormorant cursiva (500 desde 900 px, 600 en móvil); se precarga solo la que se usa arriba del pliegue.
+  if (localPath === '/') preloads.push('<link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-latin-500-italic.woff2" media="(min-width:900px)" crossorigin />', '<link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-latin-600-italic.woff2" media="(max-width:899px)" crossorigin />');
   if (localPath !== '/') {
     // Rutas interiores: la imagen LCP del HTML se precarga desde <head> e Inter llega junto con el JS.
     fonts.push('/fonts/inter.woff2');

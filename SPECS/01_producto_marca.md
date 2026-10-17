@@ -116,3 +116,15 @@ logo nuevo ni usa símbolo de marca registrada.
 - [ ] Inventario de fotografías y permisos disponible.
 - [ ] Datos duros trazables a una fuente.
 
+
+
+## Autorización de imagen (registro)
+
+El usuario confirmó (2026-10-12) tener autorización de las personas visibles en las fotos
+de experiencias (`site/src/media.json`, incl. IMG_1180, IMG_1196, IMG_3519), del conductor
+en la foto de la van y de los 7 viajeros del Palacio de la Cultura y del letrero de
+Medellín. El cliente debe conservar los soportes de esas autorizaciones.
+
+## Tipografía — decisión del usuario (2026-10-16)
+
+Se mantienen Montserrat (títulos y UI) e Inter (cuerpo) como base de marca y se añade **Cormorant** (serif, licencia SIL OFL, servida localmente) solo como acento editorial: titulares grandes seleccionados y frases destacadas en cursiva (`<em>`). Referencia: emparejamiento «Luxury Serif» (Cormorant + Montserrat) del repositorio nextlevelbuilder/ui-ux-pro-max-skill (MIT), usado solo como datos de consulta; no se instaló su «stack» ni se ejecutaron sus scripts. El usuario pide además más naranja en pequeñas zonas de los fondos.

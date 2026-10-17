@@ -59,6 +59,7 @@ var escuchemos = "heard";
 var experiencia = "experience";
 var importa = "matters";
 var mueven = "move";
+var necesitas = "you need";
 var pasajeros = "passengers";
 var personas = "people";
 var planeémoslo = "let's plan it";
@@ -106,6 +107,7 @@ var Preferencias = "Preferences";
 var Rechazar = "Reject";
 var Tequendamita = "Tequendamita";
 var Santorini = "Santorini";
+var Blog = "Blog";
 var en_default = {
 	"(se abre en una pestaña nueva)": "(opens in a new tab)",
 	". WhatsApp y los sitios externos aplican sus propias políticas al abrirlos.": ". WhatsApp and external websites apply their own policies when you open them.",
@@ -518,7 +520,6 @@ var en_default = {
 	"Reseñas anteriores": "Previous reviews",
 	"Reseñas de clientes en Google": "Customer reviews on Google",
 	"Reseñas siguientes": "Next reviews",
-	"Responsable identificado en el sitio de la marca: T&T, NIT 901738550-6.": "Data controller identified on the brand's website: T&T, tax ID 901738550-6.",
 	"Revisa con el equipo las pausas y prioridades. Un itinerario claro también debe considerar el tiempo que cada persona necesita.": "Review breaks and priorities with the team. A clear itinerary also needs to allow for everyone's pace.",
 	"Revisa tu solicitud, cópiala y compártela con nuestro equipo en WhatsApp.": "Review your inquiry, copy it and share it with our team on WhatsApp.",
 	"Ruta de la experiencia": "Experience itinerary",
@@ -656,6 +657,7 @@ var en_default = {
 	"muchas formas.": "many possibilities.",
 	mueven,
 	"necesitas.": "you need.",
+	necesitas,
 	"no está": "is not",
 	pasajeros,
 	personas,
@@ -893,7 +895,7 @@ var en_default = {
 	"Según lugar de salida e itinerario": "Depending on departure point and itinerary",
 	"Los horarios pueden modificarse dependiendo del lugar de recogida, tráfico, condiciones climáticas e itinerario.": "Schedules may change depending on the pickup location, traffic, weather conditions and itinerary.",
 	"Toca la foto para ampliar": "Tap the photo to enlarge",
-	"Política de tratamiento de datos": "Personal data processing policy",
+	"Política de tratamiento de datos": "Data processing policy",
 	"Qué datos personales recogemos, con qué finalidad, cuánto tiempo los conservamos y cómo ejercer tus derechos (Ley 1581 de 2012).": "What personal data we collect, what for, how long we keep it and how to exercise your rights (Law 1581 of 2012).",
 	"Activar sonido": "Turn sound on",
 	Silenciar,
@@ -1385,7 +1387,56 @@ var en_default = {
 	"Fotografías y tiempo libre, sujetos a apertura y a tu plan de viaje.": "Photos and free time, subject to opening hours and your travel plan.",
 	"Marcas con ruta propia": "Brands on a route of their own",
 	"Outlets de Guayabal": "Guayabal outlets",
-	"Visitamos los outlets de fábrica de Guayabal, una zona conocida por sus tiendas de ropa y calzado de producción local.": "We visit the factory outlets of Guayabal, an area known for its clothing and footwear stores with local production."
+	"Visitamos los outlets de fábrica de Guayabal, una zona conocida por sus tiendas de ropa y calzado de producción local.": "We visit the factory outlets of Guayabal, an area known for its clothing and footwear stores with local production.",
+	"Nuestra flota": "Our fleet",
+	"Vehículos para cada tipo de viaje": "Vehicles for every kind of trip",
+	"Elige la categoría según el tamaño de tu grupo y tu equipaje. Confirmamos la unidad al cotizar.": "Choose the category that fits your group size and luggage. We confirm the vehicle when we quote.",
+	"Qué tener en cuenta al elegir": "What to consider when choosing",
+	"Quiénes somos": "Who we are",
+	"Una empresa local de transporte turístico y tours privados en Medellín y Antioquia.": "A local tourist transport and private tours company in Medellín and Antioquia.",
+	"Cómo empezamos": "How we started",
+	"Cómo atendemos a cada viajero": "How we look after every traveler",
+	"Nace la idea": "The idea is born",
+	"Transporte y turismo a tu medida": "Transport and tourism tailored to you",
+	"Hablemos de tu viaje": "Let’s talk about your trip",
+	"Opiniones de quienes ya viajaron con nosotros": "What travelers who have already traveled with us say",
+	Blog,
+	"Ideas y consejos para viajar por Medellín": "Ideas and tips for traveling around Medellín",
+	"Ideas y consejos para tu viaje": "Ideas and tips for your trip",
+	"404 · Página no encontrada": "404 · Page not found",
+	"No encontramos esta página": "We couldn’t find this page",
+	"No hay resultados": "No results",
+	"Cómo te acompañamos": "How we support you",
+	"Te acompañamos de principio a fin": "We are with you from start to finish",
+	"Nuestro equipo": "Our team",
+	"Un equipo local que te acompaña": "A local team by your side",
+	"Sobre esta experiencia": "About this experience",
+	"Recomendaciones para tu recorrido": "Tips for your tour",
+	"Otras experiencias desde Medellín": "More experiences from Medellín",
+	"Así se vive": "Experience",
+	"Tu próximo viaje": "Your next trip",
+	"Hay una Medellín que se mira.": "There is a Medellín you look at.",
+	"Historia y arte urbano en Medellín": "History and street art in Medellín",
+	"Guatapé y la Piedra del Peñol en un día": "Guatapé and the Piedra del Peñol in a day",
+	"Medellín de noche: miradores y Provenza": "Medellín at night: viewpoints and Provenza",
+	"Pueblos y paisajes del Oriente antioqueño": "Towns and landscapes of eastern Antioquia",
+	"Del cultivo a la taza": "From crop to cup",
+	"Un día en familia en Hacienda Nápoles": "A family day at Hacienda Nápoles",
+	"Senderismo hasta la cascada": "Hiking to the waterfall",
+	"Calles coloniales y Puente de Occidente": "Colonial streets and the Puente de Occidente",
+	"Un pueblo de colores y café": "A town of colors and coffee",
+	"Compras en Medellín a tu ritmo": "Shopping in Medellín at your own pace",
+	"Medellín desde sus miradores": "Medellín from its viewpoints",
+	"Traslados del aeropuerto a tu alojamiento": "Transfers from the airport to your accommodation",
+	"Responsable: Transporte y Turismo Medellín, NIT 901738550-6.": "Controller: Transporte y Turismo Medellín, NIT 901738550-6.",
+	"Transporte y Turismo Medellín rechaza la explotación y el abuso sexual de niños, niñas y adolescentes. Denuncia: Línea 141 ICBF y Línea 123. Ley 679 de 2001 y Ley 1336 de 2009.": "Transporte y Turismo Medellín rejects the sexual exploitation and abuse of children and adolescents. Report it: ICBF Line 141 and Line 123. Law 679 of 2001 and Law 1336 of 2009.",
+	"PQRS:": "PQRS:",
+	"Superintendencia de Industria y Comercio (sic.gov.co)": "Superintendence of Industry and Commerce (sic.gov.co)",
+	"Autorizo a Transporte y Turismo Medellín, NIT 901738550-6, a tratar mis datos para responder y cotizar mi solicitud, según la": "I authorize Transporte y Turismo Medellín, NIT 901738550-6, to process my data to answer and quote my request, in accordance with the",
+	"Reseña en Google": "Review on Google",
+	"Aliados y reconocimientos": "Partners and recognitions",
+	"Combínalo con un tour de día, como el City Tour o el Tour Miradores, para cerrar la jornada sin perder tiempo de sol.": "Pair it with a daytime experience, such as the City Tour or Viewpoints Tour, to round off the day without missing the daylight.",
+	"Recorre los pueblos del Oriente Antioqueño entre plazas, arquitectura tradicional y paisajes de montaña.": "Explore eastern Antioquia's towns, with their plazas, traditional architecture and mountain landscapes."
 };
 //#endregion
-export { Aceptar, Ampliar, Autenticidad, Buses, Calidad, Calificaciones, Cercanía, Cerrar, Ciudad, Compromiso, Conecta, Confianza, Configurar, Contacto, Correo, Cotizar, Cultivos, Descubre, Detalles, Disfruta, Empresa, Enamórate, Experiencias, Explora, Familia, Felicitación, Foto, Fotografía, Fotografías, Guatapé, Hospitalidad, Hoy, Indicativo, Inicio, Inspiración, Inspírate, Jardín, Llámanos, Mensaje, Menú, Miradores, Naturaleza, Necesarias, Nevera, Noche, Nombre, Nosotros, Número, Opcional, Personalizable, Personas, Petición, Planeación, Preferencias, Principal, Privacidad, Provenza, Pueblos, Queja, Rechazar, Reclamo, Recolección, Recuerda, Revisa, Rionegro, Santorini, Seguir, Seguridad, Sencillez, Servicio, Servicios, Siente, Silenciar, Sorpréndete, Sugerencia, Síguenos, Tequendamita, Todas, Todos, Traslados, Vehículos, Vive, aquí, compartido, control, conversación, de, en_default as default, descubrir, empieza, encuentros, es, escuchemos, experiencia, importa, mueven, nota, notas, pasajeros, personas, planeémoslo, por, quieres, recuerdo, sentido, tu, viajó, vive };
+export { Aceptar, Ampliar, Autenticidad, Blog, Buses, Calidad, Calificaciones, Cercanía, Cerrar, Ciudad, Compromiso, Conecta, Confianza, Configurar, Contacto, Correo, Cotizar, Cultivos, Descubre, Detalles, Disfruta, Empresa, Enamórate, Experiencias, Explora, Familia, Felicitación, Foto, Fotografía, Fotografías, Guatapé, Hospitalidad, Hoy, Indicativo, Inicio, Inspiración, Inspírate, Jardín, Llámanos, Mensaje, Menú, Miradores, Naturaleza, Necesarias, Nevera, Noche, Nombre, Nosotros, Número, Opcional, Personalizable, Personas, Petición, Planeación, Preferencias, Principal, Privacidad, Provenza, Pueblos, Queja, Rechazar, Reclamo, Recolección, Recuerda, Revisa, Rionegro, Santorini, Seguir, Seguridad, Sencillez, Servicio, Servicios, Siente, Silenciar, Sorpréndete, Sugerencia, Síguenos, Tequendamita, Todas, Todos, Traslados, Vehículos, Vive, aquí, compartido, control, conversación, de, en_default as default, descubrir, empieza, encuentros, es, escuchemos, experiencia, importa, mueven, necesitas, nota, notas, pasajeros, personas, planeémoslo, por, quieres, recuerdo, sentido, tu, viajó, vive };

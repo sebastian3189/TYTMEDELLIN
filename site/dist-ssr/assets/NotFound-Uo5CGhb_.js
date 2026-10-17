@@ -1,16 +1,11 @@
-import { B as jsxs, M as usePageMeta, R as Fragment, _ as Arrow, d as PageTitle, h as TourCard, j as NOT_FOUND, r as tours, z as jsx } from "../entry-server.js";
+import { B as jsx, M as NOT_FOUND, N as usePageMeta, V as jsxs, d as PageTitle, h as TourCard, r as tours, v as Arrow, z as Fragment } from "../entry-server.js";
 import { Link } from "react-router-dom";
 //#region src/pages/NotFound.jsx
 function NotFound() {
 	usePageMeta(NOT_FOUND[0], NOT_FOUND[1]);
 	return /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(PageTitle, {
-		tag: "404 · Otro camino",
-		title: /* @__PURE__ */ jsxs(Fragment, { children: [
-			"Este recorrido",
-			/* @__PURE__ */ jsx("br", {}),
-			"no está ",
-			/* @__PURE__ */ jsx("em", { children: "aquí" })
-		] })
+		tag: "404 · Página no encontrada",
+		title: "No encontramos esta página"
 	}), /* @__PURE__ */ jsxs("section", {
 		className: "wrap section",
 		children: [/* @__PURE__ */ jsx("div", {

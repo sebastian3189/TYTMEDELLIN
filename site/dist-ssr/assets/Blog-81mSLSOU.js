@@ -1,6 +1,6 @@
-import { B as jsxs, M as usePageMeta, R as Fragment, U as language, _ as Arrow, d as PageTitle, f as Picture, l as Button, t as articles, z as jsx } from "../entry-server.js";
-import NotFound from "./NotFound-_j84yP7R.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-BONCV8ov.js";
+import { B as jsx, N as usePageMeta, V as jsxs, W as language, d as PageTitle, f as Picture, l as Button, t as articles, v as Arrow, z as Fragment } from "../entry-server.js";
+import NotFound from "./NotFound-Uo5CGhb_.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-C_3Ua-d5.js";
 import { Link, useParams } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
 //#region src/BlogIndex.jsx
@@ -334,13 +334,8 @@ function BlogIndex() {
 //#region src/pages/Blog.jsx
 function Blog() {
 	return /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(PageTitle, {
-		tag: "Cuaderno de viaje",
-		title: /* @__PURE__ */ jsxs(Fragment, { children: [
-			"Ideas para viajar",
-			/* @__PURE__ */ jsx("br", {}),
-			"con más ",
-			/* @__PURE__ */ jsx("em", { children: "sentido" })
-		] }),
+		tag: "Blog",
+		title: "Ideas y consejos para viajar por Medellín",
 		text: "Notas del equipo para elegir, preparar y disfrutar tus recorridos desde Medellín."
 	}), /* @__PURE__ */ jsx(BlogIndex, {})] });
 }

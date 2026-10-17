@@ -3,7 +3,7 @@
 Reproducible: py -3.12 site/scripts/prepare-itinerarios.py  (desde la raíz del proyecto)
 Entrada (SOLO LECTURA): fotos oficiales ya copiadas en site/public/media/oficial/orig (prefijo O) y fotos reales del
 equipo/clientes en IMAGENES/FotosMedellin-webp (prefijo F). Cada asignación se verificó mirando la imagen.
-Salida: site/public/media/itinerarios/<id>-{480,800,1200}.{avif,webp} (sin EXIF) y site/src/itinerarios-media.json
+Salida: site/public/media/itinerarios/<id>-{480,800,1200}.webp (sin EXIF) y site/src/itinerarios-media.json
 (ancho/alto reales para evitar saltos de maquetación). Sin imágenes generadas con IA. Paradas sin foto inequívoca: NO aparecen aquí
 (se muestran como «Foto pendiente»).
 """
@@ -71,7 +71,6 @@ for key, (root, rel) in MAP.items():
     for w in ws:
         r = im.resize((w, round(H * w / W)), Image.LANCZOS) if w != W else im
         r.save(os.path.join(OUT, f'{key}-{w}.webp'), 'WEBP', quality=78, method=6)
-        r.save(os.path.join(OUT, f'{key}-{w}.avif'), 'AVIF', quality=55, speed=6)
     manifest[key] = {'w': ws, 'width': ws[-1], 'height': round(H * ws[-1] / W)}
 with open(os.path.join(ROOT, 'site', 'src', 'itinerarios-media.json'), 'w', encoding='utf-8') as f:
     json.dump(manifest, f, indent=1)

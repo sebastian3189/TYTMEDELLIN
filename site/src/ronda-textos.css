@@ -23,3 +23,38 @@ article.tour-card:hover h3,.th-card:hover h3,.vehicle:hover h2,.th-title-link:ho
 .timeline.afx-line::before{background:linear-gradient(180deg,var(--text-strong),var(--line-strong))}
 .timeline article.afx.afx-in::before{background:var(--text-strong);border-color:var(--text-strong);box-shadow:0 0 0 6px var(--line)}
 .tn-bar i,.tr-dot{background:var(--text-strong)}
+
+/* ---------- 3 · Jerarquía tipográfica (tokens §I) ---------- */
+:root{--tr-display:-.045em;--tr-h2:-.035em;--tr-eyebrow:.12em;--tx-ease:cubic-bezier(.16,1,.3,1)}
+h1,h2,h3{text-wrap:balance;font-kerning:normal}
+main p{text-wrap:pretty}
+.eyebrow{letter-spacing:var(--tr-eyebrow)}
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-optical-sizing:auto}
+
+/* ---------- 4 · Movimiento de texto (text-motion.js): solo transform/opacidad; JS añade data-tx, sin JS todo queda visible ---------- */
+[data-tx="h"] .tx-w{display:inline-block;vertical-align:top;overflow:hidden;overflow:clip;padding:.12em .04em;margin:-.12em -.04em}
+[data-tx="h"] .tx-wi{display:inline-block;transform:translate3d(0,112%,0);opacity:0;transition:transform .8s var(--tx-ease),opacity .5s ease;transition-delay:min(calc(var(--i,0) * 45ms),560ms);will-change:transform}
+[data-tx="h"].tx-in .tx-wi{transform:none;opacity:1}
+[data-tx="b"]{opacity:0;transform:translate3d(0,.3em,0);clip-path:inset(-.12em -.12em 100% -.12em);transition:opacity .6s ease,transform .9s var(--tx-ease),clip-path .9s var(--tx-ease)}
+[data-tx="b"].tx-in{opacity:1;transform:none;clip-path:inset(-.12em)}
+[data-tx="e"]{opacity:0;letter-spacing:.02em;transition:opacity .6s ease,letter-spacing 1s var(--tx-ease)}
+[data-tx="e"].tx-in{opacity:1;letter-spacing:var(--tr-eyebrow)}
+[data-tx="p"]{opacity:0;transform:translate3d(0,14px,0);transition:opacity .7s ease,transform .8s var(--tx-ease);transition-delay:var(--d,0ms)}
+[data-tx="p"].tx-in{opacity:1;transform:none}
+[data-tx="n"]{opacity:0;transition:opacity .5s ease;font-variant-numeric:tabular-nums}
+[data-tx="n"].tx-in{opacity:1}
+@media(prefers-reduced-motion:reduce){[data-tx] .tx-wi,[data-tx]{opacity:1!important;transform:none!important;transition:none!important;letter-spacing:inherit}}
+
+/* ---------- 5 · Enlaces con subrayado animado (siempre visible 1 px; en hover/foco barre 2 px) ---------- */
+.text-link,.article-body p a,.consent a{text-decoration:none;padding-bottom:3px;background:linear-gradient(currentColor,currentColor) 0 100%/0 2px no-repeat,linear-gradient(currentColor,currentColor) 0 100%/100% 1px no-repeat;transition:background-size .4s var(--tx-ease)}
+.text-link:hover,.text-link:focus-visible,.article-body p a:hover,.consent a:hover{background-size:100% 2px,100% 1px}
+.site-header nav>a:not(.nav-cta):not(.active){background:linear-gradient(currentColor,currentColor) 0 calc(100% - 6px)/0 2px no-repeat;transition:background-size .35s var(--tx-ease)}
+.site-header nav>a:not(.nav-cta):not(.active):hover{background-size:100% 2px}
+@media(prefers-reduced-motion:reduce){.text-link,.article-body p a,.site-header nav>a{transition:none}}
+
+/* ---------- 6 · Transición entre páginas (View Transitions API; sin soporte = navegación normal) ---------- */
+@keyframes vt-out{to{opacity:0}}
+@keyframes vt-in{from{opacity:0;transform:translate3d(0,10px,0)}}
+::view-transition-old(root){animation:vt-out .2s ease both}
+::view-transition-new(root){animation:vt-in .38s var(--tx-ease) both}
+@media(prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}

@@ -9,8 +9,12 @@ import { GoogleBadge, ShareMenu } from './CardExtras';
 const Quote = lazy(() => import('./Quote')); // formulario, indicativos y validaciones: fuera del paquete inicial
 export const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-export function Picture({ photo, alt, priority=false, className='', native=false, sizes='(max-width: 700px) 100vw, 65vw' }) {
+// Encuadre (ronda 2026-10-16): `frame` = ancho/alto del marco. Si `cover` ocultaría más de `max` de la foto (p. ej. panorámica en marco 4:5), la foto se muestra ENTERA
+// (object-fit: contain) sobre un fondo difuminado de ella misma (.pic-fit, ronda-tipografia.css). Sin `frame` se comporta como antes.
+import { hiddenByCover } from './encuadre';
+export function Picture({ photo, alt, priority=false, className='', native=false, sizes='(max-width: 700px) 100vw, 65vw', frame=0, max=0.5 }) {
   if (!photo) return null;
+  if (frame && hiddenByCover(photo, frame) > max) return <span className="pic-fit" style={{ '--ph': `url(${photo.small || photo.src})` }}><Picture photo={photo} alt={alt} priority={priority} className={className} native={native} sizes={sizes} /></span>;
   // Fotos oficiales: `srcset` con la escalera real 400/800/1200/original (sin ampliar). `focus` = punto focal del recorte cover.
   const style = native ? { maxWidth:`min(100%, ${photo.width}px)` } : photo.focus ? { objectPosition:photo.focus } : undefined;
   return <img className={className} style={style} src={photo.src} srcSet={photo.srcset||`${photo.small} 640w, ${photo.src} ${photo.width}w`} sizes={sizes} width={photo.width} height={photo.height} alt={alt} loading={priority?'eager':'lazy'} fetchPriority={priority?'high':'auto'} decoding="async" />;

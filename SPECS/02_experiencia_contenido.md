@@ -440,3 +440,10 @@ Anexo de datos del cliente (no es un spec nuevo): [`SPECS/anexos/instrucciones_s
 La sección «La experiencia» de cada ficha muestra una parada por escena (texto visible literal del anexo). Datos editables en `site/src/itinerarios.js`;
 fotos en `site/public/media/itinerarios` (`site/scripts/prepare-itinerarios.py`). Jardín y Traslados JMC no figuran en el anexo: sus paradas/etapas
 salen solo de datos ya verificados (sedes.ts oficial, tour-info.json, FAQ y diferenciadores aprobados) y requieren aprobación del cliente.
+
+**Cumplimiento (2026-10-16):** el usuario confirma que las afiliaciones mostradas en la
+franja de aliados (ANATO, COTELCO, Cámara de Comercio de Medellín, alcaldías, Hacienda
+Nápoles, Google, Tripadvisor) están acreditadas; el cliente conserva los soportes. Siguen
+pendientes para Términos y política: razón social exacta, responsable de PQR, fecha de
+vigencia, inscripción en RNBD, postura sobre retracto, condiciones de cancelación por la
+empresa y fuerza mayor, y redacción final del aviso ESCNNA validada por el asesor.

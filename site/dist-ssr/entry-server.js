@@ -3,6 +3,150 @@ import { Link, NavLink, Navigate, Route, Routes, StaticRouter, useLocation, useN
 import { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { createPortal } from "react-dom";
+//#region src/text-motion.js
+var SCENES = ".home-hero,.scrub-hero,.th,.it,.blog-book,.different,.story,.explorer-track,[data-rv],.afx,[data-no-tx],dialog,form,details,[aria-live],.review-panel,.consent,.welcome,.tour-bar";
+var CARDS = ".tour-card,.card-copy,.vehicle,li,figure,blockquote,button,label,summary";
+var NUMS = ".timeline>article>span,.vehicle-index,.chapter";
+var WORDS_MAX = 14;
+var booted = false;
+var inView = (el) => {
+	const r = el.getBoundingClientRect();
+	return r.bottom > 0 && r.top < innerHeight;
+};
+function splitWords(el) {
+	let i = 0;
+	const walk = (node) => {
+		for (const child of [...node.childNodes]) if (child.nodeType === 3) {
+			if (!child.nodeValue.trim()) continue;
+			const frag = document.createDocumentFragment();
+			for (const part of child.nodeValue.split(/(\s+)/)) {
+				if (!part) continue;
+				if (/^\s+$/.test(part)) {
+					frag.append(part);
+					continue;
+				}
+				const w = document.createElement("span"), inner = document.createElement("span");
+				w.className = "tx-w";
+				inner.className = "tx-wi";
+				inner.style.setProperty("--i", i++);
+				inner.textContent = part;
+				w.append(inner);
+				frag.append(w);
+			}
+			child.replaceWith(frag);
+		} else if (child.nodeType === 1 && !/^(BR|SVG|IMG)$/i.test(child.tagName)) walk(child);
+	};
+	walk(el);
+	return i;
+}
+function count(el) {
+	const node = el.firstChild, text = node.nodeValue, m = /^(\s*)(\d{1,4})(\s*)$/.exec(text);
+	if (!m) return;
+	const end = Number(m[2]), pad = m[2].length, t0 = performance.now(), dur = 700;
+	const step = (now) => {
+		const k = Math.min(1, (now - t0) / dur), v = Math.round(end * (1 - Math.pow(1 - k, 3)));
+		node.nodeValue = m[1] + String(v).padStart(pad, "0") + m[3];
+		if (k < 1) requestAnimationFrame(step);
+		else node.nodeValue = text;
+	};
+	node.nodeValue = m[1] + "0".repeat(pad) + m[3];
+	requestAnimationFrame(step);
+}
+function useTextMotion(pathname) {
+	useEffect(() => {
+		if (typeof window === "undefined" || !("IntersectionObserver" in window)) return void 0;
+		if (matchMedia("(prefers-reduced-motion: reduce)").matches || navigator.connection?.saveData) return void 0;
+		const main = document.getElementById("contenido");
+		if (!main) return void 0;
+		const first = !booted;
+		booted = true;
+		const seen = /* @__PURE__ */ new WeakSet();
+		const io = new IntersectionObserver((entries) => {
+			for (const e of entries) {
+				if (!e.isIntersecting) continue;
+				const el = e.target;
+				io.unobserve(el);
+				requestAnimationFrame(() => {
+					el.classList.add("tx-in");
+					if (el.dataset.tx === "n") count(el);
+				});
+			}
+		}, {
+			rootMargin: "0px 0px -8% 0px",
+			threshold: .01
+		});
+		const prepare = () => {
+			let prevParent = null, k = 0;
+			for (const el of main.querySelectorAll("h1,h2,.eyebrow,p," + NUMS)) {
+				if (seen.has(el)) continue;
+				const isNum = el.matches(NUMS);
+				if (el.closest(SCENES) || !isNum && el.closest(CARDS)) continue;
+				seen.add(el);
+				if (first && inView(el)) continue;
+				if (!el.offsetParent) continue;
+				let kind;
+				if (el.matches("h1,h2")) {
+					const words = (el.textContent.match(/\S+/g) || []).length;
+					kind = words > 0 && words <= WORDS_MAX ? "h" : "p";
+					if (kind === "h" && first) kind = "b";
+					else if (kind === "h") try {
+						splitWords(el);
+					} catch {
+						kind = "p";
+					}
+				} else if (el.matches(".eyebrow")) {
+					const h = el.offsetHeight;
+					el.dataset.tx = "e";
+					kind = el.offsetHeight !== h ? "p" : "e";
+				} else if (isNum) {
+					kind = !first && el.childNodes.length === 1 && el.firstChild.nodeType === 3 && /^\s*\d{1,4}\s*$/.test(el.textContent) ? "n" : null;
+					if (!kind) continue;
+				} else kind = "p";
+				if (kind === "p") {
+					if (el.parentElement === prevParent) k++;
+					else {
+						k = 0;
+						prevParent = el.parentElement;
+					}
+					el.style.setProperty("--d", `${Math.min(k, 4) * 70}ms`);
+				}
+				el.dataset.tx = kind;
+				io.observe(el);
+			}
+		};
+		let frame = 0;
+		const schedule = () => {
+			cancelAnimationFrame(frame);
+			frame = requestAnimationFrame(prepare);
+		};
+		prepare();
+		const mo = new MutationObserver((records) => {
+			if (records.some((r) => [...r.addedNodes].some((n) => n.nodeType === 1 && !n.classList?.contains("tx-w")))) schedule();
+		});
+		mo.observe(main, {
+			childList: true,
+			subtree: true
+		});
+		return () => {
+			cancelAnimationFrame(frame);
+			mo.disconnect();
+			io.disconnect();
+		};
+	}, [pathname]);
+}
+var pending = null;
+function notifyRouteReady() {
+	if (!pending) return;
+	const done = pending;
+	pending = null;
+	let tries = 0;
+	const wait = () => {
+		if (document.querySelector("main#contenido > *") || ++tries > 60) done();
+		else setTimeout(wait, 16);
+	};
+	setTimeout(wait, 16);
+}
+//#endregion
 //#region src/languages.js
 var LANGUAGES = [
 	{
@@ -40,8 +184,8 @@ var S = globalThis.__ttI18n || (globalThis.__ttI18n = {
 var dictionaries = S.dictionaries;
 S.localizedProps = localizedProps;
 var loaders = {
-	en: () => import("./assets/en-CzkV7e3A.js"),
-	"pt-BR": () => import("./assets/pt-BR-CfOPQm5Y.js")
+	en: () => import("./assets/en-Ck76SkYT.js"),
+	"pt-BR": () => import("./assets/pt-BR-C53S7aXP.js")
 };
 var language = () => S.locale;
 var setLanguage = (value) => {
@@ -529,7 +673,7 @@ function Allies() {
 	const [paused, setPaused] = useState(false);
 	return /* @__PURE__ */ jsxs$1("section", {
 		className: "allies wrap",
-		"aria-label": "Aliados y referencias",
+		"aria-label": "Aliados y reconocimientos",
 		children: [/* @__PURE__ */ jsx$1("div", {
 			className: `allies-viewport ${paused ? "is-paused" : ""}`,
 			children: /* @__PURE__ */ jsxs$1("div", {
@@ -1076,7 +1220,7 @@ function QuoteCopy({ withType = false }) {
 			/* @__PURE__ */ jsx$1("h2", { children: withType ? /* @__PURE__ */ jsxs$1(Fragment, { children: [
 				"Cuéntanos qué",
 				/* @__PURE__ */ jsx$1("br", {}),
-				"necesitas."
+				"necesitas"
 			] }) : /* @__PURE__ */ jsxs$1(Fragment, { children: [
 				"Tu experiencia",
 				/* @__PURE__ */ jsx$1("br", {}),
@@ -1122,12 +1266,14 @@ function Arrow({ dir = "ne" }) {
 //#endregion
 //#region src/CardExtras.jsx
 var RATING = 5;
+var reviewsText = () => language() === "pt-BR" ? "265 avaliações no Google" : language() === "en" ? "265 Google reviews" : "265 reseñas en Google";
+var fullLabel = (figure) => language() === "pt-BR" ? `${figure} · 265 avaliações no Google · avaliação da empresa · set. 2026` : language() === "en" ? `${figure} · 265 Google reviews · company rating · Sept. 2026` : `${figure} · 265 reseñas en Google · valoración de la empresa · sept. 2026`;
 function GoogleBadge({ className = "" }) {
 	const figure = RATING.toLocaleString(languageInfo(language()).html, {
 		minimumFractionDigits: 1,
 		maximumFractionDigits: 1
 	});
-	const label = language() === "pt-BR" ? `Avaliação da empresa no Google: ${figure} de 5` : language() === "en" ? `Company rating on Google: ${figure} out of 5` : `Valoración de la empresa en Google: ${figure} de 5`;
+	const label = fullLabel(figure);
 	return /* @__PURE__ */ jsxs$1("a", {
 		className: `card-google ${className}`,
 		href: company.reviews,
@@ -1145,10 +1291,10 @@ function GoogleBadge({ className = "" }) {
 				"aria-hidden": "true",
 				children: figure
 			}),
-			/* @__PURE__ */ jsx$1("span", {
+			/* @__PURE__ */ jsxs$1("span", {
 				"aria-hidden": "true",
 				className: "card-google-brand",
-				children: "· Google"
+				children: ["· ", reviewsText()]
 			})
 		]
 	});
@@ -1158,7 +1304,7 @@ function GoogleBadgeStatic({ className = "" }) {
 		minimumFractionDigits: 1,
 		maximumFractionDigits: 1
 	});
-	const label = language() === "pt-BR" ? `Avaliação da empresa no Google: ${figure} de 5` : language() === "en" ? `Company rating on Google: ${figure} out of 5` : `Valoración de la empresa en Google: ${figure} de 5`;
+	const label = fullLabel(figure);
 	return /* @__PURE__ */ jsxs$1("span", {
 		className: `card-google card-google--static ${className}`,
 		role: "img",
@@ -1173,10 +1319,10 @@ function GoogleBadgeStatic({ className = "" }) {
 				"aria-hidden": "true",
 				children: figure
 			}),
-			/* @__PURE__ */ jsx$1("span", {
+			/* @__PURE__ */ jsxs$1("span", {
 				"aria-hidden": "true",
 				className: "card-google-brand",
-				children: "· Google"
+				children: ["· ", reviewsText()]
 			})
 		]
 	});
@@ -1445,11 +1591,30 @@ function ShareMenu({ name: rawName, path, className = "" }) {
 	}), document.body)] });
 }
 //#endregion
+//#region src/encuadre.js
+var hiddenByCover = (photo, frame) => {
+	if (!photo?.width || !photo?.height || !frame) return 0;
+	const r = photo.width / photo.height;
+	return r > frame ? 1 - frame / r : 1 - r / frame;
+};
+//#endregion
 //#region src/shared.jsx
-var Quote = lazy(() => import("./assets/Quote-yMVC5-ow.js"));
+var Quote = lazy(() => import("./assets/Quote-6WXT6Jwf.js"));
 var reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-function Picture({ photo, alt, priority = false, className = "", native = false, sizes = "(max-width: 700px) 100vw, 65vw" }) {
+function Picture({ photo, alt, priority = false, className = "", native = false, sizes = "(max-width: 700px) 100vw, 65vw", frame = 0, max = .5 }) {
 	if (!photo) return null;
+	if (frame && hiddenByCover(photo, frame) > max) return /* @__PURE__ */ jsx$1("span", {
+		className: "pic-fit",
+		style: { "--ph": `url(${photo.small || photo.src})` },
+		children: /* @__PURE__ */ jsx$1(Picture, {
+			photo,
+			alt,
+			priority,
+			className,
+			native,
+			sizes
+		})
+	});
 	return /* @__PURE__ */ jsx$1("img", {
 		className,
 		style: native ? { maxWidth: `min(100%, ${photo.width}px)` } : photo.focus ? { objectPosition: photo.focus } : void 0,
@@ -2302,7 +2467,7 @@ function Logo({ size, sizes, className = "", lazy = false }) {
 		className: `logo-mark ${className}`,
 		fetchPriority: lazy ? void 0 : "low",
 		loading: lazy ? "lazy" : void 0,
-		src: "/media/marca/logo/logo-400.png",
+		src: "/media/marca/logo/logo-400.webp",
 		srcSet: LOGO_SRCSET,
 		sizes,
 		width: size,
@@ -2327,22 +2492,22 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-CpDonhmp.js");
+var company_ = () => import("./assets/Company-BQqe_tyO.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-mE485iK9.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-Bz-DavA1.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-CvaoU3fZ.js").then((m) => m.default)),
-	fleet: lazyRoute(() => import("./assets/Fleet-C92gGVL2.js").then((m) => m.default)),
-	blog: lazyRoute(pick(() => import("./assets/Blog-DNPWtfQG.js"), "Blog")),
-	article: lazyRoute(() => import("./assets/Blog-DNPWtfQG.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-kBousz5S.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-DjCLVYLA.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-B83M0GQP.js").then((m) => m.default)),
+	fleet: lazyRoute(() => import("./assets/Fleet-DBPQgyYz.js").then((m) => m.default)),
+	blog: lazyRoute(pick(() => import("./assets/Blog-81mSLSOU.js"), "Blog")),
+	article: lazyRoute(() => import("./assets/Blog-81mSLSOU.js").then((m) => m.default)),
 	about: lazyRoute(pick(company_, "About")),
 	services: lazyRoute(pick(company_, "Services")),
 	contact: lazyRoute(pick(company_, "Contact")),
 	quote: lazyRoute(pick(company_, "QuotePage")),
 	privacy: lazyRoute(pick(company_, "Privacy")),
 	ratings: lazyRoute(pick(company_, "Ratings")),
-	dataPolicy: lazyRoute(() => import("./assets/DataPolicy-CXUZnR_L.js").then((m) => m.default)),
-	notFound: lazyRoute(() => import("./assets/NotFound-_j84yP7R.js").then((m) => m.default))
+	dataPolicy: lazyRoute(() => import("./assets/DataPolicy-CFr0aenm.js").then((m) => m.default)),
+	notFound: lazyRoute(() => import("./assets/NotFound-Uo5CGhb_.js").then((m) => m.default))
 };
 R.home, R.catalog, R.tour, R.fleet, R.blog, R.article, R.about, R.services, R.contact, R.quote, R.privacy, R.dataPolicy, R.ratings;
 var preloadAllRoutes = () => Promise.all(Object.values(R).map((route) => route.preload()));
@@ -2444,7 +2609,7 @@ function Footer() {
 				/* @__PURE__ */ jsxs$1("div", {
 					className: "pie-top",
 					children: [/* @__PURE__ */ jsxs$1("p", { children: [
-						"Tu próxima historia",
+						"Tu próximo viaje",
 						/* @__PURE__ */ jsx$1("br", {}),
 						"empieza ",
 						/* @__PURE__ */ jsx$1("em", { children: "aquí" })
@@ -2569,6 +2734,23 @@ function Footer() {
 					]
 				}),
 				/* @__PURE__ */ jsxs$1("div", {
+					className: "pie-legal",
+					children: [/* @__PURE__ */ jsx$1("p", { children: "Transporte y Turismo Medellín rechaza la explotación y el abuso sexual de niños, niñas y adolescentes. Denuncia: Línea 141 ICBF y Línea 123. Ley 679 de 2001 y Ley 1336 de 2009." }), /* @__PURE__ */ jsxs$1("p", { children: [
+						"PQRS: ",
+						/* @__PURE__ */ jsx$1("a", {
+							href: `mailto:${company.email}`,
+							children: company.email
+						}),
+						" · ",
+						/* @__PURE__ */ jsx$1("a", {
+							href: "https://www.sic.gov.co",
+							target: "_blank",
+							rel: "noopener noreferrer",
+							children: "Superintendencia de Industria y Comercio (sic.gov.co)"
+						})
+					] })]
+				}),
+				/* @__PURE__ */ jsxs$1("div", {
 					className: "pie-bottom",
 					children: [
 						/* @__PURE__ */ jsx$1("span", { children: "RNT 176384" }),
@@ -2595,6 +2777,10 @@ function Footer() {
 }
 function Layout() {
 	const { pathname } = useLocation();
+	useTextMotion(pathname);
+	useEffect(() => {
+		notifyRouteReady();
+	}, [pathname]);
 	return /* @__PURE__ */ jsxs$1(Fragment, { children: [
 		/* @__PURE__ */ jsx$1("a", {
 			className: "skip-link",
@@ -3963,7 +4149,7 @@ var media_default = {
 		}
 	],
 	"logo-marca": [{
-		"src": "/media/marca/logo/logo-400.png",
+		"src": "/media/marca/logo/logo-400.webp",
 		"small": "/media/marca/logo/logo-168.webp",
 		"width": 400,
 		"height": 400,
@@ -4113,7 +4299,7 @@ var rawTours = [
 		"city-tour-comuna-13",
 		"City Tour & Comuna 13",
 		"Ciudad",
-		"Una ciudad que vuelve a dibujarse",
+		"Historia y arte urbano en Medellín",
 		"Descubre las plazas de Medellín y el arte urbano de la Comuna 13. Planeamos contigo un recorrido privado para acercarte a la ciudad y sus historias.",
 		[
 			"La ciudad como punto de partida",
@@ -4132,7 +4318,7 @@ var rawTours = [
 		"guatape-piedra-del-penol",
 		"Guatapé & Piedra del Peñol",
 		"Pueblos",
-		"El horizonte tiene otro color",
+		"Guatapé y la Piedra del Peñol en un día",
 		"Desde Medellín, descubre los zócalos de Guatapé y el paisaje de la Piedra del Peñol. Acordamos el recorrido contigo; consulta entradas y opciones de ascenso.",
 		[
 			"Mirar desde lo alto",
@@ -4151,7 +4337,7 @@ var rawTours = [
 		"tour-nocturno-medellin",
 		"Noche en Medellín",
 		"Noche",
-		"Cuando el valle enciende sus luces",
+		"Medellín de noche: miradores y Provenza",
 		"Conoce Medellín de noche entre luces, vistas del valle y ambiente local. Coordinamos la salida y el regreso; los horarios y las paradas se acuerdan contigo.",
 		[
 			"El día se despide",
@@ -4170,7 +4356,7 @@ var rawTours = [
 		"vuelta-a-oriente",
 		"Vuelta a Oriente",
 		"Pueblos",
-		"El camino también es el destino",
+		"Pueblos y paisajes del Oriente antioqueño",
 		"Sal de Medellín hacia los pueblos y las montañas del Oriente antioqueño. Cuéntanos tus intereses para acordar las paradas y disfrutar las plazas con calma.",
 		[
 			"Salir hacia las montañas",
@@ -4189,7 +4375,7 @@ var rawTours = [
 		"tour-del-cafe-medellin",
 		"Tour del Café",
 		"Naturaleza",
-		"Una historia que empieza en la tierra",
+		"Del cultivo a la taza",
 		"Descubre la cultura cafetera en una visita desde Medellín: del cultivo al oficio detrás de una taza. La finca y la degustación se confirman en tu propuesta.",
 		[
 			"Entre hojas y granos",
@@ -4208,7 +4394,7 @@ var rawTours = [
 		"hacienda-napoles",
 		"Hacienda Nápoles",
 		"Familia",
-		"Un día para volver a sorprenderse",
+		"Un día en familia en Hacienda Nápoles",
 		"Planea un día en Hacienda Nápoles con transporte desde Medellín. Comparte naturaleza y actividades en familia; confirma el pasaporte y las entradas al cotizar.",
 		[
 			"Poner rumbo a un día distinto",
@@ -4227,7 +4413,7 @@ var rawTours = [
 		"salto-del-buey",
 		"Salto del Buey",
 		"Naturaleza",
-		"Sigue el sonido del agua",
+		"Senderismo hasta la cascada",
 		"Camina entre senderos y vegetación hasta el Salto del Buey en una salida desde Medellín. Revisamos contigo las condiciones del recorrido y las actividades opcionales.",
 		[
 			"Entrar en el verde",
@@ -4246,7 +4432,7 @@ var rawTours = [
 		"santa-fe-de-antioquia",
 		"Santa Fe de Antioquia",
 		"Pueblos",
-		"Hay lugares que enseñan a ir despacio",
+		"Calles coloniales y Puente de Occidente",
 		"Recorre Santa Fe de Antioquia desde Medellín: calles coloniales, plazas y el Puente de Occidente. Organiza con nosotros las paradas y los tiempos de caminata.",
 		[
 			"Un puente entre paisajes",
@@ -4265,7 +4451,7 @@ var rawTours = [
 		"jardin-antioquia",
 		"Jardín",
 		"Pueblos",
-		"El color se vive sin prisa",
+		"Un pueblo de colores y café",
 		"Viaja de Medellín a Jardín para conocer sus fachadas de color, su plaza y su cultura cafetera. Coordinamos el recorrido considerando el trayecto y a tu grupo.",
 		[
 			"Tomar el camino del pueblo",
@@ -4284,7 +4470,7 @@ var rawTours = [
 		"tour-de-compras",
 		"Tour de Compras",
 		"Ciudad",
-		"Tus hallazgos, a tu ritmo",
+		"Compras en Medellín a tu ritmo",
 		"Organiza tu tour de compras en Medellín por El Hueco, outlets y tiendas locales. Cuéntanos qué buscas para acordar las paradas y el espacio para tus compras.",
 		[
 			"Definir qué estás buscando",
@@ -4303,7 +4489,7 @@ var rawTours = [
 		"tour-miradores",
 		"Tour de Miradores",
 		"Noche",
-		"Una ciudad. Infinitas perspectivas",
+		"Medellín desde sus miradores",
 		"Descubre Medellín desde sus miradores y observa cómo cambia la luz sobre el valle. Acordamos las paradas contigo; la visibilidad depende del clima.",
 		[
 			"Buscar una nueva perspectiva",
@@ -4322,7 +4508,7 @@ var rawTours = [
 		"traslados-aeropuerto-jmc",
 		"Traslados Aeropuerto JMC",
 		"Traslados",
-		"Aterriza. Nosotros conectamos el camino",
+		"Traslados del aeropuerto a tu alojamiento",
 		"Coordina tu traslado entre el Aeropuerto José María Córdova y Medellín. Comparte vuelo, dirección y equipaje: seguimos tu vuelo y acordamos el punto de encuentro.",
 		[
 			"Antes de aterrizar",
@@ -4340,7 +4526,14 @@ var rawTours = [
 ];
 //#endregion
 //#region src/content.js
-var FOCUS = { "traslados-aeropuerto-jmc": "92% 50%" };
+var FOCUS = {
+	"traslados-aeropuerto-jmc": "92% 50%",
+	"guatape-piedra-del-penol": "36% 50%",
+	"tour-nocturno-medellin": "52% 50%",
+	"vuelta-a-oriente": "46% 50%",
+	"jardin-antioquia": "40% 50%",
+	"tour-miradores": "66% 50%"
+};
 var photos = (slug) => {
 	const items = media_default[slug] || [];
 	if (slug === "equipo") return [items[3], ...items.slice(0, 3)].filter(Boolean);
@@ -4552,4 +4745,4 @@ async function render(url) {
 	}));
 }
 //#endregion
-export { textoFase as A, jsxs$1 as B, useLightMotion as C, watchScroll as D, docTop as E, Icon as F, whatsapp as H, SocialIcon as I, Socials as L, usePageMeta as M, PlayIcon as N, CHAPTERS as O, SoundIcon as P, Fragment as R, useFlipGrid as S, useMounted as T, language as U, company as V, t as W, Arrow as _, vehicles as a, Marquee as b, Logo as c, PageTitle as d, Picture as f, GoogleBadgeStatic as g, TourCard as h, values as i, NOT_FOUND as j, inicioTextos as k, Button as l, Rail as m, metaFor, photos as n, rawTours as o, QuoteSection as p, paths, tours as r, render, media_default as s, articles as t, Eyebrow as u, QuoteCopy as v, useMedia as w, Trust as x, Manifesto as y, jsx$1 as z };
+export { inicioTextos as A, jsx$1 as B, useFlipGrid as C, docTop as D, useMounted as E, SoundIcon as F, t as G, company as H, Icon as I, SocialIcon as L, NOT_FOUND as M, usePageMeta as N, watchScroll as O, PlayIcon as P, Socials as R, Trust as S, useMedia as T, whatsapp as U, jsxs$1 as V, language as W, GoogleBadgeStatic as _, vehicles as a, Manifesto as b, Logo as c, PageTitle as d, Picture as f, hiddenByCover as g, TourCard as h, values as i, textoFase as j, CHAPTERS as k, Button as l, Rail as m, metaFor, photos as n, rawTours as o, QuoteSection as p, paths, tours as r, render, media_default as s, articles as t, Eyebrow as u, Arrow as v, useLightMotion as w, Marquee as x, QuoteCopy as y, Fragment as z };

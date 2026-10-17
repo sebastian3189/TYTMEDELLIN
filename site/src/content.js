@@ -6,7 +6,8 @@ export { company, whatsapp };
 // cantidad que la ficha oficial (tnt-colombia-connect, sedes.ts), copiadas en WebP con su escalera de anchos (ver scripts/prepare-oficial.py).
 // `FOCUS`: punto focal del recorte 4:5 de la portada. Traslados JMC: la portada oficial trae un cartel de broma en el centro; el recorte de
 // tarjeta/ficha se desplaza a la derecha para no mostrarlo (la foto sigue siendo la oficial; ver el informe de la ronda).
-const FOCUS = { 'traslados-aeropuerto-jmc': '92% 50%' };
+// Ronda encuadre (2026-10-16): punto focal por foto de portada para que el recorte 4:5 (cover, sin fondo difuminado) conserve a las personas y el motivo principal.
+const FOCUS = { 'traslados-aeropuerto-jmc': '92% 50%', 'guatape-piedra-del-penol': '36% 50%', 'tour-nocturno-medellin': '52% 50%', 'vuelta-a-oriente': '46% 50%', 'jardin-antioquia': '40% 50%', 'tour-miradores': '66% 50%' };
 export const photos = (slug) => {
   const items = media[slug] || [];
   if (slug === 'equipo') return [items[3], ...items.slice(0, 3)].filter(Boolean);

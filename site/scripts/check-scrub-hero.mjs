@@ -441,14 +441,14 @@ try {
   const size = async (d, f) => (await stat(path.join(d, f))).size;
   const sum = async (folder) => { let t = 0, max = 0; for (const f of await readdir(path.join(dir, folder))) { const s = await size(dir, `${folder}/${f}`); t += s; max = Math.max(max, s); } return { t, max }; };
   const firstPass = async (folder) => { let t = 0; for (const i of (folder === 'd' ? [0, 15, 30, 45, 60, 75, 90, 105, 120] : [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120])) t += await size(dir, `${folder}/${String(i + 1).padStart(3, '0')}.webp`); return t; };
-  const posters = {}; for (const f of ['poster-1280.avif', 'poster-1280.webp', 'poster-1600.avif', 'poster-1600.webp', 'poster-m.avif', 'poster-m.webp']) posters[f] = await size(dir, f);
+  const posters = {}; for (const f of ['poster-1280.webp', 'poster-1600.webp', 'poster-m.webp']) posters[f] = await size(dir, f);
   assert.ok(Object.values(posters).every((s) => s <= 200_000), 'póster ≤200 KB');
   const d = await sum('d'), m = await sum('m');
   assert.ok(d.max <= 320_000 && m.max <= 170_000, 'fotograma máx 320/170 KB (película fluida y nítida, 2026-10-12)');
   assert.equal((await readdir(path.join(dir, 'd'))).length, 121); assert.equal((await readdir(path.join(dir, 'm'))).length, 121);
   const base9 = d.t + posters['poster-1600.webp'], baseM = m.t + posters['poster-m.webp'];
   assert.ok(base9 <= 22_000_000 && baseM <= 8_000_000, `inicio actual escritorio ${base9} / móvil ${baseM} (tope 22 / 8 MB, ampliado a propósito)`);
-  const fpD = (await firstPass('d')) + posters['poster-1600.avif'], fpM = (await firstPass('m')) + posters['poster-m.avif'];
+  const fpD = (await firstPass('d')) + posters['poster-1600.webp'], fpM = (await firstPass('m')) + posters['poster-m.webp'];
   assert.ok(fpD <= 2_000_000 && fpM <= 1_200_000, 'primera pasada');
   const bt = { t: 0, m: 0, d: 0, w: 0 }, bmax = { t: 0, m: 0, d: 0, w: 0 };
   for (const slug of SLUGS) for (const k of ['t', 'm', 'd', 'w']) { const s = await size(bdir, `${slug}-${k}.webp`); bt[k] += s; bmax[k] = Math.max(bmax[k], s); }

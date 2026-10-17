@@ -1,4 +1,4 @@
-import { B as jsxs, V as company, _ as Arrow, z as jsx } from "../entry-server.js";
+import { B as jsx, H as company, V as jsxs, v as Arrow } from "../entry-server.js";
 import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
 //#region src/reviews.json
@@ -103,6 +103,10 @@ var Stars = () => /* @__PURE__ */ jsx("span", {
 	"aria-hidden": "true",
 	children: "★★★★★"
 });
+var shortName = (n) => {
+	const p = n.trim().split(/\s+/);
+	return p.length > 1 ? `${p[0]} ${p[1][0].toLocaleUpperCase("es")}.` : p[0];
+};
 function Card({ r }) {
 	const [open, setOpen] = useState(false);
 	return /* @__PURE__ */ jsxs("article", {
@@ -126,7 +130,11 @@ function Card({ r }) {
 			}),
 			/* @__PURE__ */ jsxs("footer", {
 				className: "g-author",
-				children: [/* @__PURE__ */ jsx("strong", { children: r.nombre }), r.local && /* @__PURE__ */ jsx("span", { children: "Guía local" })]
+				children: [
+					/* @__PURE__ */ jsx("strong", { children: shortName(r.nombre) }),
+					/* @__PURE__ */ jsx("span", { children: "Reseña en Google" }),
+					r.local && /* @__PURE__ */ jsx("span", { children: "Guía local" })
+				]
 			})
 		]
 	});

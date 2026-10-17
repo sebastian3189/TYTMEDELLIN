@@ -1,8 +1,8 @@
-import { A as textoFase, B as jsxs, C as useLightMotion, F as Icon, H as whatsapp, I as SocialIcon, N as PlayIcon, O as CHAPTERS, P as SoundIcon, R as Fragment, U as language, W as t, _ as Arrow, c as Logo, f as Picture, g as GoogleBadgeStatic, k as inicioTextos, l as Button, n as photos, r as tours, t as articles, u as Eyebrow, w as useMedia, z as jsx } from "../entry-server.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-BONCV8ov.js";
-import { a as inicioVideos, c as safePlay, i as tourEntry, n as HeroBlock, o as instagram, s as prepVideo } from "./Hero-CzzBejRf.js";
-import { t as Reviews } from "./Reviews-DJ7t3leM.js";
-import { a as FAQ_HOME, l as Faq } from "./faq-data-CXHnHuQT.js";
+import { A as inicioTextos, B as jsx, F as SoundIcon, G as t, I as Icon, L as SocialIcon, P as PlayIcon, T as useMedia, U as whatsapp, V as jsxs, W as language, _ as GoogleBadgeStatic, c as Logo, f as Picture, j as textoFase, k as CHAPTERS, l as Button, n as photos, r as tours, t as articles, u as Eyebrow, v as Arrow, w as useLightMotion, z as Fragment } from "../entry-server.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-C_3Ua-d5.js";
+import { a as inicioVideos, c as safePlay, i as tourEntry, n as HeroBlock, o as instagram, s as prepVideo } from "./Hero-qQQeN_TB.js";
+import { t as Reviews } from "./Reviews-CVU5ZJog.js";
+import { a as FAQ_HOME, l as Faq } from "./faq-data-BdDInLlq.js";
 import { a as smooth$1, r as placePhotos } from "./mobile-motion-o2zoinXe.js";
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -1062,33 +1062,20 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 						children: [
 							/* @__PURE__ */ jsxs("picture", {
 								className: "scrub-poster",
-								children: [
-									/* @__PURE__ */ jsx("source", {
-										media: MOBILE_QUERY,
-										type: "image/avif",
-										srcSet: `${BASE}/poster-m.avif`
-									}),
-									/* @__PURE__ */ jsx("source", {
-										media: MOBILE_QUERY,
-										type: "image/webp",
-										srcSet: `${BASE}/poster-m.webp`
-									}),
-									/* @__PURE__ */ jsx("source", {
-										type: "image/avif",
-										srcSet: `${BASE}/poster-1280.avif 1280w, ${BASE}/poster-1600.avif 1600w`,
-										sizes: "100vw"
-									}),
-									/* @__PURE__ */ jsx("img", {
-										src: `${BASE}/poster-1600.webp`,
-										srcSet: `${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`,
-										sizes: "100vw",
-										width: "1600",
-										height: "900",
-										alt: "Vista de Medellín desde la ladera de la Comuna 13",
-										loading: "lazy",
-										decoding: "async"
-									})
-								]
+								children: [/* @__PURE__ */ jsx("source", {
+									media: MOBILE_QUERY,
+									type: "image/webp",
+									srcSet: `${BASE}/poster-m.webp`
+								}), /* @__PURE__ */ jsx("img", {
+									src: `${BASE}/poster-1600.webp`,
+									srcSet: `${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`,
+									sizes: "100vw",
+									width: "1600",
+									height: "900",
+									alt: "Vista de Medellín desde la ladera de la Comuna 13",
+									loading: "lazy",
+									decoding: "async"
+								})]
 							}),
 							animated && /* @__PURE__ */ jsx("canvas", {
 								ref: canvas,
@@ -2649,14 +2636,9 @@ function BlogBook() {
 			children: [/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("p", {
 				className: "eyebrow",
 				children: "Cuaderno de viaje"
-			}), /* @__PURE__ */ jsxs("h2", {
+			}), /* @__PURE__ */ jsx("h2", {
 				id: "blog-book-title",
-				children: [
-					"Ideas para viajar",
-					/* @__PURE__ */ jsx("br", {}),
-					"con más ",
-					/* @__PURE__ */ jsx("em", { children: "sentido" })
-				]
+				children: "Ideas y consejos para tu viaje"
 			})] }), /* @__PURE__ */ jsxs(Link, {
 				className: "text-link",
 				to: "/blog",
@@ -3364,7 +3346,7 @@ function HomeStory() {
 				/* @__PURE__ */ jsxs("h2", {
 					id: "historia-titulo",
 					children: [
-						"Hay una Medellín que se mira",
+						"Hay una Medellín que se mira.",
 						/* @__PURE__ */ jsx("br", {}),
 						"Y otra que se ",
 						/* @__PURE__ */ jsx("em", { children: "vive" })
@@ -3543,13 +3525,8 @@ function Home() {
 			id: "camino",
 			tabIndex: -1,
 			children: [
-				/* @__PURE__ */ jsx(Eyebrow, { children: "Nos encargamos del camino" }),
-				/* @__PURE__ */ jsxs("h2", { children: [
-					"Del primer traslado",
-					/* @__PURE__ */ jsx("br", {}),
-					"al último ",
-					/* @__PURE__ */ jsx("em", { children: "recuerdo" })
-				] }),
+				/* @__PURE__ */ jsx(Eyebrow, { children: "Cómo te acompañamos" }),
+				/* @__PURE__ */ jsx("h2", { children: "Te acompañamos de principio a fin" }),
 				/* @__PURE__ */ jsx("div", {
 					className: "service-links",
 					children: [
@@ -3587,13 +3564,8 @@ function Home() {
 				photo: photos("equipo")[0],
 				alt: "Personas del equipo de T&T Medellín"
 			}), /* @__PURE__ */ jsxs("div", { children: [
-				/* @__PURE__ */ jsx(Eyebrow, { children: "Una historia que nace aquí" }),
-				/* @__PURE__ */ jsxs("h2", { children: [
-					"Personas que",
-					/* @__PURE__ */ jsx("br", {}),
-					"mueven ",
-					/* @__PURE__ */ jsx("em", { children: "personas" })
-				] }),
+				/* @__PURE__ */ jsx(Eyebrow, { children: "Nuestro equipo" }),
+				/* @__PURE__ */ jsx("h2", { children: "Un equipo local que te acompaña" }),
 				/* @__PURE__ */ jsx("p", { children: "Desde los primeros traslados, aprendimos a escuchar. Esa cercanía sigue guiando nuestra forma de recibir y acompañar." }),
 				/* @__PURE__ */ jsx(Button, {
 					to: "/nosotros",

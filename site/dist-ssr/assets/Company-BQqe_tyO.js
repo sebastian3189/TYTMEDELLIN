@@ -1,7 +1,7 @@
-import { B as jsxs, H as whatsapp, L as Socials, R as Fragment, V as company, _ as Arrow, d as PageTitle, f as Picture, i as values, l as Button, n as photos, p as QuoteSection, u as Eyebrow, y as Manifesto, z as jsx } from "../entry-server.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-0hQrOj7B.js";
-import { t as Reviews } from "./Reviews-DJ7t3leM.js";
-import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-CXHnHuQT.js";
+import { B as jsx, H as company, R as Socials, U as whatsapp, V as jsxs, b as Manifesto, d as PageTitle, f as Picture, i as values, l as Button, n as photos, p as QuoteSection, u as Eyebrow, v as Arrow, z as Fragment } from "../entry-server.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-BKcX_emP.js";
+import { t as Reviews } from "./Reviews-CVU5ZJog.js";
+import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-BdDInLlq.js";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 //#region src/AboutFx.jsx
@@ -242,14 +242,9 @@ function About() {
 			photo: photos("historia")[0],
 			photoAlt: "Hombre junto a una baranda con Medellín y las montañas al fondo",
 			floating: photos("historia").slice(1, 3),
-			tag: "Nuestra casa. Nuestra gente",
-			title: /* @__PURE__ */ jsxs(Fragment, { children: [
-				"Somos del camino.",
-				/* @__PURE__ */ jsx("br", {}),
-				"Somos de ",
-				/* @__PURE__ */ jsx("em", { children: "Medellín" })
-			] }),
-			text: "Nacimos con la intención de recibir bien. Crecemos escuchando a las personas que nos acompañan."
+			tag: "Quiénes somos",
+			title: "Transporte y Turismo Medellín",
+			text: "Una empresa local de transporte turístico y tours privados en Medellín y Antioquia."
 		}),
 		/* @__PURE__ */ jsx(AboutCollage, {
 			items: photos("equipo"),
@@ -258,13 +253,8 @@ function About() {
 		/* @__PURE__ */ jsxs("section", {
 			className: "wrap section history",
 			children: [/* @__PURE__ */ jsxs("div", { children: [
-				/* @__PURE__ */ jsx(Eyebrow, { children: "Una historia en movimiento" }),
-				/* @__PURE__ */ jsxs("h2", { children: [
-					"De un sueño",
-					/* @__PURE__ */ jsx("br", {}),
-					"a muchos ",
-					/* @__PURE__ */ jsx("em", { children: "encuentros" })
-				] }),
+				/* @__PURE__ */ jsx(Eyebrow, { children: "Nuestra historia" }),
+				/* @__PURE__ */ jsx("h2", { children: "Cómo empezamos" }),
 				/* @__PURE__ */ jsx("p", { children: "En 2020 nació la idea. En 2021 comenzaron los primeros traslados con un automóvil. Las conversaciones con los viajeros ayudaron a dar forma a nuestra manera de trabajar." }),
 				/* @__PURE__ */ jsx("p", { children: "Hoy seguimos cuidando lo que nos hizo empezar: hospitalidad, dedicación y orgullo por compartir nuestra tierra." })
 			] }), /* @__PURE__ */ jsx("div", {
@@ -272,7 +262,7 @@ function About() {
 				children: [
 					[
 						"2020",
-						"Imaginar el camino",
+						"Nace la idea",
 						"Una idea que une el amor por Medellín y las ganas de servir."
 					],
 					[
@@ -307,13 +297,8 @@ function About() {
 		/* @__PURE__ */ jsxs("section", {
 			className: "values wrap section",
 			children: [
-				/* @__PURE__ */ jsx(Eyebrow, { children: "Lo que nos mueve" }),
-				/* @__PURE__ */ jsxs("h2", { children: [
-					"Nuestros valores",
-					/* @__PURE__ */ jsx("br", {}),
-					"se viven ",
-					/* @__PURE__ */ jsx("em", { children: "en el trato" })
-				] }),
+				/* @__PURE__ */ jsx(Eyebrow, { children: "Nuestros valores" }),
+				/* @__PURE__ */ jsx("h2", { children: "Cómo atendemos a cada viajero" }),
 				/* @__PURE__ */ jsx("div", {
 					className: "values-grid",
 					children: values.map(([t, d], i) => /* @__PURE__ */ jsxs("article", { children: [
@@ -325,7 +310,7 @@ function About() {
 			]
 		}),
 		/* @__PURE__ */ jsx(Gallery, { tour: {
-			name: "Nuestra historia",
+			name: "T&T Medellín",
 			images: photos("historia")
 		} }),
 		/* @__PURE__ */ jsxs("section", {
@@ -344,14 +329,8 @@ function About() {
 function Services() {
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsx(PageTitle, {
-			tag: "Transporte con atención local",
-			title: /* @__PURE__ */ jsxs(Fragment, { children: [
-				"Tu plan tiene",
-				/* @__PURE__ */ jsx("br", {}),
-				"muchas formas.",
-				/* @__PURE__ */ jsx("br", {}),
-				/* @__PURE__ */ jsx("em", { children: "Nos adaptamos" })
-			] }),
+			tag: "Servicios",
+			title: "Transporte y turismo a tu medida",
 			text: "Recorridos, traslados y movilidad coordinada desde Medellín para viajeros, empresas y aliados."
 		}),
 		/* @__PURE__ */ jsx("section", {
@@ -401,13 +380,8 @@ function Services() {
 function Contact() {
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsx(PageTitle, {
-			tag: "Aquí empieza la conversación",
-			title: /* @__PURE__ */ jsxs(Fragment, { children: [
-				"Tu plan merece",
-				/* @__PURE__ */ jsx("br", {}),
-				"que lo ",
-				/* @__PURE__ */ jsx("em", { children: "escuchemos" })
-			] }),
+			tag: "Contacto",
+			title: "Hablemos de tu viaje",
 			text: "Escríbenos, llámanos o prepara una consulta con los detalles de tu recorrido."
 		}),
 		/* @__PURE__ */ jsxs("section", {
@@ -462,7 +436,7 @@ function QuotePage() {
 	const params = new URLSearchParams(search);
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsx(PageTitle, {
-			tag: "Planeemos el siguiente camino",
+			tag: "Cotizar",
 			title: /* @__PURE__ */ jsxs(Fragment, { children: [
 				"Tu viaje, tus tiempos,",
 				/* @__PURE__ */ jsx("br", {}),
@@ -479,7 +453,7 @@ function QuotePage() {
 }
 function Privacy() {
 	return /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(PageTitle, {
-		tag: "Información clara",
+		tag: "Privacidad",
 		title: /* @__PURE__ */ jsxs(Fragment, { children: [
 			"Tu información,",
 			/* @__PURE__ */ jsx("br", {}),
@@ -502,7 +476,7 @@ function Privacy() {
 				}),
 				". WhatsApp y los sitios externos aplican sus propias políticas al abrirlos."
 			] }),
-			/* @__PURE__ */ jsxs("p", { children: ["Responsable identificado en el sitio de la marca: T&T, NIT 901738550-6. ", /* @__PURE__ */ jsxs(Link, {
+			/* @__PURE__ */ jsxs("p", { children: ["Responsable: Transporte y Turismo Medellín, NIT 901738550-6. ", /* @__PURE__ */ jsxs(Link, {
 				to: "/politica-de-tratamiento-de-datos",
 				children: ["Consultar la política de tratamiento de datos de la empresa", /* @__PURE__ */ jsx(Arrow, {})]
 			})] }),
@@ -512,13 +486,8 @@ function Privacy() {
 }
 function Ratings() {
 	return /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(PageTitle, {
-		tag: "Confianza con fuente",
-		title: /* @__PURE__ */ jsxs(Fragment, { children: [
-			"Lo que cuenta",
-			/* @__PURE__ */ jsx("br", {}),
-			"quien ya ",
-			/* @__PURE__ */ jsx("em", { children: "viajó" })
-		] })
+		tag: "Calificaciones",
+		title: "Opiniones de quienes ya viajaron con nosotros"
 	}), /* @__PURE__ */ jsx(Reviews, { full: true })] });
 }
 //#endregion

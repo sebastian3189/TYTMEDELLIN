@@ -1,4 +1,4 @@
-import { B as jsxs, U as language, V as company, W as t, _ as Arrow, o as rawTours, v as QuoteCopy, z as jsx } from "../entry-server.js";
+import { B as jsx, G as t, H as company, V as jsxs, W as language, o as rawTours, v as Arrow, y as QuoteCopy } from "../entry-server.js";
 import { Link } from "react-router-dom";
 import { startTransition, useEffect, useRef, useState } from "react";
 //#region src/indicativos.json
@@ -1049,7 +1049,7 @@ function buildMessage(v, plan, withType, pais) {
 		exp: "Experiência",
 		date: "Data",
 		people: "Viajantes",
-		pickup: "Ponto de embarque",
+		pickup: "Ponto de saída",
 		tbd: "A combinar",
 		lang: "Idioma",
 		langName: "Português (Brasil)",
@@ -1066,7 +1066,7 @@ function buildMessage(v, plan, withType, pais) {
 		exp: "Experience",
 		date: "Date",
 		people: "Travelers",
-		pickup: "Pickup point",
+		pickup: "Departure point",
 		tbd: "To be arranged",
 		lang: "Language",
 		langName: "English",
@@ -1083,7 +1083,7 @@ function buildMessage(v, plan, withType, pais) {
 		exp: "Experiencia",
 		date: "Fecha",
 		people: "Viajeros",
-		pickup: "Punto de recogida",
+		pickup: "Punto de salida",
 		tbd: "Por acordar",
 		lang: "Idioma",
 		langName: "Español",
@@ -1518,15 +1518,11 @@ function Quote({ context = "Un recorrido a mi medida", mode = "cotizar" }) {
 						}),
 						/* @__PURE__ */ jsxs("label", {
 							htmlFor: "consentimiento",
-							children: [
-								"He leído la ",
-								/* @__PURE__ */ jsx(Link, {
-									to: "/politica-de-tratamiento-de-datos",
-									target: "_blank",
-									children: "política de tratamiento de datos"
-								}),
-								" y autorizo enviar esta solicitud a T&T por WhatsApp."
-							]
+							children: ["Autorizo a Transporte y Turismo Medellín, NIT 901738550-6, a tratar mis datos para responder y cotizar mi solicitud, según la ", /* @__PURE__ */ jsx(Link, {
+								to: "/politica-de-tratamiento-de-datos",
+								target: "_blank",
+								children: "Política de tratamiento de datos"
+							})]
 						}),
 						error("consentimiento")
 					]

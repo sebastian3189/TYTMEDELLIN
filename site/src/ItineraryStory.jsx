@@ -21,8 +21,9 @@ const Pin = () => <svg className="it-pin" viewBox="0 0 24 24" width="16" height=
 function Foto({ stop, eager = false }) {
   const f = fotoItinerario(stop.imagen);
   if (!f) return <div className="it-pending" role="img" aria-label={`${t('Foto pendiente')}: ${t(stop.ubicacion || stop.titulo_corto)}`}><span className="it-pending-ring" aria-hidden="true" /><b>Foto pendiente</b><span>{stop.ubicacion || stop.titulo_corto}</span></div>;
-  return <picture>
-    <source type="image/avif" srcSet={f.avif} sizes={SIZES} />
+  // Foto vertical en marco horizontal: entera (contain) sobre su propio fondo difuminado, sin cortar al sujeto.
+  const vertical = f.width / f.height < 0.95;
+  return <picture className={vertical ? 'pic-fit' : undefined} style={vertical ? { '--ph': `url(${f.src.replace(/-d+.webp$/, '-480.webp')})` } : undefined}>
     <source type="image/webp" srcSet={f.webp} sizes={SIZES} />
     <img src={f.src} width={f.width} height={f.height} alt={stop.alt} loading={eager ? 'eager' : 'lazy'} decoding="async" style={{ objectPosition: stop.foco }} />
   </picture>;

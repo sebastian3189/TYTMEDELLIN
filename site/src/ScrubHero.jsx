@@ -428,9 +428,7 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
         <div ref={stage} className="scrub-stage" data-ui="deck" data-cap="" data-ch="1" data-textos={t.estado}>
           <div ref={media} className="scrub-media">
             <picture className="scrub-poster">
-              <source media={MOBILE_QUERY} type="image/avif" srcSet={`${BASE}/poster-m.avif`} />
               <source media={MOBILE_QUERY} type="image/webp" srcSet={`${BASE}/poster-m.webp`} />
-              <source type="image/avif" srcSet={`${BASE}/poster-1280.avif 1280w, ${BASE}/poster-1600.avif 1600w`} sizes="100vw" />
               <img src={`${BASE}/poster-1600.webp`} srcSet={`${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`} sizes="100vw" width="1600" height="900" alt="Vista de Medellín desde la ladera de la Comuna 13" loading="lazy" decoding="async" />
             </picture>
             {animated && <canvas ref={canvas} className="scrub-canvas" aria-hidden="true" />}

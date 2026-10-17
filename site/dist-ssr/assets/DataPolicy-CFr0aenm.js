@@ -1,4 +1,4 @@
-import { B as jsxs, R as Fragment, U as language, V as company, d as PageTitle, z as jsx } from "../entry-server.js";
+import { B as jsx, H as company, V as jsxs, W as language, d as PageTitle, z as Fragment } from "../entry-server.js";
 //#region src/pages/DataPolicy.jsx
 var SECTIONS = [
 	["responsable", "1. Responsable del tratamiento"],
@@ -54,12 +54,13 @@ function DataPolicy() {
 							}),
 							" y teléfono +57 304 496 1698."
 						] }),
-						/* @__PURE__ */ jsx("p", { children: "NIT 901738550-6. RNT 176384." })
+						/* @__PURE__ */ jsx("p", { children: "NIT 901738550-6. RNT 176384." }),
+						/* @__PURE__ */ jsx("p", { children: /* @__PURE__ */ jsx("strong", { children: "PENDIENTE: responsable de PQR / fecha de vigencia." }) })
 					]
 				}),
 				/* @__PURE__ */ jsxs("section", {
 					id: "datos",
-					children: [/* @__PURE__ */ jsx("h2", { children: "2. Datos que recogemos" }), /* @__PURE__ */ jsx("p", { children: "Únicamente los que nos escribes en los formularios de contacto y cotización: nombre, empresa u organización, correo electrónico, teléfono, tipo de consulta, número de personas, fecha del viaje, los demás detalles del viaje que decidas incluir (por ejemplo, punto de recogida) y el mensaje. No recogemos datos sensibles ni datos de menores de edad." })]
+					children: [/* @__PURE__ */ jsx("h2", { children: "2. Datos que recogemos" }), /* @__PURE__ */ jsx("p", { children: "Únicamente los que nos escribes en los formularios de contacto y cotización: nombre, empresa u organización, correo electrónico, teléfono, tipo de consulta, número de personas, fecha del viaje, los demás detalles del viaje que decidas incluir (por ejemplo, punto de recogida) y el mensaje. No recogemos datos sensibles. Si la solicitud incluye datos de menores de edad (por ejemplo, para la lista de pasajeros), debe suministrarlos su representante legal, y los tratamos solo para prestar el servicio." })]
 				}),
 				/* @__PURE__ */ jsxs("section", {
 					id: "whatsapp",
@@ -108,6 +109,7 @@ function DataPolicy() {
 					children: [
 						/* @__PURE__ */ jsx("h2", { children: "9. Cookies" }),
 						/* @__PURE__ */ jsx("p", { children: "Este sitio no instala cookies de analítica ni publicidad. Usa almacenamiento local para guardar tu decisión de privacidad durante seis meses y ajustes funcionales de accesibilidad; la ayuda de navegación se recuerda solo durante la sesión." }),
+						/* @__PURE__ */ jsx("p", { children: "Inventario de almacenamiento: «tyt-privacy-v1» (tu decisión de privacidad), «tyt-theme» (tema claro u oscuro; opcional, requiere tu aceptación) y «tyt-bienvenida» (sessionStorage; recuerda durante la sesión que ya viste el mensaje de bienvenida; opcional y sujeto a tu consentimiento)." }),
 						/* @__PURE__ */ jsx("p", { children: "Guardar el tema claro u oscuro entre visitas es opcional y requiere tu aceptación. El idioma se determina por la dirección de la página. Puedes configurar o retirar tu consentimiento desde «Cookies y preferencias» en el pie del sitio." })
 					]
 				}),
@@ -176,12 +178,13 @@ function DataPolicyEn() {
 							}),
 							" and telephone +57 304 496 1698."
 						] }),
-						/* @__PURE__ */ jsx("p", { children: "NIT 901738550-6. RNT 176384." })
+						/* @__PURE__ */ jsx("p", { children: "NIT 901738550-6. RNT 176384." }),
+						/* @__PURE__ */ jsx("p", { children: /* @__PURE__ */ jsx("strong", { children: "PENDING: PQR contact person / effective date." }) })
 					]
 				}),
 				/* @__PURE__ */ jsxs("section", {
 					id: "data",
-					children: [/* @__PURE__ */ jsx("h2", { children: "2. Data we collect" }), /* @__PURE__ */ jsx("p", { children: "Only what you write to us in the contact and quote forms: name, company or organization, email address, telephone, type of enquiry, number of people, travel date, any other trip details you choose to include (for example, pickup point) and the message. We do not collect sensitive data or data of minors." })]
+					children: [/* @__PURE__ */ jsx("h2", { children: "2. Data we collect" }), /* @__PURE__ */ jsx("p", { children: "Only what you write to us in the contact and quote forms: name, company or organization, email address, telephone, type of enquiry, number of people, travel date, any other trip details you choose to include (for example, pickup point) and the message. We do not collect sensitive data. If a request includes data of minors (for example, for the passenger list), it must be provided by their legal representative, and we process it only to provide the service." })]
 				}),
 				/* @__PURE__ */ jsxs("section", {
 					id: "whatsapp",
@@ -230,6 +233,7 @@ function DataPolicyEn() {
 					children: [
 						/* @__PURE__ */ jsx("h2", { children: "9. Cookies" }),
 						/* @__PURE__ */ jsx("p", { children: "This site does not install analytics or advertising cookies. It uses local storage to remember your privacy choice for six months and functional accessibility settings; navigation guidance is remembered only during the session." }),
+						/* @__PURE__ */ jsx("p", { children: "Storage inventory: “tyt-privacy-v1” (your privacy choice), “tyt-theme” (light or dark theme; optional, requires your acceptance) and “tyt-bienvenida” (sessionStorage; remembers during the session that you have seen the welcome message; optional and subject to your consent)." }),
 						/* @__PURE__ */ jsx("p", { children: "Saving your light or dark theme between visits is optional and requires your acceptance. The language is determined by the page address. You can configure or withdraw consent through “Cookies and preferences” in the footer." })
 					]
 				}),

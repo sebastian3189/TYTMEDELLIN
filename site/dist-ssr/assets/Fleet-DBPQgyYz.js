@@ -1,17 +1,12 @@
-import { B as jsxs, F as Icon, R as Fragment, a as vehicles, d as PageTitle, f as Picture, l as Button, u as Eyebrow, z as jsx } from "../entry-server.js";
-import { i as FAQ_FLEET, l as Faq } from "./faq-data-CXHnHuQT.js";
+import { B as jsx, I as Icon, V as jsxs, a as vehicles, d as PageTitle, f as Picture, l as Button, u as Eyebrow, z as Fragment } from "../entry-server.js";
+import { i as FAQ_FLEET, l as Faq } from "./faq-data-BdDInLlq.js";
 //#region src/pages/Fleet.jsx
 function Fleet() {
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsx(PageTitle, {
-			tag: "La comodidad también es parte del viaje",
-			title: /* @__PURE__ */ jsxs(Fragment, { children: [
-				"El espacio justo.",
-				/* @__PURE__ */ jsx("br", {}),
-				"El camino ",
-				/* @__PURE__ */ jsx("em", { children: "compartido" })
-			] }),
-			text: "Elige la categoría que se ajusta a tu grupo. Confirmamos unidad, equipaje y equipamiento al cotizar."
+			tag: "Nuestra flota",
+			title: "Vehículos para cada tipo de viaje",
+			text: "Elige la categoría según el tamaño de tu grupo y tu equipaje. Confirmamos la unidad al cotizar."
 		}),
 		/* @__PURE__ */ jsx("section", {
 			className: "wrap fleet-grid",
@@ -64,12 +59,7 @@ function Fleet() {
 			className: "wrap section",
 			children: [
 				/* @__PURE__ */ jsx(Eyebrow, { children: "Antes de elegir" }),
-				/* @__PURE__ */ jsxs("h2", { children: [
-					"Personas, maletas",
-					/* @__PURE__ */ jsx("br", {}),
-					"y todo lo que ",
-					/* @__PURE__ */ jsx("em", { children: "importa" })
-				] }),
+				/* @__PURE__ */ jsx("h2", { children: "Qué tener en cuenta al elegir" }),
 				/* @__PURE__ */ jsx("div", {
 					className: "three-columns",
 					children: [

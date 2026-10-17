@@ -202,11 +202,11 @@ def main():
             base = f0.convert('RGB')
             for width in (1280, 1600):
                 img = base.resize((width, round(width * 9 / 16)), Image.Resampling.LANCZOS)
-                for ext, fmt, q in (('avif', 'AVIF', 60), ('webp', 'WEBP', 78)):
+                for ext, fmt, q in (('webp', 'WEBP', 78),):
                     s = save(img, OUT / f'poster-{width}.{ext}', q, fmt)
                     assert s <= POSTER_MAX, f'poster-{width}.{ext} {s} B'
             mimg = base.crop(MOBILE_CROP).resize(POSTER_M, Image.Resampling.LANCZOS)
-            for ext, fmt, q in (('avif', 'AVIF', 60), ('webp', 'WEBP', 78)):
+            for ext, fmt, q in (('webp', 'WEBP', 78),):
                 s = save(mimg, OUT / f'poster-m.{ext}', q, fmt)
                 assert s <= POSTER_MAX, f'poster-m.{ext} {s} B'
         # El LCP real es el póster servido: 1600 AVIF (escritorio) o móvil AVIF; se contabiliza el mayor formato (WebP).

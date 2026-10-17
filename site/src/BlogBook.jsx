@@ -213,7 +213,7 @@ export default function BlogBook() {
   const fw = turn?.forward;
   return (
     <section ref={rootRef} className="blog-book wrap section" aria-labelledby="blog-book-title">
-      <div className="section-title"><div><p className="eyebrow">Cuaderno de viaje</p><h2 id="blog-book-title">Ideas para viajar<br />con más <em>sentido</em></h2></div><Link className="text-link" to="/blog">Todas las notas<Arrow/></Link></div>
+      <div className="section-title"><div><p className="eyebrow">Cuaderno de viaje</p><h2 id="blog-book-title">Ideas y consejos para tu viaje</h2></div><Link className="text-link" to="/blog">Todas las notas<Arrow/></Link></div>
       <div className="ft ft-book" data-turning={Boolean(turn)} data-mobile={mobile || undefined}>
         <div className="ft-main" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
           <div className="bk-spread">

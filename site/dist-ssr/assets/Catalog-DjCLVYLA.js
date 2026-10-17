@@ -1,6 +1,6 @@
-import { B as jsxs, R as Fragment, S as useFlipGrid, h as TourCard, r as tours, x as Trust, z as jsx } from "../entry-server.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-BONCV8ov.js";
-import { t as CatalogHero } from "./Hero-CzzBejRf.js";
+import { B as jsx, C as useFlipGrid, S as Trust, V as jsxs, h as TourCard, r as tours, z as Fragment } from "../entry-server.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-C_3Ua-d5.js";
+import { t as CatalogHero } from "./Hero-qQQeN_TB.js";
 import { useRef, useState } from "react";
 //#region src/pages/Catalog.jsx
 function Catalog() {
@@ -52,7 +52,7 @@ function Catalog() {
 				!list.length && /* @__PURE__ */ jsxs("div", {
 					className: "empty",
 					children: [
-						/* @__PURE__ */ jsx("h2", { children: "Probemos con otro camino" }),
+						/* @__PURE__ */ jsx("h2", { children: "No hay resultados" }),
 						/* @__PURE__ */ jsx("p", { children: "No encontramos experiencias con ese filtro." }),
 						/* @__PURE__ */ jsx("button", {
 							className: "button",
