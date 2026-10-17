@@ -1161,7 +1161,7 @@ function Marquee({ text }) {
 function Manifesto({ words }) {
 	return /* @__PURE__ */ jsx$1("section", {
 		className: "manifesto wrap",
-		"aria-label": words.join(" "),
+		"aria-label": words.map((w) => t(w)).join(" "),
 		children: words.map((word) => /* @__PURE__ */ jsx$1(EditorialMotion, { children: /* @__PURE__ */ jsx$1("p", { children: word }) }, word))
 	});
 }
