@@ -31,7 +31,7 @@ function useHeroPlayback(ref, light, enabled) {
       if (entry.isIntersecting) safePlay(el); else el.pause();
     });
     observer.observe(el);
-    return () => { observer.disconnect(); el.removeEventListener('play', sync); el.removeEventListener('pause', sync); };
+    return () => { observer.disconnect(); el.removeEventListener('play', sync); el.removeEventListener('pause', sync); el.pause(); };
   }, [ref, light, enabled]);
   const toggle = () => {
     const el = ref.current; if (!el) return;

@@ -272,7 +272,7 @@ export default function TravelHand() {
   const header = (
     <div className="th-head">
       <p className="eyebrow">{t.eleccion}{animated && <span className="th-idx" aria-hidden="true">{two(shown + 1)} / {two(N)}</span>}</p>
-      <h2 id="th-titulo">Un lugar para cada{' '}<br /><em>forma de viajar.</em></h2>
+      <h2 id="th-titulo">Un lugar para cada{' '}<br /><em>forma de viajar</em></h2>
     </div>
   );
 

@@ -33,13 +33,21 @@ function StoryVideo({ v }) {
   const light = useLightMotion(), ref = useRef(null), manual = useRef(false), [playing, setPlaying] = useState(false), [sound, setSound] = useState(false);
   useEffect(() => {
     const el = ref.current; if (!v.src || !el) return undefined;
-    prepVideo(el, true);
+    prepVideo(el, true); if (!el.getAttribute('src')) el.src = v.src; // StrictMode: la limpieza anterior soltó el archivo
+    const silence = () => { el.muted = true; el.defaultMuted = true; el.setAttribute('muted', ''); setSound(false); };
     const sync = () => setPlaying(!el.paused); el.addEventListener('play', sync); el.addEventListener('pause', sync);
-    const io = new IntersectionObserver(([e]) => { if (light || manual.current) return; if (e.isIntersecting) safePlay(el); else el.pause(); }, { threshold: 0.5 });
+    const vol = () => setSound(!el.muted); el.addEventListener('volumechange', vol);
+    // Al salir de vista o al ocultar la pestaña: pausa Y silencio (el sonido solo vuelve con un toque explícito). Al entrar, solo reanuda (siempre en silencio) si la persona no lo pausó.
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { if (!light && !manual.current) { if (!el.muted) silence(); safePlay(el); } } else { el.pause(); silence(); } }, { threshold: 0.5 });
     io.observe(el);
-    return () => { io.disconnect(); el.removeEventListener('play', sync); el.removeEventListener('pause', sync); };
+    const hide = () => { if (document.hidden) { el.pause(); silence(); } }; document.addEventListener('visibilitychange', hide);
+    return () => {
+      io.disconnect(); document.removeEventListener('visibilitychange', hide); el.removeEventListener('play', sync); el.removeEventListener('pause', sync); el.removeEventListener('volumechange', vol);
+      // Un <video> retirado del DOM sigue sonando hasta que se libera: se detiene y se suelta (cambio de idioma, navegación, StrictMode).
+      el.pause(); el.muted = true; el.removeAttribute('src'); el.load();
+    };
   }, [v.src, light]);
-  const toggle = () => { const el = ref.current; manual.current = true; if (el.paused) safePlay(el); else el.pause(); };
+  const toggle = () => { const el = ref.current; if (el.paused) { manual.current = false; safePlay(el); } else { manual.current = true; el.pause(); el.muted = true; el.setAttribute('muted', ''); setSound(false); } };
   // Sonido (el reel conserva su audio original por decisión del usuario): arranca SIEMPRE en silencio (requisito de iOS/Chrome) y solo suena tras tocar este botón.
   // Si el navegador rechaza reproducir con sonido, vuelve a silencio y sigue reproduciendo.
   const toggleSound = async () => {
@@ -69,7 +77,7 @@ export function HomeStory() {
       <StoryVideo v={v} />
       <div className="story-copy">
         <Eyebrow>Más que llegar</Eyebrow>
-        <h2 id="historia-titulo">Hay una Medellín que se mira.<br />Y otra que se <em>vive.</em></h2>
+        <h2 id="historia-titulo">Hay una Medellín que se mira<br />Y otra que se <em>vive</em></h2>
         <p>La encuentras en una conversación, en el color de una calle y en la curva que abre un nuevo paisaje. Queremos acompañarte a descubrirla con el cuidado de un equipo local.</p>
         <Link className="button secondary" to="/nosotros">Conoce al equipo<Arrow /></Link>
       </div>
@@ -82,7 +90,7 @@ export function HomeClose() {
   return (
     <section className="home-close section" aria-labelledby="cierre-titulo">
       <div className="wrap">
-        <h2 id="cierre-titulo">Tu viaje, tus tiempos,<br />tu <em>experiencia.</em></h2>
+        <h2 id="cierre-titulo">Tu viaje, tus tiempos,<br />tu <em>experiencia</em></h2>
         <p>{f.subtitulo}</p>
         <div className="close-actions">
           <Link className="button" to="/cotizar">Planeemos tu viaje<Arrow /></Link>

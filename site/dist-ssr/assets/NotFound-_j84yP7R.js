@@ -9,7 +9,7 @@ function NotFound() {
 			"Este recorrido",
 			/* @__PURE__ */ jsx("br", {}),
 			"no está ",
-			/* @__PURE__ */ jsx("em", { children: "aquí." })
+			/* @__PURE__ */ jsx("em", { children: "aquí" })
 		] })
 	}), /* @__PURE__ */ jsxs("section", {
 		className: "wrap section",

@@ -1,6 +1,6 @@
 import { B as jsxs, H as whatsapp, L as Socials, R as Fragment, V as company, _ as Arrow, d as PageTitle, f as Picture, i as values, l as Button, n as photos, p as QuoteSection, u as Eyebrow, y as Manifesto, z as jsx } from "../entry-server.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-D5J1cQPt.js";
-import { t as Reviews } from "./Reviews-BiAb3-Ib.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-0hQrOj7B.js";
+import { t as Reviews } from "./Reviews-DJ7t3leM.js";
 import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-CXHnHuQT.js";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -242,12 +242,12 @@ function About() {
 			photo: photos("historia")[0],
 			photoAlt: "Hombre junto a una baranda con Medellín y las montañas al fondo",
 			floating: photos("historia").slice(1, 3),
-			tag: "Nuestra casa. Nuestra gente.",
+			tag: "Nuestra casa. Nuestra gente",
 			title: /* @__PURE__ */ jsxs(Fragment, { children: [
 				"Somos del camino.",
 				/* @__PURE__ */ jsx("br", {}),
 				"Somos de ",
-				/* @__PURE__ */ jsx("em", { children: "Medellín." })
+				/* @__PURE__ */ jsx("em", { children: "Medellín" })
 			] }),
 			text: "Nacimos con la intención de recibir bien. Crecemos escuchando a las personas que nos acompañan."
 		}),
@@ -263,7 +263,7 @@ function About() {
 					"De un sueño",
 					/* @__PURE__ */ jsx("br", {}),
 					"a muchos ",
-					/* @__PURE__ */ jsx("em", { children: "encuentros." })
+					/* @__PURE__ */ jsx("em", { children: "encuentros" })
 				] }),
 				/* @__PURE__ */ jsx("p", { children: "En 2020 nació la idea. En 2021 comenzaron los primeros traslados con un automóvil. Las conversaciones con los viajeros ayudaron a dar forma a nuestra manera de trabajar." }),
 				/* @__PURE__ */ jsx("p", { children: "Hoy seguimos cuidando lo que nos hizo empezar: hospitalidad, dedicación y orgullo por compartir nuestra tierra." })
@@ -298,11 +298,11 @@ function About() {
 			})]
 		}),
 		/* @__PURE__ */ jsx(Manifesto, { words: [
-			"Confianza.",
-			"Calidad.",
-			"Cercanía.",
-			"Hospitalidad.",
-			"Autenticidad."
+			"Confianza",
+			"Calidad",
+			"Cercanía",
+			"Hospitalidad",
+			"Autenticidad"
 		] }),
 		/* @__PURE__ */ jsxs("section", {
 			className: "values wrap section",
@@ -312,7 +312,7 @@ function About() {
 					"Nuestros valores",
 					/* @__PURE__ */ jsx("br", {}),
 					"se viven ",
-					/* @__PURE__ */ jsx("em", { children: "en el trato." })
+					/* @__PURE__ */ jsx("em", { children: "en el trato" })
 				] }),
 				/* @__PURE__ */ jsx("div", {
 					className: "values-grid",
@@ -350,7 +350,7 @@ function Services() {
 				/* @__PURE__ */ jsx("br", {}),
 				"muchas formas.",
 				/* @__PURE__ */ jsx("br", {}),
-				/* @__PURE__ */ jsx("em", { children: "Nos adaptamos." })
+				/* @__PURE__ */ jsx("em", { children: "Nos adaptamos" })
 			] }),
 			text: "Recorridos, traslados y movilidad coordinada desde Medellín para viajeros, empresas y aliados."
 		}),
@@ -391,9 +391,9 @@ function Services() {
 			] }, title))
 		}),
 		/* @__PURE__ */ jsx(Manifesto, { words: [
-			"Experiencias a medida.",
-			"Vehículo privado.",
-			"Atención personalizada."
+			"Experiencias a medida",
+			"Vehículo privado",
+			"Atención personalizada"
 		] }),
 		/* @__PURE__ */ jsx(Reviews, {})
 	] });
@@ -406,7 +406,7 @@ function Contact() {
 				"Tu plan merece",
 				/* @__PURE__ */ jsx("br", {}),
 				"que lo ",
-				/* @__PURE__ */ jsx("em", { children: "escuchemos." })
+				/* @__PURE__ */ jsx("em", { children: "escuchemos" })
 			] }),
 			text: "Escríbenos, llámanos o prepara una consulta con los detalles de tu recorrido."
 		}),
@@ -467,7 +467,7 @@ function QuotePage() {
 				"Tu viaje, tus tiempos,",
 				/* @__PURE__ */ jsx("br", {}),
 				"tu ",
-				/* @__PURE__ */ jsx("em", { children: "experiencia." })
+				/* @__PURE__ */ jsx("em", { children: "experiencia" })
 			] })
 		}),
 		/* @__PURE__ */ jsx(QuoteSection, { context: params.get("vehiculo") || params.get("servicio") || "Un recorrido a mi medida" }),
@@ -484,7 +484,7 @@ function Privacy() {
 			"Tu información,",
 			/* @__PURE__ */ jsx("br", {}),
 			"bajo tu ",
-			/* @__PURE__ */ jsx("em", { children: "control." })
+			/* @__PURE__ */ jsx("em", { children: "control" })
 		] })
 	}), /* @__PURE__ */ jsxs("article", {
 		className: "article-body",
@@ -517,7 +517,7 @@ function Ratings() {
 			"Lo que cuenta",
 			/* @__PURE__ */ jsx("br", {}),
 			"quien ya ",
-			/* @__PURE__ */ jsx("em", { children: "viajó." })
+			/* @__PURE__ */ jsx("em", { children: "viajó" })
 		] })
 	}), /* @__PURE__ */ jsx(Reviews, { full: true })] });
 }

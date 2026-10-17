@@ -21,7 +21,7 @@ var reviews_default = [
 	{
 		"nombre": "Fernando Espino",
 		"local": false,
-		"texto": "Perfecto con excelente, el city tour comuna 13 excelente servicio, por parte del conductor (Francisco) y el guía (Brian), sin palabras, que Chimba Medellín, ahhh no olviden pedir la bandeja paisa al la hora del almuerzo brutal!!!"
+		"texto": "Perfecto con excelente, el city tour comuna 13 excelente servicio, por parte del conductor (Francisco) y el guía (Brian), sin palabras, que Chimba Medellín, ahhh no olviden pedir la bandeja paisa a la hora del almuerzo brutal!!!"
 	},
 	{
 		"nombre": "Clara Martinez",
@@ -126,7 +126,7 @@ function Card({ r }) {
 			}),
 			/* @__PURE__ */ jsxs("footer", {
 				className: "g-author",
-				children: [/* @__PURE__ */ jsx("strong", { children: r.nombre }), r.local && /* @__PURE__ */ jsx("span", { children: "Guía Local" })]
+				children: [/* @__PURE__ */ jsx("strong", { children: r.nombre }), r.local && /* @__PURE__ */ jsx("span", { children: "Guía local" })]
 			})
 		]
 	});

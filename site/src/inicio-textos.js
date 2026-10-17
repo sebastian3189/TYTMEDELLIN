@@ -12,7 +12,7 @@
  */
 export const inicioTextos = {
   estado: 'APROBADO — concepto H1, copy del inicio (2026-10-12)',
-  titular: ['Medellín,', 'a otro nivel.'], // 2026-10-12: pedido del usuario. PENDIENTE: el lema «Experiencias a otro nivel» repite «otro nivel» en la misma pantalla.
+  titular: ['Medellín,', 'a otro nivel'], // 2026-10-12: pedido del usuario. PENDIENTE: el lema «Experiencias a otro nivel» repite «otro nivel» en la misma pantalla.
   lema: 'Experiencias a otro nivel',
   confianza: 'Tours 100% privados · Guía-conductor exclusivo · Horarios flexibles',
   eleccion: 'Elige tu próximo recuerdo', // eyebrow existente del inicio
@@ -20,8 +20,8 @@ export const inicioTextos = {
   fases: {
     c1: {
       rotulo: 'Medellín',
-      titular: 'No solo visites Medellín. Vívela.', // aprobado 2026-10-12 (una vez por página)
-      subtitulo: 'Una mirada al valle desde la ladera.',
+      titular: 'No solo visites Medellín. Vívela', // aprobado 2026-10-12 (una vez por página)
+      subtitulo: 'Una mirada al valle desde la ladera',
     },
     c2: {
       rotulo: 'Plaza Botero',
@@ -35,24 +35,24 @@ export const inicioTextos = {
     },
   },
   retiradas: {
-    c3: { rotulo: 'Metrocable', titular: 'Una ciudad que vuelve a dibujarse.', subtitulo: 'El Metrocable regala otra mirada de la ciudad.' },
+    c3: { rotulo: 'Metrocable', titular: 'Una ciudad que vuelve a dibujarse', subtitulo: 'El Metrocable regala otra mirada de la ciudad.' },
     c4: { rotulo: 'Comuna 13', titular: 'El color cuenta una historia', subtitulo: 'Arte urbano y escaleras eléctricas acompañan el relato del barrio.' },
-    c5: { rotulo: 'Guatapé', titular: 'El horizonte tiene otro color.', subtitulo: 'Agua entre montañas y un pueblo que se cuenta en sus zócalos.' },
+    c5: { rotulo: 'Guatapé', titular: 'El horizonte tiene otro color', subtitulo: 'Agua entre montañas y un pueblo que se cuenta en sus zócalos.' },
   },
   // Orden = orden de `tours` en content.js (12 experiencias).
   cartas: {
-    'city-tour-comuna-13': { emocion: 'Descubre', frase: 'plazas, murales e historias de Medellín.', lugar: 'COMUNA 13' },
-    'guatape-piedra-del-penol': { emocion: 'Explora', frase: 'agua entre montañas y zócalos de color.', lugar: 'GUATAPÉ · PIEDRA DEL PEÑOL' },
-    'tour-nocturno-medellin': { emocion: 'Siente', frase: 'el valle cuando enciende sus luces.', lugar: 'MEDELLÍN' },
-    'vuelta-a-oriente': { emocion: 'Conecta', frase: 'con pueblos y plazas, sin carreras.', lugar: 'VUELTA A ORIENTE' },
-    'tour-del-cafe-medellin': { emocion: 'Vive', frase: 'el oficio detrás de cada taza.', lugar: 'TOUR DEL CAFÉ' },
-    'hacienda-napoles': { emocion: 'Disfruta', frase: 'un día en familia, con transporte coordinado.', lugar: 'HACIENDA NÁPOLES' },
-    'salto-del-buey': { emocion: 'Sorpréndete', frase: 'una cascada al final del sendero.', lugar: 'SALTO DEL BUEY' },
-    'santa-fe-de-antioquia': { emocion: 'Recuerda', frase: 'calles coloniales y el Puente de Occidente.', lugar: 'SANTA FE DE ANTIOQUIA' },
-    'jardin-antioquia': { emocion: 'Enamórate', frase: 'fachadas de color y plaza sin prisa.', lugar: 'JARDÍN' },
-    'tour-de-compras': { emocion: 'Descubre', frase: 'El Hueco, outlets y tiendas locales.', lugar: 'TOUR DE COMPRAS' },
-    'tour-miradores': { emocion: 'Inspírate', frase: 'el valle cambia con la luz.', lugar: 'TOUR MIRADORES' },
-    'traslados-aeropuerto-jmc': { emocion: 'Conecta', frase: 'del aeropuerto a tu alojamiento, coordinado.', lugar: 'TRASLADOS JMC' },
+    'city-tour-comuna-13': { emocion: 'Descubre', frase: 'plazas, murales e historias de Medellín', lugar: 'COMUNA 13' },
+    'guatape-piedra-del-penol': { emocion: 'Explora', frase: 'agua entre montañas y zócalos de color', lugar: 'GUATAPÉ · PIEDRA DEL PEÑOL' },
+    'tour-nocturno-medellin': { emocion: 'Siente', frase: 'el valle cuando enciende sus luces', lugar: 'MEDELLÍN' },
+    'vuelta-a-oriente': { emocion: 'Conecta', frase: 'con pueblos y plazas, sin carreras', lugar: 'VUELTA A ORIENTE' },
+    'tour-del-cafe-medellin': { emocion: 'Vive', frase: 'el oficio detrás de cada taza', lugar: 'TOUR DEL CAFÉ' },
+    'hacienda-napoles': { emocion: 'Disfruta', frase: 'un día en familia, con transporte coordinado', lugar: 'HACIENDA NÁPOLES' },
+    'salto-del-buey': { emocion: 'Sorpréndete', frase: 'una cascada al final del sendero', lugar: 'SALTO DEL BUEY' },
+    'santa-fe-de-antioquia': { emocion: 'Recuerda', frase: 'calles coloniales y el Puente de Occidente', lugar: 'SANTA FE DE ANTIOQUIA' },
+    'jardin-antioquia': { emocion: 'Enamórate', frase: 'fachadas de color y plaza sin prisa', lugar: 'JARDÍN' },
+    'tour-de-compras': { emocion: 'Descubre', frase: 'El Hueco, outlets y tiendas locales', lugar: 'TOUR DE COMPRAS' },
+    'tour-miradores': { emocion: 'Inspírate', frase: 'el valle cambia con la luz', lugar: 'TOUR DE MIRADORES' },
+    'traslados-aeropuerto-jmc': { emocion: 'Conecta', frase: 'del aeropuerto a tu alojamiento, coordinado', lugar: 'TRASLADOS JMC' },
   },
 };
 

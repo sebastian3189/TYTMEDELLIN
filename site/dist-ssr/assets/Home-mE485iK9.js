@@ -1,7 +1,7 @@
 import { A as textoFase, B as jsxs, C as useLightMotion, F as Icon, H as whatsapp, I as SocialIcon, N as PlayIcon, O as CHAPTERS, P as SoundIcon, R as Fragment, U as language, W as t, _ as Arrow, c as Logo, f as Picture, g as GoogleBadgeStatic, k as inicioTextos, l as Button, n as photos, r as tours, t as articles, u as Eyebrow, w as useMedia, z as jsx } from "../entry-server.js";
 import { n as useGlassPill, t as GlassPill } from "./glass-BONCV8ov.js";
-import { a as inicioVideos, c as safePlay, i as tourEntry, n as HeroBlock, o as instagram, s as prepVideo } from "./Hero-CwPycoWY.js";
-import { t as Reviews } from "./Reviews-BiAb3-Ib.js";
+import { a as inicioVideos, c as safePlay, i as tourEntry, n as HeroBlock, o as instagram, s as prepVideo } from "./Hero-CzzBejRf.js";
+import { t as Reviews } from "./Reviews-DJ7t3leM.js";
 import { a as FAQ_HOME, l as Faq } from "./faq-data-CXHnHuQT.js";
 import { a as smooth$1, r as placePhotos } from "./mobile-motion-o2zoinXe.js";
 import { Link } from "react-router-dom";
@@ -1859,7 +1859,7 @@ function TravelHand() {
 				"Un lugar para cada",
 				" ",
 				/* @__PURE__ */ jsx("br", {}),
-				/* @__PURE__ */ jsx("em", { children: "forma de viajar." })
+				/* @__PURE__ */ jsx("em", { children: "forma de viajar" })
 			]
 		})]
 	});
@@ -2655,7 +2655,7 @@ function BlogBook() {
 					"Ideas para viajar",
 					/* @__PURE__ */ jsx("br", {}),
 					"con más ",
-					/* @__PURE__ */ jsx("em", { children: "sentido." })
+					/* @__PURE__ */ jsx("em", { children: "sentido" })
 				]
 			})] }), /* @__PURE__ */ jsxs(Link, {
 				className: "text-link",
@@ -2818,52 +2818,52 @@ function BlogBook() {
 var DIFERENTES = [
 	{
 		icon: "planeLanding",
-		t: "Monitoreamos tu vuelo.",
+		t: "Monitoreamos tu vuelo",
 		d: "Seguimos el estado de tu vuelo hasta su aterrizaje en Medellín para coordinar tu recogida y estar preparados ante posibles cambios de horario."
 	},
 	{
 		icon: "carFront",
-		t: "Vehículos para tu recorrido.",
+		t: "Vehículos para tu recorrido",
 		d: "Revisamos contigo la categoría, la capacidad y el equipaje para proponer el vehículo de tu servicio. La unidad y su disponibilidad se confirman al cotizar."
 	},
 	{
 		icon: "users",
-		t: "Un equipo que responde por ti.",
+		t: "Un equipo que responde por ti",
 		d: "Coordinamos el transporte, las paradas y el acompañamiento de tu recorrido. Antes de contratar, revisamos contigo los servicios incluidos en la propuesta."
 	},
 	{
 		icon: "droplet",
-		t: "Los detalles también cuentan.",
+		t: "Los detalles también cuentan",
 		d: "Consulta la hidratación incluida en tu experiencia. Antes de salir, revisa con el equipo qué llevar según el recorrido y las necesidades de tu grupo."
 	},
 	{
 		icon: "globe",
-		t: "Experiencias 100 % privadas.",
+		t: "Experiencias 100% privadas",
 		d: "Nuestra propuesta son tours privados para ti y tus acompañantes. Confirmamos el vehículo, el acompañamiento y las condiciones de cada recorrido al cotizar."
 	},
 	{
 		icon: "clock",
-		t: "Flexibilidad en tus horarios.",
+		t: "Flexibilidad en tus horarios",
 		d: "Cuéntanos tus intereses y el tiempo que tienes. Acordamos los horarios según el recorrido, las condiciones operativas y lo que necesitas."
 	},
 	{
 		icon: "camera",
-		t: "Recuerdos para llevar contigo.",
+		t: "Recuerdos para llevar contigo",
 		d: "Consulta las fotografías y los videos incluidos en tu recorrido. La propuesta detalla estos servicios para que sepas qué esperar antes de salir."
 	},
 	{
 		icon: "shieldCheck",
-		t: "Seguridad y respaldo legal.",
+		t: "Seguridad y respaldo legal",
 		d: "Somos una empresa legalmente constituida, con Registro Nacional de Turismo (RNT 176384). Operamos con vehículos habilitados y las coberturas y pólizas aplicables a nuestros servicios."
 	},
 	{
 		icon: "messageCircle",
-		t: "Conversemos por WhatsApp.",
+		t: "Conversemos por WhatsApp",
 		d: "Escríbenos para organizar tu viaje o consultar sobre tu servicio. La operación de transporte las 24 horas requiere reserva previa; la asesoría depende de la disponibilidad del equipo."
 	},
 	{
 		icon: "heart",
-		t: "Atención desde el primer contacto.",
+		t: "Atención desde el primer contacto",
 		d: "No solo organizamos recorridos. Escuchamos tus necesidades, te asesoramos y diseñamos experiencias que se ajustan a lo que realmente buscas."
 	}
 ];
@@ -3143,7 +3143,7 @@ function Different() {
 								/* @__PURE__ */ jsx("span", {
 									className: "df-c1",
 									children: /* @__PURE__ */ jsx(Words, {
-										text: "No es solamente a dónde te llevamos.",
+										text: "No es solamente a dónde te llevamos",
 										step: 40
 									})
 								}),
@@ -3217,26 +3217,61 @@ function StoryVideo({ v }) {
 		const el = ref.current;
 		if (!v.src || !el) return void 0;
 		prepVideo(el, true);
+		if (!el.getAttribute("src")) el.src = v.src;
+		const silence = () => {
+			el.muted = true;
+			el.defaultMuted = true;
+			el.setAttribute("muted", "");
+			setSound(false);
+		};
 		const sync = () => setPlaying(!el.paused);
 		el.addEventListener("play", sync);
 		el.addEventListener("pause", sync);
+		const vol = () => setSound(!el.muted);
+		el.addEventListener("volumechange", vol);
 		const io = new IntersectionObserver(([e]) => {
-			if (light || manual.current) return;
-			if (e.isIntersecting) safePlay(el);
-			else el.pause();
+			if (e.isIntersecting) {
+				if (!light && !manual.current) {
+					if (!el.muted) silence();
+					safePlay(el);
+				}
+			} else {
+				el.pause();
+				silence();
+			}
 		}, { threshold: .5 });
 		io.observe(el);
+		const hide = () => {
+			if (document.hidden) {
+				el.pause();
+				silence();
+			}
+		};
+		document.addEventListener("visibilitychange", hide);
 		return () => {
 			io.disconnect();
+			document.removeEventListener("visibilitychange", hide);
 			el.removeEventListener("play", sync);
 			el.removeEventListener("pause", sync);
+			el.removeEventListener("volumechange", vol);
+			el.pause();
+			el.muted = true;
+			el.removeAttribute("src");
+			el.load();
 		};
 	}, [v.src, light]);
 	const toggle = () => {
 		const el = ref.current;
-		manual.current = true;
-		if (el.paused) safePlay(el);
-		else el.pause();
+		if (el.paused) {
+			manual.current = false;
+			safePlay(el);
+		} else {
+			manual.current = true;
+			el.pause();
+			el.muted = true;
+			el.setAttribute("muted", "");
+			setSound(false);
+		}
 	};
 	const toggleSound = async () => {
 		const el = ref.current;
@@ -3329,10 +3364,10 @@ function HomeStory() {
 				/* @__PURE__ */ jsxs("h2", {
 					id: "historia-titulo",
 					children: [
-						"Hay una Medellín que se mira.",
+						"Hay una Medellín que se mira",
 						/* @__PURE__ */ jsx("br", {}),
 						"Y otra que se ",
-						/* @__PURE__ */ jsx("em", { children: "vive." })
+						/* @__PURE__ */ jsx("em", { children: "vive" })
 					]
 				}),
 				/* @__PURE__ */ jsx("p", { children: "La encuentras en una conversación, en el color de una calle y en la curva que abre un nuevo paisaje. Queremos acompañarte a descubrirla con el cuidado de un equipo local." }),
@@ -3359,7 +3394,7 @@ function HomeClose() {
 						"Tu viaje, tus tiempos,",
 						/* @__PURE__ */ jsx("br", {}),
 						"tu ",
-						/* @__PURE__ */ jsx("em", { children: "experiencia." })
+						/* @__PURE__ */ jsx("em", { children: "experiencia" })
 					]
 				}),
 				/* @__PURE__ */ jsx("p", { children: f.subtitulo }),
@@ -3513,7 +3548,7 @@ function Home() {
 					"Del primer traslado",
 					/* @__PURE__ */ jsx("br", {}),
 					"al último ",
-					/* @__PURE__ */ jsx("em", { children: "recuerdo." })
+					/* @__PURE__ */ jsx("em", { children: "recuerdo" })
 				] }),
 				/* @__PURE__ */ jsx("div", {
 					className: "service-links",
@@ -3557,7 +3592,7 @@ function Home() {
 					"Personas que",
 					/* @__PURE__ */ jsx("br", {}),
 					"mueven ",
-					/* @__PURE__ */ jsx("em", { children: "personas." })
+					/* @__PURE__ */ jsx("em", { children: "personas" })
 				] }),
 				/* @__PURE__ */ jsx("p", { children: "Desde los primeros traslados, aprendimos a escuchar. Esa cercanía sigue guiando nuestra forma de recibir y acompañar." }),
 				/* @__PURE__ */ jsx(Button, {

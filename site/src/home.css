@@ -131,3 +131,4 @@ html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .socials a{col
 .home-hero[data-video="on"] .hero-shade{background:radial-gradient(ellipse 85% 70% at 50% 54%,rgba(15,17,15,.34) 0%,rgba(15,17,15,.18) 60%,rgba(15,17,15,0) 100%),linear-gradient(to top,rgba(15,17,15,.4) 0%,rgba(15,17,15,0) 55%),rgba(15,17,15,.62)}
 .home-hero[data-video="on"] .hero-copy h1,.home-hero[data-video="on"] .hero-support,.home-hero[data-video="on"] .hero-eyebrow{text-shadow:0 2px 24px rgba(15,17,15,.55)}
 @media(prefers-reduced-motion:reduce){.hero-media .hero-dron{transition:none}}
+@media(min-width:800px){.hero-pause{right:max(var(--pad),92px)}} /* el botón de pausa no queda tras el botón flotante de WhatsApp (64 px + 16 px) */

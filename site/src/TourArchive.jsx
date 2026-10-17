@@ -63,7 +63,7 @@ export default function TourArchive({ tour }) {
     <section className="ta" aria-labelledby="ta-titulo">
       <div ref={track} className="ta-track" style={{ '--ta-total': SEG_SVH }}>
         <div ref={stage} className="ta-stage">
-          <div className="ta-head"><p className="eyebrow">El archivo de nuestros viajes</p><h2 id="ta-titulo">Esto también<br />es <em>{tour.name}.</em></h2><p className="ta-count">{String(front + 1).padStart(2, '0')} / {String(n).padStart(2, '0')} · Toca la foto para ampliar</p></div>
+          <div className="ta-head"><p className="eyebrow">El archivo de nuestros viajes</p><h2 id="ta-titulo">Esto también<br />es <em>{tour.name}</em></h2><p className="ta-count">{String(front + 1).padStart(2, '0')} / {String(n).padStart(2, '0')} · Toca la foto para ampliar</p></div>
           <div className="th-mq-clip ta-mq" aria-hidden="true"><div ref={mq} className="th-mq"><span>{entry.lugar}</span></div></div>
           <div ref={hand} className="th-hand ta-hand" role="region" aria-roledescription="carrusel" aria-label={`Fotografías de ${tour.name}`} tabIndex={0}
             onKeyDown={(e) => { if (['ArrowLeft', 'ArrowRight'].includes(e.key)) { e.preventDefault(); select(front + (e.key === 'ArrowRight' ? 1 : -1), true); } else if (e.key === 'Enter') open(); }}

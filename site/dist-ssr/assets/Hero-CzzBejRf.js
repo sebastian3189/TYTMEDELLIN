@@ -24,7 +24,7 @@ function safePlay(el) {
 var inicioVideos = {
 	hero: {
 		src: null,
-		adaptive: null,
+		adaptive: media_default["hero-dron"].videos,
 		poster: media_default["hero-dron"].poster,
 		image: media_default["hero-inicio"]
 	},
@@ -202,6 +202,7 @@ function useHeroPlayback(ref, light, enabled) {
 			observer.disconnect();
 			el.removeEventListener("play", sync);
 			el.removeEventListener("pause", sync);
+			el.pause();
 		};
 	}, [
 		ref,

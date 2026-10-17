@@ -68,7 +68,7 @@ function FeaturedGallery({ tour }) {
 					"Esto también",
 					/* @__PURE__ */ jsx("br", {}),
 					"es ",
-					/* @__PURE__ */ jsxs("em", { children: [tour.name, "."] })
+					/* @__PURE__ */ jsx("em", { children: tour.name })
 				] })] }), /* @__PURE__ */ jsxs("span", { children: [images.length, " fotografías · Toca para ampliar"] })]
 			}),
 			/* @__PURE__ */ jsxs("div", {

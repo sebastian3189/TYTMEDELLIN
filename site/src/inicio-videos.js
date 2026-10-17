@@ -16,7 +16,7 @@ export const inicioVideos = {
   // hero.image: fondo provisional (panorámica real, scripts/prepare-hero.py) MIENTRAS `src` sea null; al poner un `src` el video lo sustituye solo.
   // hero (2026-10-16): video de dron real, `adaptive` = una fuente por dispositivo (movil 9:16 / hd720 / hd1080, elegida en Hero.jsx); `poster` = primer cuadro (LCP, lo único
   // que se ve con movimiento reducido, ahorro de datos o 2g/3g); `image` = la foto anterior, solo como respaldo si el póster o el video fallan.
-  hero: { src: null, adaptive: null, poster: media['hero-dron'].poster, image: media['hero-inicio'] },
+  hero: { src: null, adaptive: media['hero-dron'].videos, poster: media['hero-dron'].poster, image: media['hero-inicio'] },
   // historia: el reel propio del tour privado (sin audio: la música original tiene derechos y solo está licenciada dentro de Instagram; NO añadir audio ni usar el archivo original).
   historia: { src: '/media/videos/reel-tour-privado.mp4', poster: '/media/videos/reel-tour-privado-poster.webp', captions: null, instagramUrl: 'https://www.instagram.com/p/DdXYS5gJ-GH/', alt: 'Reel: viajar por Medellín a tu propio ritmo, en tour privado' },
 };

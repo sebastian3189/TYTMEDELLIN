@@ -17,7 +17,7 @@ function Card({ r }) {
     <Stars /><span className="sr-only">Calificación: 5.0 de 5 estrellas.</span>
     <p className={`g-text ${open ? 'is-open' : ''}`}>{r.texto}</p>
     <button type="button" className="g-more" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? 'Leer menos' : 'Leer más'}</button>
-    <footer className="g-author"><strong>{r.nombre}</strong>{r.local && <span>Guía Local</span>}</footer>
+    <footer className="g-author"><strong>{r.nombre}</strong>{r.local && <span>Guía local</span>}</footer>
   </article>;
 }
 export default function Reviews({ full = false }) {

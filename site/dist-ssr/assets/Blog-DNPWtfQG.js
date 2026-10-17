@@ -1,5 +1,5 @@
 import { B as jsxs, M as usePageMeta, R as Fragment, U as language, _ as Arrow, d as PageTitle, f as Picture, l as Button, t as articles, z as jsx } from "../entry-server.js";
-import NotFound from "./NotFound-DqRFEl7f.js";
+import NotFound from "./NotFound-_j84yP7R.js";
 import { n as useGlassPill, t as GlassPill } from "./glass-BONCV8ov.js";
 import { Link, useParams } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -339,7 +339,7 @@ function Blog() {
 			"Ideas para viajar",
 			/* @__PURE__ */ jsx("br", {}),
 			"con más ",
-			/* @__PURE__ */ jsx("em", { children: "sentido." })
+			/* @__PURE__ */ jsx("em", { children: "sentido" })
 		] }),
 		text: "Notas del equipo para elegir, preparar y disfrutar tus recorridos desde Medellín."
 	}), /* @__PURE__ */ jsx(BlogIndex, {})] });

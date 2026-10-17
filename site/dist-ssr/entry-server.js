@@ -40,8 +40,8 @@ var S = globalThis.__ttI18n || (globalThis.__ttI18n = {
 var dictionaries = S.dictionaries;
 S.localizedProps = localizedProps;
 var loaders = {
-	en: () => import("./assets/en-BfTFsgZ_.js"),
-	"pt-BR": () => import("./assets/pt-BR-DZ9XAYy_.js")
+	en: () => import("./assets/en-CzkV7e3A.js"),
+	"pt-BR": () => import("./assets/pt-BR-CfOPQm5Y.js")
 };
 var language = () => S.locale;
 var setLanguage = (value) => {
@@ -640,7 +640,7 @@ function usePageMeta(title, description) {
 //#region src/inicio-textos.js
 var inicioTextos = {
 	estado: "APROBADO — concepto H1, copy del inicio (2026-10-12)",
-	titular: ["Medellín,", "a otro nivel."],
+	titular: ["Medellín,", "a otro nivel"],
 	lema: "Experiencias a otro nivel",
 	confianza: "Tours 100% privados · Guía-conductor exclusivo · Horarios flexibles",
 	eleccion: "Elige tu próximo recuerdo",
@@ -658,8 +658,8 @@ var inicioTextos = {
 	fases: {
 		c1: {
 			rotulo: "Medellín",
-			titular: "No solo visites Medellín. Vívela.",
-			subtitulo: "Una mirada al valle desde la ladera."
+			titular: "No solo visites Medellín. Vívela",
+			subtitulo: "Una mirada al valle desde la ladera"
 		},
 		c2: {
 			rotulo: "Plaza Botero",
@@ -675,7 +675,7 @@ var inicioTextos = {
 	retiradas: {
 		c3: {
 			rotulo: "Metrocable",
-			titular: "Una ciudad que vuelve a dibujarse.",
+			titular: "Una ciudad que vuelve a dibujarse",
 			subtitulo: "El Metrocable regala otra mirada de la ciudad."
 		},
 		c4: {
@@ -685,69 +685,69 @@ var inicioTextos = {
 		},
 		c5: {
 			rotulo: "Guatapé",
-			titular: "El horizonte tiene otro color.",
+			titular: "El horizonte tiene otro color",
 			subtitulo: "Agua entre montañas y un pueblo que se cuenta en sus zócalos."
 		}
 	},
 	cartas: {
 		"city-tour-comuna-13": {
 			emocion: "Descubre",
-			frase: "plazas, murales e historias de Medellín.",
+			frase: "plazas, murales e historias de Medellín",
 			lugar: "COMUNA 13"
 		},
 		"guatape-piedra-del-penol": {
 			emocion: "Explora",
-			frase: "agua entre montañas y zócalos de color.",
+			frase: "agua entre montañas y zócalos de color",
 			lugar: "GUATAPÉ · PIEDRA DEL PEÑOL"
 		},
 		"tour-nocturno-medellin": {
 			emocion: "Siente",
-			frase: "el valle cuando enciende sus luces.",
+			frase: "el valle cuando enciende sus luces",
 			lugar: "MEDELLÍN"
 		},
 		"vuelta-a-oriente": {
 			emocion: "Conecta",
-			frase: "con pueblos y plazas, sin carreras.",
+			frase: "con pueblos y plazas, sin carreras",
 			lugar: "VUELTA A ORIENTE"
 		},
 		"tour-del-cafe-medellin": {
 			emocion: "Vive",
-			frase: "el oficio detrás de cada taza.",
+			frase: "el oficio detrás de cada taza",
 			lugar: "TOUR DEL CAFÉ"
 		},
 		"hacienda-napoles": {
 			emocion: "Disfruta",
-			frase: "un día en familia, con transporte coordinado.",
+			frase: "un día en familia, con transporte coordinado",
 			lugar: "HACIENDA NÁPOLES"
 		},
 		"salto-del-buey": {
 			emocion: "Sorpréndete",
-			frase: "una cascada al final del sendero.",
+			frase: "una cascada al final del sendero",
 			lugar: "SALTO DEL BUEY"
 		},
 		"santa-fe-de-antioquia": {
 			emocion: "Recuerda",
-			frase: "calles coloniales y el Puente de Occidente.",
+			frase: "calles coloniales y el Puente de Occidente",
 			lugar: "SANTA FE DE ANTIOQUIA"
 		},
 		"jardin-antioquia": {
 			emocion: "Enamórate",
-			frase: "fachadas de color y plaza sin prisa.",
+			frase: "fachadas de color y plaza sin prisa",
 			lugar: "JARDÍN"
 		},
 		"tour-de-compras": {
 			emocion: "Descubre",
-			frase: "El Hueco, outlets y tiendas locales.",
+			frase: "El Hueco, outlets y tiendas locales",
 			lugar: "TOUR DE COMPRAS"
 		},
 		"tour-miradores": {
 			emocion: "Inspírate",
-			frase: "el valle cambia con la luz.",
-			lugar: "TOUR MIRADORES"
+			frase: "el valle cambia con la luz",
+			lugar: "TOUR DE MIRADORES"
 		},
 		"traslados-aeropuerto-jmc": {
 			emocion: "Conecta",
-			frase: "del aeropuerto a tu alojamiento, coordinado.",
+			frase: "del aeropuerto a tu alojamiento, coordinado",
 			lugar: "TRASLADOS JMC"
 		}
 	}
@@ -1082,7 +1082,7 @@ function QuoteCopy({ withType = false }) {
 				/* @__PURE__ */ jsx$1("br", {}),
 				"empieza con una",
 				/* @__PURE__ */ jsx$1("br", {}),
-				/* @__PURE__ */ jsx$1("em", { children: "conversación." })
+				/* @__PURE__ */ jsx$1("em", { children: "conversación" })
 			] }) }),
 			/* @__PURE__ */ jsx$1("p", { children: withType ? "Elige el tipo de solicitud y completa tus datos. Te dejamos el mensaje listo en WhatsApp para que solo pulses Enviar." : "Completa tus datos y te dejamos el mensaje listo en WhatsApp para que solo pulses Enviar." }),
 			/* @__PURE__ */ jsx$1("a", {
@@ -2327,14 +2327,14 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-DV785C7V.js");
+var company_ = () => import("./assets/Company-CpDonhmp.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-C57vw9Ld.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-Bb5kDD5c.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-CBCmCG7f.js").then((m) => m.default)),
-	fleet: lazyRoute(() => import("./assets/Fleet-DO59oc98.js").then((m) => m.default)),
-	blog: lazyRoute(pick(() => import("./assets/Blog-BhpXLRlf.js"), "Blog")),
-	article: lazyRoute(() => import("./assets/Blog-BhpXLRlf.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-mE485iK9.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-Bz-DavA1.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-CvaoU3fZ.js").then((m) => m.default)),
+	fleet: lazyRoute(() => import("./assets/Fleet-C92gGVL2.js").then((m) => m.default)),
+	blog: lazyRoute(pick(() => import("./assets/Blog-DNPWtfQG.js"), "Blog")),
+	article: lazyRoute(() => import("./assets/Blog-DNPWtfQG.js").then((m) => m.default)),
 	about: lazyRoute(pick(company_, "About")),
 	services: lazyRoute(pick(company_, "Services")),
 	contact: lazyRoute(pick(company_, "Contact")),
@@ -2342,7 +2342,7 @@ var R = {
 	privacy: lazyRoute(pick(company_, "Privacy")),
 	ratings: lazyRoute(pick(company_, "Ratings")),
 	dataPolicy: lazyRoute(() => import("./assets/DataPolicy-CXUZnR_L.js").then((m) => m.default)),
-	notFound: lazyRoute(() => import("./assets/NotFound-DqRFEl7f.js").then((m) => m.default))
+	notFound: lazyRoute(() => import("./assets/NotFound-_j84yP7R.js").then((m) => m.default))
 };
 R.home, R.catalog, R.tour, R.fleet, R.blog, R.article, R.about, R.services, R.contact, R.quote, R.privacy, R.dataPolicy, R.ratings;
 var preloadAllRoutes = () => Promise.all(Object.values(R).map((route) => route.preload()));
@@ -2447,7 +2447,7 @@ function Footer() {
 						"Tu próxima historia",
 						/* @__PURE__ */ jsx$1("br", {}),
 						"empieza ",
-						/* @__PURE__ */ jsx$1("em", { children: "aquí." })
+						/* @__PURE__ */ jsx$1("em", { children: "aquí" })
 					] }), /* @__PURE__ */ jsx$1(Button, {
 						to: "/experiencias",
 						children: "Encuentra tu experiencia"
@@ -2477,7 +2477,7 @@ function Footer() {
 								/* @__PURE__ */ jsxs$1("p", { children: [
 									"Nos mueve nuestra tierra.",
 									/* @__PURE__ */ jsx$1("br", {}),
-									"Nos importan las personas."
+									"Nos importan las personas"
 								] })
 							]
 						}),
@@ -4113,7 +4113,7 @@ var rawTours = [
 		"city-tour-comuna-13",
 		"City Tour & Comuna 13",
 		"Ciudad",
-		"Una ciudad que vuelve a dibujarse.",
+		"Una ciudad que vuelve a dibujarse",
 		"Descubre las plazas de Medellín y el arte urbano de la Comuna 13. Planeamos contigo un recorrido privado para acercarte a la ciudad y sus historias.",
 		[
 			"La ciudad como punto de partida",
@@ -4132,7 +4132,7 @@ var rawTours = [
 		"guatape-piedra-del-penol",
 		"Guatapé & Piedra del Peñol",
 		"Pueblos",
-		"El horizonte tiene otro color.",
+		"El horizonte tiene otro color",
 		"Desde Medellín, descubre los zócalos de Guatapé y el paisaje de la Piedra del Peñol. Acordamos el recorrido contigo; consulta entradas y opciones de ascenso.",
 		[
 			"Mirar desde lo alto",
@@ -4151,7 +4151,7 @@ var rawTours = [
 		"tour-nocturno-medellin",
 		"Noche en Medellín",
 		"Noche",
-		"Cuando el valle enciende sus luces.",
+		"Cuando el valle enciende sus luces",
 		"Conoce Medellín de noche entre luces, vistas del valle y ambiente local. Coordinamos la salida y el regreso; los horarios y las paradas se acuerdan contigo.",
 		[
 			"El día se despide",
@@ -4170,15 +4170,15 @@ var rawTours = [
 		"vuelta-a-oriente",
 		"Vuelta a Oriente",
 		"Pueblos",
-		"El camino también es el destino.",
-		"Sal de Medellín hacia los pueblos y las montañas del Oriente Antioqueño. Cuéntanos tus intereses para acordar las paradas y disfrutar las plazas con calma.",
+		"El camino también es el destino",
+		"Sal de Medellín hacia los pueblos y las montañas del Oriente antioqueño. Cuéntanos tus intereses para acordar las paradas y disfrutar las plazas con calma.",
 		[
 			"Salir hacia las montañas",
 			"La vida alrededor de una plaza",
 			"Pequeñas paradas, grandes recuerdos"
 		],
 		[
-			"El paisaje cambia al dejar la ciudad y entrar en el Oriente Antioqueño.",
+			"El paisaje cambia al dejar la ciudad y entrar en el Oriente antioqueño.",
 			"Arquitectura tradicional y encuentros cotidianos le dan carácter a cada pueblo.",
 			"Acordamos las paradas según tus intereses y el tiempo disponible, sin convertir el día en una carrera."
 		],
@@ -4189,7 +4189,7 @@ var rawTours = [
 		"tour-del-cafe-medellin",
 		"Tour del Café",
 		"Naturaleza",
-		"Una historia que empieza en la tierra.",
+		"Una historia que empieza en la tierra",
 		"Descubre la cultura cafetera en una visita desde Medellín: del cultivo al oficio detrás de una taza. La finca y la degustación se confirman en tu propuesta.",
 		[
 			"Entre hojas y granos",
@@ -4208,7 +4208,7 @@ var rawTours = [
 		"hacienda-napoles",
 		"Hacienda Nápoles",
 		"Familia",
-		"Un día para volver a sorprenderse.",
+		"Un día para volver a sorprenderse",
 		"Planea un día en Hacienda Nápoles con transporte desde Medellín. Comparte naturaleza y actividades en familia; confirma el pasaporte y las entradas al cotizar.",
 		[
 			"Poner rumbo a un día distinto",
@@ -4227,7 +4227,7 @@ var rawTours = [
 		"salto-del-buey",
 		"Salto del Buey",
 		"Naturaleza",
-		"Sigue el sonido del agua.",
+		"Sigue el sonido del agua",
 		"Camina entre senderos y vegetación hasta el Salto del Buey en una salida desde Medellín. Revisamos contigo las condiciones del recorrido y las actividades opcionales.",
 		[
 			"Entrar en el verde",
@@ -4246,7 +4246,7 @@ var rawTours = [
 		"santa-fe-de-antioquia",
 		"Santa Fe de Antioquia",
 		"Pueblos",
-		"Hay lugares que enseñan a ir despacio.",
+		"Hay lugares que enseñan a ir despacio",
 		"Recorre Santa Fe de Antioquia desde Medellín: calles coloniales, plazas y el Puente de Occidente. Organiza con nosotros las paradas y los tiempos de caminata.",
 		[
 			"Un puente entre paisajes",
@@ -4265,7 +4265,7 @@ var rawTours = [
 		"jardin-antioquia",
 		"Jardín",
 		"Pueblos",
-		"El color se vive sin prisa.",
+		"El color se vive sin prisa",
 		"Viaja de Medellín a Jardín para conocer sus fachadas de color, su plaza y su cultura cafetera. Coordinamos el recorrido considerando el trayecto y a tu grupo.",
 		[
 			"Tomar el camino del pueblo",
@@ -4284,7 +4284,7 @@ var rawTours = [
 		"tour-de-compras",
 		"Tour de Compras",
 		"Ciudad",
-		"Tus hallazgos, a tu ritmo.",
+		"Tus hallazgos, a tu ritmo",
 		"Organiza tu tour de compras en Medellín por El Hueco, outlets y tiendas locales. Cuéntanos qué buscas para acordar las paradas y el espacio para tus compras.",
 		[
 			"Definir qué estás buscando",
@@ -4301,9 +4301,9 @@ var rawTours = [
 	],
 	[
 		"tour-miradores",
-		"Tour Miradores",
+		"Tour de Miradores",
 		"Noche",
-		"Una ciudad. Infinitas perspectivas.",
+		"Una ciudad. Infinitas perspectivas",
 		"Descubre Medellín desde sus miradores y observa cómo cambia la luz sobre el valle. Acordamos las paradas contigo; la visibilidad depende del clima.",
 		[
 			"Buscar una nueva perspectiva",
@@ -4322,7 +4322,7 @@ var rawTours = [
 		"traslados-aeropuerto-jmc",
 		"Traslados Aeropuerto JMC",
 		"Traslados",
-		"Aterriza. Nosotros conectamos el camino.",
+		"Aterriza. Nosotros conectamos el camino",
 		"Coordina tu traslado entre el Aeropuerto José María Córdova y Medellín. Comparte vuelo, dirección y equipaje: seguimos tu vuelo y acordamos el punto de encuentro.",
 		[
 			"Antes de aterrizar",

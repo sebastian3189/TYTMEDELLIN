@@ -9,7 +9,7 @@ function Fleet() {
 				"El espacio justo.",
 				/* @__PURE__ */ jsx("br", {}),
 				"El camino ",
-				/* @__PURE__ */ jsx("em", { children: "compartido." })
+				/* @__PURE__ */ jsx("em", { children: "compartido" })
 			] }),
 			text: "Elige la categoría que se ajusta a tu grupo. Confirmamos unidad, equipaje y equipamiento al cotizar."
 		}),
@@ -68,7 +68,7 @@ function Fleet() {
 					"Personas, maletas",
 					/* @__PURE__ */ jsx("br", {}),
 					"y todo lo que ",
-					/* @__PURE__ */ jsx("em", { children: "importa." })
+					/* @__PURE__ */ jsx("em", { children: "importa" })
 				] }),
 				/* @__PURE__ */ jsx("div", {
 					className: "three-columns",

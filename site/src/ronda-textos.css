@@ -1,0 +1,25 @@
+/* Ronda de textos (2026-10-16). 1 · «Planeemos tu viaje» de la cabecera = LA acción principal del sitio: naranja sólido de vidrio líquido (mismo material que
+   los botones primarios), texto --on-brand #1E201D sobre #FF7F09 ≈ 6,6:1 (AA) en claro y oscuro, también sobre el hero transparente y en el menú móvil.
+   2 · El resto de naranjas se apaga a tinta/neutro: el naranja queda para la acción principal de cada pantalla y este botón. */
+.site-header .nav-cta,html[data-theme="dark"] .site-header .nav-cta{
+  background:linear-gradient(180deg,rgba(255,255,255,.34) 0%,rgba(255,255,255,.08) 48%,rgba(255,255,255,0) 50%),#FF7F09!important;
+  color:#1E201D!important;border:1px solid rgba(255,255,255,.42)!important;border-radius:999px;font-weight:700;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -1px 0 rgba(150,60,0,.2),0 6px 18px rgba(255,127,9,.42)!important;
+  -webkit-backdrop-filter:none;backdrop-filter:none;transition:transform .18s var(--ease-out-strong),box-shadow .18s ease,filter .18s ease}
+@media(hover:hover) and (pointer:fine){.site-header .nav-cta:hover,html[data-theme="dark"] .site-header .nav-cta:hover,html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .nav-cta:hover{background:linear-gradient(180deg,rgba(255,255,255,.4) 0%,rgba(255,255,255,.1) 48%,rgba(255,255,255,0) 50%),#FF8E26!important;transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 10px 24px rgba(255,127,9,.5)!important}}
+.site-header .nav-cta:active{transform:scale(.97)}
+.site-header .nav-cta:focus-visible{outline:3px solid var(--focus,#1E201D);outline-offset:3px}
+html[data-theme="dark"] .site-header .nav-cta:focus-visible{outline-color:#F5F5F0}
+@media(max-width:1099px){.site-header nav.open .nav-cta{justify-content:center;min-height:52px;font-size:16px;margin-top:8px}}
+@media(prefers-reduced-motion:reduce){.site-header .nav-cta{transition:none}.site-header .nav-cta:hover{transform:none}}
+/* Detalles naranja → tinta */
+.site-header nav>a.active:after{background:var(--text-strong)}
+.explorer-item button[aria-selected=true],.th-index [role=tab][aria-selected=true]{border-left-color:var(--text-strong)}
+.bc-tag{color:var(--text-muted)}
+article.tour-card:hover h3,.th-card:hover h3,.vehicle:hover h2,.th-title-link:hover{color:var(--text-strong)}
+.vehicle-features .ico,.vehicle .capacity .ico{color:var(--text-strong)}
+.consent-icon,.welcome-icon{background:var(--surface-1);color:var(--text-strong)}
+.policy-note{border-color:var(--line-strong);background:var(--surface-1)}
+.timeline.afx-line::before{background:linear-gradient(180deg,var(--text-strong),var(--line-strong))}
+.timeline article.afx.afx-in::before{background:var(--text-strong);border-color:var(--text-strong);box-shadow:0 0 0 6px var(--line)}
+.tn-bar i,.tr-dot{background:var(--text-strong)}

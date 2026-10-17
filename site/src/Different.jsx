@@ -12,16 +12,16 @@ import './different.css';
  * detenido fuera de vista; solo transform/opacity/stroke-dashoffset. Reducido/saveData/sin JS: todo visible y estático (el ocultado lo añade JS).
  */
 export const DIFERENTES = [
-  { icon: 'planeLanding', t: 'Monitoreamos tu vuelo.', d: 'Seguimos el estado de tu vuelo hasta su aterrizaje en Medellín para coordinar tu recogida y estar preparados ante posibles cambios de horario.' },
-  { icon: 'carFront', t: 'Vehículos para tu recorrido.', d: 'Revisamos contigo la categoría, la capacidad y el equipaje para proponer el vehículo de tu servicio. La unidad y su disponibilidad se confirman al cotizar.' },
-  { icon: 'users', t: 'Un equipo que responde por ti.', d: 'Coordinamos el transporte, las paradas y el acompañamiento de tu recorrido. Antes de contratar, revisamos contigo los servicios incluidos en la propuesta.' },
-  { icon: 'droplet', t: 'Los detalles también cuentan.', d: 'Consulta la hidratación incluida en tu experiencia. Antes de salir, revisa con el equipo qué llevar según el recorrido y las necesidades de tu grupo.' },
-  { icon: 'globe', t: 'Experiencias 100 % privadas.', d: 'Nuestra propuesta son tours privados para ti y tus acompañantes. Confirmamos el vehículo, el acompañamiento y las condiciones de cada recorrido al cotizar.' },
-  { icon: 'clock', t: 'Flexibilidad en tus horarios.', d: 'Cuéntanos tus intereses y el tiempo que tienes. Acordamos los horarios según el recorrido, las condiciones operativas y lo que necesitas.' },
-  { icon: 'camera', t: 'Recuerdos para llevar contigo.', d: 'Consulta las fotografías y los videos incluidos en tu recorrido. La propuesta detalla estos servicios para que sepas qué esperar antes de salir.' },
-  { icon: 'shieldCheck', t: 'Seguridad y respaldo legal.', d: 'Somos una empresa legalmente constituida, con Registro Nacional de Turismo (RNT 176384). Operamos con vehículos habilitados y las coberturas y pólizas aplicables a nuestros servicios.' },
-  { icon: 'messageCircle', t: 'Conversemos por WhatsApp.', d: 'Escríbenos para organizar tu viaje o consultar sobre tu servicio. La operación de transporte las 24 horas requiere reserva previa; la asesoría depende de la disponibilidad del equipo.' },
-  { icon: 'heart', t: 'Atención desde el primer contacto.', d: 'No solo organizamos recorridos. Escuchamos tus necesidades, te asesoramos y diseñamos experiencias que se ajustan a lo que realmente buscas.' },
+  { icon: 'planeLanding', t: 'Monitoreamos tu vuelo', d: 'Seguimos el estado de tu vuelo hasta su aterrizaje en Medellín para coordinar tu recogida y estar preparados ante posibles cambios de horario.' },
+  { icon: 'carFront', t: 'Vehículos para tu recorrido', d: 'Revisamos contigo la categoría, la capacidad y el equipaje para proponer el vehículo de tu servicio. La unidad y su disponibilidad se confirman al cotizar.' },
+  { icon: 'users', t: 'Un equipo que responde por ti', d: 'Coordinamos el transporte, las paradas y el acompañamiento de tu recorrido. Antes de contratar, revisamos contigo los servicios incluidos en la propuesta.' },
+  { icon: 'droplet', t: 'Los detalles también cuentan', d: 'Consulta la hidratación incluida en tu experiencia. Antes de salir, revisa con el equipo qué llevar según el recorrido y las necesidades de tu grupo.' },
+  { icon: 'globe', t: 'Experiencias 100% privadas', d: 'Nuestra propuesta son tours privados para ti y tus acompañantes. Confirmamos el vehículo, el acompañamiento y las condiciones de cada recorrido al cotizar.' },
+  { icon: 'clock', t: 'Flexibilidad en tus horarios', d: 'Cuéntanos tus intereses y el tiempo que tienes. Acordamos los horarios según el recorrido, las condiciones operativas y lo que necesitas.' },
+  { icon: 'camera', t: 'Recuerdos para llevar contigo', d: 'Consulta las fotografías y los videos incluidos en tu recorrido. La propuesta detalla estos servicios para que sepas qué esperar antes de salir.' },
+  { icon: 'shieldCheck', t: 'Seguridad y respaldo legal', d: 'Somos una empresa legalmente constituida, con Registro Nacional de Turismo (RNT 176384). Operamos con vehículos habilitados y las coberturas y pólizas aplicables a nuestros servicios.' },
+  { icon: 'messageCircle', t: 'Conversemos por WhatsApp', d: 'Escríbenos para organizar tu viaje o consultar sobre tu servicio. La operación de transporte las 24 horas requiere reserva previa; la asesoría depende de la disponibilidad del equipo.' },
+  { icon: 'heart', t: 'Atención desde el primer contacto', d: 'No solo organizamos recorridos. Escuchamos tus necesidades, te asesoramos y diseñamos experiencias que se ajustan a lo que realmente buscas.' },
 ];
 const two = (n) => String(n).padStart(2, '0');
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -128,7 +128,7 @@ export default function Different() {
           <div className="df-close">
             <p className="df-close-eyebrow eyebrow" data-rv>Experiencias a otro nivel</p>
             <p className="df-close-text" data-rv>
-              <span className="df-c1"><Words text="No es solamente a dónde te llevamos." step={40} /></span>{' '}
+              <span className="df-c1"><Words text="No es solamente a dónde te llevamos" step={40} /></span>{' '}
               <span className="df-c2"><Words text="Es cómo te hacemos sentir durante todo el camino" from={7} step={40} /><span className="df-end-wrap">.<i className="df-end" aria-hidden="true" /></span></span><i className="df-end-m" aria-hidden="true" />
             </p>
           </div>
