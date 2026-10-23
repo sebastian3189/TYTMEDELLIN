@@ -8,7 +8,7 @@ import './itinerary.css';
 
 /*
  * «La experiencia»: historia vertical por paradas (Spec 02 «Itinerarios por parada», anexo SPECS/anexos/instrucciones_scroll_experiencias_TT.md; Spec 03 §I/§M).
- * Datos: src/itinerarios.js (única fuente editable). Escritorio (≥1000×620, sin movimiento reducido): foto sticky a la izquierda y panel a la derecha; el scroll
+ * Datos: src/itinerarios.js (única fuente editable). Escritorio (≥900×580, ampliado 2026-10-23 para laptops 1280×720 y 1366×768; sin movimiento reducido): foto sticky a la izquierda y panel a la derecha; el scroll
  * del navegador manda (sin preventDefault) y un solo planificador (scroll-bus) cambia la escena activa. Resto (móvil, tableta, horizontal bajo, movimiento
  * reducido, prerender): lista estática, foto arriba y texto abajo, sin pins. Indicador único «03 / 09» + mini barra (estilo Guatapé) en todos los tours. Imágenes: AVIF/WebP con srcset; las escenas futuras se cargan solo al acercarse.
  */
@@ -50,7 +50,7 @@ export default function ItineraryStory({ tour }) {
   const data = itinerarios[tour.slug], stops = data.paradas, n = stops.length;
   const ref = useRef(null), stack = useRef(null), ctrl = useRef(null);
   const [active, setActive] = useState(0), [seen, setSeen] = useState(() => new Set([0, 1]));
-  const wide = useMedia('(min-width: 1000px) and (min-height: 620px)', false), light = useLightMotion(), sticky = wide && !light;
+  const wide = useMedia('(min-width: 900px) and (min-height: 580px)', false), light = useLightMotion(), sticky = wide && !light;
 
   // Planificador único: medidas una vez; en el scroll solo cambia la escena al cruzar un umbral y la barra (transform).
   useEffect(() => {

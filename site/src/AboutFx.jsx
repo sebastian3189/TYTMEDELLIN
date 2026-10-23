@@ -41,7 +41,7 @@ export function AboutCollage({ items, alt }) {
           const L = LAYOUT[i];
           return (
             <figure className="ac-card" key={p.src} data-depth={L.d} style={{ '--l': `${L.l}%`, '--t': `${L.t}%`, '--w': `${L.w}%`, '--r': `${L.r}deg`, '--z': i === 0 ? 1 : 2 + i }}>
-              <Picture photo={p} alt={alt} priority={i === 0} sizes="(max-width: 699px) 70vw, 30vw" />
+              <Picture photo={p} alt={p.alt || alt} priority={i === 0} sizes="(max-width: 699px) 70vw, 30vw" />
             </figure>
           );
         })}

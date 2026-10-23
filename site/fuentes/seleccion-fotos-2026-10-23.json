@@ -1,0 +1,1365 @@
+{
+ "_meta": {
+  "autor": "director-diseno-marca (Opus 5.5, claude-opus-5-5)",
+  "fecha": "2026-10-23 (revisión 4)",
+  "spec": "Spec 03 (fotografía, I.3 P3/P4, K6, M7) y Spec 01 (lenguaje fotográfico)",
+  "compuerta": "DISEÑAR — selección y dirección fotográfica; pendiente de auditoría independiente y aprobación del usuario",
+  "ids": "Rutas relativas a IMAGENES/NuevasFotos-webp sin .webp; las antiguas, con el prefijo «antigua:» y la ruta del repositorio con extensión",
+  "topes": "inicio_tarjeta = mismo número de mini tarjetas que en HEAD (portada + 7; Jardín portada + 4; Compras portada + 2-3); cabecera 1–3; galería ≤7; catálogo 7",
+  "regla_unicidad": "Cada foto en un solo hueco del sitio, salvo la portada (carta de baraja + carta de portada de la mano) y las repeticiones de «repeticiones_declaradas»",
+  "foco": "Posición del objeto (object-position) para el recorte 4:5 (portada y baraja), 4:5/4:3 (exploración) y el recorte de parada",
+  "capas": {
+   "portada": "Carta de la baraja (4:5) y carta de portada de la mano (inicio y «Archivo de nuestros viajes» de la ficha). Ya NO es la primera diapositiva de la cabecera (regla del usuario, revisión 4). null = marcador de marca",
+   "cabecera_slides": "Diaporama tourSlides de la ficha. La primera NO es la portada ni la primera tarjeta de TourArchive; fotos que resisten 16:9 a pantalla completa (foco = object-position para 16:9) y recorte vertical en móvil",
+   "paradas": "Itinerario de la ficha (itinerarios.js)",
+   "galeria": "«Archivo de nuestros viajes» de la ficha (TourArchive = tourEntry), detrás de la portada; ≤7",
+   "inicio_tarjeta": "Fotos de la mano de viaje del inicio (TravelHand) detrás de la portada; ≤7. Hoy TravelHand y TourArchive comparten tourEntry (mismas fotos en inicio y ficha, recorrido continuo): deben separarse para que cada lista sea propia",
+   "catalogo_slides": "Cabecera de /experiencias (catalogSlides)",
+   "exploracion": "ELIMINADA: ExperienceExplorer ya no se renderiza (TravelHand lo sustituyó); sus fotos pasan a inicio_tarjeta o galería"
+  },
+  "regla_paradas": "Revisión 6 del usuario: toda parada se llena con la foto más relacionada aunque no sea el lugar exacto (salvo Tour Miradores, sin fotos). Los alt no afirman un lugar que no se reconozca",
+  "ids_antiguos": "Los ids «antigua:site/public/media/oficial/orig/…» son rutas del repositorio en HEAD; varias ya no están en el árbol de trabajo porque prepare-oficial.py limpia la carpeta: el constructor debe recuperarlas de HEAD (git show HEAD:<ruta>)"
+ },
+ "city-tour-comuna-13": {
+  "portada": {
+   "id": "city-tour-comuna-13/city-tour-img-7966-2",
+   "alt": "Tres viajeros sonríen dentro de la canasta de un globo decorado con la palabra «Comuna», con los barrios de ladera y las montañas de Medellín al fondo",
+   "foco": "50% 55%"
+  },
+  "cabecera_slides": [
+   {
+    "id": "city-tour-comuna-13/photos-1-001-2-img-6179",
+    "alt": "Viajeros en una terraza techada junto a grandes letras de colores «Comuna 13», con los barrios de ladera y las montañas al fondo",
+    "foco": "45% 55%"
+   },
+   {
+    "id": "city-tour-comuna-13/photos-1-001-2-dji-fly-20231109-170700-729-1699567695965-photo-optimized",
+    "alt": "Vista cenital de viajeros tendidos en un patio bajo un letrero pintado «Esto es Medellín»",
+    "foco": "50% 50%"
+   },
+   {
+    "id": "city-tour-comuna-13/photos-1-001-img-1083",
+    "alt": "Viajera de gorra blanca en una baranda mirando los barrios de ladera y el valle de Medellín",
+    "foco": "40% 45%"
+   }
+  ],
+  "paradas": [
+   {
+    "orden": 1,
+    "ubicacion": "Parque Memorial Inflexión",
+    "id": "city-tour-comuna-13/img-9101",
+    "foco": "50% 60%",
+    "alt": "Un guía saluda junto a un grupo de viajeros en un sendero del parque, con un muro de piedra negra pulida a la derecha y torres de ladrillo al fondo"
+   },
+   {
+    "orden": 2,
+    "ubicacion": "La Alpujarra",
+    "id": "antigua:site/public/media/oficial/orig/city-tour-comuna-13/citytour-gobernacion-antioquia-grupo-1600.webp",
+    "foco": "50% 55%",
+    "alt": "Grupo de viajeros frente al edificio de la Gobernación de Antioquia en La Alpujarra, con las banderas de Antioquia, Colombia y Medellín"
+   },
+   {
+    "orden": 3,
+    "ubicacion": "Parque de las Luces",
+    "id": "antigua:IMAGENES/FotosMedellin-webp/City Tour/IMG_2174 (1).webp",
+    "foco": "50% 40%",
+    "alt": "Bosque de columnas de luz de la Plaza Cisneros, con un grupo de viajeros posando en la plaza"
+   },
+   {
+    "orden": 4,
+    "ubicacion": "Plaza Botero",
+    "id": "city-tour-comuna-13/img-5766-1",
+    "foco": "50% 60%",
+    "alt": "Grupo numeroso de viajeros con una bandera de México frente al Palacio de la Cultura, su cúpula a cuadros y la hilera de cipreses de la Plaza Botero"
+   },
+   {
+    "orden": 5,
+    "ubicacion": "Pueblito Paisa",
+    "id": "antigua:site/public/media/oficial/orig/city-tour-comuna-13/img-3163-1600.webp",
+    "foco": "50% 50%",
+    "alt": "Viajeros en la plaza empedrada del Pueblito Paisa, con la iglesia blanca y las fachadas de balcones coloridos al fondo"
+   },
+   {
+    "orden": 6,
+    "ubicacion": "Metro y Metrocable",
+    "id": "antigua:site/public/media/oficial/orig/city-tour-comuna-13/citytour-metrocable-grupo-1600.webp",
+    "foco": "50% 55%",
+    "alt": "Viajeros dentro de una cabina del Metrocable con las montañas de Medellín al fondo"
+   },
+   {
+    "orden": 7,
+    "ubicacion": "Comuna 13",
+    "id": "city-tour-comuna-13/photos-1-001-2-img-6144",
+    "foco": "50% 55%",
+    "alt": "Grupo de viajeros frente a un mural de flores con el letrero «Comuna 13» en una calle del barrio"
+   },
+   {
+    "orden": 8,
+    "ubicacion": "Escaleras eléctricas de Comuna 13",
+    "id": "antigua:site/public/media/oficial/orig/city-tour-comuna-13/comuna13-escaleras-electricas-grupo-1600.webp",
+    "foco": "50% 45%",
+    "alt": "Grupo de viajeros subiendo por las escaleras eléctricas techadas de la Comuna 13"
+   },
+   {
+    "orden": 9,
+    "ubicacion": "Arte y miradores de Comuna 13",
+    "id": "city-tour-comuna-13/photos-1-001-img-1004",
+    "foco": "50% 50%",
+    "alt": "Viajera junto a grandes letras de colores «Comuna 13» en una terraza mirador del barrio"
+   }
+  ],
+  "galeria": [
+   {
+    "id": "city-tour-comuna-13/city-tour-img-7385-1",
+    "alt": "Viajeros en el balcón de una gran escultura de brazos abiertos, sobre un mirador con los barrios de ladera al fondo"
+   },
+   {
+    "id": "city-tour-comuna-13/img-1587-2",
+    "alt": "Viajera sentada en la palma de una escultura de manos con un rostro gigante de piedra, frente a las montañas"
+   },
+   {
+    "id": "city-tour-comuna-13/img-4127-1",
+    "alt": "Un guía con camiseta de T&T se toma una foto con tres viajeras en un parque de la ciudad"
+   },
+   {
+    "id": "city-tour-comuna-13/photos-1-001-2-img-6111-1",
+    "alt": "Grupo de viajeros en una cancha pintada de azul, con casas de ladera y murales detrás"
+   },
+   {
+    "id": "city-tour-comuna-13/img-9058",
+    "alt": "Viajera apoyada en una baranda de piedra calada, con el edificio Coltejer y el centro de Medellín al fondo"
+   },
+   {
+    "id": "city-tour-comuna-13/photos-1-001-img-1189",
+    "alt": "Viajera recostada en un banco frente a un muro verde con el letrero «Medellín, aquí todo florece»"
+   },
+   {
+    "id": "city-tour-comuna-13/city-tour-img-7328-1",
+    "alt": "Viajeros sentados en unas escaleras pintadas bajo grandes letras «Comuna 13 Medellín» con los colores de la bandera"
+   }
+  ],
+  "inicio_tarjeta": [
+   {
+    "id": "city-tour-comuna-13/photos-1-001-2-img-6091",
+    "alt": "Grupo de viajeros en unas escaleras pintadas de colores bajo un letrero «Welcome»"
+   },
+   {
+    "id": "city-tour-comuna-13/photos-1-001-img-0757-2",
+    "alt": "Dos viajeras en una baranda de piedra calada, con un tren del Metro sobre el viaducto y el centro de la ciudad detrás"
+   },
+   {
+    "id": "city-tour-comuna-13/img-4132-1",
+    "alt": "Tres viajeras sonríen en un sendero de un parque, con torres de ladrillo y árboles detrás"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/city-tour-comuna-13/img-2776-1600.webp",
+    "alt": "Visitantes frente a un muro de piedra oscura con la frase «Somos lo que dejamos a los demás» y una torre de apartamentos al fondo"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/city-tour-comuna-13/img-2275-1600.webp",
+    "alt": "Escultura reclinada de Fernando Botero frente a la fachada de piedra a cuadros del Palacio de la Cultura"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/city-tour-comuna-13/citytour-medellin-letras-plaza-botero-1600.webp",
+    "alt": "Viajeros junto a letras de colores de Medellín en una plaza del centro"
+   },
+   {
+    "id": "antigua:IMAGENES/FotosMedellin-webp/City Tour/IMG_4983.webp",
+    "alt": "Mural de un rostro de mujer con un colibrí en una calle de la Comuna 13"
+   }
+  ],
+  "descartadas": [
+   "antigua:IMAGENES/FotosMedellin-webp/City Tour/IMG_2776, IMG_2275, IMG_4983, IMG_5141~2 y la galería oficial anterior: renovadas por nuevas (ver ronda anterior)",
+   "city-tour-comuna-13/photos-1-001-2-img-6179 deja la parada 9 (pasa a cabecera por ser horizontal 2400×1440); la parada 9 usa img-1004 con las letras «Comuna 13»"
+  ]
+ },
+ "guatape-piedra-del-penol": {
+  "portada": {
+   "id": "guatape-piedra-del-penol/photos-1-001-img-9871-1",
+   "alt": "Un adulto y un niño de espaldas bajan la escalera de la Piedra del Peñol, con el embalse de Guatapé y sus islas abajo",
+   "foco": "50% 48%"
+  },
+  "cabecera_slides": [
+   {
+    "id": "guatape-piedra-del-penol/photos-1-001-1-img-2171",
+    "alt": "Viajera con falda roja sentada en la proa de una lancha en el embalse",
+    "foco": "50% 55%"
+   },
+   {
+    "id": "guatape-piedra-del-penol/photos-1-001-1-img-9107",
+    "foco": "50% 45%",
+    "alt": "Dos viajeras con ponchos y sombreros junto a una baranda, con palmeras y el embalse detrás"
+   },
+   {
+    "id": "guatape-piedra-del-penol/photos-1-001-img-1961",
+    "alt": "Dos viajeras posan frente a la Piedra del Peñol, con su escalera en zigzag y el cielo azul",
+    "foco": "50% 45%"
+   }
+  ],
+  "paradas": [
+   {
+    "orden": 1,
+    "ubicacion": "Alto del Chocho",
+    "id": "guatape-piedra-del-penol/photos-1-001-img-8816-1",
+    "foco": "50% 55%",
+    "alt": "Viajera con sombrero tricolor junto a una carreta de madera llena de flores bajo el letrero «El Alto del Chocho»"
+   },
+   {
+    "orden": 2,
+    "ubicacion": "Réplica del Viejo Peñol",
+    "id": "guatape-piedra-del-penol/img-0127",
+    "foco": "40% 50%",
+    "alt": "Viajero con poncho y sombrero en un balcón con loros de madera, frente a la iglesia de torres de ladrillo y la plaza de la réplica del Viejo Peñol"
+   },
+   {
+    "orden": 3,
+    "ubicacion": "Piedra del Peñol",
+    "id": "antigua:site/public/media/oficial/orig/guatape-piedra-del-penol/img-9345-1600.webp",
+    "foco": "50% 45%",
+    "alt": "Tres viajeras posan en el parqueadero al pie de la Piedra del Peñol, con su escalera en zigzag a la vista"
+   },
+   {
+    "orden": 4,
+    "ubicacion": "Calle de los Recuerdos",
+    "id": "guatape-piedra-del-penol/photos-1-001-1-img-9790",
+    "foco": "50% 60%",
+    "alt": "Viajera junto a una fuente redonda pintada de colores en una calle empedrada de fachadas con zócalos"
+   },
+   {
+    "orden": 5,
+    "ubicacion": "Calle de las Sombrillas",
+    "id": "guatape-piedra-del-penol/photos-1-001-1-img-9245",
+    "foco": "50% 45%",
+    "alt": "Tres viajeras en una calle empedrada de Guatapé cubierta por sombrillas de colores"
+   },
+   {
+    "orden": 6,
+    "ubicacion": "Parque Principal y Parroquia",
+    "id": "guatape-piedra-del-penol/photos-1-001-1-img-2357",
+    "foco": "45% 55%",
+    "alt": "Dos viajeras junto a una mototaxi decorada con el nombre «Guatapé» en una calle empedrada del pueblo"
+   },
+   {
+    "orden": 7,
+    "ubicacion": "Plazoleta de los Zócalos",
+    "id": "guatape-piedra-del-penol/zocalos",
+    "foco": "50% 55%",
+    "alt": "Viajera sonriente frente a las escaleras pintadas con zócalos de colores de la plazoleta, rodeada de fachadas coloridas"
+   },
+   {
+    "orden": 8,
+    "ubicacion": "Malecón de Guatapé",
+    "id": "guatape-piedra-del-penol/malecon",
+    "foco": "55% 50%",
+    "alt": "Pareja apoyada en la baranda del malecón, con el embalse, lanchas y montañas al fondo al atardecer"
+   },
+   {
+    "orden": 9,
+    "ubicacion": "Paseo en lancha",
+    "id": "guatape-piedra-del-penol/photos-1-001-1-img-2142",
+    "foco": "50% 55%",
+    "alt": "Viajera sentada en la proa acolchada de una lancha que navega por el embalse, con islas verdes en el horizonte"
+   }
+  ],
+  "galeria": [
+   {
+    "id": "guatape-piedra-del-penol/photos-1-001-1-img-9126",
+    "alt": "Tres viajeras con ponchos y sombreros sentadas frente al embalse, entre palmeras"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/guatape-piedra-del-penol/guatape-zocalos-balcones-1600.webp",
+    "alt": "Fachada de dos pisos con zócalos de colores, balcones turquesa y flores, típica de Guatapé"
+   },
+   {
+    "id": "guatape-piedra-del-penol/photos-1-001-img-3134",
+    "alt": "Viajera con poncho y sombrero de colores en un balcón con artesanías colgadas, sobre una plaza"
+   },
+   {
+    "id": "guatape-piedra-del-penol/img-0059",
+    "alt": "Viajero entre alpacas y llamas en un patio de tierra, bajo una estructura de madera"
+   },
+   {
+    "id": "guatape-piedra-del-penol/photos-1-001-img-3256-1",
+    "alt": "Viajera frente a la Piedra del Peñol, con su escalera y el parqueadero al pie"
+   },
+   {
+    "id": "guatape-piedra-del-penol/photos-1-001-img-3148",
+    "alt": "Viajero con sombrero y poncho en un balcón de madera decorado con artesanías"
+   }
+  ],
+  "inicio_tarjeta": [
+   {
+    "id": "guatape-piedra-del-penol/img-1849-1",
+    "alt": "Alpacas y llamas en primer plano y una viajera detrás, bajo una gran estructura de madera"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp",
+    "alt": "Viajero con sombrero en un mirador de baranda azul, con el embalse y sus islas detrás"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/guatape-piedra-del-penol/img-4491-1600.webp",
+    "alt": "Cuatro viajeras de pie en una lancha sobre el embalse"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/guatape-piedra-del-penol/img-9018-1600.webp",
+    "alt": "Viajera con gorra en la cima de la Piedra del Peñol, con el embalse al fondo"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/guatape-piedra-del-penol/img-4177-1600.webp",
+    "alt": "Grupo de viajeras sobre un yip rojo bajo el letrero «El Alto del Chocho»"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/guatape-piedra-del-penol/guatape-paseo-lancha-grupo-1600.webp",
+    "alt": "Grupo de viajeros con chalecos salvavidas en una lancha sobre el embalse"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/guatape-piedra-del-penol/img-9386-1600.webp",
+    "alt": "Tres viajeras junto a una escalera de piedra con baranda, frente a un edificio con letras de colores"
+   }
+  ],
+  "descartadas": [
+   "guatape-piedra-del-penol/photos-1-001-img-3256-1: el usuario rechazó esta portada; pasa a la parada 3 (Piedra del Peñol), donde es literal",
+   "guatape-piedra-del-penol/img-1182: el usuario rechazó esta segunda foto de cabecera; se retira del sitio (img-9107 muestra el mismo lugar en la galería)",
+   "guatape-piedra-del-penol/img-9988-1: es el valle de Medellín, no Guatapé",
+   "guatape-piedra-del-penol/photos-1-001-img-3148: casi igual a img-3134",
+   "antiguas de paradas 4 y 7 (IMG_3119, DJI_..._0905_D): retiradas por no coincidir con el lugar (ronda anterior)"
+  ]
+ },
+ "tour-nocturno-medellin": {
+  "portada": {
+   "id": "tour-nocturno-medellin/tour-nocturno-img-8245",
+   "alt": "Viajera de vestido claro sentada sobre un gran girasol de madera en un mirador, con las luces de Medellín al anochecer",
+   "foco": "50% 55%"
+  },
+  "cabecera_slides": [
+   {
+    "id": "tour-nocturno-medellin/tour-nocturno-img-7930",
+    "alt": "Dos viajeras sobre un girasol gigante junto a una bandera de Colombia, con la ciudad iluminada al fondo",
+    "foco": "55% 50%"
+   },
+   {
+    "id": "tour-nocturno-medellin/tour-nocturno-img-8358",
+    "alt": "Grupo de viajeros con músicos y personajes folclóricos en un restaurante decorado con luces y banderines",
+    "foco": "50% 55%"
+   }
+  ],
+  "paradas": [
+   {
+    "orden": 1,
+    "ubicacion": "Mirador Octava Maravilla",
+    "id": "tour-nocturno-medellin/tour-nocturno-img-8258",
+    "foco": "60% 55%",
+    "alt": "Viajera de vestido rojo sentada en un girasol gigante de madera junto a una bandera de Colombia, con el valle de Medellín al anochecer"
+   },
+   {
+    "orden": 2,
+    "ubicacion": "Provenza",
+    "id": "antigua:site/public/media/oficial/orig/_sede/img-1695-1600.webp",
+    "foco": "50% 55%",
+    "alt": "Grupo de viajeros bajo el arco iluminado «Medellín · Provenza» por la noche"
+   }
+  ],
+  "galeria": [
+   {
+    "id": "tour-nocturno-medellin/img-3529",
+    "alt": "Viajera de pie sobre un girasol gigante junto a una bandera de Colombia y una estrella de colores, sobre las luces de la ciudad"
+   },
+   {
+    "id": "tour-nocturno-medellin/nocturno-img-9060",
+    "alt": "Dos viajeros en una mesa junto a un personaje con traje y tocado de flores de colores"
+   },
+   {
+    "id": "tour-nocturno-medellin/nocturno",
+    "alt": "Viajera sentada en la barra de una terraza con la ciudad iluminada y una estrella de luz detrás"
+   },
+   {
+    "id": "tour-nocturno-medellin/nocturno-img-9082",
+    "alt": "Terraza de noche con viajeros en las mesas y personajes folclóricos tocando música"
+   },
+   {
+    "id": "tour-nocturno-medellin/tour-nocturno-img-8311",
+    "alt": "Tres viajeras sonríen en una mesa de un bar con la ciudad iluminada de fondo"
+   }
+  ],
+  "inicio_tarjeta": [
+   {
+    "id": "antigua:site/public/media/oficial/orig/_sede/noche-medellin-mirador-payaso-1600.webp",
+    "alt": "Viajeros con un personaje de payaso y globos en la terraza de un mirador de noche"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/_sede/img-1905-1600.webp",
+    "alt": "Dos viajeras en una vía iluminada frente a un puente atirantado de luces moradas"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/_sede/noche-medellin-restaurante-tematico-1600.webp",
+    "alt": "Viajera junto a un personaje con tocado de flores en un restaurante decorado"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/_sede/noche-medellin-mirador-ruanas-1600.webp",
+    "alt": "Familia con ruanas y sombreros en la baranda de un mirador de noche, con las luces de Medellín al fondo"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/_sede/noche-medellin-mirador-grupo-1600.webp",
+    "alt": "Viajeros y personajes con trajes típicos en la terraza de un mirador de noche"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/_sede/noche-medellin-la70-grupo-1600.webp",
+    "alt": "Grupo de viajeros en una mesa al aire libre de un bar de noche"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/_sede/noche-medellin-restaurante-folclorico-1600.webp",
+    "alt": "Viajeros con músicos y personajes folclóricos en un restaurante decorado"
+   }
+  ],
+  "descartadas": [
+   "tour-nocturno-medellin/tour-nocturno-img-4789: casi igual a img-8715",
+   "tour-nocturno-medellin/tour-nocturno-img-8258: casi igual a la portada"
+  ]
+ },
+ "vuelta-a-oriente": {
+  "portada": {
+   "id": "vuelta-a-oriente/vuelta-oriente-2-img-6555-2",
+   "alt": "Grupo de viajeros celebra en una plaza frente a una casona blanca de balcones de madera",
+   "foco": "50% 60%"
+  },
+  "cabecera_slides": [
+   {
+    "id": "vuelta-a-oriente/vuelta-oriente-img-9228",
+    "alt": "Grupo de viajeros con los brazos en alto frente a una cascada entre rocas y bosque",
+    "foco": "50% 55%"
+   },
+   {
+    "id": "vuelta-a-oriente/vuelta-oriente-img-9152",
+    "alt": "Grupo de viajeros en el atrio de una iglesia blanca de tres torres, al final de una escalinata",
+    "foco": "50% 58%"
+   }
+  ],
+  "paradas": [
+   {
+    "orden": 1,
+    "ubicacion": "El Retiro",
+    "id": "vuelta-a-oriente/vuelta-oriente-2-img-4489-1",
+    "foco": "50% 55%",
+    "alt": "Viajeros junto a grandes letras «El Retiro» en una plazoleta de ladrillo, con árboles altos detrás"
+   },
+   {
+    "orden": 2,
+    "ubicacion": "Tequendamita",
+    "id": "vuelta-a-oriente/vuelta-oriente-2-img-4611",
+    "foco": "50% 45%",
+    "alt": "Cascada de varios saltos entre rocas y vegetación, con un visitante sentado junto al agua"
+   },
+   {
+    "orden": 3,
+    "ubicacion": "La Ceja",
+    "id": "antigua:site/public/media/oficial/orig/vuelta-a-oriente/oriente-la-ceja-letras-1600.webp",
+    "foco": "50% 55%",
+    "alt": "Letras blancas «La Ceja» en la plaza principal del municipio, con árboles y puestos de turismo al fondo"
+   },
+   {
+    "orden": 4,
+    "ubicacion": "El Carmen de Viboral",
+    "id": "antigua:site/public/media/oficial/orig/vuelta-a-oriente/img-0815-1600.webp",
+    "foco": "50% 45%",
+    "alt": "Dos viajeros frente a un mural de cerámica pintada con el título «El Carmen de Viboral»"
+   },
+   {
+    "orden": 5,
+    "ubicacion": "San Antonio de Pereira",
+    "id": "vuelta-a-oriente/vuelta-oriente-2-img-4839-1",
+    "foco": "50% 55%",
+    "alt": "Grupo de viajeros frente a la postrería de fachada de colores con el letrero «Postres San Antonio»"
+   }
+  ],
+  "galeria": [
+   {
+    "id": "vuelta-a-oriente/vuelta-oriente-2-img-4584",
+    "alt": "Viajero de pie sobre las rocas de una cascada rodeada de bosque"
+   },
+   {
+    "id": "vuelta-a-oriente/vuelta-oriente-img-9404",
+    "alt": "Grupo de viajeros en una plaza junto a una alta chimenea de ladrillo con la parte superior cubierta de mosaico"
+   },
+   {
+    "id": "vuelta-a-oriente/vuelta-oriente-2-img-4784",
+    "alt": "Viajero con los brazos abiertos en un pasaje cubierto por sombrillas de colores"
+   },
+   {
+    "id": "vuelta-a-oriente/vuelta-oriente-img-9325",
+    "alt": "Viajeros en una calle de un pueblo con una iglesia blanca al fondo"
+   },
+   {
+    "id": "vuelta-a-oriente/vuelta-oriente-img-9199",
+    "alt": "Viajeros en una calle de casas blancas con puertas y balcones de madera"
+   },
+   {
+    "id": "vuelta-a-oriente/vuelta-oriente-img-9458",
+    "alt": "Manos de viajeros sosteniendo platos con porciones de postre"
+   }
+  ],
+  "inicio_tarjeta": [
+   {
+    "id": "vuelta-a-oriente/vuelta-oriente-img-9234",
+    "alt": "Pareja abrazada frente a una cascada que cae entre rocas y vegetación"
+   },
+   {
+    "id": "vuelta-a-oriente/vuelta-oriente-img-9435",
+    "alt": "Grupo de viajeros junto a un poste de alumbrado azul con base de cerámica pintada, frente a una fachada amarilla"
+   },
+   {
+    "id": "vuelta-a-oriente/vuelta-oriente-img-9428",
+    "alt": "Viajera sentada frente a un mural de mosaico con unas alas de colores"
+   },
+   {
+    "id": "vuelta-a-oriente/vuelta-oriente-img-9355",
+    "alt": "Viajera sentada en la orilla de hierba junto a un río de montaña"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/vuelta-a-oriente/img-2686-1600.webp",
+    "alt": "Viajera de pie sobre las rocas frente a una cascada entre árboles"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/vuelta-a-oriente/img-0768-1600.webp",
+    "alt": "Familia en una plaza amplia de piso de piedra frente a una casona de balcones"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/vuelta-a-oriente/img-0801-1600.webp",
+    "alt": "Pareja saluda junto a una fuente en un parque arbolado"
+   }
+  ],
+  "descartadas": [
+   "vuelta-a-oriente/vuelta-oriente-2-img-6552: va al blog («viajar-en-grupo»)",
+   "vuelta-a-oriente/vuelta-oriente-2-img-4682-2: casi igual a img-9404",
+   "vuelta-a-oriente/vuelta-oriente-2-img-4706: casi igual a img-9428",
+   "vuelta-a-oriente/vuelta-oriente-img-9165 y img-9211: casi iguales a img-9199",
+   "vuelta-a-oriente/vuelta-oriente-img-9434: casi igual a img-9435"
+  ]
+ },
+ "tour-del-cafe-medellin": {
+  "portada": {
+   "id": "tour-del-cafe-medellin/tour-del-cafe-img-4138",
+   "alt": "Grupo de viajeros con sombrero, pañoleta roja y delantal cafetero celebra con los brazos en alto en un potrero, con montañas detrás",
+   "foco": "50% 55%"
+  },
+  "cabecera_slides": [
+   {
+    "id": "tour-del-cafe-medellin/tour-del-cafe-img-4170-1",
+    "alt": "Cuatro viajeras con atuendo cafetero apoyadas en una baranda de madera, con flores y montañas detrás",
+    "foco": "50% 62%"
+   },
+   {
+    "id": "tour-del-cafe-medellin/tour-del-cafe-img-4123",
+    "alt": "Viajeras con atuendo cafetero sentadas en bancas de madera bajo el corredor de la casa de la finca",
+    "foco": "50% 50%"
+   }
+  ],
+  "paradas": [
+   {
+    "orden": 1,
+    "ubicacion": "Finca cafetera",
+    "id": "antigua:site/public/media/oficial/orig/tour-del-cafe-medellin/img-0626-1600.webp",
+    "foco": "50% 45%",
+    "alt": "Dos viajeros con sombrero, pañoleta roja y delantal cafetero entre la vegetación de la finca"
+   },
+   {
+    "orden": 2,
+    "ubicacion": "Cultivos",
+    "id": "tour-del-cafe-medellin/tour-del-cafe-img-4150-1",
+    "foco": "50% 45%",
+    "alt": "Viajera con atuendo cafetero de pie entre cafetos y matas de plátano"
+   },
+   {
+    "orden": 3,
+    "ubicacion": "Recolección",
+    "id": "tour-del-cafe-medellin/tour-del-cafe-img-4156-1",
+    "foco": "50% 45%",
+    "alt": "Viajera con sombrero y pañoleta roja sostiene un canasto de recolección entre los cafetos"
+   },
+   {
+    "orden": 4,
+    "ubicacion": "Beneficio y secado",
+    "id": "tour-del-cafe-medellin/tour-del-cafe-img-4166",
+    "foco": "50% 55%",
+    "alt": "Viajera con rastrillo sobre el café extendido en el secadero, con montañas y cielo azul al fondo"
+   },
+   {
+    "orden": 5,
+    "ubicacion": "Tostión y molienda",
+    "id": "tour-del-cafe-medellin/tour-del-cafe-img-4159-1",
+    "foco": "50% 55%",
+    "alt": "Viajera vierte granos de café desde un canasto en una máquina manual de manivela, bajo el alero de la finca"
+   },
+   {
+    "orden": 6,
+    "ubicacion": "Cata de café",
+    "id": "antigua:site/public/media/oficial/orig/tour-del-cafe-medellin/img-0785-1600.webp",
+    "foco": "45% 50%",
+    "alt": "Mano que sostiene un cuenco metálico con dulce y queso, en la terraza de la finca con montañas al fondo"
+   },
+   {
+    "orden": 7,
+    "ubicacion": "Productos cafeteros",
+    "id": "tour-del-cafe-medellin/img-7604",
+    "foco": "40% 55%",
+    "alt": "Bolsa de café empacado junto a morteros de piedra con granos de café tostado, sobre un mostrador de la finca"
+   }
+  ],
+  "galeria": [
+   {
+    "id": "antigua:site/public/media/oficial/orig/tour-del-cafe-medellin/img-2466-1600.webp",
+    "alt": "Cuatro viajeros con sombrero, pañoleta roja y delantal cafetero entre la vegetación del cafetal"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/tour-del-cafe-medellin/img-0775-1600.webp",
+    "alt": "Grupo de viajeros sentados en unas gradas pintadas con los colores de la bandera, bajo un mural de fotografías"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/tour-del-cafe-medellin/img-0731-1600.webp",
+    "alt": "Un caficultor muestra un canasto con granos rojos de café junto a los cafetos"
+   }
+  ],
+  "inicio_tarjeta": [
+   {
+    "id": "antigua:site/public/media/oficial/orig/_sede/img-0657-1600.webp",
+    "alt": "Grupo de viajeros con atuendo cafetero saluda en un potrero de la finca, con montañas al fondo"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/tour-del-cafe-medellin/img-0759-1600.webp",
+    "alt": "Viajero rastrillando el café extendido en el secadero de la finca, con las montañas al fondo"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/tour-del-cafe-medellin/img-2509-1600.webp",
+    "alt": "Viajeros con delantales y canastos de recolección sobre una ladera de la finca"
+   },
+   {
+    "id": "tour-del-cafe-medellin/tour-del-cafe-img-4156-1",
+    "alt": "Viajera con sombrero y pañoleta roja sostiene un canasto de recolección entre los cafetos"
+   },
+   {
+    "id": "tour-del-cafe-medellin/tour-del-cafe-img-4159-1",
+    "alt": "Viajera vierte granos de café desde un canasto en una máquina manual de manivela, bajo el alero de la finca"
+   },
+   {
+    "id": "tour-del-cafe-medellin/tour-del-cafe-img-4166",
+    "alt": "Viajera con rastrillo sobre el café extendido en el secadero, con montañas y cielo azul al fondo"
+   },
+   {
+    "id": "tour-del-cafe-medellin/img-7604",
+    "alt": "Bolsa de café empacado junto a morteros de piedra con granos de café tostado, sobre un mostrador de la finca"
+   }
+  ],
+  "descartadas": [
+   "antigua:_sede/img-0657-1600.webp (1200 px de ancho) no entra en la cabecera para no ampliarse; va a la tarjeta del inicio. La cabecera del Café queda con 2 diapositivas"
+  ]
+ },
+ "hacienda-napoles": {
+  "portada": {
+   "id": "hacienda-napoles/napoles-img-7239",
+   "alt": "Grupo de viajeros en el paso de cebra bajo el gran arco de madera de la entrada de Hacienda Nápoles",
+   "foco": "50% 60%"
+  },
+  "cabecera_slides": [
+   {
+    "id": "hacienda-napoles/photos-1-001-2-img-2442",
+    "alt": "Grupo de viajeros frente a las grandes letras de colores «Nápoles» y el letrero «Parque temático»",
+    "foco": "50% 72%"
+   },
+   {
+    "id": "hacienda-napoles/photos-1-001-2-img-2592-1",
+    "alt": "Grupo de viajeros junto a una escultura de hipopótamo entre palmeras",
+    "foco": "50% 62%"
+   }
+  ],
+  "paradas": [
+   {
+    "orden": 1,
+    "ubicacion": "Aventura Jurásica",
+    "id": "antigua:site/public/media/oficial/orig/hacienda-napoles/img-5290-1600.webp",
+    "foco": "50% 50%",
+    "alt": "Tres visitantes frente al letrero de Aventura Jurásica con un dinosaurio pintado, en un camino del parque"
+   },
+   {
+    "orden": 2,
+    "ubicacion": "Sabana Africana",
+    "id": "hacienda-napoles/napoles-img-7337-1",
+    "foco": "50% 50%",
+    "alt": "Cuatro viajeros junto a una cerca, con un elefante bajo un cobertizo en un potrero detrás"
+   },
+   {
+    "orden": 3,
+    "ubicacion": "Santuario de fauna",
+    "id": "hacienda-napoles/napoles-img-7303",
+    "foco": "60% 60%",
+    "alt": "Dos viajeros sonrientes junto a la cerca de malla de un recinto de animales con techo de paja"
+   },
+   {
+    "orden": 4,
+    "ubicacion": "Espacios históricos",
+    "id": "hacienda-napoles/photos-1-001-2-img-2555-1",
+    "foco": "50% 55%",
+    "alt": "Grupo de viajeros bajo el arco «Hacienda Nápoles» con la avioneta histórica encima"
+   },
+   {
+    "orden": 5,
+    "ubicacion": "Atracciones acuáticas",
+    "id": "hacienda-napoles/photos-1-001-2-img-2523-1",
+    "foco": "50% 50%",
+    "alt": "Grupo de viajeros bajo el arco de madera con el letrero «Aventura Acuática»"
+   },
+   {
+    "orden": 6,
+    "ubicacion": "Zona gastronómica",
+    "id": "antigua:site/public/media/oficial/orig/hacienda-napoles/img-1828-1600.webp",
+    "foco": "40% 55%",
+    "alt": "Cuatro viajeros en un patio con mesas de manteles azules, frente a un edificio blanco con el letrero «Aldea Plaza»"
+   },
+   {
+    "orden": 7,
+    "ubicacion": "Santorini",
+    "id": "hacienda-napoles/santorini-napoles-img-2804",
+    "foco": "50% 60%",
+    "alt": "Dos viajeros junto al letrero «El Santorini», frente a edificios blancos de ventanas verdes"
+   }
+  ],
+  "galeria": [
+   {
+    "id": "hacienda-napoles/napoles-img-7330",
+    "alt": "Viajero sonriente junto a una cerca, con un elefante bajo un cobertizo en un potrero detrás"
+   },
+   {
+    "id": "hacienda-napoles/santorini-napoles-img-2742",
+    "alt": "Pareja sentada en un columpio circular cubierto de enredaderas"
+   },
+   {
+    "id": "hacienda-napoles/napoles-img-7374",
+    "alt": "Tres viajeros frente a una piscina con una cascada artificial"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/hacienda-napoles/img-5304-1600.webp",
+    "alt": "Visitante junto a una escultura de dinosaurio en un camino de piedra"
+   },
+   {
+    "id": "hacienda-napoles/santorini-napoles-img-2698",
+    "alt": "Pareja sentada en una banca azul junto a un corazón con las palabras «Te amo», en un rincón blanco"
+   }
+  ],
+  "inicio_tarjeta": [
+   {
+    "id": "antigua:site/public/media/oficial/orig/hacienda-napoles/img-5231-1600.webp",
+    "alt": "Pareja frente a grandes letras de madera y el letrero «Parques temáticos»"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/_sede/img-1747-1600.webp",
+    "alt": "Dos viajeros bajo el arco «Hacienda Nápoles» con la avioneta histórica encima"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/hacienda-napoles/img-1811-1600.webp",
+    "alt": "Letrero «El Santorini» con flores frente a edificios blancos de estilo mediterráneo"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/hacienda-napoles/img-1832-1600.webp",
+    "alt": "Viajera sentada en una banca azul junto a un corazón con las palabras «Te amo»"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/hacienda-napoles/img-5205-1600.webp",
+    "alt": "Grupo de viajeros en el paso de cebra frente al gran arco de madera de la entrada del parque"
+   },
+   {
+    "id": "hacienda-napoles/napoles-img-7330",
+    "alt": "Viajero sonriente junto a una cerca, con un elefante bajo un cobertizo en un potrero detrás"
+   },
+   {
+    "id": "hacienda-napoles/napoles-img-7374",
+    "alt": "Tres viajeros frente a una piscina con una cascada artificial"
+   }
+  ],
+  "descartadas": [
+   "hacienda-napoles/napoles-img-7225: casi igual a la portada",
+   "hacienda-napoles/napoles-img-7361: pasa al catálogo /experiencias",
+   "antigua: portada hacienda-napoles-480 (480 px): resolución insuficiente"
+  ]
+ },
+ "salto-del-buey": {
+  "portada": {
+   "id": "antigua:site/public/media/oficial/orig/_sede/img-7241-1600.webp",
+   "alt": "Visitante con los brazos abiertos frente al Salto del Buey, con un arcoíris en la bruma",
+   "foco": "50% 50%"
+  },
+  "cabecera_slides": [
+   {
+    "id": "salto-del-buey/salto-del-buey",
+    "alt": "Tres visitantes en un mirador de madera frente a la cascada del Salto del Buey, con un arcoíris sobre la vegetación",
+    "foco": "42% 55%"
+   },
+   {
+    "id": "salto-del-buey/salto-del-buey-img-2163",
+    "alt": "Visitantes con casco y arnés descienden por las rocas junto a la caída de agua",
+    "foco": "50% 50%"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/salto-del-buey/salto-del-buey-cascada-hombre-1600.webp",
+    "alt": "Visitante de espaldas frente al Salto del Buey, que cae entre paredes de roca y vegetación",
+    "foco": "50% 45%"
+   }
+  ],
+  "paradas": [
+   {
+    "orden": 1,
+    "ubicacion": null,
+    "id": "antigua:site/public/media/oficial/orig/salto-del-buey/img-7125-1600.webp",
+    "foco": "50% 50%",
+    "alt": "Tres visitantes con casco en un mirador de montaña, con el Salto del Buey al fondo"
+   },
+   {
+    "orden": 2,
+    "ubicacion": null,
+    "id": "antigua:site/public/media/oficial/orig/salto-del-buey/salto-del-buey-sendero-familia-1600.webp",
+    "foco": "50% 50%",
+    "alt": "Familia caminando por un sendero de selva entre raíces y vegetación"
+   },
+   {
+    "orden": 3,
+    "ubicacion": null,
+    "id": "antigua:site/public/media/oficial/orig/salto-del-buey/salto-del-buey-cascada-1600.webp",
+    "foco": "50% 40%",
+    "alt": "El Salto del Buey cayendo entre rocas y vegetación, con una visitante en primer plano"
+   },
+   {
+    "orden": 4,
+    "ubicacion": null,
+    "id": "antigua:site/public/media/oficial/orig/salto-del-buey/salto-del-buey-zipline-familia-1600.webp",
+    "foco": "50% 40%",
+    "alt": "Pareja con equipo de seguridad en una plataforma de madera de la actividad de aventura, con las montañas detrás"
+   }
+  ],
+  "galeria": [
+   {
+    "id": "antigua:site/public/media/oficial/orig/salto-del-buey/img-7157-1600.webp",
+    "alt": "Dos visitantes con casco y equipo de seguridad en un sendero de selva"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/salto-del-buey/img-7170-1600.webp",
+    "alt": "Visitante con equipo de seguridad en una plataforma de madera junto a la montaña"
+   }
+  ],
+  "inicio_tarjeta": [
+   {
+    "id": "salto-del-buey/salto-del-buey-img-2028",
+    "alt": "Cuatro visitantes sentados en un mirador de madera con montañas y una bandera de Colombia"
+   },
+   {
+    "id": "salto-del-buey/salto-del-buey-img-2044",
+    "alt": "Cuatro visitantes en unos escalones de un sendero entre árboles"
+   },
+   {
+    "id": "salto-del-buey/salto-del-buey-img-2058",
+    "alt": "Visitantes sobre una roca junto a la base de la cascada, con un arcoíris en la bruma"
+   },
+   {
+    "id": "salto-del-buey/salto-del-buey-img-2091",
+    "alt": "Cuatro visitantes sentados de espaldas en una roca, mirando la cascada"
+   },
+   {
+    "id": "salto-del-buey/salto-del-buey-img-2102",
+    "alt": "Visitante sentado en una roca frente a la cascada y su poza verde"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/salto-del-buey/img-7271-1600.webp",
+    "alt": "Visitante sobre una roca frente a la cascada envuelta en bruma"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/salto-del-buey/img-7225-1600.webp",
+    "alt": "Visitante de espaldas con los brazos abiertos frente a la cascada y un arcoíris"
+   }
+  ],
+  "descartadas": [
+   "antigua:site/public/media/oficial/orig/salto-del-buey/img-2161-1600.webp: casi igual a la nueva img-2163",
+   "antigua: img-7225 (casi igual a img-7241), img-7271 (bruma), img-2114 (627 px)",
+   "Las nuevas de 627×836 (2028, 2044, 2058, 2091, 2102) solo se usan como mini tarjetas del inicio, donde caben sin ampliarse; 2108 y 2113 siguen descartadas (casi iguales a 2102). Pedir los originales al cliente",
+   "Portada: vuelve la antigua img-7241 (vertical 1200×1600, buena para la carta 4:5); la horizontal salto-del-buey (2400×1800) abre la cabecera, cumpliendo la regla de no repetir portada y primera diapositiva"
+  ]
+ },
+ "santa-fe-de-antioquia": {
+  "portada": {
+   "id": "santa-fe-de-antioquia/santafe-de-antoquia2-img-3380-1",
+   "alt": "Grupo de viajeros sobre la pasarela de madera del Puente de Occidente, con sus torres y cables detrás",
+   "foco": "50% 55%"
+  },
+  "cabecera_slides": [
+   {
+    "id": "santa-fe-de-antioquia/santafe-de-antoquia2-img-3631-2",
+    "alt": "Grupo de viajeros en el parque principal de Santa Fe de Antioquia, con la fuente y una iglesia blanca detrás",
+    "foco": "50% 62%"
+   },
+   {
+    "id": "santa-fe-de-antioquia/santafe-de-antoquia2-img-3432",
+    "alt": "Grupo de viajeros en mesas al aire libre bajo sombrillas rojas",
+    "foco": "50% 55%"
+   },
+   {
+    "id": "santa-fe-de-antioquia/santafe-de-antioquia-img-8411",
+    "alt": "Viajero en la pasarela del Puente de Occidente mirando el río Cauca y las montañas",
+    "foco": "50% 42%"
+   }
+  ],
+  "paradas": [
+   {
+    "orden": 1,
+    "ubicacion": "Calles coloniales",
+    "id": "santa-fe-de-antioquia/santafe-de-antoquia2-img-3559",
+    "foco": "45% 60%",
+    "alt": "Grupo de viajeros en la acera de una calle empedrada, junto a una casa colonial blanca de ventanas con rejas verdes"
+   },
+   {
+    "orden": 2,
+    "ubicacion": "Plaza Mayor",
+    "id": "santa-fe-de-antioquia/santafe-de-antioquia-img-8544",
+    "foco": "50% 60%",
+    "alt": "Viajero en la plaza principal de ladrillo frente a la fuente central, con casas coloniales alrededor"
+   },
+   {
+    "orden": 3,
+    "ubicacion": "Catedral de la Inmaculada Concepción",
+    "id": "antigua:site/public/media/oficial/orig/santa-fe-de-antioquia/santa-fe-catedral-plaza.webp",
+    "foco": "40% 50%",
+    "alt": "Fachada blanca y torre de campanario con base de piedra de una iglesia colonial, con toldos de colores frente a ella"
+   },
+   {
+    "orden": 4,
+    "ubicacion": "Iglesias y arquitectura histórica",
+    "id": "santa-fe-de-antioquia/santafe-de-antioquia-img-8488",
+    "foco": "50% 45%",
+    "alt": "Viajero frente a la fachada de piedra y ladrillo de una iglesia colonial con portada tallada"
+   },
+   {
+    "orden": 5,
+    "ubicacion": "Puente de Occidente",
+    "id": "santa-fe-de-antioquia/santafe-de-antioquia-img-8446",
+    "foco": "50% 50%",
+    "alt": "Viajero con los brazos abiertos frente a las dos torres de entrada del Puente de Occidente"
+   },
+   {
+    "orden": 6,
+    "ubicacion": "Gastronomía local",
+    "id": "santa-fe-de-antioquia/santafe-de-antoquia2-img-3588-2",
+    "foco": "50% 50%",
+    "alt": "Grupo de viajeros almorzando en una larga mesa de un restaurante colonial"
+   }
+  ],
+  "galeria": [
+   {
+    "id": "santa-fe-de-antioquia/santafe-de-antoquia2-img-3369",
+    "alt": "Grupo de viajeros almorzando en un restaurante amplio de mesas de madera"
+   },
+   {
+    "id": "santa-fe-de-antioquia/santafe-de-antoquia2-img-3606",
+    "alt": "Tres viajeras sentadas en una banca de un parque, con árboles y casas detrás"
+   },
+   {
+    "id": "santa-fe-de-antioquia/santafe-de-antoquia2-img-3480-2",
+    "alt": "Viajera y un niño juegan en un callejón entre muros de ladrillo, con una señal de pare"
+   },
+   {
+    "id": "santa-fe-de-antioquia/santafe-de-antioquia-img-8435",
+    "alt": "Viajero junto a un mototaxi decorado, con una torre del Puente de Occidente detrás"
+   }
+  ],
+  "inicio_tarjeta": [
+   {
+    "id": "santa-fe-de-antioquia/santafe-de-antoquia2-img-3574-2",
+    "alt": "Grupo de viajeros frente a una casa colonial blanca de puertas de madera, en una calle empedrada"
+   },
+   {
+    "id": "santa-fe-de-antioquia/santafe-de-antoquia2-img-3515",
+    "alt": "Dos viajeras sobre la pasarela del Puente de Occidente, con el río y las montañas detrás"
+   },
+   {
+    "id": "santa-fe-de-antioquia/santafe-de-antioquia-img-8503",
+    "alt": "Viajero en un patio interior blanco con plantas y vasijas de barro"
+   },
+   {
+    "id": "santa-fe-de-antioquia/santafe-de-antioquia-img-8425",
+    "alt": "Viajero en la pasarela de madera del Puente de Occidente, entre sus dos torres"
+   },
+   {
+    "id": "santa-fe-de-antioquia/santafe-de-antioquia-img-8575",
+    "alt": "Viajero subiendo por un camino de tierra bajo un arco de árboles con un letrero de madera"
+   },
+   {
+    "id": "santa-fe-de-antioquia/santafe-de-antioquia-img-8604",
+    "alt": "Viajero bebiendo en la mesa de un café al aire libre bajo los árboles"
+   },
+   {
+    "id": "santa-fe-de-antioquia/santafe-de-antioquia-img-8563",
+    "alt": "Viajero junto a grandes letras de colores «San Jerónimo» al borde de una carretera"
+   }
+  ],
+  "descartadas": [
+   "Solo fotos nuevas, alternando las carpetas «SantaFe de Antioquia» (img-84xx–86xx) y «SantaFe de Antoquia2» (img-33xx–36xx)",
+   "santafe-de-antoquia2-img-3574-2: el usuario rechazó esta foto en la parada 1; pasa a la tarjeta del inicio. La parada 1 usa img-3559 (calle empedrada y casa colonial)",
+   "antiguas retiradas (todas): santa-fe-catedral-plaza, santa-fe-calle-colonial, santa-fe-palacio-arzobispal, santa-fe-puente-occidente, img-3634, 3589, 3596, 3604, 3637, 5974, 5981, centro-historico-noche, puente-interior, balcon-colonial",
+   "Revisión 6: P3 (Catedral) usa la antigua santa-fe-catedral-plaza (720×540, de HEAD) porque el usuario permite antiguas para llenar paradas; se amplía en el recorte de la parada. La portada pasa a img-3380-1 (grupo en el Puente de Occidente) para que la primera tarjeta del Archivo y de la mano tenga varias personas"
+  ]
+ },
+ "jardin-antioquia": {
+  "portada": {
+   "id": "jardin-antioquia/jardin-img-1216",
+   "alt": "Pareja en una calle empedrada de Jardín, junto a una casona blanca de balcones de madera pintados de colores",
+   "foco": "50% 55%"
+  },
+  "cabecera_slides": [
+   {
+    "id": "jardin-antioquia/jardin-img-1266",
+    "alt": "Casona esquinera blanca de dos pisos con balcones y zócalos de colores",
+    "foco": "50% 55%"
+   },
+   {
+    "id": "jardin-antioquia/jardin-img-9794",
+    "alt": "Cuatro viajeros en un mirador, con montañas verdes y árboles detrás",
+    "foco": "50% 58%"
+   }
+  ],
+  "paradas": [
+   {
+    "orden": 1,
+    "ubicacion": "Jardín",
+    "id": "jardin-antioquia/jardin-img-9744",
+    "foco": "45% 55%",
+    "alt": "Pareja junto a grandes letras blancas «Jardín» con un corazón rojo, delante de árboles"
+   },
+   {
+    "orden": 2,
+    "ubicacion": "Calles de Jardín",
+    "id": "jardin-antioquia/jardin-img-1262",
+    "foco": "50% 55%",
+    "alt": "Dos viajeras en una acera de Jardín, frente a una casa blanca con puertas y balcones azules"
+   },
+   {
+    "orden": 3,
+    "ubicacion": "Basílica de Jardín",
+    "id": "jardin-antioquia/jardin-img-1248",
+    "foco": "50% 45%",
+    "alt": "Pareja frente a la fachada de piedra de torres gemelas de la basílica de Jardín"
+   },
+   {
+    "orden": 4,
+    "ubicacion": "Murales de Jardín",
+    "id": "antigua:site/public/media/oficial/orig/jardin-antioquia/jardin-mural-aves.webp",
+    "foco": "50% 55%",
+    "alt": "Mural de aves de colores pintado a lo largo de un muro, bajo un cielo nublado"
+   },
+   {
+    "orden": 5,
+    "ubicacion": "Cultura cafetera",
+    "id": "antigua:site/public/media/oficial/orig/jardin-antioquia/jardin-cafe-origen.webp",
+    "foco": "50% 60%",
+    "alt": "Taza de café sobre una mesa al aire libre, con sombrillas y montañas entre nubes al fondo"
+   }
+  ],
+  "galeria": [
+   {
+    "id": "jardin-antioquia/jardin-img-1223",
+    "alt": "Un guía se toma una foto con tres viajeros en una calle de casas de colores, con montañas al fondo"
+   },
+   {
+    "id": "jardin-antioquia/jardin-img-1235",
+    "alt": "Pareja sonriente en la plaza, con una torre de la basílica entre los árboles"
+   },
+   {
+    "id": "jardin-antioquia/jardin-img-9746",
+    "alt": "Pareja junto a grandes letras blancas «Jardín» con un corazón rojo, delante de árboles"
+   },
+   {
+    "id": "jardin-antioquia/jardin-img-1249",
+    "alt": "Pareja frente a la basílica de torres gemelas de Jardín"
+   },
+   {
+    "id": "jardin-antioquia/jardin-img-1263",
+    "alt": "Dos viajeras en una acera de Jardín frente a una casa blanca de puertas y balcones azules, con la calle y las montañas detrás"
+   }
+  ],
+  "inicio_tarjeta": [
+   {
+    "id": "jardin-antioquia/jardin-img-1251",
+    "alt": "Pareja de pie en el atrio empedrado frente a la fachada de piedra de torres gemelas de la basílica de Jardín"
+   },
+   {
+    "id": "jardin-antioquia/jardin-img-9788",
+    "alt": "Pareja junto a grandes letras blancas «Jardín» con un corazón rojo"
+   },
+   {
+    "id": "jardin-antioquia/jardin-img-1223",
+    "alt": "Un guía se toma una foto con tres viajeros en una calle de casas de colores, con montañas al fondo"
+   },
+   {
+    "id": "jardin-antioquia/jardin-img-1235",
+    "alt": "Pareja sonriente en la plaza, con una torre de la basílica entre los árboles"
+   },
+   {
+    "id": "jardin-antioquia/jardin-img-1263",
+    "alt": "Dos viajeras en una acera de Jardín frente a una casa blanca de puertas y balcones azules, con la calle y las montañas detrás"
+   }
+  ],
+  "descartadas": [
+   "Solo fotos nuevas. Antiguas retiradas: jardin-panoramica, jardin-calles, jardin-basilica, jardin-mural-aves, jardin-cafe-origen",
+   "jardin-img-9748: mismas letras «Jardín» que la parada 1 y que img-9746 de la galería, en la misma ficha",
+   "jardin-img-1252: ráfaga casi idéntica a img-1251 (inicio) e img-1249 (galería)"
+  ]
+ },
+ "traslados-aeropuerto-jmc": {
+  "portada": {
+   "id": "traslados-aeropuerto-jmc/aeropueto",
+   "alt": "Grupo de viajeros con sus maletas bajo la cubierta de concreto de la zona de llegada del aeropuerto",
+   "foco": "50% 55%"
+  },
+  "cabecera_slides": [
+   {
+    "id": "traslados-aeropuerto-jmc/img-8367",
+    "alt": "Viajeros con varias maletas de colores en la zona cubierta de llegadas del aeropuerto",
+    "foco": "50% 55%"
+   }
+  ],
+  "paradas": [
+   {
+    "orden": 1,
+    "ubicacion": "Antes de que aterrices",
+    "id": "antigua:site/public/media/oficial/orig/traslados-aeropuerto-jmc/img-3444-1600.webp",
+    "foco": "50% 55%",
+    "alt": "Viajera con su maleta en la zona de salidas del aeropuerto, con la torre de control al fondo"
+   },
+   {
+    "orden": 2,
+    "ubicacion": "Antes de la recogida",
+    "id": "antigua:site/public/media/equipo/2.webp",
+    "foco": "50% 55%",
+    "alt": "Dos integrantes del equipo con polo negro de la marca junto a una van blanca"
+   },
+   {
+    "orden": 3,
+    "ubicacion": "Aeropuerto José María Córdova",
+    "id": "traslados-aeropuerto-jmc/img-0544",
+    "foco": "50% 55%",
+    "alt": "Familia de cuatro frente al edificio del aeropuerto, con la torre de control «José María Córdova» detrás"
+   },
+   {
+    "orden": 4,
+    "ubicacion": "Hasta tu alojamiento en Medellín",
+    "id": "traslados-aeropuerto-jmc/img-6507",
+    "foco": "50% 60%",
+    "alt": "Viajera con su maleta en la entrada iluminada de un edificio con jardín tropical"
+   }
+  ],
+  "galeria": [
+   {
+    "id": "antigua:site/public/media/oficial/orig/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp",
+    "alt": "Van blanca y pasajeros junto a la zona de salidas del aeropuerto José María Córdova"
+   },
+   {
+    "id": "antigua:site/public/media/equipo/3.webp",
+    "alt": "Integrante del equipo de pie delante de varias vans estacionadas"
+   }
+  ],
+  "inicio_tarjeta": [],
+  "descartadas": [
+   "antigua: img-9035-card (cartel inapropiado): fuera de todo el sitio",
+   "antigua: van 74a9a0c4 (899 px de ancho) no llena la cabecera; se queda en la galería"
+  ]
+ },
+ "tour-miradores": {
+  "portada": null,
+  "cabecera_slides": [],
+  "paradas": [
+   {
+    "orden": 1,
+    "ubicacion": "Mirador La Palma",
+    "id": null,
+    "foco": null,
+    "alt": null
+   },
+   {
+    "orden": 2,
+    "ubicacion": "Cerro El Picacho",
+    "id": null,
+    "foco": null,
+    "alt": null
+   }
+  ],
+  "galeria": [],
+  "inicio_tarjeta": [],
+  "descartadas": [
+   "Decisión del usuario: sin fotos. La tarjeta usará un marcador de marca sin foto (constructor). Las fotos _sede que tenía quedan libres y algunas pasan al Tour Nocturno (tarjeta del inicio) y al catálogo"
+  ]
+ },
+ "tour-de-compras": {
+  "portada": {
+   "id": "antigua:site/public/media/oficial/orig/tour-de-compras/img-2686-1600.webp",
+   "foco": "50% 55%",
+   "alt": "Cuatro viajeros de noche con bolsas de compras, en una acera junto a árboles"
+  },
+  "cabecera_slides": [
+   {
+    "id": "antigua:IMAGENES/FotosMedellin-webp/City Tour/6a8edc22-b798-4d33-97bf-7676bb7cbf5f.webp",
+    "alt": "Grupo de viajeros sonríe en una selfi en la acera, junto a una camioneta blanca",
+    "foco": "55% 45%"
+   }
+  ],
+  "paradas": [
+   {
+    "orden": 1,
+    "ubicacion": "El Hueco",
+    "id": "antigua:IMAGENES/FotosMedellin-webp/City Tour/29880249-2425-4d05-a2b1-88107950c040.webp",
+    "foco": "50% 45%",
+    "alt": "Viajeros brindando en una calle comercial concurrida de El Hueco, con toldos y puestos al fondo"
+   },
+   {
+    "orden": 2,
+    "ubicacion": "Sector comercial del centro",
+    "id": "antigua:IMAGENES/FotosMedellin-webp/City Tour/53a38c2e-3891-40d7-b631-a35ff3c6a1f3.webp",
+    "foco": "50% 55%",
+    "alt": "Carro de venta de limonada y guarapo en una acera, con transeúntes y puestos al fondo"
+   },
+   {
+    "orden": 3,
+    "ubicacion": "Outlets de Guayabal",
+    "id": "antigua:site/public/media/oficial/orig/tour-de-compras/img-3181-1600.webp",
+    "foco": "50% 50%",
+    "alt": "Grupo de viajeros de noche en unas escaleras, rodeados de bolsas de compras"
+   }
+  ],
+  "galeria": [],
+  "inicio_tarjeta": [
+   {
+    "id": "antigua:site/public/media/oficial/orig/tour-de-compras/img-3181-1600.webp",
+    "alt": "Grupo de viajeros de noche en unas escaleras, rodeados de bolsas de compras"
+   },
+   {
+    "id": "antigua:site/public/media/oficial/orig/_sede/tour-de-compras-1120.webp",
+    "alt": "Viajeros brindando en una calle comercial concurrida, con toldos y puestos al fondo"
+   },
+   {
+    "id": "antigua:IMAGENES/FotosMedellin-webp/City Tour/53a38c2e-3891-40d7-b631-a35ff3c6a1f3.webp",
+    "alt": "Carro de venta de limonada y guarapo en una acera, con transeúntes y puestos al fondo"
+   }
+  ],
+  "descartadas": [
+   "antigua:site/public/media/oficial/orig/_sede/tour-de-compras-1120.webp: misma foto que la parada 1",
+   "La portada img-2686 mide 1200×1600: como cabecera a pantalla completa se amplía 1,6×. Sin alternativa: PENDIENTE CLIENTE fotos de mayor resolución"
+  ]
+ },
+ "catalogo_slides": [
+  {
+   "id": "tour-nocturno-medellin/tour-nocturno-img-8715",
+   "alt": "Viajera sentada en un girasol gigante de madera frente al valle de Medellín iluminado",
+   "foco": "55% 55%"
+  },
+  {
+   "id": "hacienda-napoles/napoles-img-7361",
+   "alt": "Grupo de viajeros frente a los letreros de las atracciones acuáticas del parque",
+   "foco": "50% 60%"
+  },
+  {
+   "id": "antigua:IMAGENES/FotosMedellin-webp/City Tour/dji_fly_20260823_171008_507_1787523057150_photo_optimized.webp",
+   "alt": "Vista aérea de un grupo de viajeros saludando bajo un techo pintado con la palabra «Medellín» y los colores de la bandera de Colombia",
+   "foco": "50% 55%"
+  },
+  {
+   "id": "antigua:site/public/media/oficial/orig/_sede/noche-medellin-bandera-mirador-card-1600.webp",
+   "alt": "Viajero de espaldas con los brazos abiertos bajo una bandera de Colombia y una estrella de colores, frente a la ciudad iluminada de noche",
+   "foco": "50% 40%"
+  },
+  {
+   "id": "guatape-piedra-del-penol/photos-1-001-1-img-3538",
+   "alt": "Estela de una lancha en el embalse de Guatapé, con una persona practicando wakeboard y la orilla boscosa al fondo",
+   "foco": "50% 55%"
+  },
+  {
+   "id": "santa-fe-de-antioquia/santafe-de-antoquia2-img-3529-1",
+   "alt": "Tres viajeras sobre la pasarela del Puente de Occidente, con el río Cauca y las montañas al fondo",
+   "foco": "50% 55%"
+  },
+  {
+   "id": "vuelta-a-oriente/vuelta-oriente-img-9344",
+   "alt": "Dos viajeras posan sobre las rocas frente a una cascada",
+   "foco": "50% 55%"
+  }
+ ],
+ "nosotros": {
+  "_nota": "Página /nosotros (Company.jsx). Revisión del usuario 2026-10-23: sin fotos en la cabecera (título sin foto ni flotantes, sin espacio perdido); el collage de 4 fotos usa SOLO fotos de nosotros.zip; la galería/carrusel de abajo vuelve a ser la de HEAD (todas las de photos(\"historia\")); el bloque «Nuestro equipo» del inicio vuelve a HEAD (photos(\"equipo\")[0]), que ya no se repite porque el collage ya no usa equipo/.",
+  "cabecera": null,
+  "flotantes": [],
+  "equipo": [
+   {
+    "id": "nosotros/nosotros-img-2500",
+    "foco": "50% 40%",
+    "alt": "Cinco integrantes del equipo de T&T Medellín, con polos de la marca, sonríen en una selfi en la entrada de un edificio"
+   },
+   {
+    "id": "nosotros/nosotros-img-9257",
+    "foco": "50% 60%",
+    "alt": "Equipo de T&T Medellín en fila con polos blancos y negros, delante de vans y automóviles en una explanada"
+   },
+   {
+    "id": "nosotros/nosotros-img-0995",
+    "foco": "40% 55%",
+    "alt": "Cinco personas sonríen en una acera junto a una camioneta blanca; dos llevan el polo gris de la marca"
+   },
+   {
+    "id": "nosotros/nosotros-img-2496",
+    "foco": "35% 40%",
+    "alt": "Integrantes del equipo de T&T Medellín con polos de la marca en otra selfi en la entrada de un edificio"
+   }
+  ],
+  "galeria": "HEAD: photos(\"historia\") completo (8), como en el último commit",
+  "inicio_equipo": "HEAD: photos(\"equipo\")[0]",
+  "descartadas": [
+   "nosotros/nosotros-0d9373ef-46e1-4125-9163-8f5997bcf78d: no es una fotografía; es una ilustración en estilo caricatura (aparentemente generada) del equipo, con el logo. Spec 01 prohíbe presentar rostros artificiales como reales",
+   "nosotros/nosotros-35e3724c-09e9-4be3-b88b-8a38b89b0042: pieza gráfica de 640×640 con el logo superpuesto sobre la foto y marco desenfocado; repite la escena de img-9257, y la regla I2 prohíbe texto o logo sobre fotografía",
+   "nosotros/nosotros-img-2497: casi igual a img-2500 (cabecera) y menos nítida",
+   "antigua:site/public/media/equipo/4.webp: equipo en fila con vehículos; la sustituye la nueva img-9257 (misma idea, más nítida). Hoy también es la foto del inicio y antes lo era del artículo «viajar-en-grupo»",
+   "antigua:site/public/media/historia/3.webp: mesa de restaurante de noche, poco representativa de la historia",
+   "antigua:site/public/media/historia/4.webp: mesa en un local de comidas, poco representativa de la historia",
+   "nosotros/nosotros-img-2497: casi igual a img-2500, que ya está en el collage"
+  ]
+ },
+ "blog": {
+  "preparar-tu-recorrido": {
+   "id": "blog/photos-1-001-img-8155",
+   "alt": "Viajera en la escalinata de piedra frente a un castillo de torres con tejados rojos"
+  },
+  "elegir-tu-experiencia": {
+   "id": "blog/photos-1-001-img-2202",
+   "alt": "Viajera sentada en un columpio de anillo de madera sobre un muelle, con el embalse detrás y el letrero luminoso «Náutica Guatapé»"
+  },
+  "viajar-en-grupo": {
+   "id": "vuelta-a-oriente/vuelta-oriente-2-img-6552",
+   "alt": "Grupo numeroso de viajeros posando en una plaza frente a una casona blanca de balcones de madera"
+  }
+ },
+ "notas": [
+  "Revisión 4: la mano del inicio vuelve a tener tantas mini tarjetas como en HEAD (MAX_PHOTOS 8 = portada + 7; Jardín 4; Compras 3). Traslados no figura en la mano del inicio (ORDER de TravelHand). Miradores queda sin fotos por decisión del usuario: su carta es el marcador de marca y no lleva mini tarjetas (en HEAD tenía 7).",
+  "Catálogo: solo dos fotos horizontales llegan a 2400 px (napoles-img-7361, tour-nocturno-img-8715); las otras son verticales de 1800 px (recorte 16:9 con el foco indicado, ampliación 1,07× a 1920) y las dos horizontales oficiales que ya usaba esa cabecera (1600×900 y 1600×960, ampliación 1,2×). No quedan más horizontales ≥1920 libres.",
+  "Capas visibles reales: baraja (portada), cabecera tourSlides, paradas, TourArchive (galeria), TravelHand del inicio (inicio_tarjeta), catalogSlides. ExperienceExplorer no se usa: la clave exploracion desaparece.",
+  "tourEntry hoy alimenta a la vez TravelHand (inicio) y TourArchive (ficha) con las mismas fotos: el usuario las vería dos veces al ir del inicio a la ficha. El constructor debe dar a TravelHand la lista inicio_tarjeta y a TourArchive la lista galeria. Si inicio_tarjeta está vacía (Salto del Buey, Traslados, Compras, Miradores), la mano del inicio muestra solo la portada.",
+  "tourSlides y catalogSlides deben leer listas explícitas de este archivo en lugar de sacar fotos de la galería; así la cabecera no repite la galería de la misma página.",
+  "Resolución: las fotos de 1600 px de ancho del catálogo (comuna13-parce 1600×900, bandera-mirador-card 1600×960) y de cabecera (cascada-hombre, img-0657) se amplían ≤1,2× en una pantalla de 1920; las de 1200 px o menos se excluyeron de la cabecera y del catálogo. Las fotos de Salto del Buey de 627×836 se descartan: el cliente debe aportar los originales.",
+  "Recorte 16:9 de fotos 3:4: conserva el 42 % central del alto; los focos indicados mantienen rostros y el motivo principal (verificado sobre las hojas de contacto). En móvil la cabecera es vertical y el recorte es casi completo.",
+  "Vuelta a Oriente: 5 paradas (El Retiro, Tequendamita, La Ceja, El Carmen de Viboral, San Antonio de Pereira). Tequendamita sigue pendiente de confirmación del cliente.",
+  "Miradores sin fotos: portada null y todas las paradas null; el constructor pone un marcador de marca en la carta.",
+  "Pendientes del cliente: originales de Salto del Buey; fotos inequívocas para las paradas en null; autorización de personas visibles en las fotos nuevas (el usuario la confirma para /nosotros).",
+  "Este archivo no edita el código. El constructor implementa y el auditor revisa; el director no aprueba su propia selección.",
+  "2026-10-23 (usuario): Guatapé P3=1961 (más personas con la Piedra), P4=fuente 9790, P6 y P8 con las fotos más relacionadas aunque no muestren el parque ni el malecón de forma inequívoca (pedido expreso del usuario). Nocturno: paradas con fotos del zip con mujeres; ninguna muestra el arco de Provenza.",
+  "2026-10-23 (usuario): Guatapé P7=zocalos y P8=malecon (fotos sueltas Zocalos.HEIC y Malecon.jpg); las que salen (P7 antigua zócalos-balcones y P8 img-9126) pasan al inicio de la galería: pila del principio de la ficha y Archivo del final."
+ ],
+ "repeticiones_declaradas": [
+  "jardin-antioquia (revisión 5, prioridad del usuario: más fotos de Jardín): jardin-img-1223, jardin-img-1235 y jardin-img-1263 aparecen en la mano del inicio y en «Archivo de nuestros viajes» de la ficha (páginas distintas; solo fotos nuevas del zip de Jardín)",
+  "jardin-antioquia: ráfagas en la misma ficha, archivos distintos: la parada 3 (img-1248) y la galería (img-1249) son la misma escena de la basílica; la parada 2 (img-1262) y la galería (img-1263) son la misma escena de la casa azul. En el inicio, img-1251 es otra toma de esa ráfaga de la basílica",
+  "Otras escenas parecidas: Nápoles img-5205 (inicio) y la portada img-7239 muestran el mismo arco de entrada; Santa Fe img-3515 (inicio) e img-3529-1 (catálogo) son el mismo puente, en páginas distintas",
+  "tour-del-cafe-medellin (revisión 6): 4 mini tarjetas del inicio repiten paradas de la ficha (tour-del-cafe-img-4156-1, tour-del-cafe-img-4159-1, tour-del-cafe-img-4166, img-7604); páginas distintas. El Café no tiene más fotos",
+  "tour-de-compras (revisión 6): las 3 mini tarjetas del inicio repiten paradas de la ficha (P1 tour-de-compras-1120 = mismo archivo que FotosMedellin-webp/City Tour/29880249…, P2 53a38c2e-3891-40d7-b631-a35ff3c6a1f3, P3 img-3181); páginas distintas",
+  "hacienda-napoles (revisión 6): napoles-img-7330 y napoles-img-7374 están en el Archivo de la ficha y en la mano del inicio (páginas distintas) para completar 7 tarjetas",
+  "Paradas llenadas por relación y no por lugar exacto (regla de la revisión 6): Café P6 (degustación de dulce y queso), Café P5 (máquina manual), Nápoles P3 (recinto de animales), Nápoles P6 (patio con mesas de Aldea Plaza), Compras P2 (carro de limonada en la calle) y P3 (bolsas de compras), Traslados E1 (aeropuerto) y E2 (equipo con van), Guatapé P4/P6/P7/P8. Los alt describen lo que se ve sin afirmar el lugar"
+ ],
+ "descartadas_globales": [
+  "antigua:site/public/media/oficial/orig/_sede/comuna13-parce-medellin-grupo-1600.webp: retirada de catalogo_slides por pedido del usuario (2026-10-23); la reemplaza la toma de dron 16:9"
+ ]
+}

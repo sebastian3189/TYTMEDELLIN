@@ -34,8 +34,9 @@ const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const readReduce = () => { try { return localStorage.getItem(REDUCE_KEY) === '1'; } catch { return false; } };
 const prefersStatic = () => {
   if (typeof window === 'undefined') return true;
-  if (readReduce() || window.matchMedia(REDUCE).matches || (window.matchMedia(WIDE).matches && window.matchMedia(LOW).matches)) return true;
-  const c = navigator.connection; return Boolean(c && (c.saveData || ['slow-2g', '2g', '3g'].includes(c.effectiveType)));
+  // Solo la persona apaga el movimiento (Windows o el botón «Reducir movimiento»). La estimación de red del navegador (saveData/3G) ya no lo decide:
+  // Edge la activa en Wi‑Fi normales y dejaba la mano fija sin índice ni mazo (usuario, 2026-10-23).
+  return readReduce() || window.matchMedia(REDUCE).matches || (window.matchMedia(WIDE).matches && window.matchMedia(LOW).matches);
 };
 
 // Datos: portada de la baraja + hasta 7 fotos oficiales (tour-entry.js, compartido con las fichas).
@@ -78,7 +79,7 @@ export default function TravelHand() {
   useLayoutEffect(() => {
     const decide = () => {
       const head = document.querySelector('.site-header')?.offsetHeight || 92, wide = window.matchMedia(WIDE).matches;
-      const fits = !wide || window.innerHeight - head >= 560; // compacto (móvil/tablet): el escenario no está fijado y crece si la ventana es baja (iPhone: Safari deja ~660 px de alto útil), así que nunca pasa a estático por altura
+      const fits = !wide || window.innerHeight - head >= 500; // 500 (antes 560, 2026-10-23): laptops 1280×720 y 1366×768 con barra del navegador conservan la mano animada. Compacto (móvil/tablet): el escenario no está fijado y crece si la ventana es baja (iPhone: Safari deja ~660 px de alto útil), así que nunca pasa a estático por altura
       setLayout(wide ? 'wide' : 'compact'); setMode(prefersStatic() || !fits ? 'static' : 'scrub');
     };
     decide(); setReady(true);

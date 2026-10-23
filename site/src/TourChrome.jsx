@@ -13,7 +13,7 @@ import './tour-motion.css';
 const TABS = [['#esencia', 'La experiencia', 0], ['#fotos', 'Fotografías', 1], ['#preparar', 'Antes de viajar', 2], ['#consulta', 'Cotizar', 3]];
 
 /** Pestañas pegajosas: píldora de vidrio, opción activa sólida que viaja (useGlassPill), activa por scroll (IO) y barra de avance con punto naranja. */
-export function TourNav() {
+export function TourNav({ sinFotos = false }) {
   const box = useRef(null), sentinel = useRef(null), bar = useRef(null);
   const [active, setActive] = useState(0), [stuck, setStuck] = useState(false);
   const light = useLightMotion();
@@ -41,7 +41,7 @@ export function TourNav() {
       <nav className="tour-nav tn" data-stuck={stuck} aria-label="En esta experiencia">
         <div ref={box} className="glass-tabs tn-pill">
           <GlassPill />
-          {TABS.map(([href, label, i]) => <a key={href} href={href} aria-current={active === i ? 'location' : undefined}>{label}{i === 3 && <> <Arrow /></>}</a>)}
+          {TABS.filter(([href]) => !(sinFotos && href === '#fotos')).map(([href, label, i]) => <a key={href} href={href} aria-current={active === i ? 'location' : undefined}>{label}{i === 3 && <> <Arrow /></>}</a>)}
           <span ref={bar} className="tn-bar" aria-hidden="true"><b /><i /></span>
         </div>
       </nav>

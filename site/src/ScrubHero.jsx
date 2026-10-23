@@ -42,9 +42,8 @@ const osReduce = () => typeof window !== 'undefined' && window.matchMedia(REDUCE
 
 const prefersStatic = (user) => {
   if (typeof window === 'undefined') return true;
-  if (user || osReduce() || window.matchMedia(LOW_HEIGHT_QUERY).matches) return true;
-  const c = navigator.connection;
-  return Boolean(c && (c.saveData || ['slow-2g', '2g', '3g'].includes(c.effectiveType)));
+  // Sin condición por estimación de red (saveData/3G): Edge la activa en Wi‑Fi normales (usuario, 2026-10-23).
+  return Boolean(user || osReduce() || window.matchMedia(LOW_HEIGHT_QUERY).matches);
 };
 
 function frameOrder(count, mobile) {

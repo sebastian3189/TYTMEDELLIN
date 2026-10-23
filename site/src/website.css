@@ -57,3 +57,9 @@
 .back-link{gap:8px}
 .bd-arrow,.ft-nav button,.rail-controls button,.g-controls button,.gallery-controls button,.chapter-controls button{display:inline-flex;align-items:center;justify-content:center}
 .bd-arrow .ico-arrow,.ft-nav .ico-arrow,.rail-controls .ico-arrow,.g-controls .ico-arrow,.gallery-controls .ico-arrow{vertical-align:0}
+
+/* Tarjeta de marca sin foto (Tour Miradores, decisión del usuario 2026-10-23): mismo marco 4:5 que las fotos, fondo de marca y nombre; sin romper el layout. */
+.tour-card-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;width:100%;height:100%;padding:24px;background:#3C3F3B;color:#F5F5F0;text-align:center}
+.tour-card-ph svg{width:46%;max-width:150px;fill:none;stroke:#FF7F09;stroke-width:3;stroke-linejoin:round}
+.tour-card-ph svg circle{fill:#FF7F09;stroke:none}
+.tour-card-ph b{font:600 clamp(18px,2.2vw,26px)/1.2 Montserrat,Arial,sans-serif;letter-spacing:.01em}

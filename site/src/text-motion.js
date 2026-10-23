@@ -51,7 +51,7 @@ function count(el) {
 export function useTextMotion(pathname) {
   useEffect(() => {
     if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return undefined;
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches || navigator.connection?.saveData) return undefined;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
     const main = document.getElementById('contenido');
     if (!main) return undefined;
     const first = !booted; booted = true;
@@ -121,7 +121,7 @@ export function installPageTransitions() {
     if (!a || (a.target && a.target !== '_self') || a.hasAttribute('download')) return;
     let url; try { url = new URL(a.href, location.href); } catch { return; }
     if (url.origin !== location.origin || url.pathname === location.pathname) return;
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches || navigator.connection?.saveData || pending) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || pending) return;
     e.preventDefault(); e.stopPropagation();
     try {
       document.startViewTransition(() => new Promise((resolve) => {

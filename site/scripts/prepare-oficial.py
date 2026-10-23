@@ -1,4 +1,6 @@
-"""Fotos oficiales de Medellín (ronda 2026-10-12, pedido del usuario; Spec 02 «Pedido del usuario», Spec 04).
+"""OBSOLETO desde 2026-10-23: lo sustituye scripts/prepare-fichas.py (este script no puede ejecutarse: su origen ya no está y borra public/media/oficial).
+
+Fotos oficiales de Medellín (ronda 2026-10-12, pedido del usuario; Spec 02 «Pedido del usuario», Spec 04).
 
 Reproducible: py -3.12 site/scripts/prepare-oficial.py  (desde la raíz del proyecto)
 Entrada (SOLO LECTURA, tratada como datos): tnt-colombia-connect/public/img/paginas/sedes/medellin/<carpeta>/<archivo>.webp

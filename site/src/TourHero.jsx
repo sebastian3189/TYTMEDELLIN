@@ -17,7 +17,7 @@ const two = (n) => String(n).padStart(2, '0');
 
 export default function TourHero({ tour }) {
   const light = useLightMotion();
-  const photos = [tour.hero, ...tour.gallery.filter((g) => g.src !== tour.hero.src)].slice(0, MAX), n = photos.length;
+  const photos = tour.hero ? [tour.hero, ...tour.gallery.filter((g) => g.src !== tour.hero.src)].slice(0, MAX) : [], n = photos.length; // sin portada (Tour Miradores): sin pila
   const [cur, setCur] = useState(0), [flying, setFlying] = useState(-1), [live, setLive] = useState(''), [viewer, setViewer] = useState(false);
   const stage = useRef(null), els = useRef([]), dlg = useRef(null), busy = useRef(false), drag = useRef(null), raf = useRef(0), tilt = useRef(0), side = useRef(1), moved = useRef(false), curRef = useRef(0);
   curRef.current = cur;
@@ -85,6 +85,7 @@ export default function TourHero({ tour }) {
   const open = () => { setViewer(true); requestAnimationFrame(() => dlg.current?.showModal()); };
   const onKey = (e) => { if (e.key === 'ArrowRight') { e.preventDefault(); go(1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); } else if (e.key === 'Enter') { e.preventDefault(); open(); } };
 
+  if (!n) return null;
   return (
     <section className="cs wrap" aria-label={tour.name}>
       <div className="cs-text">

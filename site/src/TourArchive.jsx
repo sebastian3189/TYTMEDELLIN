@@ -1,7 +1,7 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { useLightMotion, useMedia, useMounted } from './PremiumMotion';
 import { smooth, clamp, placePhotos, placeLugar, smallCaps } from './hand-geometria';
-import { tourEntry } from './tour-entry';
+import { archiveEntry } from './tour-entry';
 import FeaturedGallery from './FeaturedGallery';
 import Arrow from './Arrow';
 import { t } from './i18n';
@@ -18,7 +18,7 @@ const SEG_SVH = 230;
 export default function TourArchive({ tour }) {
   const light = useLightMotion(), wide = useMedia('(min-width: 1100px)'), tall = useMedia('(min-height: 640px)'), mounted = useMounted();
   const animated = mounted && wide && tall && !light;
-  const entry = tourEntry(tour.slug), photos = entry.photos.slice(0, 8), n = photos.length;
+  const entry = archiveEntry(tour.slug), photos = entry.photos.slice(0, 8), n = photos.length;
   const [front, setFront] = useState(0), [viewer, setViewer] = useState(false), [live, setLive] = useState('');
   const track = useRef(null), stage = useRef(null), hand = useRef(null), mq = useRef(null), dlg = useRef(null), st = useRef({ front: 0, manualY: null, refresh: () => {} });
   st.current.front = front;
@@ -57,6 +57,7 @@ export default function TourArchive({ tour }) {
     if (announce) setLive(`Foto ${f + 1} de ${n}, ${tour.name}`);
   }, [n, tour.name]);
 
+  if (tour.gallery.length === 0) return null; // sin galería (Tour Miradores y Tour de Compras): se oculta de forma limpia
   if (!animated) return <FeaturedGallery tour={tour} />;
   const open = () => { setViewer(true); requestAnimationFrame(() => dlg.current?.showModal()); };
   return (

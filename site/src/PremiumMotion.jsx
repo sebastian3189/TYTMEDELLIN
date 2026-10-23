@@ -6,8 +6,9 @@ import { watchScroll, docTop, clamp01 } from './scroll-bus';
 // Prerender (Spec 04): el servidor y la primera pasada de hidratación usan el valor `false` (movimiento completo); `useSyncExternalStore` lo
 // corrige con la preferencia real justo después de hidratar, sin desajuste.
 const reducedQuery = () => window.matchMedia('(prefers-reduced-motion: reduce)');
-const subscribeLight = (notify) => { const mq = reducedQuery(); mq.addEventListener('change', notify); navigator.connection?.addEventListener('change', notify); return () => { mq.removeEventListener('change', notify); navigator.connection?.removeEventListener('change', notify); }; };
-const readLight = () => reducedQuery().matches || Boolean(navigator.connection?.saveData);
+// Movimiento ligero solo por preferencia del sistema; la estimación de red (saveData) ya no lo activa (usuario, 2026-10-23).
+const subscribeLight = (notify) => { const mq = reducedQuery(); mq.addEventListener('change', notify); return () => mq.removeEventListener('change', notify); };
+const readLight = () => reducedQuery().matches;
 export function useLightMotion() { return useSyncExternalStore(subscribeLight, readLight, () => false); }
 // `false` en el servidor y al hidratar; `true` después. Para contenido que solo existe en el navegador (formulario, portales).
 const noSubscribe = () => () => {};
