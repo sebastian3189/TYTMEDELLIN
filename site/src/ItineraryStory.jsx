@@ -15,19 +15,18 @@ import './itinerary.css';
 const pad = (n) => String(n).padStart(2, '0');
 const stopOf = (i, n, unit) => t(unit === 'Etapa' ? 'Etapa {n} de {total}' : 'Parada {n} de {total}').replace('{n}', pad(i)).replace('{total}', pad(n));
 const SIZES = '(max-width: 699px) 100vw, (max-width: 999px) 52vw, 58vw';
-// Foto vertical: en escritorio se ve entera (contain) limitada por la altura, ~33–44 % del ancho; así no se descarga la versión de 1200 px (2026-10-24).
-const SIZES_V = '(max-width: 767px) 100vw, (max-width: 1099px) 46vw, 36vw';
 
 const Pin = () => <svg className="it-pin" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>;
 
 function Foto({ stop, eager = false }) {
   const f = fotoItinerario(stop.imagen);
   if (!f) return <div className="it-pending" role="img" aria-label={`${t('Foto pendiente')}: ${t(stop.ubicacion || stop.titulo_corto)}`}><span className="it-pending-ring" aria-hidden="true" /><b>Foto pendiente</b><span>{stop.ubicacion || stop.titulo_corto}</span></div>;
-  // Foto vertical en marco horizontal: entera (contain) sobre su propio fondo difuminado, sin cortar al sujeto.
+  // Foto vertical: LLENA la tarjeta con su foco en PC y en celular (usuario, 2026-10-24); en la lista de celular su tarjeta es 4:5.
+  // La clase pic-fit solo marca la orientación (CSS .it .pic-fit en itinerary.css); ya no hay fondo difuminado.
   const vertical = f.width / f.height < 0.95;
-  return <picture className={vertical ? 'pic-fit' : undefined} style={vertical ? { '--ph': `url(${f.src.replace(/-\d+\.webp$/, '-480.webp')})` } : undefined}>
-    <source type="image/webp" srcSet={f.webp} sizes={vertical ? SIZES_V : SIZES} />
-    <img src={f.src} width={f.width} height={f.height} alt={stop.alt} loading={eager ? 'eager' : 'lazy'} decoding="async" style={{ objectPosition: stop.foco }} />
+  return <picture className={vertical ? 'pic-fit' : undefined}>
+    <source type="image/webp" srcSet={f.webp} sizes={SIZES} />
+    <img src={f.src} width={f.width} height={f.height} alt={stop.alt} loading={eager ? 'eager' : 'lazy'} decoding="async" style={{ objectPosition: stop.foco, '--foco': stop.foco }} />
   </picture>;
 }
 

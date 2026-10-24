@@ -1,7 +1,7 @@
-import { A as watchScroll, C as Marquee, D as useMedia, E as useLightMotion, F as usePageMeta, G as whatsapp, H as jsx, K as language, O as useMounted, R as Icon$1, U as jsxs, V as Fragment, _ as TourCard, a as tours, b as Arrow, f as Eyebrow, g as Rail, h as QuoteSection, k as docTop, m as Picture, q as t, w as Trust } from "../entry-server.js";
+import { A as watchScroll, C as Marquee, D as useMedia, E as useLightMotion, F as usePageMeta, G as whatsapp, H as jsx, K as language, O as useMounted, R as Icon$1, U as jsxs, V as Fragment$1, _ as TourCard, a as tours, b as Arrow, f as Eyebrow, g as Rail, h as QuoteSection, k as docTop, m as Picture, q as t, w as Trust } from "../entry-server.js";
 import NotFound from "./NotFound-Cug1s3FC.js";
 import { n as useGlassPill, t as GlassPill } from "./glass-nEhUSRvx.js";
-import { i as archiveEntry, r as TourHeroVideo } from "./Hero-MO5IjHIT.js";
+import { i as archiveEntry, r as TourHeroVideo } from "./Hero-CvbbLY17.js";
 import { t as FeaturedGallery } from "./FeaturedGallery-7UODtH_G.js";
 import { t as Reviews } from "./Reviews-CLKwcIeX.js";
 import { l as Faq, o as FAQ_TOUR, s as FAQ_TRANSFER, t as DURACIONES } from "./faq-data-BaHZP5K7.js";
@@ -1022,7 +1022,7 @@ function TourNav({ sinFotos = false }) {
 			}
 		});
 	}, [light]);
-	return /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx("i", {
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx("i", {
 		ref: sentinel,
 		className: "tn-sentinel",
 		"aria-hidden": "true"
@@ -1038,7 +1038,7 @@ function TourNav({ sinFotos = false }) {
 				TABS.filter(([href]) => !(sinFotos && href === "#fotos")).map(([href, label, i]) => /* @__PURE__ */ jsxs("a", {
 					href,
 					"aria-current": active === i ? "location" : void 0,
-					children: [label, i === 3 && /* @__PURE__ */ jsxs(Fragment, { children: [" ", /* @__PURE__ */ jsx(Arrow, {})] })]
+					children: [label, i === 3 && /* @__PURE__ */ jsxs(Fragment$1, { children: [" ", /* @__PURE__ */ jsx(Arrow, {})] })]
 				}, href)),
 				/* @__PURE__ */ jsxs("span", {
 					ref: bar,
@@ -1747,11 +1747,11 @@ var itinerarios_media_default = {
 		"w": [
 			480,
 			800,
-			1200
+			899
 		],
-		"width": 1200,
-		"height": 1600,
-		"origen": "site/public/media/equipo/2.webp"
+		"width": 899,
+		"height": 1599,
+		"origen": "site/public/media/oficial/orig/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp"
 	},
 	"traslados-03": {
 		"w": [
@@ -2063,7 +2063,7 @@ var itinerarios = {
 		estado: "confirmada",
 		paradas: [
 			p(1, "Seguimos tu vuelo", "Antes de que aterrices", "Seguimos el estado de tu vuelo hasta su aterrizaje en Medellín para coordinar tu recogida y estar preparados ante posibles cambios de horario.", "Comparte tu número de vuelo, dirección y número de pasajeros.", "traslados-01", "Viajera con su maleta en la zona de salidas del aeropuerto, con la torre de control al fondo", { foco: "50% 55%" }),
-			p(2, "Tu conductor te contacta", "Antes de la recogida", "Nuestro conductor se comunica previamente y comparte las instrucciones del punto de encuentro, así como sus datos y los del vehículo.", "El punto de encuentro y las condiciones de espera se confirman con el equipo.", "traslados-02", "Dos integrantes del equipo con polo negro de la marca junto a una van blanca", { foco: "50% 55%" }),
+			p(2, "Tu conductor te contacta", "Antes de la recogida", "Nuestro conductor se comunica previamente y comparte las instrucciones del punto de encuentro, así como sus datos y los del vehículo.", "El punto de encuentro y las condiciones de espera se confirman con el equipo.", "traslados-02", "Van blanca y pasajeros junto a la zona de salidas del aeropuerto José María Córdova", { foco: "50% 55%" }),
 			p(3, "Te recibimos en el aeropuerto", "Aeropuerto José María Córdova", "Entendemos que pueden presentarse demoras en migración, recogida de equipaje o vuelos, por lo que ofrecemos acompañamiento y flexibilidad en la espera.", "En servicios previamente coordinados podemos ofrecer señalización personalizada con el nombre del pasajero o grupo.", "traslados-03", "Familia de cuatro frente al edificio del aeropuerto, con la torre de control «José María Córdova» detrás", { foco: "50% 55%" }),
 			p(4, "De puerta a puerta", "Hasta tu alojamiento en Medellín", "Coordinamos tu traslado entre el Aeropuerto José María Córdova y tu alojamiento en Medellín.", "Puerta a puerta, con transporte privado.", "traslados-04", "Viajera con su maleta en la entrada iluminada de un edificio con jardín tropical", { foco: "50% 60%" })
 		]
@@ -2098,7 +2098,6 @@ var itinerarios = {
 var pad = (n) => String(n).padStart(2, "0");
 var stopOf = (i, n, unit) => t(unit === "Etapa" ? "Etapa {n} de {total}" : "Parada {n} de {total}").replace("{n}", pad(i)).replace("{total}", pad(n));
 var SIZES = "(max-width: 699px) 100vw, (max-width: 999px) 52vw, 58vw";
-var SIZES_V = "(max-width: 767px) 100vw, (max-width: 1099px) 46vw, 36vw";
 var Pin = () => /* @__PURE__ */ jsxs("svg", {
 	className: "it-pin",
 	viewBox: "0 0 24 24",
@@ -2135,11 +2134,10 @@ function Foto({ stop, eager = false }) {
 	const vertical = f.width / f.height < .95;
 	return /* @__PURE__ */ jsxs("picture", {
 		className: vertical ? "pic-fit" : void 0,
-		style: vertical ? { "--ph": `url(${f.src.replace(/-\d+\.webp$/, "-480.webp")})` } : void 0,
 		children: [/* @__PURE__ */ jsx("source", {
 			type: "image/webp",
 			srcSet: f.webp,
-			sizes: vertical ? SIZES_V : SIZES
+			sizes: SIZES
 		}), /* @__PURE__ */ jsx("img", {
 			src: f.src,
 			width: f.width,
@@ -2147,7 +2145,10 @@ function Foto({ stop, eager = false }) {
 			alt: stop.alt,
 			loading: eager ? "eager" : "lazy",
 			decoding: "async",
-			style: { objectPosition: stop.foco }
+			style: {
+				objectPosition: stop.foco,
+				"--foco": stop.foco
+			}
 		})]
 	});
 }
@@ -2159,7 +2160,7 @@ var labelsOf = (s) => [
 ].filter(Boolean);
 function StopText({ s, i, n, corto, unit, rotulo, big }) {
 	const labels = labelsOf(s);
-	return /* @__PURE__ */ jsxs(Fragment, { children: [
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
 		/* @__PURE__ */ jsxs("p", {
 			className: "it-sub",
 			children: [
@@ -2504,7 +2505,7 @@ function Story({ tour }) {
 					}),
 					/* @__PURE__ */ jsx("span", {
 						className: "story-hint",
-						children: staticMode ? "A tu ritmo" : /* @__PURE__ */ jsxs(Fragment, { children: ["Desliza para seguir la historia ", /* @__PURE__ */ jsx(Arrow, { dir: "down" })] })
+						children: staticMode ? "A tu ritmo" : /* @__PURE__ */ jsxs(Fragment$1, { children: ["Desliza para seguir la historia ", /* @__PURE__ */ jsx(Arrow, { dir: "down" })] })
 					})
 				]
 			})]

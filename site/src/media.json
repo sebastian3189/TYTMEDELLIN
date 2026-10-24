@@ -369,6 +369,7 @@
         "height": 2400,
         "source": "IMAGENES/NuevasFotos-webp/tour-nocturno-medellin/tour-nocturno-img-8358.webp",
         "focus": "50% 55%",
+        "entera": true,
         "alt": "Grupo de viajeros con músicos y personajes folclóricos en un restaurante decorado con luces y banderines"
       }
     ],
@@ -660,6 +661,7 @@
         "height": 1575,
         "source": "IMAGENES/NuevasFotos-webp/tour-del-cafe-medellin/tour-del-cafe-img-4170-1.webp",
         "focus": "50% 62%",
+        "entera": true,
         "alt": "Cuatro viajeras con atuendo cafetero apoyadas en una baranda de madera, con flores y montañas detrás"
       },
       {
@@ -1257,25 +1259,33 @@
     },
     "cabecera": [
       {
-        "src": "/media/fichas/traslados-aeropuerto-jmc/img-8367-h1800.webp",
-        "small": "/media/fichas/traslados-aeropuerto-jmc/img-8367-h640.webp",
-        "srcset": "/media/fichas/traslados-aeropuerto-jmc/img-8367-h640.webp 640w, /media/fichas/traslados-aeropuerto-jmc/img-8367-h1080.webp 1080w, /media/fichas/traslados-aeropuerto-jmc/img-8367-h1800.webp 1800w",
+        "src": "/media/fichas/nosotros/nosotros-img-0995-h1800.webp",
+        "small": "/media/fichas/nosotros/nosotros-img-0995-h640.webp",
+        "srcset": "/media/fichas/nosotros/nosotros-img-0995-h640.webp 640w, /media/fichas/nosotros/nosotros-img-0995-h1080.webp 1080w, /media/fichas/nosotros/nosotros-img-0995-h1800.webp 1800w, /media/fichas/nosotros/nosotros-img-0995-h1800.webp 1800w",
         "width": 1800,
-        "height": 2400,
-        "source": "IMAGENES/NuevasFotos-webp/traslados-aeropuerto-jmc/img-8367.webp",
-        "focus": "50% 55%",
-        "alt": "Viajeros con varias maletas de colores en la zona cubierta de llegadas del aeropuerto"
+        "height": 1350,
+        "source": "IMAGENES/NuevasFotos-webp/nosotros/nosotros-img-0995.webp",
+        "focus": "45% 55%",
+        "alt": "Cinco personas sonríen en una acera junto a una camioneta blanca; dos llevan el polo gris de la marca"
       }
     ],
     "galeria": [
       {
-        "src": "/media/oficial/orig/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp",
-        "small": "/media/oficial/w400/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp",
-        "srcset": "/media/oficial/w400/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp 400w, /media/oficial/w800/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp 800w, /media/oficial/orig/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp 899w",
-        "width": 899,
-        "height": 1599,
-        "source": "site/public/media/oficial/orig/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp",
-        "alt": "Van blanca y pasajeros junto a la zona de salidas del aeropuerto José María Córdova"
+        "src": "/media/fichas/traslados-aeropuerto-jmc/img-8367-1200.webp",
+        "small": "/media/fichas/traslados-aeropuerto-jmc/img-8367-400.webp",
+        "srcset": "/media/fichas/traslados-aeropuerto-jmc/img-8367-400.webp 400w, /media/fichas/traslados-aeropuerto-jmc/img-8367-800.webp 800w, /media/fichas/traslados-aeropuerto-jmc/img-8367-1200.webp 1200w",
+        "width": 1200,
+        "height": 1600,
+        "source": "IMAGENES/NuevasFotos-webp/traslados-aeropuerto-jmc/img-8367.webp",
+        "alt": "Viajeros con varias maletas de colores en la zona cubierta de llegadas del aeropuerto"
+      },
+      {
+        "src": "/media/equipo/2.webp",
+        "small": "/media/equipo/2-small.webp",
+        "width": 1200,
+        "height": 1600,
+        "source": "site/public/media/equipo/2.webp",
+        "alt": "Dos integrantes del equipo con polo negro de la marca junto a una van blanca"
       },
       {
         "src": "/media/equipo/3.webp",
@@ -1284,6 +1294,14 @@
         "height": 1600,
         "source": "site/public/media/equipo/3.webp",
         "alt": "Integrante del equipo de pie delante de varias vans estacionadas"
+      },
+      {
+        "src": "/media/equipo/4.webp",
+        "small": "/media/equipo/4-small.webp",
+        "width": 1024,
+        "height": 768,
+        "source": "site/public/media/equipo/4.webp",
+        "alt": "Equipo de T&T Medellín en fila junto a las vans y automóviles de la flota en un parqueadero"
       }
     ],
     "inicio": []

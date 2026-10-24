@@ -1,4 +1,4 @@
-import { B as Socials, G as whatsapp, H as jsx, S as Manifesto, U as jsxs, V as Fragment, W as company, b as Arrow, d as Button, f as Eyebrow, h as QuoteSection, i as photos, m as Picture, o as values, p as PageTitle, r as nosotros } from "../entry-server.js";
+import { B as Socials, G as whatsapp, H as jsx, S as Manifesto, U as jsxs, V as Fragment$1, W as company, b as Arrow, d as Button, f as Eyebrow, h as QuoteSection, i as photos, m as Picture, o as values, p as PageTitle, r as nosotros } from "../entry-server.js";
 import { t as FeaturedGallery } from "./FeaturedGallery-7UODtH_G.js";
 import { t as Reviews } from "./Reviews-CLKwcIeX.js";
 import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-BaHZP5K7.js";
@@ -239,7 +239,7 @@ var Gallery = ({ tour, eyebrow }) => /* @__PURE__ */ jsx(FeaturedGallery, {
 	eyebrow
 });
 function About() {
-	return /* @__PURE__ */ jsxs(Fragment, { children: [
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
 		/* @__PURE__ */ jsx(AboutFx, {}),
 		/* @__PURE__ */ jsx(PageTitle, {
 			tag: "Quiénes somos",
@@ -330,7 +330,7 @@ function About() {
 	] });
 }
 function Services() {
-	return /* @__PURE__ */ jsxs(Fragment, { children: [
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
 		/* @__PURE__ */ jsx(PageTitle, {
 			tag: "Servicios",
 			title: "Transporte y turismo a tu medida",
@@ -381,7 +381,7 @@ function Services() {
 	] });
 }
 function Contact() {
-	return /* @__PURE__ */ jsxs(Fragment, { children: [
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
 		/* @__PURE__ */ jsx(PageTitle, {
 			tag: "Contacto",
 			title: "Hablemos de tu viaje",
@@ -437,10 +437,10 @@ function Contact() {
 function QuotePage() {
 	const { search } = useLocation();
 	const params = new URLSearchParams(search);
-	return /* @__PURE__ */ jsxs(Fragment, { children: [
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
 		/* @__PURE__ */ jsx(PageTitle, {
 			tag: "Cotizar",
-			title: /* @__PURE__ */ jsxs(Fragment, { children: [
+			title: /* @__PURE__ */ jsxs(Fragment$1, { children: [
 				"Tu viaje, tus tiempos,",
 				/* @__PURE__ */ jsx("br", {}),
 				"tu ",
@@ -455,9 +455,9 @@ function QuotePage() {
 	] });
 }
 function Privacy() {
-	return /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(PageTitle, {
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx(PageTitle, {
 		tag: "Privacidad",
-		title: /* @__PURE__ */ jsxs(Fragment, { children: [
+		title: /* @__PURE__ */ jsxs(Fragment$1, { children: [
 			"Tu información,",
 			/* @__PURE__ */ jsx("br", {}),
 			"bajo tu ",
@@ -488,7 +488,7 @@ function Privacy() {
 	})] });
 }
 function Ratings() {
-	return /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(PageTitle, {
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx(PageTitle, {
 		tag: "Calificaciones",
 		title: "Opiniones de quienes ya viajaron con nosotros"
 	}), /* @__PURE__ */ jsx(Reviews, { full: true })] });

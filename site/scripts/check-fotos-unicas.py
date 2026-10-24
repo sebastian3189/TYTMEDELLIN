@@ -114,9 +114,9 @@ usadas_decl = set()
 
 def declarada(ka, kb, ra, rb):
     slug_a, slug_b = ka.split('#')[0], kb.split('#')[0]
-    if slug_a != slug_b: return False
     for i, d in enumerate(declaradas):
-        if not d.startswith(slug_a): continue
+        # Misma experiencia: la declaración empieza por su slug. Entre dos secciones (p. ej. Traslados y /nosotros): debe nombrar a ambas.
+        if not (d.startswith(slug_a) and (slug_a == slug_b or slug_b in d)) and not (d.startswith(slug_b) and slug_a in d): continue
         for r in (ra, rb):
             stem = Path(r).stem
             claves = {stem, *re.findall(r'img-\d+(?:-\d+)?', stem), *re.findall(r'img-\d+', stem), *re.findall(r'\d{7,}', stem)}

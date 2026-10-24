@@ -105,6 +105,13 @@ html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .socials a{col
 @keyframes hs-kb-a{from{transform:scale(1) translate3d(0,0,0)}to{transform:scale(1.09) translate3d(-1.2%,-.8%,0)}}
 @keyframes hs-kb-b{from{transform:scale(1.09) translate3d(1.2%,.8%,0)}to{transform:scale(1) translate3d(0,0,0)}}
 .hero-slides[data-still=true] .hs-img{animation:none;transition:none}
+/* Diapositivas marcadas `entera` (usuario, 2026-10-24: solo la foto vertical de Noche en Medellín): en pantallas horizontales se ven enteras (contain) sobre su propio fondo
+   ampliado y difuminado, con el mismo fundido que las demás. El resto de diapositivas y las pantallas verticales siguen a pantalla completa (cover). */
+.hs-bg{display:none;position:absolute;inset:-8%;background:var(--ph) center/cover no-repeat;filter:blur(30px) brightness(.6) saturate(1.1);opacity:0;transition:opacity 1200ms ease}
+.hs-bg.is-on{opacity:1}
+.hs-bg.is-prev{opacity:0}
+@media(min-aspect-ratio:1/1){.hs-bg-v{display:block}.hs-img.hs-fit-v{object-fit:contain;object-position:50% 50%!important}}
+.hero-slides[data-still=true] .hs-bg{transition:none}
 @media(prefers-reduced-motion:reduce){.hs-img{animation:none!important;transition:none}}
 
 /* Video vertical de la historia: botón reproducir/pausar (sin volumen: el reel no tiene audio) y pie con enlace al post */

@@ -93,3 +93,8 @@ html[data-theme="dark"] .it-media{outline:1px solid rgba(255,255,255,.1)}
 @media(min-width:768px) and (max-width:899px) and (max-height:640px){.it-art h3{font-size:22px}.it-art .it-desc{font-size:14px;line-height:1.4}.it-art .it-place{font-size:14px}} /* angosta y baja (768–899 × ≤640) */
 /* Rendimiento (2026-10-24): la lista de paradas (móvil y HTML pre-generado) no pinta ni descarga fotos/fondos de las tarjetas fuera de pantalla. */
 .it-static .it-card{content-visibility:auto;contain-intrinsic-size:auto 640px}
+/* PC y celular (usuario, 2026-10-24): la foto LLENA la tarjeta (cover con el foco de cada parada), sin franjas difuminadas. En la lista de
+   celular las fotos verticales usan tarjeta 4:5 para casi no recortar; la foto completa se sigue abriendo (mantener pulsada → abrir imagen). */
+.it .pic-fit::before{display:none}
+.it .pic-fit>img{object-fit:cover!important;object-position:var(--foco,50% 40%)!important}
+.it-static .it-card .it-media:has(.pic-fit){aspect-ratio:4/5}

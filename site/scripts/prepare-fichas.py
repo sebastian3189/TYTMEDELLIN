@@ -149,6 +149,7 @@ def antigua(foto_id):
 def entrada(item, ancha=False):
     e = (slide if ancha else (antigua if en_publico(item['id']) else nueva))(item['id'])
     if item.get('foco'): e['focus'] = item['foco']
+    if item.get('entera'): e['entera'] = True  # se muestra entera (sin recortar) en pantallas horizontales; usuario 2026-10-24
     if item.get('alt'): e['alt'] = item['alt']
     return e
 

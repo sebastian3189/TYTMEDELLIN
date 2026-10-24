@@ -1,6 +1,6 @@
-import { D as useMedia, E as useLightMotion, G as whatsapp, H as jsx, I as PlayIcon, K as language, L as SoundIcon, M as inicioTextos, N as textoFase, R as Icon, U as jsxs, V as Fragment, a as tours, b as Arrow, d as Button, f as Eyebrow, j as CHAPTERS, m as Picture, q as t, r as nosotros, t as articles, u as Logo, y as GoogleBadgeStatic, z as SocialIcon } from "../entry-server.js";
+import { D as useMedia, E as useLightMotion, G as whatsapp, H as jsx, I as PlayIcon, K as language, L as SoundIcon, M as inicioTextos, N as textoFase, R as Icon, U as jsxs, V as Fragment$1, a as tours, b as Arrow, d as Button, f as Eyebrow, j as CHAPTERS, m as Picture, q as t, r as nosotros, t as articles, u as Logo, y as GoogleBadgeStatic, z as SocialIcon } from "../entry-server.js";
 import { n as useGlassPill, t as GlassPill } from "./glass-nEhUSRvx.js";
-import { a as tourEntry, c as prepVideo, l as safePlay, n as HeroBlock, o as inicioVideos, s as instagram } from "./Hero-MO5IjHIT.js";
+import { a as tourEntry, c as prepVideo, l as safePlay, n as HeroBlock, o as inicioVideos, s as instagram } from "./Hero-CvbbLY17.js";
 import { t as Reviews } from "./Reviews-CLKwcIeX.js";
 import { a as FAQ_HOME, l as Faq } from "./faq-data-BaHZP5K7.js";
 import { a as smooth$1, r as placePhotos } from "./mobile-motion-o2zoinXe.js";
@@ -2147,7 +2147,7 @@ var textPage = (item) => /* @__PURE__ */ jsx("div", {
 	className: "bk-page bk-page--text",
 	children: /* @__PURE__ */ jsx(PageText, { item })
 });
-var faceContent = (kind, item) => kind === "photo" ? photoPage(item) : kind === "text" ? textPage(item) : /* @__PURE__ */ jsxs(Fragment, { children: [photoPage(item), textPage(item)] });
+var faceContent = (kind, item) => kind === "photo" ? photoPage(item) : kind === "text" ? textPage(item) : /* @__PURE__ */ jsxs(Fragment$1, { children: [photoPage(item), textPage(item)] });
 function Face({ kind, item, side, spine, segment, split }) {
 	const w = segment === "a" ? SPLIT : .7;
 	const inner = split ? `${(100 / w).toFixed(4)}%` : "100%";
@@ -3089,7 +3089,7 @@ function HomeHero() {
 				})
 			]
 		}),
-		actions: /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsxs(Link, {
+		actions: /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsxs(Link, {
 			className: "button hero-btn hero-btn--explore",
 			to: "/experiencias",
 			children: ["Explorar experiencias", /* @__PURE__ */ jsx(Arrow, {})]
@@ -3228,7 +3228,7 @@ function StoryVideo({ v }) {
 					})
 				})
 			]
-		}), /* @__PURE__ */ jsxs("figcaption", { children: [v.alt, v.instagramUrl && /* @__PURE__ */ jsxs(Fragment, { children: [" · ", /* @__PURE__ */ jsxs("a", {
+		}), /* @__PURE__ */ jsxs("figcaption", { children: [v.alt, v.instagramUrl && /* @__PURE__ */ jsxs(Fragment$1, { children: [" · ", /* @__PURE__ */ jsxs("a", {
 			className: "text-link",
 			href: v.instagramUrl,
 			target: "_blank",
@@ -3414,7 +3414,7 @@ function HomeSocial() {
 //#endregion
 //#region src/pages/Home.jsx
 function Home() {
-	return /* @__PURE__ */ jsxs(Fragment, { children: [
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
 		/* @__PURE__ */ jsx(HomeHero, {}),
 		/* @__PURE__ */ jsx(HomeStory, {}),
 		/* @__PURE__ */ jsx(ScrubHero, {

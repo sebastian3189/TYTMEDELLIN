@@ -1512,7 +1512,8 @@ var en_default = {
 	"Cuatro viajeros de noche con bolsas de compras, en una acera junto a árboles": "Four travelers at night with shopping bags, on a sidewalk beside trees",
 	"Nuestros comienzos": "Our beginnings",
 	"Equipo de T&T Medellín en fila delante de vans y automóviles de la flota": "The T&T Medellín team lined up in front of the fleet's vans and cars",
-	"Grupo de viajeras posando en un mirador frente al embalse al atardecer": "Group of women travelers posing at a viewpoint over the reservoir at sunset"
+	"Grupo de viajeras posando en un mirador frente al embalse al atardecer": "Group of women travelers posing at a viewpoint over the reservoir at sunset",
+	"Equipo de T&T Medellín en fila junto a las vans y automóviles de la flota en un parqueadero": "The T&T Medellín team lined up beside the fleet's vans and cars in a parking lot"
 };
 //#endregion
 export { Aceptar, Ampliar, Autenticidad, Blog, Buses, Calidad, Calificaciones, Cercanía, Cerrar, Ciudad, Compromiso, Conecta, Confianza, Configurar, Contacto, Correo, Cotizar, Cultivos, Descubre, Detalles, Disfruta, Empresa, Enamórate, Experiencias, Explora, Familia, Felicitación, Foto, Fotografía, Fotografías, Guatapé, Hospitalidad, Hoy, Indicativo, Inicio, Inspiración, Inspírate, Jardín, Llámanos, Mensaje, Menú, Miradores, Naturaleza, Necesarias, Nevera, Noche, Nombre, Nosotros, Número, Opcional, Personalizable, Personas, Petición, Planeación, Preferencias, Principal, Privacidad, Provenza, Pueblos, Queja, Rechazar, Reclamo, Recolección, Recuerda, Revisa, Rionegro, Santorini, Seguir, Seguridad, Sencillez, Servicio, Servicios, Siente, Silenciar, Sorpréndete, Sugerencia, Síguenos, Tequendamita, Todas, Todos, Traslados, Vehículos, Vive, aquí, compartido, control, conversación, de, en_default as default, descubrir, empieza, encuentros, es, escuchemos, experiencia, importa, mueven, necesitas, nota, notas, pasajeros, personas, planeémoslo, por, quieres, recuerdo, sentido, tu, viajó, vive };

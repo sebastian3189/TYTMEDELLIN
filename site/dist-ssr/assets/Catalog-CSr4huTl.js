@@ -1,6 +1,6 @@
-import { H as jsx, T as useFlipGrid, U as jsxs, V as Fragment, _ as TourCard, a as tours, w as Trust } from "../entry-server.js";
+import { H as jsx, T as useFlipGrid, U as jsxs, V as Fragment$1, _ as TourCard, a as tours, w as Trust } from "../entry-server.js";
 import { n as useGlassPill, t as GlassPill } from "./glass-nEhUSRvx.js";
-import { t as CatalogHero } from "./Hero-MO5IjHIT.js";
+import { t as CatalogHero } from "./Hero-CvbbLY17.js";
 import { useRef, useState } from "react";
 //#region src/pages/Catalog.jsx
 function Catalog() {
@@ -11,7 +11,7 @@ function Catalog() {
 	useGlassPill(tabs, filter);
 	const list = tours.filter((t) => (filter === "Todos" || t.category === filter) && `${t.name} ${t.description}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase())).sort((a, b) => Number(!a.hero) - Number(!b.hero));
 	useFlipGrid(grid, list.map((t) => t.slug).join("|"));
-	return /* @__PURE__ */ jsxs(Fragment, { children: [
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
 		/* @__PURE__ */ jsx(CatalogHero, {}),
 		/* @__PURE__ */ jsx(Trust, {}),
 		/* @__PURE__ */ jsxs("section", {

@@ -1,7 +1,7 @@
 import { renderToString } from "react-dom/server";
 import { Link, NavLink, Navigate, Route, Routes, StaticRouter, useLocation, useNavigationType } from "react-router-dom";
 import { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
-import { Fragment, jsx, jsxs } from "react/jsx-runtime";
+import { Fragment as Fragment$1, jsx, jsxs } from "react/jsx-runtime";
 import { createPortal } from "react-dom";
 //#region src/text-motion.js
 var SCENES = ".home-hero,.scrub-hero,.th,.it,.blog-book,.different,.story,.explorer-track,[data-rv],.afx,[data-no-tx],dialog,form,details,[aria-live],.review-panel,.consent,.welcome,.tour-bar";
@@ -184,8 +184,8 @@ var S = globalThis.__ttI18n || (globalThis.__ttI18n = {
 var dictionaries = S.dictionaries;
 S.localizedProps = localizedProps;
 var loaders = {
-	en: () => import("./assets/en-CWR2vRr4.js"),
-	"pt-BR": () => import("./assets/pt-BR-CtEYCEzg.js")
+	en: () => import("./assets/en-KGYVZKOu.js"),
+	"pt-BR": () => import("./assets/pt-BR-CEtx2oPy.js")
 };
 var language = () => S.locale;
 var setLanguage = (value) => {
@@ -1213,11 +1213,11 @@ function QuoteCopy({ withType = false }) {
 				className: "eyebrow",
 				children: "Hecho para ti"
 			}),
-			/* @__PURE__ */ jsx$1("h2", { children: withType ? /* @__PURE__ */ jsxs$1(Fragment, { children: [
+			/* @__PURE__ */ jsx$1("h2", { children: withType ? /* @__PURE__ */ jsxs$1(Fragment$1, { children: [
 				"Cuéntanos qué",
 				/* @__PURE__ */ jsx$1("br", {}),
 				"necesitas"
-			] }) : /* @__PURE__ */ jsxs$1(Fragment, { children: [
+			] }) : /* @__PURE__ */ jsxs$1(Fragment$1, { children: [
 				"Tu experiencia",
 				/* @__PURE__ */ jsx$1("br", {}),
 				"empieza con una",
@@ -1542,7 +1542,7 @@ function ShareMenu({ name: rawName, path, className = "" }) {
 			els[(i + (e.shiftKey ? -1 : 1) + els.length) % els.length].focus();
 		}
 	};
-	return /* @__PURE__ */ jsxs$1(Fragment, { children: [/* @__PURE__ */ jsx$1("button", {
+	return /* @__PURE__ */ jsxs$1(Fragment$1, { children: [/* @__PURE__ */ jsx$1("button", {
 		ref: btn,
 		type: "button",
 		className: `card-share ${className}`,
@@ -2091,7 +2091,7 @@ function Preferences() {
 				fill: "none",
 				stroke: "currentColor",
 				strokeWidth: "1.7",
-				children: dark ? /* @__PURE__ */ jsxs$1(Fragment, { children: [/* @__PURE__ */ jsx$1("circle", {
+				children: dark ? /* @__PURE__ */ jsxs$1(Fragment$1, { children: [/* @__PURE__ */ jsx$1("circle", {
 					cx: "12",
 					cy: "12",
 					r: "4"
@@ -2195,7 +2195,7 @@ function Consent() {
 		} else setChosen(true);
 	};
 	if (!ready) return null;
-	return /* @__PURE__ */ jsxs$1(Fragment, { children: [
+	return /* @__PURE__ */ jsxs$1(Fragment$1, { children: [
 		!chosen && /* @__PURE__ */ jsxs$1("section", {
 			ref: banner,
 			className: `consent-banner${leaving ? " is-leaving" : ""}`,
@@ -2516,14 +2516,14 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-C9ewm6Gy.js");
+var company_ = () => import("./assets/Company-BJhEQKvh.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-B45NLcWY.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-YBgr5gCe.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-Cz7aBTsQ.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-Bcbz4Xe5.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-CSr4huTl.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-CETMUmw5.js").then((m) => m.default)),
 	fleet: lazyRoute(() => import("./assets/Fleet-BVxxzf6D.js").then((m) => m.default)),
-	blog: lazyRoute(pick(() => import("./assets/Blog-DV1OkLFs.js"), "Blog")),
-	article: lazyRoute(() => import("./assets/Blog-DV1OkLFs.js").then((m) => m.default)),
+	blog: lazyRoute(pick(() => import("./assets/Blog-D_VKyTZO.js"), "Blog")),
+	article: lazyRoute(() => import("./assets/Blog-D_VKyTZO.js").then((m) => m.default)),
 	about: lazyRoute(pick(company_, "About")),
 	services: lazyRoute(pick(company_, "Services")),
 	contact: lazyRoute(pick(company_, "Contact")),
@@ -2805,7 +2805,7 @@ function Layout() {
 	useEffect(() => {
 		notifyRouteReady();
 	}, [pathname]);
-	return /* @__PURE__ */ jsxs$1(Fragment, { children: [
+	return /* @__PURE__ */ jsxs$1(Fragment$1, { children: [
 		/* @__PURE__ */ jsx$1("a", {
 			className: "skip-link",
 			href: "#contenido",
@@ -2933,6 +2933,7 @@ var media_default = {
 			"height": 2400,
 			"source": "IMAGENES/NuevasFotos-webp/tour-nocturno-medellin/tour-nocturno-img-8358.webp",
 			"focus": "50% 55%",
+			"entera": true,
 			"alt": "Grupo de viajeros con músicos y personajes folclóricos en un restaurante decorado con luces y banderines"
 		}],
 		"galeria": [
@@ -3219,6 +3220,7 @@ var media_default = {
 			"height": 1575,
 			"source": "IMAGENES/NuevasFotos-webp/tour-del-cafe-medellin/tour-del-cafe-img-4170-1.webp",
 			"focus": "50% 62%",
+			"entera": true,
 			"alt": "Cuatro viajeras con atuendo cafetero apoyadas en una baranda de madera, con flores y montañas detrás"
 		}, {
 			"src": "/media/fichas/tour-del-cafe-medellin/tour-del-cafe-img-4123-h1312.webp",
@@ -3805,31 +3807,50 @@ var media_default = {
 			"alt": "Grupo de viajeros con sus maletas bajo la cubierta de concreto de la zona de llegada del aeropuerto"
 		},
 		"cabecera": [{
-			"src": "/media/fichas/traslados-aeropuerto-jmc/img-8367-h1800.webp",
-			"small": "/media/fichas/traslados-aeropuerto-jmc/img-8367-h640.webp",
-			"srcset": "/media/fichas/traslados-aeropuerto-jmc/img-8367-h640.webp 640w, /media/fichas/traslados-aeropuerto-jmc/img-8367-h1080.webp 1080w, /media/fichas/traslados-aeropuerto-jmc/img-8367-h1800.webp 1800w",
+			"src": "/media/fichas/nosotros/nosotros-img-0995-h1800.webp",
+			"small": "/media/fichas/nosotros/nosotros-img-0995-h640.webp",
+			"srcset": "/media/fichas/nosotros/nosotros-img-0995-h640.webp 640w, /media/fichas/nosotros/nosotros-img-0995-h1080.webp 1080w, /media/fichas/nosotros/nosotros-img-0995-h1800.webp 1800w, /media/fichas/nosotros/nosotros-img-0995-h1800.webp 1800w",
 			"width": 1800,
-			"height": 2400,
-			"source": "IMAGENES/NuevasFotos-webp/traslados-aeropuerto-jmc/img-8367.webp",
-			"focus": "50% 55%",
-			"alt": "Viajeros con varias maletas de colores en la zona cubierta de llegadas del aeropuerto"
+			"height": 1350,
+			"source": "IMAGENES/NuevasFotos-webp/nosotros/nosotros-img-0995.webp",
+			"focus": "45% 55%",
+			"alt": "Cinco personas sonríen en una acera junto a una camioneta blanca; dos llevan el polo gris de la marca"
 		}],
-		"galeria": [{
-			"src": "/media/oficial/orig/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp",
-			"small": "/media/oficial/w400/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp",
-			"srcset": "/media/oficial/w400/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp 400w, /media/oficial/w800/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp 800w, /media/oficial/orig/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp 899w",
-			"width": 899,
-			"height": 1599,
-			"source": "site/public/media/oficial/orig/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp",
-			"alt": "Van blanca y pasajeros junto a la zona de salidas del aeropuerto José María Córdova"
-		}, {
-			"src": "/media/equipo/3.webp",
-			"small": "/media/equipo/3-small.webp",
-			"width": 1200,
-			"height": 1600,
-			"source": "site/public/media/equipo/3.webp",
-			"alt": "Integrante del equipo de pie delante de varias vans estacionadas"
-		}],
+		"galeria": [
+			{
+				"src": "/media/fichas/traslados-aeropuerto-jmc/img-8367-1200.webp",
+				"small": "/media/fichas/traslados-aeropuerto-jmc/img-8367-400.webp",
+				"srcset": "/media/fichas/traslados-aeropuerto-jmc/img-8367-400.webp 400w, /media/fichas/traslados-aeropuerto-jmc/img-8367-800.webp 800w, /media/fichas/traslados-aeropuerto-jmc/img-8367-1200.webp 1200w",
+				"width": 1200,
+				"height": 1600,
+				"source": "IMAGENES/NuevasFotos-webp/traslados-aeropuerto-jmc/img-8367.webp",
+				"alt": "Viajeros con varias maletas de colores en la zona cubierta de llegadas del aeropuerto"
+			},
+			{
+				"src": "/media/equipo/2.webp",
+				"small": "/media/equipo/2-small.webp",
+				"width": 1200,
+				"height": 1600,
+				"source": "site/public/media/equipo/2.webp",
+				"alt": "Dos integrantes del equipo con polo negro de la marca junto a una van blanca"
+			},
+			{
+				"src": "/media/equipo/3.webp",
+				"small": "/media/equipo/3-small.webp",
+				"width": 1200,
+				"height": 1600,
+				"source": "site/public/media/equipo/3.webp",
+				"alt": "Integrante del equipo de pie delante de varias vans estacionadas"
+			},
+			{
+				"src": "/media/equipo/4.webp",
+				"small": "/media/equipo/4-small.webp",
+				"width": 1024,
+				"height": 768,
+				"source": "site/public/media/equipo/4.webp",
+				"alt": "Equipo de T&T Medellín en fila junto a las vans y automóviles de la flota en un parqueadero"
+			}
+		],
 		"inicio": []
 	},
 	"jardin-antioquia": {
@@ -4832,4 +4853,4 @@ async function render(url) {
 	}));
 }
 //#endregion
-export { watchScroll as A, Socials as B, Marquee as C, useMedia as D, useLightMotion as E, usePageMeta as F, whatsapp as G, jsx$1 as H, PlayIcon as I, language as K, SoundIcon as L, inicioTextos as M, textoFase as N, useMounted as O, NOT_FOUND as P, Icon as R, Manifesto as S, useFlipGrid as T, jsxs$1 as U, Fragment as V, company as W, TourCard as _, tours as a, Arrow as b, rawTours as c, Button as d, Eyebrow as f, Rail as g, QuoteSection as h, photos as i, CHAPTERS as j, docTop as k, media_default as l, Picture as m, metaFor, catalogo as n, values as o, PageTitle as p, paths, t as q, nosotros as r, render, vehicles as s, articles as t, Logo as u, hiddenByCover as v, Trust as w, QuoteCopy as x, GoogleBadgeStatic as y, SocialIcon as z };
+export { watchScroll as A, Socials as B, Marquee as C, useMedia as D, useLightMotion as E, usePageMeta as F, whatsapp as G, jsx$1 as H, PlayIcon as I, language as K, SoundIcon as L, inicioTextos as M, textoFase as N, useMounted as O, NOT_FOUND as P, Icon as R, Manifesto as S, useFlipGrid as T, jsxs$1 as U, Fragment$1 as V, company as W, TourCard as _, tours as a, Arrow as b, rawTours as c, Button as d, Eyebrow as f, Rail as g, QuoteSection as h, photos as i, CHAPTERS as j, docTop as k, media_default as l, Picture as m, metaFor, catalogo as n, values as o, PageTitle as p, paths, t as q, nosotros as r, render, vehicles as s, articles as t, Logo as u, hiddenByCover as v, Trust as w, QuoteCopy as x, GoogleBadgeStatic as y, SocialIcon as z };

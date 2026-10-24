@@ -341,7 +341,8 @@
    {
     "id": "tour-nocturno-medellin/tour-nocturno-img-8358",
     "alt": "Grupo de viajeros con músicos y personajes folclóricos en un restaurante decorado con luces y banderines",
-    "foco": "50% 55%"
+    "foco": "50% 55%",
+    "entera": true
    }
   ],
   "paradas": [
@@ -546,7 +547,8 @@
    {
     "id": "tour-del-cafe-medellin/tour-del-cafe-img-4170-1",
     "alt": "Cuatro viajeras con atuendo cafetero apoyadas en una baranda de madera, con flores y montañas detrás",
-    "foco": "50% 62%"
+    "foco": "50% 62%",
+    "entera": true
    },
    {
     "id": "tour-del-cafe-medellin/tour-del-cafe-img-4123",
@@ -1115,9 +1117,9 @@
   },
   "cabecera_slides": [
    {
-    "id": "traslados-aeropuerto-jmc/img-8367",
-    "alt": "Viajeros con varias maletas de colores en la zona cubierta de llegadas del aeropuerto",
-    "foco": "50% 55%"
+    "id": "nosotros/nosotros-img-0995",
+    "foco": "45% 55%",
+    "alt": "Cinco personas sonríen en una acera junto a una camioneta blanca; dos llevan el polo gris de la marca"
    }
   ],
   "paradas": [
@@ -1131,9 +1133,9 @@
    {
     "orden": 2,
     "ubicacion": "Antes de la recogida",
-    "id": "antigua:site/public/media/equipo/2.webp",
+    "id": "antigua:site/public/media/oficial/orig/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp",
     "foco": "50% 55%",
-    "alt": "Dos integrantes del equipo con polo negro de la marca junto a una van blanca"
+    "alt": "Van blanca y pasajeros junto a la zona de salidas del aeropuerto José María Córdova"
    },
    {
     "orden": 3,
@@ -1152,12 +1154,20 @@
   ],
   "galeria": [
    {
-    "id": "antigua:site/public/media/oficial/orig/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp",
-    "alt": "Van blanca y pasajeros junto a la zona de salidas del aeropuerto José María Córdova"
+    "id": "traslados-aeropuerto-jmc/img-8367",
+    "alt": "Viajeros con varias maletas de colores en la zona cubierta de llegadas del aeropuerto"
+   },
+   {
+    "id": "antigua:site/public/media/equipo/2.webp",
+    "alt": "Dos integrantes del equipo con polo negro de la marca junto a una van blanca"
    },
    {
     "id": "antigua:site/public/media/equipo/3.webp",
     "alt": "Integrante del equipo de pie delante de varias vans estacionadas"
+   },
+   {
+    "id": "antigua:site/public/media/equipo/4.webp",
+    "alt": "Equipo de T&T Medellín en fila junto a las vans y automóviles de la flota en un parqueadero"
    }
   ],
   "inicio_tarjeta": [],
@@ -1360,14 +1370,17 @@
   "hacienda-napoles (revisión 6): napoles-img-7330 y napoles-img-7374 están en el Archivo de la ficha y en la mano del inicio (páginas distintas) para completar 7 tarjetas",
   "Paradas llenadas por relación y no por lugar exacto (regla de la revisión 6): Café P6 (degustación de dulce y queso), Café P5 (máquina manual), Nápoles P3 (recinto de animales), Nápoles P6 (patio con mesas de Aldea Plaza), Compras P2 (carro de limonada en la calle) y P3 (bolsas de compras), Traslados E1 (aeropuerto) y E2 (equipo con van), Guatapé P4/P6/P7/P8. Los alt describen lo que se ve sin afirmar el lugar",
   "tour-de-compras (usuario, 2026-10-23): la parada 2 usa la portada img-2686-1600 (la carta central de Compras en la mano del inicio); en la ficha se ve en la pila de la cabecera y en la parada 2",
-  "nosotros (usuario, 2026-10-23): img-9257 está en el collage de /nosotros y en el bloque «Nuestro equipo» del inicio (páginas distintas)"
+  "nosotros (usuario, 2026-10-23): img-9257 está en el collage de /nosotros y en el bloque «Nuestro equipo» del inicio (páginas distintas)",
+  "traslados-aeropuerto-jmc y nosotros (usuario, 2026-10-24): nosotros-img-0995 es la cabecera de Traslados y está en el collage de /nosotros (páginas distintas)"
  ],
  "descartadas_globales": [
   "antigua:site/public/media/oficial/orig/_sede/comuna13-parce-medellin-grupo-1600.webp: retirada de catalogo_slides por pedido del usuario (2026-10-23); la reemplaza la toma de dron 16:9"
  ],
  "vetadas": [
   "antigua:site/public/media/oficial/orig/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp",
-  "antigua:IMAGENES/FotosMedellin-webp/GUATAPE/IMG_3500.webp"
+  "antigua:IMAGENES/FotosMedellin-webp/GUATAPE/IMG_3500.webp",
+  "antigua:site/public/media/oficial/orig/traslados-aeropuerto-jmc/img-9035-card-1600.webp"
  ],
- "_nota_vetadas": "Fotos que el usuario pidió no usar en ningún lugar (2026-10-24): hombre con sombrero en el mirador de la Piedra (dos copias)."
+ "_nota_vetadas": "Fotos que el usuario pidió no usar en ningún lugar (2026-10-24): hombre con sombrero en el mirador de la Piedra (dos copias).",
+ "_nota_entera": "entera: true = la diapositiva se ve completa sobre fondo difuminado en pantallas horizontales (pedido explícito del usuario, 2026-10-24: Noche en Medellín y la 1.ª del Tour del Café); las demás llenan su espacio (cover)."
 }

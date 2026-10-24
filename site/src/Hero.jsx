@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import PlayIcon from './PlayIcon';
 import { prepVideo, safePlay } from './videoPrep';
 import { Link } from 'react-router-dom';
@@ -129,11 +129,19 @@ function HeroSlides({ slides, paused, still }) {
   useEffect(() => { if (still || n < 2) return undefined; const idle = window.requestIdleCallback || ((f) => setTimeout(f, 1200)); const h = idle(() => setReach((r) => Math.max(r, 2))); return () => { (window.cancelIdleCallback || clearTimeout)(h); }; }, [still, n]);
   return (
     <div ref={box} className="hero-slides" data-paused={paused ? 'true' : 'false'} data-still={still ? 'true' : 'false'}>
-      {slides.slice(0, still ? 1 : reach).map((p, i) => (
-        <img key={p.src} ref={(el) => { imgs.current[i] = el; }} className={`hs-img hs-${i % 2 ? 'b' : 'a'}${i === cur ? ' is-on' : i === prev ? ' is-prev' : ''}`}
-          src={p.src} srcSet={p.srcset || `${p.small} 640w, ${p.src} ${p.width}w`} sizes="100vw" width={p.width} height={p.height} alt="" style={{ objectPosition: p.focus || '50% 38%' }}
-          loading="eager" fetchPriority={i === 0 ? 'high' : 'low'} decoding="async" draggable="false" />
-      ))}
+      {slides.slice(0, still ? 1 : reach).map((p, i) => {
+        // Diapositiva marcada `entera` en la selección (usuario, 2026-10-24: solo la vertical de Noche en Medellín): en pantalla horizontal se ve
+        // ENTERA sobre su propio fondo difuminado (CSS .hs-bg-v/.hs-fit-v). Todas las demás llenan la cabecera (cover), como siempre.
+        const fit = p.entera && p.height > p.width ? 'v' : '', state = i === cur ? ' is-on' : i === prev ? ' is-prev' : '';
+        return (
+          <Fragment key={p.src}>
+            {fit && <span aria-hidden="true" className={`hs-bg hs-bg-${fit}${state}`} style={{ '--ph': `url(${p.small || p.src})` }} />}
+            <img ref={(el) => { imgs.current[i] = el; }} className={`hs-img hs-${i % 2 ? 'b' : 'a'}${fit ? ` hs-fit-${fit}` : ''}${state}`}
+              src={p.src} srcSet={p.srcset || `${p.small} 640w, ${p.src} ${p.width}w`} sizes={fit === 'v' ? '(min-aspect-ratio: 1/1) 76vh, 100vw' : '100vw'} width={p.width} height={p.height} alt="" style={{ objectPosition: p.focus || '50% 38%' }}
+              loading="eager" fetchPriority={i === 0 ? 'high' : 'low'} decoding="async" draggable="false" />
+          </Fragment>
+        );
+      })}
     </div>
   );
 }

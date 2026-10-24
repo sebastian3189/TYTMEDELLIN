@@ -1,4 +1,4 @@
-import { F as usePageMeta, H as jsx, K as language, U as jsxs, V as Fragment, b as Arrow, d as Button, m as Picture, p as PageTitle, t as articles } from "../entry-server.js";
+import { F as usePageMeta, H as jsx, K as language, U as jsxs, V as Fragment$1, b as Arrow, d as Button, m as Picture, p as PageTitle, t as articles } from "../entry-server.js";
 import NotFound from "./NotFound-Cug1s3FC.js";
 import { n as useGlassPill, t as GlassPill } from "./glass-nEhUSRvx.js";
 import { Link, useParams } from "react-router-dom";
@@ -228,7 +228,7 @@ function BlogIndex() {
 	const [featured, ...rest] = articles;
 	const pool = filter === "Todas" ? rest : articles.filter((a) => a.tag === filter);
 	const list = pool.slice(0, shown);
-	return /* @__PURE__ */ jsxs(Fragment, { children: [
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
 		featured && /* @__PURE__ */ jsx("section", {
 			className: "wrap blog-featured",
 			"aria-labelledby": "blog-destacado",
@@ -333,7 +333,7 @@ function BlogIndex() {
 //#endregion
 //#region src/pages/Blog.jsx
 function Blog() {
-	return /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(PageTitle, {
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx(PageTitle, {
 		tag: "Blog",
 		title: "Ideas y consejos para viajar por Medellín",
 		text: "Notas del equipo para elegir, preparar y disfrutar tus recorridos desde Medellín."
@@ -343,7 +343,7 @@ function Article() {
 	const { slug } = useParams(), article = articles.find((a) => a.slug === slug);
 	usePageMeta(article?.title, article?.intro);
 	if (!article) return /* @__PURE__ */ jsx(NotFound, {});
-	return /* @__PURE__ */ jsxs(Fragment, { children: [
+	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
 		/* @__PURE__ */ jsx(PageTitle, {
 			tag: `Cuaderno de viaje · ${article.tag}`,
 			title: article.title,

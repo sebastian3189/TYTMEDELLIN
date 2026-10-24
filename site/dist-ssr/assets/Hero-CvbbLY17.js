@@ -1,6 +1,6 @@
-import { E as useLightMotion, H as jsx, I as PlayIcon, M as inicioTextos, U as jsxs, V as Fragment, W as company, a as tours, b as Arrow, l as media_default, n as catalogo } from "../entry-server.js";
+import { E as useLightMotion, H as jsx, I as PlayIcon, M as inicioTextos, U as jsxs, V as Fragment$1, W as company, a as tours, b as Arrow, l as media_default, n as catalogo } from "../entry-server.js";
 import { Link } from "react-router-dom";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 //#region src/videoPrep.js
 function prepVideo(el, muted = true) {
 	if (!el) return;
@@ -366,23 +366,30 @@ function HeroSlides({ slides, paused, still }) {
 		className: "hero-slides",
 		"data-paused": paused ? "true" : "false",
 		"data-still": still ? "true" : "false",
-		children: slides.slice(0, still ? 1 : reach).map((p, i) => /* @__PURE__ */ jsx("img", {
-			ref: (el) => {
-				imgs.current[i] = el;
-			},
-			className: `hs-img hs-${i % 2 ? "b" : "a"}${i === cur ? " is-on" : i === prev ? " is-prev" : ""}`,
-			src: p.src,
-			srcSet: p.srcset || `${p.small} 640w, ${p.src} ${p.width}w`,
-			sizes: "100vw",
-			width: p.width,
-			height: p.height,
-			alt: "",
-			style: { objectPosition: p.focus || "50% 38%" },
-			loading: "eager",
-			fetchPriority: i === 0 ? "high" : "low",
-			decoding: "async",
-			draggable: "false"
-		}, p.src))
+		children: slides.slice(0, still ? 1 : reach).map((p, i) => {
+			const fit = p.entera && p.height > p.width ? "v" : "", state = i === cur ? " is-on" : i === prev ? " is-prev" : "";
+			return /* @__PURE__ */ jsxs(Fragment, { children: [fit && /* @__PURE__ */ jsx("span", {
+				"aria-hidden": "true",
+				className: `hs-bg hs-bg-${fit}${state}`,
+				style: { "--ph": `url(${p.small || p.src})` }
+			}), /* @__PURE__ */ jsx("img", {
+				ref: (el) => {
+					imgs.current[i] = el;
+				},
+				className: `hs-img hs-${i % 2 ? "b" : "a"}${fit ? ` hs-fit-${fit}` : ""}${state}`,
+				src: p.src,
+				srcSet: p.srcset || `${p.small} 640w, ${p.src} ${p.width}w`,
+				sizes: fit === "v" ? "(min-aspect-ratio: 1/1) 76vh, 100vw" : "100vw",
+				width: p.width,
+				height: p.height,
+				alt: "",
+				style: { objectPosition: p.focus || "50% 38%" },
+				loading: "eager",
+				fetchPriority: i === 0 ? "high" : "low",
+				decoding: "async",
+				draggable: "false"
+			})] }, p.src);
+		})
 	});
 }
 /**
@@ -438,7 +445,7 @@ function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = fal
 						paused: slidesPaused,
 						still: light
 					}),
-					img && /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx("link", {
+					img && /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx("link", {
 						rel: "preload",
 						as: "image",
 						href: img.desktop.src,
@@ -537,7 +544,7 @@ function TourHeroVideo({ tour }) {
 			className: "hero-h1--tour",
 			children: tour.name
 		}),
-		actions: /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsxs("a", {
+		actions: /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsxs("a", {
 			className: "button hero-btn hero-btn--explore",
 			id: "cta-principal",
 			href: "#consulta",
@@ -563,7 +570,7 @@ function CatalogHero() {
 			className: "hero-h1--tour",
 			children: "Experiencias desde Medellín"
 		}),
-		actions: /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsxs("a", {
+		actions: /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsxs("a", {
 			className: "button hero-btn hero-btn--explore",
 			href: "#catalogo",
 			children: ["Ver las experiencias", /* @__PURE__ */ jsx(Arrow, {})]
