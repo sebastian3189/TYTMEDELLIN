@@ -72,7 +72,7 @@ export default function TourArchive({ tour }) {
             onPointerDown={(e) => { st.current.sx = e.clientX; st.current.sy = e.clientY; }}
             onPointerUp={(e) => { const dx = e.clientX - (st.current.sx ?? e.clientX), dy = e.clientY - (st.current.sy ?? e.clientY); if (e.pointerType !== 'mouse' && Math.abs(dx) >= 48 && Math.abs(dx) > Math.abs(dy) * 1.2) select(front + (dx < 0 ? 1 : -1), true); }}>
             <div className="th-group">
-              {photos.map((p, k) => <img key={k} className="th-photo" data-k={k} src={p.src} srcSet={p.srcSet} sizes={k === front ? '36vw' : '18vw'} width={p.width} height={p.height} alt={`${tour.name}, fotografía ${k + 1}`} loading="lazy" decoding="async" draggable="false" />)}
+              {photos.map((p, k) => <img key={k} className="th-photo" data-k={k} src={p.src} srcSet={p.srcSet} sizes={k === front ? '(max-width: 799px) 84vw, 24vw' : '(max-width: 799px) 40vw, 14vw'} width={p.width} height={p.height} alt={`${tour.name}, fotografía ${k + 1}`} loading="lazy" decoding="async" draggable="false" />)}
               <span className="th-lugar" aria-hidden="true"><b>{smallCaps(t(entry.lugar))}</b></span>
             </div>
           </div>
@@ -88,7 +88,7 @@ export default function TourArchive({ tour }) {
       {viewer && (
         <dialog ref={dlg} className="gallery-dialog ta-dialog" aria-label={`Galería ampliada de ${tour.name}`} onClose={() => setViewer(false)} onClick={(e) => { if (e.target === dlg.current) dlg.current.close(); }}>
           <button type="button" className="ta-close" aria-label="Cerrar" onClick={() => dlg.current.close()}>×</button>
-          <img src={photos[front].src} srcSet={photos[front].srcSet} sizes="90vw" alt={`${tour.name}, fotografía ${front + 1}`} />
+          <img src={photos[front].src} srcSet={photos[front].srcSet} sizes="90vw" loading="lazy" alt={`${tour.name}, fotografía ${front + 1}`} />
           <div className="ta-dlg-nav"><button type="button" aria-label="Fotografía anterior" onClick={() => select(front - 1, true)}><Arrow dir="left" /></button><button type="button" aria-label="Fotografía siguiente" onClick={() => select(front + 1, true)}><Arrow dir="right" /></button></div>
         </dialog>
       )}

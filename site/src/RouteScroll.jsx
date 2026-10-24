@@ -7,7 +7,12 @@ let activeKey = null, held = null;
 export const holdScroll = () => { held = window.scrollY; };
 if (typeof window !== 'undefined') {
   history.scrollRestoration = 'manual';
-  window.addEventListener('scroll', () => { if(activeKey) positions.set(activeKey,window.scrollY); }, {passive:true});
+  // Rendimiento (2026-10-24): leer scrollY en CADA evento de scroll forzaba un recálculo de diseño por cuadro (las animaciones de scroll dejan estilos
+  // pendientes) y era la mayor causa de tirones. La posición se guarda al terminar el scroll, al hacer clic (antes de navegar) y con atrás/adelante.
+  let idle = 0; const save = () => { clearTimeout(idle); if(activeKey) positions.set(activeKey,window.scrollY); };
+  window.addEventListener('scroll', () => { clearTimeout(idle); idle = setTimeout(save, 150); }, {passive:true});
+  window.addEventListener('click', save, {capture:true, passive:true});
+  window.addEventListener('popstate', save);
 }
 export default function RouteScroll() {
   const location=useLocation(), action=useNavigationType();

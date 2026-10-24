@@ -102,7 +102,7 @@ export default function BlogBook() {
   // Las fotos de las notas se piden al acercarse (solo tres): así el reverso de la hoja no llega vacío.
   const rootRef = useRef(null);
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { cards.forEach((c) => { const img = new Image(); img.srcset = c.image.srcset || ''; img.sizes = '(max-width:799px) 90vw, 42vw'; img.src = c.image.src; }); observer.disconnect(); } }, { rootMargin: '50% 0px' });
+    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { cards.forEach((c) => { const img = new Image(); img.sizes = '(max-width:799px) 90vw, 42vw'; img.srcset = c.image.srcset || ''; /* sizes antes de srcset */ img.src = c.image.src; }); observer.disconnect(); } }, { rootMargin: '50% 0px' });
     observer.observe(rootRef.current);
     return () => observer.disconnect();
   }, [cards]);

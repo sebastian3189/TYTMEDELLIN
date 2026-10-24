@@ -8,13 +8,15 @@ import './itinerary.css';
 
 /*
  * «La experiencia»: historia vertical por paradas (Spec 02 «Itinerarios por parada», anexo SPECS/anexos/instrucciones_scroll_experiencias_TT.md; Spec 03 §I/§M).
- * Datos: src/itinerarios.js (única fuente editable). Escritorio (≥900×580, ampliado 2026-10-23 para laptops 1280×720 y 1366×768; sin movimiento reducido): foto sticky a la izquierda y panel a la derecha; el scroll
+ * Datos: src/itinerarios.js (única fuente editable). Escritorio (≥900×580 o ≥768×600, ampliado 2026-10-23 para laptops 1280×720 y 1366×768; sin movimiento reducido): foto sticky a la izquierda y panel a la derecha; el scroll
  * del navegador manda (sin preventDefault) y un solo planificador (scroll-bus) cambia la escena activa. Resto (móvil, tableta, horizontal bajo, movimiento
  * reducido, prerender): lista estática, foto arriba y texto abajo, sin pins. Indicador único «03 / 09» + mini barra (estilo Guatapé) en todos los tours. Imágenes: AVIF/WebP con srcset; las escenas futuras se cargan solo al acercarse.
  */
 const pad = (n) => String(n).padStart(2, '0');
 const stopOf = (i, n, unit) => t(unit === 'Etapa' ? 'Etapa {n} de {total}' : 'Parada {n} de {total}').replace('{n}', pad(i)).replace('{total}', pad(n));
 const SIZES = '(max-width: 699px) 100vw, (max-width: 999px) 52vw, 58vw';
+// Foto vertical: en escritorio se ve entera (contain) limitada por la altura, ~33–44 % del ancho; así no se descarga la versión de 1200 px (2026-10-24).
+const SIZES_V = '(max-width: 767px) 100vw, (max-width: 1099px) 46vw, 36vw';
 
 const Pin = () => <svg className="it-pin" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>;
 
@@ -23,8 +25,8 @@ function Foto({ stop, eager = false }) {
   if (!f) return <div className="it-pending" role="img" aria-label={`${t('Foto pendiente')}: ${t(stop.ubicacion || stop.titulo_corto)}`}><span className="it-pending-ring" aria-hidden="true" /><b>Foto pendiente</b><span>{stop.ubicacion || stop.titulo_corto}</span></div>;
   // Foto vertical en marco horizontal: entera (contain) sobre su propio fondo difuminado, sin cortar al sujeto.
   const vertical = f.width / f.height < 0.95;
-  return <picture className={vertical ? 'pic-fit' : undefined} style={vertical ? { '--ph': `url(${f.src.replace(/-d+.webp$/, '-480.webp')})` } : undefined}>
-    <source type="image/webp" srcSet={f.webp} sizes={SIZES} />
+  return <picture className={vertical ? 'pic-fit' : undefined} style={vertical ? { '--ph': `url(${f.src.replace(/-\d+\.webp$/, '-480.webp')})` } : undefined}>
+    <source type="image/webp" srcSet={f.webp} sizes={vertical ? SIZES_V : SIZES} />
     <img src={f.src} width={f.width} height={f.height} alt={stop.alt} loading={eager ? 'eager' : 'lazy'} decoding="async" style={{ objectPosition: stop.foco }} />
   </picture>;
 }
@@ -50,7 +52,7 @@ export default function ItineraryStory({ tour }) {
   const data = itinerarios[tour.slug], stops = data.paradas, n = stops.length;
   const ref = useRef(null), stack = useRef(null), ctrl = useRef(null);
   const [active, setActive] = useState(0), [seen, setSeen] = useState(() => new Set([0, 1]));
-  const wide = useMedia('(min-width: 900px) and (min-height: 580px)', false), light = useLightMotion(), sticky = wide && !light;
+  const wide = useMedia('(min-width: 900px) and (min-height: 580px), (min-width: 768px) and (min-height: 600px)', false), light = useLightMotion(), sticky = wide && !light;
 
   // Planificador único: medidas una vez; en el scroll solo cambia la escena al cruzar un umbral y la barra (transform).
   useEffect(() => {

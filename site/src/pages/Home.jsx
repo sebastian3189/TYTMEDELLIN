@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { tours, photos } from '../content';
+import { tours, nosotros } from '../content';
 import ScrubHero from '../ScrubHero';
 import TravelHand from '../TravelHand';
 import BlogBook from '../BlogBook';
@@ -20,7 +20,7 @@ export default function Home(){return <>
  <TravelHand/>
  <section className="service-band wrap" id="camino" tabIndex={-1}><Eyebrow>Cómo te acompañamos</Eyebrow><h2>Te acompañamos de principio a fin</h2><div className="service-links">{[['01','Traslados de aeropuerto','/experiencias/traslados-aeropuerto-jmc'],['02','Recorridos privados','/experiencias'],['03','Empresas, agencias y grupos','/servicios']].map(([n,name,url])=><Link to={url} key={n}><span>{n}</span><h3>{name}</h3><Arrow/></Link>)}</div></section>
 <Different/>
- <Reviews/><section className="about-preview wrap section"><Picture photo={photos('equipo')[0]} alt="Personas del equipo de T&T Medellín"/><div><Eyebrow>Nuestro equipo</Eyebrow><h2>Un equipo local que te acompaña</h2><p>Desde los primeros traslados, aprendimos a escuchar. Esa cercanía sigue guiando nuestra forma de recibir y acompañar.</p><Button to="/nosotros">Conoce al equipo</Button></div></section>
+ <Reviews/><section className="about-preview wrap section"><Picture photo={nosotros.equipo.find((p) => p.src.includes('img-9257'))} alt="Equipo de T&T Medellín en fila delante de vans y automóviles de la flota"/><div><Eyebrow>Nuestro equipo</Eyebrow><h2>Un equipo local que te acompaña</h2><p>Desde los primeros traslados, aprendimos a escuchar. Esa cercanía sigue guiando nuestra forma de recibir y acompañar.</p><Button to="/nosotros">Conoce al equipo</Button></div></section>
  <BlogBook/>
  <section className="wrap section faq-page"><Faq items={FAQ_HOME} eyebrow="Antes de decidir"/></section>
  <HomeClose/>

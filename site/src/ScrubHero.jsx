@@ -30,10 +30,11 @@ const TAU = { desktop: 60, mobile: 50 }; // suavizado corto, sin inercia que se 
 const JUMP = 0.12, SETTLE = 0.0003;
 // Miniaturas flotantes decorativas (x, y en fracción del escenario, ancho px, profundidad, carta, rotación): paralaje a distintas profundidades.
 // [x, y (fracción del escenario), ancho px, profundidad (velocidad de paralaje), carta, rotación, desenfoque px (las más lejanas), amplitud del paralaje del ratón px]. Fotos de tours distintos, sin repetir y sin la portada del traslado JMC (carta 11).
+// Desenfoque de profundidad (7.º valor) rebajado a 0,4–0,6 px (usuario, 2026-10-23: las cartas del fondo se veían borrosas).
 const FLOATS = [[0.06, 0.5, 130, 0.3, 2, -4, 0, 16], [0.2, 0.66, 120, 0.15, 7, 3, 0, 12], [0.8, 0.22, 140, 0.2, 4, 4, 0, 14], [0.9, 0.46, 124, 0.3, 10, -3, 0, 16],
-  [0.015, 0.3, 92, 0.55, 1, 5, 1.6, 30], [0.05, 0.74, 110, 0.1, 5, -5, 0, 8], [0.7, 0.76, 108, 0.45, 0, 3, 1.2, 26], [0.86, 0.68, 98, 0.6, 8, -6, 1.8, 34], [0.73, 0.07, 88, 0.5, 9, 4, 1.8, 30]];
+  [0.015, 0.3, 92, 0.55, 1, 5, 0.5, 30], [0.05, 0.74, 110, 0.1, 5, -5, 0, 8], [0.7, 0.76, 108, 0.45, 0, 3, 0.4, 26], [0.86, 0.68, 98, 0.6, 8, -6, 0.6, 34], [0.73, 0.07, 88, 0.5, 9, 4, 0.6, 30]];
 // Móvil (<800 px): solo 3 cartas sueltas, en los huecos bajo el titular y bajo el mazo (nunca sobre el texto ni sobre el botón de WhatsApp).
-const FLOATS_M = [[0.04, 0.7, 72, 0.06, 5, -5, 0, 0], [0.7, 0.72, 66, 0.1, 8, 5, 1.4, 0], [0.76, 0.215, 52, 0.05, 0, 4, 1.2, 0]];
+const FLOATS_M = [[0.04, 0.7, 72, 0.06, 5, -5, 0, 0], [0.7, 0.72, 66, 0.1, 8, 5, 0.5, 0], [0.76, 0.215, 52, 0.05, 0, 4, 0.4, 0]];
 
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const readReduce = () => { try { return localStorage.getItem(REDUCE_KEY) === '1'; } catch { return false; } };

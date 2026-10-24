@@ -63,3 +63,5 @@
 .tour-card-ph svg{width:46%;max-width:150px;fill:none;stroke:#FF7F09;stroke-width:3;stroke-linejoin:round}
 .tour-card-ph svg circle{fill:#FF7F09;stroke:none}
 .tour-card-ph b{font:600 clamp(18px,2.2vw,26px)/1.2 Montserrat,Arial,sans-serif;letter-spacing:.01em}
+/* Rendimiento (2026-10-24): la galería fija (archivo pre-generado y /nosotros) no se procesa hasta acercarse; evita descargar su foto grande al cargar. */
+.section.gallery{content-visibility:auto;contain-intrinsic-size:auto 900px}

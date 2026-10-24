@@ -77,4 +77,5 @@ def usos(sel=None):
     for slug, v in sel['blog'].items():
         out.append(('blog', slug, v['id']))
     out += [('nosotros-equipo', 'nosotros', f['id']) for f in sel['nosotros']['equipo']]  # collage de /nosotros (nosotros.zip)
+    if isinstance(sel['nosotros'].get('inicio_equipo'), dict): out.append(('inicio-equipo', 'nosotros', sel['nosotros']['inicio_equipo']['id']))  # bloque «Nuestro equipo» del inicio (usuario 2026-10-23)
     return out

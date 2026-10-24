@@ -16,7 +16,7 @@ export const smooth = (t) => { t = clamp(t); return t * t * (3 - 2 * t); };
 
 /** Relevo hacia «La mano de viaje» (Spec 03 §K3): el mazo se traslada a su caja y el escenario se funde sobre uno idéntico. */
 export const RELAY_SVH = 30, FADE_SVH = 4;
-/** Límites del recorrido en svh. Fase del clip: 165 svh escritorio / 140 svh móvil (ajuste aprobado, se conserva). Tras la contracción (t4) solo queda el relevo (t4→t5) y el fundido final. */
+/** Límites del recorrido en svh. Fase del clip: 165 svh escritorio / 140 svh móvil (ajuste aprobado, se conserva). Desde 2026-10-23 escritorio y móvil terminan en el último fotograma (sin contracción ni relevo; `film: true`). */
 export function timeline(mobile) {
   if (mobile) {
     // Móvil (pedido del usuario 2026-10-15): la película TERMINA en su último fotograma («02 / 02 · Plaza Botero»). Sin retorno al mazo, relevo ni fundido:
@@ -24,8 +24,11 @@ export function timeline(mobile) {
     const t0 = 24, t1 = t0 + 40, t2 = t1 + 140, t3 = t2 + 44;
     return { t0, t1, t2, t3, t4: t3, t5: t3, t6: t3, total: t3, clip: 140, film: true };
   }
-  const t0 = 30, t1 = t0 + 50, t2 = t1 + 165, t3 = t2 + 15, t4 = t3 + 45, t5 = t4 + RELAY_SVH;
-  return { t0, t1, t2, t3, t4, t5, t6: t5, total: t5 + FADE_SVH, clip: 165 };
+  // Escritorio (pedido del usuario 2026-10-23): igual que en móvil, la película se QUEDA en su último fotograma («02 / 02 · Plaza Botero»); sin contracción
+  // al mazo ni relevo por un escenario vacío (dejaba un espacio negro). Se conservan los últimos RELAY_SVH + FADE_SVH de pista: ahí se superpone
+  // «La mano de viaje» (margen negativo de .th) y su escenario se funde sobre el fotograma fijo.
+  const t0 = 30, t1 = t0 + 50, t2 = t1 + 165, t3 = t2 + 15;
+  return { t0, t1, t2, t3, t4: t3, t5: t3, t6: t3, total: t3 + RELAY_SVH + FADE_SVH, clip: 165, film: true };
 }
 
 // Rotaciones de la baraja (±3–6°), deterministas y estables. Desplazamientos pequeños para que asomen los bordes.

@@ -2,7 +2,7 @@ import { A as watchScroll, C as Marquee, D as useMedia, E as useLightMotion, F a
 import NotFound from "./NotFound-Cug1s3FC.js";
 import { n as useGlassPill, t as GlassPill } from "./glass-nEhUSRvx.js";
 import { i as archiveEntry, r as TourHeroVideo } from "./Hero-MO5IjHIT.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-CF5fM8YP.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-7UODtH_G.js";
 import { t as Reviews } from "./Reviews-CLKwcIeX.js";
 import { l as Faq, o as FAQ_TOUR, s as FAQ_TRANSFER, t as DURACIONES } from "./faq-data-BaHZP5K7.js";
 import { i as smallCaps, n as placeLugar, r as placePhotos, t as clamp } from "./mobile-motion-o2zoinXe.js";
@@ -515,7 +515,7 @@ function TourArchive({ tour }) {
 								"data-k": k,
 								src: p.src,
 								srcSet: p.srcSet,
-								sizes: k === front ? "36vw" : "18vw",
+								sizes: k === front ? "(max-width: 799px) 84vw, 24vw" : "(max-width: 799px) 40vw, 14vw",
 								width: p.width,
 								height: p.height,
 								alt: `${tour.name}, fotografía ${k + 1}`,
@@ -573,6 +573,7 @@ function TourArchive({ tour }) {
 					src: photos[front].src,
 					srcSet: photos[front].srcSet,
 					sizes: "90vw",
+					loading: "lazy",
 					alt: `${tour.name}, fotografía ${front + 1}`
 				}),
 				/* @__PURE__ */ jsxs("div", {
@@ -624,8 +625,8 @@ function TourHero({ tour }) {
 			if (!p) return;
 			const im = new Image();
 			im.decoding = "async";
-			im.srcset = p.srcset || `${p.small} 640w, ${p.src} ${p.width}w`;
 			im.sizes = "440px";
+			im.srcset = p.srcset || `${p.small} 640w, ${p.src} ${p.width}w`;
 			im.src = p.src;
 			im.decode?.().catch(() => {});
 		});
@@ -851,7 +852,7 @@ function TourHero({ tour }) {
 										go(1);
 									} : void 0,
 									onDoubleClick: top ? open : void 0,
-									children: /* @__PURE__ */ jsx(Picture, {
+									children: k <= VISIBLE && /* @__PURE__ */ jsx(Picture, {
 										photo: p,
 										alt: top ? `${tour.name}, fotografía ${i + 1} de ${n}` : "",
 										priority: false,
@@ -930,6 +931,7 @@ function TourHero({ tour }) {
 						src: photos[cur].src,
 						srcSet: photos[cur].srcset || `${photos[cur].small} 640w, ${photos[cur].src} ${photos[cur].width}w`,
 						sizes: "90vw",
+						loading: "lazy",
 						alt: `${tour.name}, fotografía ${cur + 1}`
 					}),
 					/* @__PURE__ */ jsxs("div", {
@@ -1352,8 +1354,8 @@ var itinerarios_media_default = {
 			1200
 		],
 		"width": 1200,
-		"height": 2133,
-		"origen": "site/fuentes/oficial-orig/guatape-piedra-del-penol/guatape-zocalos-balcones-1600.webp"
+		"height": 1600,
+		"origen": "IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/zocalos.webp"
 	},
 	"guatape-08": {
 		"w": [
@@ -1363,7 +1365,7 @@ var itinerarios_media_default = {
 		],
 		"width": 1200,
 		"height": 1600,
-		"origen": "IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-1-img-9126.webp"
+		"origen": "IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/malecon.webp"
 	},
 	"guatape-09": {
 		"w": [
@@ -1789,7 +1791,7 @@ var itinerarios_media_default = {
 		],
 		"width": 1200,
 		"height": 1600,
-		"origen": "IMAGENES/FotosMedellin-webp/City Tour/53a38c2e-3891-40d7-b631-a35ff3c6a1f3.webp"
+		"origen": "site/public/media/oficial/orig/tour-de-compras/img-2686-1600.webp"
 	},
 	"compras-03": {
 		"w": [
@@ -1870,8 +1872,8 @@ var itinerarios = {
 			p(4, "Postales de colores", "Calle de los Recuerdos", "Caminamos por las calles llenas de color que narran costumbres, tradiciones y momentos de la vida del municipio.", "Zócalos, arquitectura local, fotos.", "guatape-04", "Viajera junto a una fuente redonda pintada de colores en una calle empedrada de fachadas con zócalos", { foco: "50% 60%" }),
 			p(5, "Bajo un cielo de sombrillas", "Calle de las Sombrillas", "Una de las paradas más fotogénicas del recorrido: colores, detalles artesanales y rincones que invitan a llevarse un recuerdo de Guatapé.", "Recorrido corto y fotografías.", "guatape-05", "Tres viajeras en una calle empedrada de Guatapé cubierta por sombrillas de colores", { foco: "50% 45%" }),
 			p(6, "El corazón de Guatapé", "Parque Principal y Parroquia", "Llegamos al corazón del municipio, donde la vida local, la arquitectura y la tradición se reúnen alrededor de su parque principal.", "Plaza, iglesia (ingreso según apertura), comercio local.", "guatape-06", "Dos viajeras junto a una mototaxi decorada con el nombre «Guatapé» en una calle empedrada del pueblo", { foco: "45% 55%" }),
-			p(7, "La esencia de los zócalos", "Plazoleta de los Zócalos", "Los zócalos cuentan historias en cada fachada. En esta plazoleta descubrimos por qué el color es parte de la identidad de Guatapé.", "Plazoleta, arte, fotos y artesanías.", "guatape-07", "Fachada de dos pisos con zócalos de colores, balcones turquesa y flores, típica de Guatapé", { foco: "50% 45%" }),
-			p(8, "Frente al agua", "Malecón de Guatapé", "Cerramos el recorrido urbano frente al embalse, disfrutando del paisaje, el aire fresco y el ambiente turístico del malecón.", "Paseo, paisaje y fotografías.", "guatape-08", "Tres viajeras con ponchos y sombreros sentadas frente al embalse, entre palmeras", { foco: "50% 55%" }),
+			p(7, "La esencia de los zócalos", "Plazoleta de los Zócalos", "Los zócalos cuentan historias en cada fachada. En esta plazoleta descubrimos por qué el color es parte de la identidad de Guatapé.", "Plazoleta, arte, fotos y artesanías.", "guatape-07", "Viajera sonriente frente a las escaleras pintadas con zócalos de colores de la plazoleta, rodeada de fachadas coloridas", { foco: "50% 55%" }),
+			p(8, "Frente al agua", "Malecón de Guatapé", "Cerramos el recorrido urbano frente al embalse, disfrutando del paisaje, el aire fresco y el ambiente turístico del malecón.", "Paseo, paisaje y fotografías.", "guatape-08", "Pareja apoyada en la baranda del malecón, con el embalse, lanchas y montañas al fondo al atardecer", { foco: "55% 50%" }),
 			p(9, "Navegar el paisaje", "Paseo en lancha", "Para quienes desean añadir otra perspectiva, existe la opción de navegar el embalse y admirar desde el agua sus islas y montañas.", "Paseo en embarcación opcional; se contrata por separado y no está incluido por defecto.", "guatape-09", "Viajera sentada en la proa acolchada de una lancha que navega por el embalse, con islas verdes en el horizonte", {
 				estado_parada: "opcional",
 				foco: "50% 55%"
@@ -2014,7 +2016,7 @@ var itinerarios = {
 				estado_parada: "sugerida",
 				foco: "50% 45%"
 			}),
-			p(2, "Encuentra lo que buscas", "Sector comercial del centro", "Podemos adaptar la ruta para visitar comercios especializados del centro de Medellín de acuerdo con tu lista de compras.", "Establecimientos elegidos previamente.", "compras-02", "Carro de venta de limonada y guarapo en una acera, con transeúntes y puestos al fondo", {
+			p(2, "Encuentra lo que buscas", "Sector comercial del centro", "Podemos adaptar la ruta para visitar comercios especializados del centro de Medellín de acuerdo con tu lista de compras.", "Establecimientos elegidos previamente.", "compras-02", "Cuatro viajeros de noche con bolsas de compras, en una acera junto a árboles", {
 				estado_parada: "sugerida",
 				foco: "50% 55%"
 			}),
@@ -2096,6 +2098,7 @@ var itinerarios = {
 var pad = (n) => String(n).padStart(2, "0");
 var stopOf = (i, n, unit) => t(unit === "Etapa" ? "Etapa {n} de {total}" : "Parada {n} de {total}").replace("{n}", pad(i)).replace("{total}", pad(n));
 var SIZES = "(max-width: 699px) 100vw, (max-width: 999px) 52vw, 58vw";
+var SIZES_V = "(max-width: 767px) 100vw, (max-width: 1099px) 46vw, 36vw";
 var Pin = () => /* @__PURE__ */ jsxs("svg", {
 	className: "it-pin",
 	viewBox: "0 0 24 24",
@@ -2132,11 +2135,11 @@ function Foto({ stop, eager = false }) {
 	const vertical = f.width / f.height < .95;
 	return /* @__PURE__ */ jsxs("picture", {
 		className: vertical ? "pic-fit" : void 0,
-		style: vertical ? { "--ph": `url(${f.src.replace(/-d+.webp$/, "-480.webp")})` } : void 0,
+		style: vertical ? { "--ph": `url(${f.src.replace(/-\d+\.webp$/, "-480.webp")})` } : void 0,
 		children: [/* @__PURE__ */ jsx("source", {
 			type: "image/webp",
 			srcSet: f.webp,
-			sizes: SIZES
+			sizes: vertical ? SIZES_V : SIZES
 		}), /* @__PURE__ */ jsx("img", {
 			src: f.src,
 			width: f.width,
@@ -2213,7 +2216,7 @@ function ItineraryStory({ tour }) {
 	const data = itinerarios[tour.slug], stops = data.paradas, n = stops.length;
 	const ref = useRef(null), stack = useRef(null), ctrl = useRef(null);
 	const [active, setActive] = useState(0), [seen, setSeen] = useState(() => /* @__PURE__ */ new Set([0, 1]));
-	const wide = useMedia("(min-width: 1000px) and (min-height: 620px)", false), light = useLightMotion(), sticky = wide && !light;
+	const wide = useMedia("(min-width: 900px) and (min-height: 580px), (min-width: 768px) and (min-height: 600px)", false), light = useLightMotion(), sticky = wide && !light;
 	useEffect(() => {
 		if (!sticky) return;
 		const el = ref.current, inner = el.querySelector(".it-inner"), meter = el.querySelector(".it-meter i");
@@ -2631,7 +2634,7 @@ function Tour() {
 					/* @__PURE__ */ jsx("h2", { children: "Otras experiencias desde Medellín" }),
 					/* @__PURE__ */ jsx(Rail, {
 						label: "Más experiencias",
-						children: tours.filter((t) => t.slug !== slug).sort((a, b) => Number(b.category === tour.category) - Number(a.category === tour.category)).slice(0, 6).map((t) => /* @__PURE__ */ jsx(TourCard, { tour: t }, t.slug))
+						children: tours.filter((t) => t.slug !== slug).sort((a, b) => Number(b.category === tour.category) - Number(a.category === tour.category) || Number(!a.hero) - Number(!b.hero)).slice(0, 6).map((t) => /* @__PURE__ */ jsx(TourCard, { tour: t }, t.slug))
 					})
 				]
 			}),

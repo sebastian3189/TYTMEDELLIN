@@ -1659,16 +1659,6 @@
   "nosotros": {
     "equipo": [
       {
-        "src": "/media/fichas/nosotros/nosotros-img-2500-1200.webp",
-        "small": "/media/fichas/nosotros/nosotros-img-2500-400.webp",
-        "srcset": "/media/fichas/nosotros/nosotros-img-2500-400.webp 400w, /media/fichas/nosotros/nosotros-img-2500-800.webp 800w, /media/fichas/nosotros/nosotros-img-2500-1200.webp 1200w",
-        "width": 1200,
-        "height": 1600,
-        "source": "IMAGENES/NuevasFotos-webp/nosotros/nosotros-img-2500.webp",
-        "focus": "50% 40%",
-        "alt": "Cinco integrantes del equipo de T&T Medellín, con polos de la marca, sonríen en una selfi en la entrada de un edificio"
-      },
-      {
         "src": "/media/fichas/nosotros/nosotros-img-9257-1200.webp",
         "small": "/media/fichas/nosotros/nosotros-img-9257-400.webp",
         "srcset": "/media/fichas/nosotros/nosotros-img-9257-400.webp 400w, /media/fichas/nosotros/nosotros-img-9257-800.webp 800w, /media/fichas/nosotros/nosotros-img-9257-1200.webp 1200w",
@@ -1679,6 +1669,16 @@
         "alt": "Equipo de T&T Medellín en fila con polos blancos y negros, delante de vans y automóviles en una explanada"
       },
       {
+        "src": "/media/fichas/nosotros/nosotros-img-2500-1200.webp",
+        "small": "/media/fichas/nosotros/nosotros-img-2500-400.webp",
+        "srcset": "/media/fichas/nosotros/nosotros-img-2500-400.webp 400w, /media/fichas/nosotros/nosotros-img-2500-800.webp 800w, /media/fichas/nosotros/nosotros-img-2500-1200.webp 1200w",
+        "width": 1200,
+        "height": 1600,
+        "source": "IMAGENES/NuevasFotos-webp/nosotros/nosotros-img-2500.webp",
+        "focus": "50% 40%",
+        "alt": "Cinco integrantes del equipo de T&T Medellín, con polos de la marca, sonríen en una selfi en la entrada de un edificio"
+      },
+      {
         "src": "/media/fichas/nosotros/nosotros-img-0995-1200.webp",
         "small": "/media/fichas/nosotros/nosotros-img-0995-400.webp",
         "srcset": "/media/fichas/nosotros/nosotros-img-0995-400.webp 400w, /media/fichas/nosotros/nosotros-img-0995-800.webp 800w, /media/fichas/nosotros/nosotros-img-0995-1200.webp 1200w",
@@ -1687,16 +1687,6 @@
         "source": "IMAGENES/NuevasFotos-webp/nosotros/nosotros-img-0995.webp",
         "focus": "40% 55%",
         "alt": "Cinco personas sonríen en una acera junto a una camioneta blanca; dos llevan el polo gris de la marca"
-      },
-      {
-        "src": "/media/fichas/nosotros/nosotros-img-2496-1200.webp",
-        "small": "/media/fichas/nosotros/nosotros-img-2496-400.webp",
-        "srcset": "/media/fichas/nosotros/nosotros-img-2496-400.webp 400w, /media/fichas/nosotros/nosotros-img-2496-800.webp 800w, /media/fichas/nosotros/nosotros-img-2496-1200.webp 1200w",
-        "width": 1200,
-        "height": 1600,
-        "source": "IMAGENES/NuevasFotos-webp/nosotros/nosotros-img-2496.webp",
-        "focus": "35% 40%",
-        "alt": "Integrantes del equipo de T&T Medellín con polos de la marca en otra selfi en la entrada de un edificio"
       }
     ]
   },

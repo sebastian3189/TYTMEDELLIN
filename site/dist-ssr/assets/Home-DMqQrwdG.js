@@ -1,4 +1,4 @@
-import { D as useMedia, E as useLightMotion, G as whatsapp, H as jsx, I as PlayIcon, K as language, L as SoundIcon, M as inicioTextos, N as textoFase, R as Icon, U as jsxs, V as Fragment, a as tours, b as Arrow, d as Button, f as Eyebrow, i as photos, j as CHAPTERS, m as Picture, q as t, t as articles, u as Logo, y as GoogleBadgeStatic, z as SocialIcon } from "../entry-server.js";
+import { D as useMedia, E as useLightMotion, G as whatsapp, H as jsx, I as PlayIcon, K as language, L as SoundIcon, M as inicioTextos, N as textoFase, R as Icon, U as jsxs, V as Fragment, a as tours, b as Arrow, d as Button, f as Eyebrow, j as CHAPTERS, m as Picture, q as t, r as nosotros, t as articles, u as Logo, y as GoogleBadgeStatic, z as SocialIcon } from "../entry-server.js";
 import { n as useGlassPill, t as GlassPill } from "./glass-nEhUSRvx.js";
 import { a as tourEntry, c as prepVideo, l as safePlay, n as HeroBlock, o as inicioVideos, s as instagram } from "./Hero-MO5IjHIT.js";
 import { t as Reviews } from "./Reviews-CLKwcIeX.js";
@@ -47,7 +47,7 @@ var smooth = (t) => {
 	t = clamp$3(t);
 	return t * t * (3 - 2 * t);
 };
-/** Límites del recorrido en svh. Fase del clip: 165 svh escritorio / 140 svh móvil (ajuste aprobado, se conserva). Tras la contracción (t4) solo queda el relevo (t4→t5) y el fundido final. */
+/** Límites del recorrido en svh. Fase del clip: 165 svh escritorio / 140 svh móvil (ajuste aprobado, se conserva). Desde 2026-10-23 escritorio y móvil terminan en el último fotograma (sin contracción ni relevo; `film: true`). */
 function timeline(mobile) {
 	if (mobile) {
 		const t0 = 24, t1 = 64, t2 = 204, t3 = 248;
@@ -64,17 +64,18 @@ function timeline(mobile) {
 			film: true
 		};
 	}
-	const t0 = 30, t1 = 80, t2 = 245, t3 = 260, t4 = 305, t5 = 335;
+	const t0 = 30, t1 = 80, t2 = 245, t3 = 260;
 	return {
 		t0,
 		t1,
 		t2,
 		t3,
-		t4,
-		t5,
-		t6: t5,
-		total: 339,
-		clip: 165
+		t4: t3,
+		t5: t3,
+		t6: t3,
+		total: 294,
+		clip: 165,
+		film: true
 	};
 }
 var ROT = [
@@ -365,7 +366,7 @@ var FLOATS = [
 		.55,
 		1,
 		5,
-		1.6,
+		.5,
 		30
 	],
 	[
@@ -385,7 +386,7 @@ var FLOATS = [
 		.45,
 		0,
 		3,
-		1.2,
+		.4,
 		26
 	],
 	[
@@ -395,7 +396,7 @@ var FLOATS = [
 		.6,
 		8,
 		-6,
-		1.8,
+		.6,
 		34
 	],
 	[
@@ -405,7 +406,7 @@ var FLOATS = [
 		.5,
 		9,
 		4,
-		1.8,
+		.6,
 		30
 	]
 ];
@@ -427,7 +428,7 @@ var FLOATS_M = [
 		.1,
 		8,
 		5,
-		1.4,
+		.5,
 		0
 	],
 	[
@@ -437,7 +438,7 @@ var FLOATS_M = [
 		.05,
 		0,
 		4,
-		1.2,
+		.4,
 		0
 	]
 ];
@@ -458,13 +459,7 @@ var writeReduce = (on) => {
 var osReduce = () => typeof window !== "undefined" && window.matchMedia(REDUCE_QUERY).matches;
 var prefersStatic$1 = (user) => {
 	if (typeof window === "undefined") return true;
-	if (user || osReduce() || window.matchMedia(LOW_HEIGHT_QUERY).matches) return true;
-	const c = navigator.connection;
-	return Boolean(c && (c.saveData || [
-		"slow-2g",
-		"2g",
-		"3g"
-	].includes(c.effectiveType)));
+	return Boolean(user || osReduce() || window.matchMedia(LOW_HEIGHT_QUERY).matches);
 };
 function frameOrder(count, mobile) {
 	const seen = /* @__PURE__ */ new Set(), order = [];
@@ -1336,9 +1331,9 @@ var ORDER = [
 	"jardin-antioquia",
 	"tour-del-cafe-medellin",
 	"salto-del-buey",
+	"hacienda-napoles",
 	"tour-nocturno-medellin",
-	"tour-miradores",
-	"hacienda-napoles"
+	"tour-miradores"
 ];
 var N = ORDER.length;
 var SEG = {
@@ -1354,7 +1349,7 @@ var PH_A = .16;
 var PH_C = .88;
 var totalFor = (wide) => wide ? RELAY + N * SEG.wide + EXIT : RELAY + COMPACT_SVH + COMPACT_END;
 var mapLocal = (tl) => tl < PH_A ? .62 * (tl / PH_A) : .62 + .18 * clamp$1((tl - PH_A) / .72);
-var WIDE = "(min-width: 1100px)";
+var WIDE = "(min-width: 900px)";
 var SMALL = "(max-width: 799px)";
 var REDUCE = "(prefers-reduced-motion: reduce)";
 var LOW = "(max-height: 560px)";
@@ -1370,13 +1365,7 @@ var readReduce = () => {
 };
 var prefersStatic = () => {
 	if (typeof window === "undefined") return true;
-	if (readReduce() || window.matchMedia(REDUCE).matches || window.matchMedia(WIDE).matches && window.matchMedia(LOW).matches) return true;
-	const c = navigator.connection;
-	return Boolean(c && (c.saveData || [
-		"slow-2g",
-		"2g",
-		"3g"
-	].includes(c.effectiveType)));
+	return readReduce() || window.matchMedia(REDUCE).matches || window.matchMedia(WIDE).matches && window.matchMedia(LOW).matches;
 };
 var ENTRIES = ORDER.map(tourEntry);
 var GROUPS = ENTRIES.reduce((acc, e, i) => {
@@ -1429,7 +1418,7 @@ function Photo({ photo, entry, k, primary }) {
 		"data-k": k,
 		src: photo.src,
 		srcSet: photo.srcSet,
-		sizes: primary ? "(max-width: 799px) 84vw, 36vw" : "(max-width: 799px) 40vw, 18vw",
+		sizes: primary ? "(max-width: 799px) 84vw, (max-width: 899px) 44vw, 24vw" : "(max-width: 799px) 40vw, (max-width: 899px) 22vw, 14vw",
 		width: photo.width,
 		height: photo.height,
 		alt: `${entry.name}, fotografía ${k + 1}`,
@@ -1461,7 +1450,7 @@ function TravelHand() {
 	useLayoutEffect(() => {
 		const decide = () => {
 			const head = document.querySelector(".site-header")?.offsetHeight || 92, wide = window.matchMedia(WIDE).matches;
-			const fits = !wide || window.innerHeight - head >= 560;
+			const fits = !wide || window.innerHeight - head >= 500;
 			setLayout(wide ? "wide" : "compact");
 			setMode(prefersStatic() || !fits ? "static" : "scrub");
 		};
@@ -1514,7 +1503,7 @@ function TravelHand() {
 			(all ? e.photos : e.photos.slice(0, 1)).forEach((p, k) => {
 				const im = new Image();
 				im.decoding = "async";
-				im.sizes = k === 0 ? "(max-width: 799px) 84vw, 36vw" : "(max-width: 799px) 40vw, 18vw";
+				im.sizes = k === 0 ? "(max-width: 799px) 84vw, (max-width: 899px) 44vw, 24vw" : "(max-width: 799px) 40vw, (max-width: 899px) 22vw, 14vw";
 				im.srcset = p.srcSet;
 				im.src = p.src;
 				im.decode?.().catch(() => {});
@@ -1572,7 +1561,7 @@ function TravelHand() {
 		e.photos.forEach((p, k) => {
 			const im = new Image();
 			im.decoding = "async";
-			im.sizes = k === 0 ? "(max-width: 799px) 84vw, 36vw" : "(max-width: 799px) 40vw, 18vw";
+			im.sizes = k === 0 ? "(max-width: 799px) 84vw, (max-width: 899px) 44vw, 24vw" : "(max-width: 799px) 40vw, (max-width: 899px) 22vw, 14vw";
 			im.srcset = p.srcSet;
 			im.src = p.src;
 			im.decode?.().catch(() => {});
@@ -2336,8 +2325,8 @@ function BlogBook() {
 			if (entry.isIntersecting) {
 				cards.forEach((c) => {
 					const img = new Image();
-					img.srcset = c.image.srcset || "";
 					img.sizes = "(max-width:799px) 90vw, 42vw";
+					img.srcset = c.image.srcset || "";
 					img.src = c.image.src;
 				});
 				observer.disconnect();
@@ -3561,8 +3550,8 @@ function Home() {
 		/* @__PURE__ */ jsxs("section", {
 			className: "about-preview wrap section",
 			children: [/* @__PURE__ */ jsx(Picture, {
-				photo: photos("equipo")[0],
-				alt: "Personas del equipo de T&T Medellín"
+				photo: nosotros.equipo.find((p) => p.src.includes("img-9257")),
+				alt: "Equipo de T&T Medellín en fila delante de vans y automóviles de la flota"
 			}), /* @__PURE__ */ jsxs("div", { children: [
 				/* @__PURE__ */ jsx(Eyebrow, { children: "Nuestro equipo" }),
 				/* @__PURE__ */ jsx("h2", { children: "Un equipo local que te acompaña" }),

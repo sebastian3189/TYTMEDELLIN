@@ -1,5 +1,5 @@
 import { B as Socials, G as whatsapp, H as jsx, S as Manifesto, U as jsxs, V as Fragment, W as company, b as Arrow, d as Button, f as Eyebrow, h as QuoteSection, i as photos, m as Picture, o as values, p as PageTitle, r as nosotros } from "../entry-server.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-CF5fM8YP.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-7UODtH_G.js";
 import { t as Reviews } from "./Reviews-CLKwcIeX.js";
 import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-BaHZP5K7.js";
 import { Link, useLocation } from "react-router-dom";
@@ -65,32 +65,31 @@ function AboutFx() {
 }
 var LAYOUT = [
 	{
-		l: 0,
-		t: 9,
-		w: 52,
-		r: -2.4,
-		d: 14
+		l: 1,
+		t: 24,
+		w: 36,
+		r: -3,
+		d: 26,
+		a: "4/3",
+		z: 2
 	},
 	{
-		l: 46,
-		t: 0,
-		w: 22,
-		r: 3.6,
-		d: 34
+		l: 34.5,
+		t: 6,
+		w: 31,
+		r: 1.2,
+		d: 14,
+		a: "4/5",
+		z: 4
 	},
 	{
-		l: 66,
-		t: 25,
-		w: 20,
-		r: -3.2,
-		d: 22
-	},
-	{
-		l: 82,
-		t: 2,
-		w: 18,
-		r: 5,
-		d: 44
+		l: 63,
+		t: 18,
+		w: 36,
+		r: 3,
+		d: 30,
+		a: "4/3",
+		z: 3
 	}
 ];
 function AboutCollage({ items, alt }) {
@@ -109,13 +108,14 @@ function AboutCollage({ items, alt }) {
 						"--t": `${L.t}%`,
 						"--w": `${L.w}%`,
 						"--r": `${L.r}deg`,
-						"--z": i === 0 ? 1 : 2 + i
+						"--z": L.z,
+						"--a": L.a
 					},
 					children: /* @__PURE__ */ jsx(Picture, {
 						photo: p,
 						alt: p.alt || alt,
-						priority: i === 0,
-						sizes: "(max-width: 699px) 70vw, 30vw"
+						priority: i === 1,
+						sizes: "(max-width: 699px) 70vw, 36vw"
 					})
 				}, p.src);
 			})
@@ -234,7 +234,10 @@ function ContactPlace() {
 }
 //#endregion
 //#region src/pages/Company.jsx
-var Gallery = ({ tour }) => /* @__PURE__ */ jsx(FeaturedGallery, { tour });
+var Gallery = ({ tour, eyebrow }) => /* @__PURE__ */ jsx(FeaturedGallery, {
+	tour,
+	eyebrow
+});
 function About() {
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsx(AboutFx, {}),
@@ -306,10 +309,13 @@ function About() {
 				})
 			]
 		}),
-		/* @__PURE__ */ jsx(Gallery, { tour: {
-			name: "T&T Medellín",
-			images: photos("historia")
-		} }),
+		/* @__PURE__ */ jsx(Gallery, {
+			eyebrow: "Nuestros comienzos",
+			tour: {
+				name: "T&T Medellín",
+				images: photos("historia")
+			}
+		}),
 		/* @__PURE__ */ jsxs("section", {
 			className: "wrap section faq-page",
 			children: [/* @__PURE__ */ jsx("p", {

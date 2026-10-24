@@ -9,7 +9,7 @@ function Catalog() {
 	const categories = ["Todos", ...new Set(tours.map((t) => t.category))];
 	const grid = useRef(null), tabs = useRef(null);
 	useGlassPill(tabs, filter);
-	const list = tours.filter((t) => (filter === "Todos" || t.category === filter) && `${t.name} ${t.description}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()));
+	const list = tours.filter((t) => (filter === "Todos" || t.category === filter) && `${t.name} ${t.description}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase())).sort((a, b) => Number(!a.hero) - Number(!b.hero));
 	useFlipGrid(grid, list.map((t) => t.slug).join("|"));
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsx(CatalogHero, {}),

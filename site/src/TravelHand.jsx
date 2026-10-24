@@ -18,7 +18,7 @@ import './travel-hand.css';
  * Relevo desde la película: la sección se superpone a la pista de ScrubHero (margen negativo) y su escenario, fijo en el mismo sitio, se funde sobre el
  * de la película mientras el mazo ya está en su caja (relayDeck, compartida con baraja-geometria.js). Escrituras solo en `style` (transform/opacity).
  */
-const ORDER = ['city-tour-comuna-13', 'tour-de-compras', 'guatape-piedra-del-penol', 'vuelta-a-oriente', 'santa-fe-de-antioquia', 'jardin-antioquia', 'tour-del-cafe-medellin', 'salto-del-buey', 'tour-nocturno-medellin', 'tour-miradores', 'hacienda-napoles'];
+const ORDER = ['city-tour-comuna-13', 'tour-de-compras', 'guatape-piedra-del-penol', 'vuelta-a-oriente', 'santa-fe-de-antioquia', 'jardin-antioquia', 'tour-del-cafe-medellin', 'salto-del-buey', 'hacienda-napoles', 'tour-nocturno-medellin', 'tour-miradores']; // Miradores (sin foto) al final (usuario, 2026-10-24)
 const N = ORDER.length;
 const CARDS = '/media/baraja';
 const SEG = { wide: 30, compact: 80 }; // svh por experiencia (móvil: ≈0,8 pantallas por tour, sin tramos muertos)
@@ -27,7 +27,7 @@ const EXIT = 20, RELAY = RELAY_SVH + FADE_SVH;
 const REST = 0.48, COMPACT_SVH = 232, COMPACT_END = 10, PH_A = 0.16, PH_C = 0.88;
 const totalFor = (wide) => (wide ? RELAY + N * SEG.wide + EXIT : RELAY + COMPACT_SVH + COMPACT_END);
 const mapLocal = (tl) => (tl < PH_A ? 0.62 * (tl / PH_A) : 0.62 + 0.18 * clamp((tl - PH_A) / (PH_C - PH_A))); // abanico abierto y deriva suave; la despedida es un fundido (sin recorrido que cruce el texto)
-const WIDE = '(min-width: 1100px)', SMALL = '(max-width: 799px)', REDUCE = '(prefers-reduced-motion: reduce)', LOW = '(max-height: 560px)', REDUCE_KEY = 'tyt-reducir-movimiento';
+const WIDE = '(min-width: 900px)', SMALL = '(max-width: 799px)', REDUCE = '(prefers-reduced-motion: reduce)', LOW = '(max-height: 560px)', REDUCE_KEY = 'tyt-reducir-movimiento';
 const MAX_PHOTOS = 8;
 const two = (n) => String(n).padStart(2, '0');
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -62,7 +62,7 @@ function fitTitle(host, text, small) {
 }
 
 function Photo({ photo, entry, k, primary }) {
-  return <img className="th-photo" data-k={k} src={photo.src} srcSet={photo.srcSet} sizes={primary ? '(max-width: 799px) 84vw, 36vw' : '(max-width: 799px) 40vw, 18vw'} width={photo.width} height={photo.height} alt={`${entry.name}, fotografía ${k + 1}`} loading={primary ? 'eager' : 'lazy'} fetchPriority={primary ? 'auto' : 'low'} decoding="async" draggable="false" />;
+  return <img className="th-photo" data-k={k} src={photo.src} srcSet={photo.srcSet} sizes={primary ? '(max-width: 799px) 84vw, (max-width: 899px) 44vw, 24vw' : '(max-width: 799px) 40vw, (max-width: 899px) 22vw, 14vw'} width={photo.width} height={photo.height} alt={`${entry.name}, fotografía ${k + 1}`} loading={primary ? 'eager' : 'lazy'} fetchPriority={primary ? 'auto' : 'low'} decoding="async" draggable="false" />;
 }
 
 export default function TravelHand() {
@@ -106,7 +106,7 @@ export default function TravelHand() {
     const done = [];
     [[active + 1, true], [active + 2, false]].forEach(([gi, all]) => {
       const e = ENTRIES[gi]; if (!e || navigator.connection?.saveData) return;
-      (all ? e.photos : e.photos.slice(0, 1)).forEach((p, k) => { const im = new Image(); im.decoding = 'async'; im.sizes = k === 0 ? '(max-width: 799px) 84vw, 36vw' : '(max-width: 799px) 40vw, 18vw'; im.srcset = p.srcSet; im.src = p.src; im.decode?.().catch(() => {}); done.push(im); });
+      (all ? e.photos : e.photos.slice(0, 1)).forEach((p, k) => { const im = new Image(); im.decoding = 'async'; im.sizes = k === 0 ? '(max-width: 799px) 84vw, (max-width: 899px) 44vw, 24vw' : '(max-width: 799px) 40vw, (max-width: 899px) 22vw, 14vw'; im.srcset = p.srcSet; im.src = p.src; im.decode?.().catch(() => {}); done.push(im); });
     });
     return () => { done.length = 0; };
   }, [active, animated]);
@@ -130,7 +130,7 @@ export default function TravelHand() {
 
   const flipOn = useCallback(() => { const el = handEl.current; if (el) { el.dataset.flip = 'true'; clearTimeout(st.current.flip); st.current.flip = setTimeout(() => { el.dataset.flip = 'false'; }, 650); } }, []);
   // Antes de tocar un chip se decodifican las fotos de ese tour (la llegada nunca parpadea).
-  const warm = useCallback((gi) => { const e = ENTRIES[gi]; if (!e || navigator.connection?.saveData) return; e.photos.forEach((p, k) => { const im = new Image(); im.decoding = 'async'; im.sizes = k === 0 ? '(max-width: 799px) 84vw, 36vw' : '(max-width: 799px) 40vw, 18vw'; im.srcset = p.srcSet; im.src = p.src; im.decode?.().catch(() => {}); }); setFull((prev) => (prev.has(gi) ? prev : new Set(prev).add(gi))); }, []);
+  const warm = useCallback((gi) => { const e = ENTRIES[gi]; if (!e || navigator.connection?.saveData) return; e.photos.forEach((p, k) => { const im = new Image(); im.decoding = 'async'; im.sizes = k === 0 ? '(max-width: 799px) 84vw, (max-width: 899px) 44vw, 24vw' : '(max-width: 799px) 40vw, (max-width: 899px) 22vw, 14vw'; im.srcset = p.srcSet; im.src = p.src; im.decode?.().catch(() => {}); }); setFull((prev) => (prev.has(gi) ? prev : new Set(prev).add(gi))); }, []);
 
   useLayoutEffect(() => {
     if (!ready || !animated) return undefined;

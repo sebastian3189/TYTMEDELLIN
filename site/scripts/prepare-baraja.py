@@ -84,7 +84,7 @@ def sharp_cards():
             base = crop45(ImageOps.exif_transpose(source).convert('RGB') if src else source, *FOCAL.get(slug, (.5, .5)))
             base.thumbnail((960, 1200), Image.Resampling.LANCZOS)
             target = OUT / f'{slug}-h.webp'
-            base.save(target, 'WEBP', quality=86, method=6)
+            base.save(target, 'WEBP', quality=76, method=6)  # 86 → 76 (2026-10-24): 170–520 KB por carta era excesivo; a este tamaño no se nota
             total += target.stat().st_size
             print(slug, base.size, target.stat().st_size)
     print('sharp cards bytes:', total)

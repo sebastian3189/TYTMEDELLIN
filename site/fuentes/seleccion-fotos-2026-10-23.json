@@ -1214,9 +1214,9 @@
    {
     "orden": 2,
     "ubicacion": "Sector comercial del centro",
-    "id": "antigua:IMAGENES/FotosMedellin-webp/City Tour/53a38c2e-3891-40d7-b631-a35ff3c6a1f3.webp",
+    "id": "antigua:site/public/media/oficial/orig/tour-de-compras/img-2686-1600.webp",
     "foco": "50% 55%",
-    "alt": "Carro de venta de limonada y guarapo en una acera, con transeúntes y puestos al fondo"
+    "alt": "Cuatro viajeros de noche con bolsas de compras, en una acera junto a árboles"
    },
    {
     "orden": 3,
@@ -1289,28 +1289,27 @@
   "flotantes": [],
   "equipo": [
    {
-    "id": "nosotros/nosotros-img-2500",
-    "foco": "50% 40%",
-    "alt": "Cinco integrantes del equipo de T&T Medellín, con polos de la marca, sonríen en una selfi en la entrada de un edificio"
-   },
-   {
     "id": "nosotros/nosotros-img-9257",
     "foco": "50% 60%",
     "alt": "Equipo de T&T Medellín en fila con polos blancos y negros, delante de vans y automóviles en una explanada"
    },
    {
+    "id": "nosotros/nosotros-img-2500",
+    "foco": "50% 40%",
+    "alt": "Cinco integrantes del equipo de T&T Medellín, con polos de la marca, sonríen en una selfi en la entrada de un edificio"
+   },
+   {
     "id": "nosotros/nosotros-img-0995",
     "foco": "40% 55%",
     "alt": "Cinco personas sonríen en una acera junto a una camioneta blanca; dos llevan el polo gris de la marca"
-   },
-   {
-    "id": "nosotros/nosotros-img-2496",
-    "foco": "35% 40%",
-    "alt": "Integrantes del equipo de T&T Medellín con polos de la marca en otra selfi en la entrada de un edificio"
    }
   ],
   "galeria": "HEAD: photos(\"historia\") completo (8), como en el último commit",
-  "inicio_equipo": "HEAD: photos(\"equipo\")[0]",
+  "inicio_equipo": {
+   "id": "nosotros/nosotros-img-9257",
+   "alt": "Equipo de T&T Medellín en fila delante de vans y automóviles de la flota",
+   "nota": "Home.jsx lo toma de media.json nosotros.equipo (mismo archivo que el collage de /nosotros)"
+  },
   "descartadas": [
    "nosotros/nosotros-0d9373ef-46e1-4125-9163-8f5997bcf78d: no es una fotografía; es una ilustración en estilo caricatura (aparentemente generada) del equipo, con el logo. Spec 01 prohíbe presentar rostros artificiales como reales",
    "nosotros/nosotros-35e3724c-09e9-4be3-b88b-8a38b89b0042: pieza gráfica de 640×640 con el logo superpuesto sobre la foto y marco desenfocado; repite la escena de img-9257, y la regla I2 prohíbe texto o logo sobre fotografía",
@@ -1318,7 +1317,8 @@
    "antigua:site/public/media/equipo/4.webp: equipo en fila con vehículos; la sustituye la nueva img-9257 (misma idea, más nítida). Hoy también es la foto del inicio y antes lo era del artículo «viajar-en-grupo»",
    "antigua:site/public/media/historia/3.webp: mesa de restaurante de noche, poco representativa de la historia",
    "antigua:site/public/media/historia/4.webp: mesa en un local de comidas, poco representativa de la historia",
-   "nosotros/nosotros-img-2497: casi igual a img-2500, que ya está en el collage"
+   "nosotros/nosotros-img-2497: casi igual a img-2500, que ya está en el collage",
+   "nosotros/nosotros-img-2496: retirada del collage (usuario, 2026-10-23): casi igual a img-2500; el collage queda en 3 fotos centradas"
   ]
  },
  "blog": {
@@ -1357,7 +1357,9 @@
   "tour-del-cafe-medellin (revisión 6): 4 mini tarjetas del inicio repiten paradas de la ficha (tour-del-cafe-img-4156-1, tour-del-cafe-img-4159-1, tour-del-cafe-img-4166, img-7604); páginas distintas. El Café no tiene más fotos",
   "tour-de-compras (revisión 6): las 3 mini tarjetas del inicio repiten paradas de la ficha (P1 tour-de-compras-1120 = mismo archivo que FotosMedellin-webp/City Tour/29880249…, P2 53a38c2e-3891-40d7-b631-a35ff3c6a1f3, P3 img-3181); páginas distintas",
   "hacienda-napoles (revisión 6): napoles-img-7330 y napoles-img-7374 están en el Archivo de la ficha y en la mano del inicio (páginas distintas) para completar 7 tarjetas",
-  "Paradas llenadas por relación y no por lugar exacto (regla de la revisión 6): Café P6 (degustación de dulce y queso), Café P5 (máquina manual), Nápoles P3 (recinto de animales), Nápoles P6 (patio con mesas de Aldea Plaza), Compras P2 (carro de limonada en la calle) y P3 (bolsas de compras), Traslados E1 (aeropuerto) y E2 (equipo con van), Guatapé P4/P6/P7/P8. Los alt describen lo que se ve sin afirmar el lugar"
+  "Paradas llenadas por relación y no por lugar exacto (regla de la revisión 6): Café P6 (degustación de dulce y queso), Café P5 (máquina manual), Nápoles P3 (recinto de animales), Nápoles P6 (patio con mesas de Aldea Plaza), Compras P2 (carro de limonada en la calle) y P3 (bolsas de compras), Traslados E1 (aeropuerto) y E2 (equipo con van), Guatapé P4/P6/P7/P8. Los alt describen lo que se ve sin afirmar el lugar",
+  "tour-de-compras (usuario, 2026-10-23): la parada 2 usa la portada img-2686-1600 (la carta central de Compras en la mano del inicio); en la ficha se ve en la pila de la cabecera y en la parada 2",
+  "nosotros (usuario, 2026-10-23): img-9257 está en el collage de /nosotros y en el bloque «Nuestro equipo» del inicio (páginas distintas)"
  ],
  "descartadas_globales": [
   "antigua:site/public/media/oficial/orig/_sede/comuna13-parce-medellin-grupo-1600.webp: retirada de catalogo_slides por pedido del usuario (2026-10-23); la reemplaza la toma de dron 16:9"

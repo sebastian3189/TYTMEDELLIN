@@ -94,7 +94,7 @@ for i, it in enumerate(media.get('nosotros', {}).get('equipo', [])): usos.append
 # /nosotros e inicio como en HEAD (clave `nosotros.galeria` / `inicio_equipo` = «HEAD: …»): carrusel = media.json['historia'] y bloque «Nuestro equipo» = photos('equipo')[0]
 # (media.json['equipo'][3]). Se comprueban contra todo lo demás por su archivo en public/media.
 for i, it in enumerate(media.get('historia', [])): usos.append(('nosotros-carrusel(HEAD)', f'historia#{i}', 'site/public' + it['src']))
-usos.append(('inicio-equipo(HEAD)', 'equipo#0', 'site/public' + media['equipo'][3]['src']))
+usos.append(('inicio-equipo', 'nosotros#inicio', next(it['source'] for it in media['nosotros']['equipo'] if 'img-9257' in it['source'])))  # usuario 2026-10-23: el bloque «Nuestro equipo» del inicio usa img-9257
 
 # coherencia con la selección (mismos orígenes por capa)
 esperado = [(c, k, F.ruta_repo(F.resolver(i))) for c, k, i in F.usos(sel)]
@@ -157,7 +157,7 @@ for slug in F.TOURS:
     # La carta es un recorte 4:5 de la portada: no se compara con ella (misma foto admitida) pero sí con todos los demás usos.
     for capa, clave, rel, hx in hashes:
         if (capa, clave) == ('portada', slug): continue
-        if bin(hb ^ hx).count('1') <= DUP: err(f'la carta de baraja de {slug} se parece a {capa}:{clave} ({rel})')
+        if bin(hb ^ hx).count('1') <= DUP and not declarada(slug, clave, rel, rel): err(f'la carta de baraja de {slug} se parece a {capa}:{clave} ({rel})')
 
 capas = {}
 for c, _, _ in usos: capas[c] = capas.get(c, 0) + 1

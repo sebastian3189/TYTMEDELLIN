@@ -55,7 +55,7 @@ function count(el) {
 function useTextMotion(pathname) {
 	useEffect(() => {
 		if (typeof window === "undefined" || !("IntersectionObserver" in window)) return void 0;
-		if (matchMedia("(prefers-reduced-motion: reduce)").matches || navigator.connection?.saveData) return void 0;
+		if (matchMedia("(prefers-reduced-motion: reduce)").matches) return void 0;
 		const main = document.getElementById("contenido");
 		if (!main) return void 0;
 		const first = !booted;
@@ -184,8 +184,8 @@ var S = globalThis.__ttI18n || (globalThis.__ttI18n = {
 var dictionaries = S.dictionaries;
 S.localizedProps = localizedProps;
 var loaders = {
-	en: () => import("./assets/en-B2UHNrCV.js"),
-	"pt-BR": () => import("./assets/pt-BR-DFjo5-y5.js")
+	en: () => import("./assets/en-DNvW0xEi.js"),
+	"pt-BR": () => import("./assets/pt-BR-C54nYjL2.js")
 };
 var language = () => S.locale;
 var setLanguage = (value) => {
@@ -1013,13 +1013,9 @@ var reducedQuery = () => window.matchMedia("(prefers-reduced-motion: reduce)");
 var subscribeLight = (notify) => {
 	const mq = reducedQuery();
 	mq.addEventListener("change", notify);
-	navigator.connection?.addEventListener("change", notify);
-	return () => {
-		mq.removeEventListener("change", notify);
-		navigator.connection?.removeEventListener("change", notify);
-	};
+	return () => mq.removeEventListener("change", notify);
 };
-var readLight = () => reducedQuery().matches || Boolean(navigator.connection?.saveData);
+var readLight = () => reducedQuery().matches;
 function useLightMotion() {
 	return useSyncExternalStore(subscribeLight, readLight, () => false);
 }
@@ -1839,9 +1835,20 @@ var holdScroll = () => {
 };
 if (typeof window !== "undefined") {
 	history.scrollRestoration = "manual";
-	window.addEventListener("scroll", () => {
+	let idle = 0;
+	const save = () => {
+		clearTimeout(idle);
 		if (activeKey) positions.set(activeKey, window.scrollY);
+	};
+	window.addEventListener("scroll", () => {
+		clearTimeout(idle);
+		idle = setTimeout(save, 150);
 	}, { passive: true });
+	window.addEventListener("click", save, {
+		capture: true,
+		passive: true
+	});
+	window.addEventListener("popstate", save);
 }
 function RouteScroll() {
 	const location = useLocation(), action = useNavigationType();
@@ -2509,11 +2516,11 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-Bz7bOWMh.js");
+var company_ = () => import("./assets/Company-C9ewm6Gy.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-CsSoyHgX.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-DNamulRd.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-CiYD9oue.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-DMqQrwdG.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-YBgr5gCe.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-Cz7aBTsQ.js").then((m) => m.default)),
 	fleet: lazyRoute(() => import("./assets/Fleet-BVxxzf6D.js").then((m) => m.default)),
 	blog: lazyRoute(pick(() => import("./assets/Blog-DV1OkLFs.js"), "Blog")),
 	article: lazyRoute(() => import("./assets/Blog-DV1OkLFs.js").then((m) => m.default)),
@@ -2897,153 +2904,7 @@ function Website() {
 }
 var media_default = {
 	"city-tour-comuna-13": /*#__PURE__*/ JSON.parse("{\"portada\":{\"src\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7966-2-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7966-2-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7966-2-400.webp 400w, /media/fichas/city-tour-comuna-13/city-tour-img-7966-2-800.webp 800w, /media/fichas/city-tour-comuna-13/city-tour-img-7966-2-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/city-tour-img-7966-2.webp\",\"focus\":\"50% 55%\",\"alt\":\"Tres viajeros sonríen dentro de la canasta de un globo decorado con la palabra «Comuna», con los barrios de ladera y las montañas de Medellín al fondo\"},\"cabecera\":[{\"src\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6179-h1800.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6179-h640.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6179-h640.webp 640w, /media/fichas/city-tour-comuna-13/photos-1-001-2-img-6179-h1080.webp 1080w, /media/fichas/city-tour-comuna-13/photos-1-001-2-img-6179-h1800.webp 1800w, /media/fichas/city-tour-comuna-13/photos-1-001-2-img-6179-h1800.webp 1800w\",\"width\":1800,\"height\":1080,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/photos-1-001-2-img-6179.webp\",\"focus\":\"45% 55%\",\"alt\":\"Viajeros en una terraza techada junto a grandes letras de colores «Comuna 13», con los barrios de ladera y las montañas al fondo\"},{\"src\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-dji-fly-20231109-170700-729-1699567695965-photo-optimized-h1800.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-dji-fly-20231109-170700-729-1699567695965-photo-optimized-h640.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-dji-fly-20231109-170700-729-1699567695965-photo-optimized-h640.webp 640w, /media/fichas/city-tour-comuna-13/photos-1-001-2-dji-fly-20231109-170700-729-1699567695965-photo-optimized-h1080.webp 1080w, /media/fichas/city-tour-comuna-13/photos-1-001-2-dji-fly-20231109-170700-729-1699567695965-photo-optimized-h1800.webp 1800w, /media/fichas/city-tour-comuna-13/photos-1-001-2-dji-fly-20231109-170700-729-1699567695965-photo-optimized-h1800.webp 1800w\",\"width\":1800,\"height\":1012,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/photos-1-001-2-dji-fly-20231109-170700-729-1699567695965-photo-optimized.webp\",\"focus\":\"50% 50%\",\"alt\":\"Vista cenital de viajeros tendidos en un patio bajo un letrero pintado «Esto es Medellín»\"},{\"src\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-1083-h1800.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-1083-h640.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-1083-h640.webp 640w, /media/fichas/city-tour-comuna-13/photos-1-001-img-1083-h1080.webp 1080w, /media/fichas/city-tour-comuna-13/photos-1-001-img-1083-h1800.webp 1800w\",\"width\":1800,\"height\":2400,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/photos-1-001-img-1083.webp\",\"focus\":\"40% 45%\",\"alt\":\"Viajera de gorra blanca en una baranda mirando los barrios de ladera y el valle de Medellín\"}],\"galeria\":[{\"src\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7385-1-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7385-1-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7385-1-400.webp 400w, /media/fichas/city-tour-comuna-13/city-tour-img-7385-1-800.webp 800w, /media/fichas/city-tour-comuna-13/city-tour-img-7385-1-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/city-tour-img-7385-1.webp\",\"alt\":\"Viajeros en el balcón de una gran escultura de brazos abiertos, sobre un mirador con los barrios de ladera al fondo\"},{\"src\":\"/media/fichas/city-tour-comuna-13/img-1587-2-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/img-1587-2-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/img-1587-2-400.webp 400w, /media/fichas/city-tour-comuna-13/img-1587-2-800.webp 800w, /media/fichas/city-tour-comuna-13/img-1587-2-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/img-1587-2.webp\",\"alt\":\"Viajera sentada en la palma de una escultura de manos con un rostro gigante de piedra, frente a las montañas\"},{\"src\":\"/media/fichas/city-tour-comuna-13/img-4127-1-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/img-4127-1-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/img-4127-1-400.webp 400w, /media/fichas/city-tour-comuna-13/img-4127-1-800.webp 800w, /media/fichas/city-tour-comuna-13/img-4127-1-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/img-4127-1.webp\",\"alt\":\"Un guía con camiseta de T&T se toma una foto con tres viajeras en un parque de la ciudad\"},{\"src\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6111-1-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6111-1-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6111-1-400.webp 400w, /media/fichas/city-tour-comuna-13/photos-1-001-2-img-6111-1-800.webp 800w, /media/fichas/city-tour-comuna-13/photos-1-001-2-img-6111-1-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/photos-1-001-2-img-6111-1.webp\",\"alt\":\"Grupo de viajeros en una cancha pintada de azul, con casas de ladera y murales detrás\"},{\"src\":\"/media/fichas/city-tour-comuna-13/img-9058-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/img-9058-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/img-9058-400.webp 400w, /media/fichas/city-tour-comuna-13/img-9058-800.webp 800w, /media/fichas/city-tour-comuna-13/img-9058-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/img-9058.webp\",\"alt\":\"Viajera apoyada en una baranda de piedra calada, con el edificio Coltejer y el centro de Medellín al fondo\"},{\"src\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-1189-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-1189-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-1189-400.webp 400w, /media/fichas/city-tour-comuna-13/photos-1-001-img-1189-800.webp 800w, /media/fichas/city-tour-comuna-13/photos-1-001-img-1189-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/photos-1-001-img-1189.webp\",\"alt\":\"Viajera recostada en un banco frente a un muro verde con el letrero «Medellín, aquí todo florece»\"},{\"src\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7328-1-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7328-1-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7328-1-400.webp 400w, /media/fichas/city-tour-comuna-13/city-tour-img-7328-1-800.webp 800w, /media/fichas/city-tour-comuna-13/city-tour-img-7328-1-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/city-tour-img-7328-1.webp\",\"alt\":\"Viajeros sentados en unas escaleras pintadas bajo grandes letras «Comuna 13 Medellín» con los colores de la bandera\"}],\"inicio\":[{\"src\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6091-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6091-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6091-400.webp 400w, /media/fichas/city-tour-comuna-13/photos-1-001-2-img-6091-800.webp 800w, /media/fichas/city-tour-comuna-13/photos-1-001-2-img-6091-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/photos-1-001-2-img-6091.webp\",\"alt\":\"Grupo de viajeros en unas escaleras pintadas de colores bajo un letrero «Welcome»\"},{\"src\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-0757-2-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-0757-2-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-0757-2-400.webp 400w, /media/fichas/city-tour-comuna-13/photos-1-001-img-0757-2-800.webp 800w, /media/fichas/city-tour-comuna-13/photos-1-001-img-0757-2-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/photos-1-001-img-0757-2.webp\",\"alt\":\"Dos viajeras en una baranda de piedra calada, con un tren del Metro sobre el viaducto y el centro de la ciudad detrás\"},{\"src\":\"/media/fichas/city-tour-comuna-13/img-4132-1-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/img-4132-1-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/img-4132-1-400.webp 400w, /media/fichas/city-tour-comuna-13/img-4132-1-800.webp 800w, /media/fichas/city-tour-comuna-13/img-4132-1-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/img-4132-1.webp\",\"alt\":\"Tres viajeras sonríen en un sendero de un parque, con torres de ladrillo y árboles detrás\"},{\"src\":\"/media/oficial/orig/city-tour-comuna-13/img-2776-1600.webp\",\"small\":\"/media/oficial/w400/city-tour-comuna-13/img-2776-1600.webp\",\"srcset\":\"/media/oficial/w400/city-tour-comuna-13/img-2776-1600.webp 400w, /media/oficial/w800/city-tour-comuna-13/img-2776-1600.webp 800w, /media/oficial/orig/city-tour-comuna-13/img-2776-1600.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"site/public/media/oficial/orig/city-tour-comuna-13/img-2776-1600.webp\",\"alt\":\"Visitantes frente a un muro de piedra oscura con la frase «Somos lo que dejamos a los demás» y una torre de apartamentos al fondo\"},{\"src\":\"/media/oficial/orig/city-tour-comuna-13/img-2275-1600.webp\",\"small\":\"/media/oficial/w400/city-tour-comuna-13/img-2275-1600.webp\",\"srcset\":\"/media/oficial/w400/city-tour-comuna-13/img-2275-1600.webp 400w, /media/oficial/w800/city-tour-comuna-13/img-2275-1600.webp 800w, /media/oficial/orig/city-tour-comuna-13/img-2275-1600.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"site/public/media/oficial/orig/city-tour-comuna-13/img-2275-1600.webp\",\"alt\":\"Escultura reclinada de Fernando Botero frente a la fachada de piedra a cuadros del Palacio de la Cultura\"},{\"src\":\"/media/oficial/orig/city-tour-comuna-13/citytour-medellin-letras-plaza-botero-1600.webp\",\"small\":\"/media/oficial/w400/city-tour-comuna-13/citytour-medellin-letras-plaza-botero-1600.webp\",\"srcset\":\"/media/oficial/w400/city-tour-comuna-13/citytour-medellin-letras-plaza-botero-1600.webp 400w, /media/oficial/w800/city-tour-comuna-13/citytour-medellin-letras-plaza-botero-1600.webp 800w, /media/oficial/w1200/city-tour-comuna-13/citytour-medellin-letras-plaza-botero-1600.webp 1200w, /media/oficial/orig/city-tour-comuna-13/citytour-medellin-letras-plaza-botero-1600.webp 1600w\",\"width\":1600,\"height\":2133,\"source\":\"site/public/media/oficial/orig/city-tour-comuna-13/citytour-medellin-letras-plaza-botero-1600.webp\",\"alt\":\"Viajeros junto a letras de colores de Medellín en una plaza del centro\"},{\"src\":\"/media/fichas/repo/imagenes-fotosmedellin-webp-city-tour-img-4983-1200.webp\",\"small\":\"/media/fichas/repo/imagenes-fotosmedellin-webp-city-tour-img-4983-400.webp\",\"srcset\":\"/media/fichas/repo/imagenes-fotosmedellin-webp-city-tour-img-4983-400.webp 400w, /media/fichas/repo/imagenes-fotosmedellin-webp-city-tour-img-4983-800.webp 800w, /media/fichas/repo/imagenes-fotosmedellin-webp-city-tour-img-4983-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/FotosMedellin-webp/City Tour/IMG_4983.webp\",\"alt\":\"Mural de un rostro de mujer con un colibrí en una calle de la Comuna 13\"}]}"),
-	"guatape-piedra-del-penol": {
-		"portada": {
-			"src": "/media/fichas/guatape-piedra-del-penol/photos-1-001-img-9871-1-1200.webp",
-			"small": "/media/fichas/guatape-piedra-del-penol/photos-1-001-img-9871-1-400.webp",
-			"srcset": "/media/fichas/guatape-piedra-del-penol/photos-1-001-img-9871-1-400.webp 400w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-9871-1-800.webp 800w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-9871-1-1200.webp 1200w",
-			"width": 1200,
-			"height": 1600,
-			"source": "IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-img-9871-1.webp",
-			"focus": "50% 48%",
-			"alt": "Un adulto y un niño de espaldas bajan la escalera de la Piedra del Peñol, con el embalse de Guatapé y sus islas abajo"
-		},
-		"cabecera": [
-			{
-				"src": "/media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-2171-h1800.webp",
-				"small": "/media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-2171-h640.webp",
-				"srcset": "/media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-2171-h640.webp 640w, /media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-2171-h1080.webp 1080w, /media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-2171-h1800.webp 1800w",
-				"width": 1800,
-				"height": 2400,
-				"source": "IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-1-img-2171.webp",
-				"focus": "50% 55%",
-				"alt": "Viajera con falda roja sentada en la proa de una lancha en el embalse"
-			},
-			{
-				"src": "/media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-9107-h1800.webp",
-				"small": "/media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-9107-h640.webp",
-				"srcset": "/media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-9107-h640.webp 640w, /media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-9107-h1080.webp 1080w, /media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-9107-h1800.webp 1800w",
-				"width": 1800,
-				"height": 2400,
-				"source": "IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-1-img-9107.webp",
-				"focus": "50% 45%",
-				"alt": "Dos viajeras con ponchos y sombreros junto a una baranda, con palmeras y el embalse detrás"
-			},
-			{
-				"src": "/media/fichas/guatape-piedra-del-penol/photos-1-001-img-1961-h1312.webp",
-				"small": "/media/fichas/guatape-piedra-del-penol/photos-1-001-img-1961-h640.webp",
-				"srcset": "/media/fichas/guatape-piedra-del-penol/photos-1-001-img-1961-h640.webp 640w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-1961-h788.webp 788w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-1961-h1312.webp 1312w",
-				"width": 1312,
-				"height": 1749,
-				"source": "IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-img-1961.webp",
-				"focus": "50% 45%",
-				"alt": "Dos viajeras posan frente a la Piedra del Peñol, con su escalera en zigzag y el cielo azul"
-			}
-		],
-		"galeria": [
-			{
-				"src": "/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3134-1200.webp",
-				"small": "/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3134-400.webp",
-				"srcset": "/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3134-400.webp 400w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-3134-800.webp 800w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-3134-1200.webp 1200w",
-				"width": 1200,
-				"height": 1600,
-				"source": "IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-img-3134.webp",
-				"alt": "Viajera con poncho y sombrero de colores en un balcón con artesanías colgadas, sobre una plaza"
-			},
-			{
-				"src": "/media/fichas/guatape-piedra-del-penol/img-0059-1200.webp",
-				"small": "/media/fichas/guatape-piedra-del-penol/img-0059-400.webp",
-				"srcset": "/media/fichas/guatape-piedra-del-penol/img-0059-400.webp 400w, /media/fichas/guatape-piedra-del-penol/img-0059-800.webp 800w, /media/fichas/guatape-piedra-del-penol/img-0059-1200.webp 1200w",
-				"width": 1200,
-				"height": 1600,
-				"source": "IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/img-0059.webp",
-				"alt": "Viajero entre alpacas y llamas en un patio de tierra, bajo una estructura de madera"
-			},
-			{
-				"src": "/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3256-1-1200.webp",
-				"small": "/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3256-1-400.webp",
-				"srcset": "/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3256-1-400.webp 400w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-3256-1-800.webp 800w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-3256-1-1200.webp 1200w",
-				"width": 1200,
-				"height": 1600,
-				"source": "IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-img-3256-1.webp",
-				"alt": "Viajera frente a la Piedra del Peñol, con su escalera y el parqueadero al pie"
-			},
-			{
-				"src": "/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3148-1200.webp",
-				"small": "/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3148-400.webp",
-				"srcset": "/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3148-400.webp 400w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-3148-800.webp 800w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-3148-1200.webp 1200w",
-				"width": 1200,
-				"height": 1600,
-				"source": "IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-img-3148.webp",
-				"alt": "Viajero con sombrero y poncho en un balcón de madera decorado con artesanías"
-			}
-		],
-		"inicio": [
-			{
-				"src": "/media/fichas/guatape-piedra-del-penol/img-1849-1-1200.webp",
-				"small": "/media/fichas/guatape-piedra-del-penol/img-1849-1-400.webp",
-				"srcset": "/media/fichas/guatape-piedra-del-penol/img-1849-1-400.webp 400w, /media/fichas/guatape-piedra-del-penol/img-1849-1-800.webp 800w, /media/fichas/guatape-piedra-del-penol/img-1849-1-1200.webp 1200w",
-				"width": 1200,
-				"height": 1600,
-				"source": "IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/img-1849-1.webp",
-				"alt": "Alpacas y llamas en primer plano y una viajera detrás, bajo una gran estructura de madera"
-			},
-			{
-				"src": "/media/oficial/orig/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp",
-				"small": "/media/oficial/w400/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp",
-				"srcset": "/media/oficial/w400/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp 400w, /media/oficial/w800/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp 800w, /media/oficial/w1200/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp 1200w, /media/oficial/orig/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp 1600w",
-				"width": 1600,
-				"height": 2133,
-				"source": "site/public/media/oficial/orig/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp",
-				"alt": "Viajero con sombrero en un mirador de baranda azul, con el embalse y sus islas detrás"
-			},
-			{
-				"src": "/media/oficial/orig/guatape-piedra-del-penol/img-4491-1600.webp",
-				"small": "/media/oficial/w400/guatape-piedra-del-penol/img-4491-1600.webp",
-				"srcset": "/media/oficial/w400/guatape-piedra-del-penol/img-4491-1600.webp 400w, /media/oficial/w800/guatape-piedra-del-penol/img-4491-1600.webp 800w, /media/oficial/orig/guatape-piedra-del-penol/img-4491-1600.webp 1200w",
-				"width": 1200,
-				"height": 1600,
-				"source": "site/public/media/oficial/orig/guatape-piedra-del-penol/img-4491-1600.webp",
-				"alt": "Cuatro viajeras de pie en una lancha sobre el embalse"
-			},
-			{
-				"src": "/media/oficial/orig/guatape-piedra-del-penol/img-9018-1600.webp",
-				"small": "/media/oficial/w400/guatape-piedra-del-penol/img-9018-1600.webp",
-				"srcset": "/media/oficial/w400/guatape-piedra-del-penol/img-9018-1600.webp 400w, /media/oficial/w800/guatape-piedra-del-penol/img-9018-1600.webp 800w, /media/oficial/orig/guatape-piedra-del-penol/img-9018-1600.webp 1200w",
-				"width": 1200,
-				"height": 1600,
-				"source": "site/public/media/oficial/orig/guatape-piedra-del-penol/img-9018-1600.webp",
-				"alt": "Viajera con gorra en la cima de la Piedra del Peñol, con el embalse al fondo"
-			},
-			{
-				"src": "/media/oficial/orig/guatape-piedra-del-penol/img-4177-1600.webp",
-				"small": "/media/oficial/w400/guatape-piedra-del-penol/img-4177-1600.webp",
-				"srcset": "/media/oficial/w400/guatape-piedra-del-penol/img-4177-1600.webp 400w, /media/oficial/w800/guatape-piedra-del-penol/img-4177-1600.webp 800w, /media/oficial/orig/guatape-piedra-del-penol/img-4177-1600.webp 1200w",
-				"width": 1200,
-				"height": 1600,
-				"source": "site/public/media/oficial/orig/guatape-piedra-del-penol/img-4177-1600.webp",
-				"alt": "Grupo de viajeras sobre un yip rojo bajo el letrero «El Alto del Chocho»"
-			},
-			{
-				"src": "/media/oficial/orig/guatape-piedra-del-penol/guatape-paseo-lancha-grupo-1600.webp",
-				"small": "/media/oficial/w400/guatape-piedra-del-penol/guatape-paseo-lancha-grupo-1600.webp",
-				"srcset": "/media/oficial/w400/guatape-piedra-del-penol/guatape-paseo-lancha-grupo-1600.webp 400w, /media/oficial/w800/guatape-piedra-del-penol/guatape-paseo-lancha-grupo-1600.webp 800w, /media/oficial/w1200/guatape-piedra-del-penol/guatape-paseo-lancha-grupo-1600.webp 1200w, /media/oficial/orig/guatape-piedra-del-penol/guatape-paseo-lancha-grupo-1600.webp 1600w",
-				"width": 1600,
-				"height": 2133,
-				"source": "site/public/media/oficial/orig/guatape-piedra-del-penol/guatape-paseo-lancha-grupo-1600.webp",
-				"alt": "Grupo de viajeros con chalecos salvavidas en una lancha sobre el embalse"
-			},
-			{
-				"src": "/media/oficial/orig/guatape-piedra-del-penol/img-9386-1600.webp",
-				"small": "/media/oficial/w400/guatape-piedra-del-penol/img-9386-1600.webp",
-				"srcset": "/media/oficial/w400/guatape-piedra-del-penol/img-9386-1600.webp 400w, /media/oficial/w800/guatape-piedra-del-penol/img-9386-1600.webp 800w, /media/oficial/orig/guatape-piedra-del-penol/img-9386-1600.webp 1200w",
-				"width": 1200,
-				"height": 1600,
-				"source": "site/public/media/oficial/orig/guatape-piedra-del-penol/img-9386-1600.webp",
-				"alt": "Tres viajeras junto a una escalera de piedra con baranda, frente a un edificio con letras de colores"
-			}
-		]
-	},
+	"guatape-piedra-del-penol": /*#__PURE__*/ JSON.parse("{\"portada\":{\"src\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-img-9871-1-1200.webp\",\"small\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-img-9871-1-400.webp\",\"srcset\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-img-9871-1-400.webp 400w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-9871-1-800.webp 800w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-9871-1-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-img-9871-1.webp\",\"focus\":\"50% 48%\",\"alt\":\"Un adulto y un niño de espaldas bajan la escalera de la Piedra del Peñol, con el embalse de Guatapé y sus islas abajo\"},\"cabecera\":[{\"src\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-2171-h1800.webp\",\"small\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-2171-h640.webp\",\"srcset\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-2171-h640.webp 640w, /media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-2171-h1080.webp 1080w, /media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-2171-h1800.webp 1800w\",\"width\":1800,\"height\":2400,\"source\":\"IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-1-img-2171.webp\",\"focus\":\"50% 55%\",\"alt\":\"Viajera con falda roja sentada en la proa de una lancha en el embalse\"},{\"src\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-9107-h1800.webp\",\"small\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-9107-h640.webp\",\"srcset\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-9107-h640.webp 640w, /media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-9107-h1080.webp 1080w, /media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-9107-h1800.webp 1800w\",\"width\":1800,\"height\":2400,\"source\":\"IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-1-img-9107.webp\",\"focus\":\"50% 45%\",\"alt\":\"Dos viajeras con ponchos y sombreros junto a una baranda, con palmeras y el embalse detrás\"},{\"src\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-img-1961-h1312.webp\",\"small\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-img-1961-h640.webp\",\"srcset\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-img-1961-h640.webp 640w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-1961-h788.webp 788w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-1961-h1312.webp 1312w\",\"width\":1312,\"height\":1749,\"source\":\"IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-img-1961.webp\",\"focus\":\"50% 45%\",\"alt\":\"Dos viajeras posan frente a la Piedra del Peñol, con su escalera en zigzag y el cielo azul\"}],\"galeria\":[{\"src\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-9126-1200.webp\",\"small\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-9126-400.webp\",\"srcset\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-9126-400.webp 400w, /media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-9126-800.webp 800w, /media/fichas/guatape-piedra-del-penol/photos-1-001-1-img-9126-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-1-img-9126.webp\",\"alt\":\"Tres viajeras con ponchos y sombreros sentadas frente al embalse, entre palmeras\"},{\"src\":\"/media/oficial/orig/guatape-piedra-del-penol/guatape-zocalos-balcones-1600.webp\",\"small\":\"/media/oficial/w400/guatape-piedra-del-penol/guatape-zocalos-balcones-1600.webp\",\"srcset\":\"/media/oficial/w400/guatape-piedra-del-penol/guatape-zocalos-balcones-1600.webp 400w, /media/oficial/w800/guatape-piedra-del-penol/guatape-zocalos-balcones-1600.webp 800w, /media/oficial/w1200/guatape-piedra-del-penol/guatape-zocalos-balcones-1600.webp 1200w, /media/oficial/orig/guatape-piedra-del-penol/guatape-zocalos-balcones-1600.webp 1600w\",\"width\":1600,\"height\":2844,\"source\":\"site/public/media/oficial/orig/guatape-piedra-del-penol/guatape-zocalos-balcones-1600.webp\",\"alt\":\"Fachada de dos pisos con zócalos de colores, balcones turquesa y flores, típica de Guatapé\"},{\"src\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3134-1200.webp\",\"small\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3134-400.webp\",\"srcset\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3134-400.webp 400w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-3134-800.webp 800w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-3134-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-img-3134.webp\",\"alt\":\"Viajera con poncho y sombrero de colores en un balcón con artesanías colgadas, sobre una plaza\"},{\"src\":\"/media/fichas/guatape-piedra-del-penol/img-0059-1200.webp\",\"small\":\"/media/fichas/guatape-piedra-del-penol/img-0059-400.webp\",\"srcset\":\"/media/fichas/guatape-piedra-del-penol/img-0059-400.webp 400w, /media/fichas/guatape-piedra-del-penol/img-0059-800.webp 800w, /media/fichas/guatape-piedra-del-penol/img-0059-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/img-0059.webp\",\"alt\":\"Viajero entre alpacas y llamas en un patio de tierra, bajo una estructura de madera\"},{\"src\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3256-1-1200.webp\",\"small\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3256-1-400.webp\",\"srcset\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3256-1-400.webp 400w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-3256-1-800.webp 800w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-3256-1-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-img-3256-1.webp\",\"alt\":\"Viajera frente a la Piedra del Peñol, con su escalera y el parqueadero al pie\"},{\"src\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3148-1200.webp\",\"small\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3148-400.webp\",\"srcset\":\"/media/fichas/guatape-piedra-del-penol/photos-1-001-img-3148-400.webp 400w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-3148-800.webp 800w, /media/fichas/guatape-piedra-del-penol/photos-1-001-img-3148-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/photos-1-001-img-3148.webp\",\"alt\":\"Viajero con sombrero y poncho en un balcón de madera decorado con artesanías\"}],\"inicio\":[{\"src\":\"/media/fichas/guatape-piedra-del-penol/img-1849-1-1200.webp\",\"small\":\"/media/fichas/guatape-piedra-del-penol/img-1849-1-400.webp\",\"srcset\":\"/media/fichas/guatape-piedra-del-penol/img-1849-1-400.webp 400w, /media/fichas/guatape-piedra-del-penol/img-1849-1-800.webp 800w, /media/fichas/guatape-piedra-del-penol/img-1849-1-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/guatape-piedra-del-penol/img-1849-1.webp\",\"alt\":\"Alpacas y llamas en primer plano y una viajera detrás, bajo una gran estructura de madera\"},{\"src\":\"/media/oficial/orig/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp\",\"small\":\"/media/oficial/w400/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp\",\"srcset\":\"/media/oficial/w400/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp 400w, /media/oficial/w800/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp 800w, /media/oficial/w1200/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp 1200w, /media/oficial/orig/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp 1600w\",\"width\":1600,\"height\":2133,\"source\":\"site/public/media/oficial/orig/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp\",\"alt\":\"Viajero con sombrero en un mirador de baranda azul, con el embalse y sus islas detrás\"},{\"src\":\"/media/oficial/orig/guatape-piedra-del-penol/img-4491-1600.webp\",\"small\":\"/media/oficial/w400/guatape-piedra-del-penol/img-4491-1600.webp\",\"srcset\":\"/media/oficial/w400/guatape-piedra-del-penol/img-4491-1600.webp 400w, /media/oficial/w800/guatape-piedra-del-penol/img-4491-1600.webp 800w, /media/oficial/orig/guatape-piedra-del-penol/img-4491-1600.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"site/public/media/oficial/orig/guatape-piedra-del-penol/img-4491-1600.webp\",\"alt\":\"Cuatro viajeras de pie en una lancha sobre el embalse\"},{\"src\":\"/media/oficial/orig/guatape-piedra-del-penol/img-9018-1600.webp\",\"small\":\"/media/oficial/w400/guatape-piedra-del-penol/img-9018-1600.webp\",\"srcset\":\"/media/oficial/w400/guatape-piedra-del-penol/img-9018-1600.webp 400w, /media/oficial/w800/guatape-piedra-del-penol/img-9018-1600.webp 800w, /media/oficial/orig/guatape-piedra-del-penol/img-9018-1600.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"site/public/media/oficial/orig/guatape-piedra-del-penol/img-9018-1600.webp\",\"alt\":\"Viajera con gorra en la cima de la Piedra del Peñol, con el embalse al fondo\"},{\"src\":\"/media/oficial/orig/guatape-piedra-del-penol/img-4177-1600.webp\",\"small\":\"/media/oficial/w400/guatape-piedra-del-penol/img-4177-1600.webp\",\"srcset\":\"/media/oficial/w400/guatape-piedra-del-penol/img-4177-1600.webp 400w, /media/oficial/w800/guatape-piedra-del-penol/img-4177-1600.webp 800w, /media/oficial/orig/guatape-piedra-del-penol/img-4177-1600.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"site/public/media/oficial/orig/guatape-piedra-del-penol/img-4177-1600.webp\",\"alt\":\"Grupo de viajeras sobre un yip rojo bajo el letrero «El Alto del Chocho»\"},{\"src\":\"/media/oficial/orig/guatape-piedra-del-penol/guatape-paseo-lancha-grupo-1600.webp\",\"small\":\"/media/oficial/w400/guatape-piedra-del-penol/guatape-paseo-lancha-grupo-1600.webp\",\"srcset\":\"/media/oficial/w400/guatape-piedra-del-penol/guatape-paseo-lancha-grupo-1600.webp 400w, /media/oficial/w800/guatape-piedra-del-penol/guatape-paseo-lancha-grupo-1600.webp 800w, /media/oficial/w1200/guatape-piedra-del-penol/guatape-paseo-lancha-grupo-1600.webp 1200w, /media/oficial/orig/guatape-piedra-del-penol/guatape-paseo-lancha-grupo-1600.webp 1600w\",\"width\":1600,\"height\":2133,\"source\":\"site/public/media/oficial/orig/guatape-piedra-del-penol/guatape-paseo-lancha-grupo-1600.webp\",\"alt\":\"Grupo de viajeros con chalecos salvavidas en una lancha sobre el embalse\"},{\"src\":\"/media/oficial/orig/guatape-piedra-del-penol/img-9386-1600.webp\",\"small\":\"/media/oficial/w400/guatape-piedra-del-penol/img-9386-1600.webp\",\"srcset\":\"/media/oficial/w400/guatape-piedra-del-penol/img-9386-1600.webp 400w, /media/oficial/w800/guatape-piedra-del-penol/img-9386-1600.webp 800w, /media/oficial/orig/guatape-piedra-del-penol/img-9386-1600.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"site/public/media/oficial/orig/guatape-piedra-del-penol/img-9386-1600.webp\",\"alt\":\"Tres viajeras junto a una escalera de piedra con baranda, frente a un edificio con letras de colores\"}]}"),
 	"tour-nocturno-medellin": {
 		"portada": {
 			"src": "/media/fichas/tour-nocturno-medellin/tour-nocturno-img-8245-1200.webp",
@@ -4337,16 +4198,6 @@ var media_default = {
 	],
 	nosotros: { "equipo": [
 		{
-			"src": "/media/fichas/nosotros/nosotros-img-2500-1200.webp",
-			"small": "/media/fichas/nosotros/nosotros-img-2500-400.webp",
-			"srcset": "/media/fichas/nosotros/nosotros-img-2500-400.webp 400w, /media/fichas/nosotros/nosotros-img-2500-800.webp 800w, /media/fichas/nosotros/nosotros-img-2500-1200.webp 1200w",
-			"width": 1200,
-			"height": 1600,
-			"source": "IMAGENES/NuevasFotos-webp/nosotros/nosotros-img-2500.webp",
-			"focus": "50% 40%",
-			"alt": "Cinco integrantes del equipo de T&T Medellín, con polos de la marca, sonríen en una selfi en la entrada de un edificio"
-		},
-		{
 			"src": "/media/fichas/nosotros/nosotros-img-9257-1200.webp",
 			"small": "/media/fichas/nosotros/nosotros-img-9257-400.webp",
 			"srcset": "/media/fichas/nosotros/nosotros-img-9257-400.webp 400w, /media/fichas/nosotros/nosotros-img-9257-800.webp 800w, /media/fichas/nosotros/nosotros-img-9257-1200.webp 1200w",
@@ -4357,6 +4208,16 @@ var media_default = {
 			"alt": "Equipo de T&T Medellín en fila con polos blancos y negros, delante de vans y automóviles en una explanada"
 		},
 		{
+			"src": "/media/fichas/nosotros/nosotros-img-2500-1200.webp",
+			"small": "/media/fichas/nosotros/nosotros-img-2500-400.webp",
+			"srcset": "/media/fichas/nosotros/nosotros-img-2500-400.webp 400w, /media/fichas/nosotros/nosotros-img-2500-800.webp 800w, /media/fichas/nosotros/nosotros-img-2500-1200.webp 1200w",
+			"width": 1200,
+			"height": 1600,
+			"source": "IMAGENES/NuevasFotos-webp/nosotros/nosotros-img-2500.webp",
+			"focus": "50% 40%",
+			"alt": "Cinco integrantes del equipo de T&T Medellín, con polos de la marca, sonríen en una selfi en la entrada de un edificio"
+		},
+		{
 			"src": "/media/fichas/nosotros/nosotros-img-0995-1200.webp",
 			"small": "/media/fichas/nosotros/nosotros-img-0995-400.webp",
 			"srcset": "/media/fichas/nosotros/nosotros-img-0995-400.webp 400w, /media/fichas/nosotros/nosotros-img-0995-800.webp 800w, /media/fichas/nosotros/nosotros-img-0995-1200.webp 1200w",
@@ -4365,16 +4226,6 @@ var media_default = {
 			"source": "IMAGENES/NuevasFotos-webp/nosotros/nosotros-img-0995.webp",
 			"focus": "40% 55%",
 			"alt": "Cinco personas sonríen en una acera junto a una camioneta blanca; dos llevan el polo gris de la marca"
-		},
-		{
-			"src": "/media/fichas/nosotros/nosotros-img-2496-1200.webp",
-			"small": "/media/fichas/nosotros/nosotros-img-2496-400.webp",
-			"srcset": "/media/fichas/nosotros/nosotros-img-2496-400.webp 400w, /media/fichas/nosotros/nosotros-img-2496-800.webp 800w, /media/fichas/nosotros/nosotros-img-2496-1200.webp 1200w",
-			"width": 1200,
-			"height": 1600,
-			"source": "IMAGENES/NuevasFotos-webp/nosotros/nosotros-img-2496.webp",
-			"focus": "35% 40%",
-			"alt": "Integrantes del equipo de T&T Medellín con polos de la marca en otra selfi en la entrada de un edificio"
 		}
 	] },
 	catalogo: [

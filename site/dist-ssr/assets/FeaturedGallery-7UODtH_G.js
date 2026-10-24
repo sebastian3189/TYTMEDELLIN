@@ -1,7 +1,7 @@
 import { E as useLightMotion, H as jsx, U as jsxs, b as Arrow, v as hiddenByCover } from "../entry-server.js";
 import { useLayoutEffect, useRef, useState } from "react";
 //#region src/FeaturedGallery.jsx
-function FeaturedGallery({ tour }) {
+function FeaturedGallery({ tour, eyebrow = "El archivo de nuestros viajes" }) {
 	const [index, setIndex] = useState(0), dialog = useRef(null), image = useRef(null), origin = useRef(null), swipe = useRef(null), swiped = useRef(false), returnFocus = useRef(null), light = useLightMotion();
 	const images = tour.gallery || tour.images;
 	if (!images.length) return null;
@@ -43,6 +43,8 @@ function FeaturedGallery({ tour }) {
 		dialog.current.showModal();
 	};
 	const img = (photo, full = false) => /* @__PURE__ */ jsx("img", {
+		loading: "lazy",
+		decoding: "async",
 		src: full ? photo.src : photo.small || photo.src,
 		srcSet: full ? photo.srcset || (photo.small ? `${photo.small} 640w, ${photo.src} ${photo.width}w` : void 0) : void 0,
 		sizes: `(max-width:899px) min(100vw, ${photo.width}px), min(62vw, ${photo.width}px)`,
@@ -52,9 +54,7 @@ function FeaturedGallery({ tour }) {
 		} : void 0,
 		width: photo.width,
 		height: photo.height,
-		alt: full ? `${tour.name}, fotografía ${index + 1}` : "",
-		loading: "lazy",
-		decoding: "async"
+		alt: full ? `${tour.name}, fotografía ${index + 1}` : ""
 	});
 	return /* @__PURE__ */ jsxs("section", {
 		className: "wrap section gallery",
@@ -63,7 +63,7 @@ function FeaturedGallery({ tour }) {
 				className: "section-title",
 				children: [/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("p", {
 					className: "eyebrow",
-					children: "El archivo de nuestros viajes"
+					children: eyebrow
 				}), /* @__PURE__ */ jsxs("h2", { children: [
 					"Así se vive",
 					/* @__PURE__ */ jsx("br", {}),

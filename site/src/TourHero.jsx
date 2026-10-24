@@ -23,7 +23,7 @@ export default function TourHero({ tour }) {
   curRef.current = cur;
 
   // Las tres siguientes fotos se decodifican antes de subir de nivel (sin parpadeo).
-  useEffect(() => { [1, 2, 3].forEach((d) => { const p = photos[(cur + d) % n]; if (!p) return; const im = new Image(); im.decoding = 'async'; im.srcset = p.srcset || `${p.small} 640w, ${p.src} ${p.width}w`; im.sizes = '440px'; im.src = p.src; im.decode?.().catch(() => {}); }); }, [cur, n]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { [1, 2, 3].forEach((d) => { const p = photos[(cur + d) % n]; if (!p) return; const im = new Image(); im.decoding = 'async'; im.sizes = '440px'; im.srcset = p.srcset || `${p.small} 640w, ${p.src} ${p.width}w`; /* sizes ANTES de srcset: si no, el navegador elige con 100vw y baja la versión grande */ im.src = p.src; im.decode?.().catch(() => {}); }); }, [cur, n]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const go = useCallback((dir, from, sd) => {
     if (busy.current || n < 2) return;
@@ -104,7 +104,7 @@ export default function TourHero({ tour }) {
                   style={{ transform: pose(k), opacity: light ? (top ? 1 : 0) : k < VISIBLE ? 1 : 0, zIndex: i === flying ? 40 : 30 - k, transitionDelay: `${Math.min(k, 4) * 45}ms` }}
                   onPointerDown={top ? onDown : undefined} onPointerMove={top ? onMove : undefined} onPointerUp={top ? onUp : undefined} onPointerCancel={top ? onUp : undefined}
                   onClick={top ? () => { if (moved.current) { moved.current = false; return; } go(1); } : undefined} onDoubleClick={top ? open : undefined}>
-                  <Picture photo={p} alt={top ? `${tour.name}, fotografía ${i + 1} de ${n}` : ''} priority={false} sizes="(max-width: 700px) 72vw, 440px" />
+                  {k <= VISIBLE && <Picture photo={p} alt={top ? `${tour.name}, fotografía ${i + 1} de ${n}` : ''} priority={false} sizes="(max-width: 700px) 72vw, 440px" />}{/* solo las visibles y la siguiente: las demás no se descargan (2026-10-24) */}
                 </div>
               );
             })}
@@ -124,7 +124,7 @@ export default function TourHero({ tour }) {
       {viewer && (
         <dialog ref={dlg} className="gallery-dialog ta-dialog" aria-label={`Galería ampliada de ${tour.name}`} onClose={() => setViewer(false)} onClick={(e) => { if (e.target === dlg.current) dlg.current.close(); }}>
           <button type="button" className="ta-close" aria-label="Cerrar" onClick={() => dlg.current.close()}>×</button>
-          <img src={photos[cur].src} srcSet={photos[cur].srcset || `${photos[cur].small} 640w, ${photos[cur].src} ${photos[cur].width}w`} sizes="90vw" alt={`${tour.name}, fotografía ${cur + 1}`} />
+          <img src={photos[cur].src} srcSet={photos[cur].srcset || `${photos[cur].small} 640w, ${photos[cur].src} ${photos[cur].width}w`} sizes="90vw" loading="lazy" alt={`${tour.name}, fotografía ${cur + 1}`} />
           <div className="ta-dlg-nav"><button type="button" aria-label="Fotografía anterior" onClick={() => setCur((c) => (c - 1 + n) % n)}><Arrow dir="left" /></button><button type="button" aria-label="Fotografía siguiente" onClick={() => setCur((c) => (c + 1) % n)}><Arrow dir="right" /></button></div>
         </dialog>
       )}

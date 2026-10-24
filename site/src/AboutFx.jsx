@@ -30,8 +30,9 @@ export default function AboutFx() {
 
 /* Collage de postales (pedido del usuario, ronda 3): retrato 4:5 y paisaje 3:2 con marco postal, sombra suave, giros distintos y profundidad; sin texto sobre las fotos.
    Escritorio: cartas superpuestas con parallax; móvil: carrusel horizontal con snap. `items` = fotos oficiales (media.json). */
+// 3 postales centradas (usuario, 2026-10-23): paisaje 4:3 a la izquierda y a la derecha, retrato 4:5 más grande en el centro y encima. `a` = proporción, `z` = capa.
 const LAYOUT = [
-  { l: 0, t: 9, w: 52, r: -2.4, d: 14 }, { l: 46, t: 0, w: 22, r: 3.6, d: 34 }, { l: 66, t: 25, w: 20, r: -3.2, d: 22 }, { l: 82, t: 2, w: 18, r: 5, d: 44 },
+  { l: 1, t: 24, w: 36, r: -3, d: 26, a: '4/3', z: 2 }, { l: 34.5, t: 6, w: 31, r: 1.2, d: 14, a: '4/5', z: 4 }, { l: 63, t: 18, w: 36, r: 3, d: 30, a: '4/3', z: 3 },
 ];
 export function AboutCollage({ items, alt }) {
   return (
@@ -40,8 +41,8 @@ export function AboutCollage({ items, alt }) {
         {items.slice(0, LAYOUT.length).map((p, i) => {
           const L = LAYOUT[i];
           return (
-            <figure className="ac-card" key={p.src} data-depth={L.d} style={{ '--l': `${L.l}%`, '--t': `${L.t}%`, '--w': `${L.w}%`, '--r': `${L.r}deg`, '--z': i === 0 ? 1 : 2 + i }}>
-              <Picture photo={p} alt={p.alt || alt} priority={i === 0} sizes="(max-width: 699px) 70vw, 30vw" />
+            <figure className="ac-card" key={p.src} data-depth={L.d} style={{ '--l': `${L.l}%`, '--t': `${L.t}%`, '--w': `${L.w}%`, '--r': `${L.r}deg`, '--z': L.z, '--a': L.a }}>
+              <Picture photo={p} alt={p.alt || alt} priority={i === 1} sizes="(max-width: 699px) 70vw, 36vw" />
             </figure>
           );
         })}

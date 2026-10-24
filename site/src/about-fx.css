@@ -18,8 +18,7 @@
 .ac-card{position:absolute;left:var(--l);top:var(--t);width:var(--w);z-index:var(--z);margin:0;padding:clamp(6px,.8vw,11px);border-radius:14px;background:#fff;rotate:var(--r);transform:translate3d(0,var(--afx-py,0px),0);
  box-shadow:0 1px 2px rgba(30,32,29,.22),0 18px 36px -10px rgba(30,32,29,.38);transition:scale 320ms var(--ease-out-strong),translate 320ms var(--ease-out-strong),box-shadow 320ms ease}
 .ac-card img{display:block;width:100%;height:auto;border-radius:8px;object-fit:cover}
-.ac-card:nth-child(1) img{aspect-ratio:4/3}
-.ac-card:nth-child(n+2) img{aspect-ratio:4/5}
+.ac-card img{aspect-ratio:var(--a,4/5)}
 html[data-theme="dark"] .ac-card{background:#2A302C;box-shadow:0 1px 2px rgba(0,0,0,.6),0 22px 44px -10px rgba(0,0,0,.65)}
 @media(hover:hover) and (pointer:fine){.ac-card:hover{scale:1.05;translate:0 -10px;z-index:20;box-shadow:0 0 0 1px rgba(238,122,18,.45),0 26px 56px -12px var(--brand-glow),0 18px 36px -10px rgba(30,32,29,.38)}}
 /* Entrada tipo carta (Flip): giro extra que se asienta en el ángulo propio; con movimiento reducido no existe la clase */
@@ -27,7 +26,7 @@ html[data-theme="dark"] .ac-card{background:#2A302C;box-shadow:0 1px 2px rgba(0,
 .ac-card.afx-card.afx-in{rotate:var(--r)}
 @media(max-width:699px){
  .about-collage{padding-inline:0}
- .ac-wrap{display:flex;gap:16px;aspect-ratio:auto;overflow-x:auto;scroll-snap-type:x mandatory;padding:20px 24px 28px;scrollbar-width:none;overscroll-behavior-x:contain}
+ .ac-wrap{display:flex;align-items:center;gap:16px;aspect-ratio:auto;overflow-x:auto;scroll-snap-type:x mandatory;padding:20px 24px 28px;scrollbar-width:none;overscroll-behavior-x:contain}
  .ac-wrap::-webkit-scrollbar{display:none}
  .ac-card{position:relative;left:auto;top:auto;flex:0 0 68vw;scroll-snap-align:center;transform:none}
  .ac-card:nth-child(even){margin-top:18px}
