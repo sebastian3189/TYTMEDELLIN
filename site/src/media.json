@@ -283,13 +283,14 @@
         "alt": "Alpacas y llamas en primer plano y una viajera detrás, bajo una gran estructura de madera"
       },
       {
-        "src": "/media/oficial/orig/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp",
-        "small": "/media/oficial/w400/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp",
-        "srcset": "/media/oficial/w400/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp 400w, /media/oficial/w800/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp 800w, /media/oficial/w1200/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp 1200w, /media/oficial/orig/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp 1600w",
-        "width": 1600,
-        "height": 2133,
-        "source": "site/public/media/oficial/orig/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp",
-        "alt": "Viajero con sombrero en un mirador de baranda azul, con el embalse y sus islas detrás"
+        "src": "/media/fichas/repo/imagenes-fotosmedellin-webp-guatape-img-4731-1200.webp",
+        "small": "/media/fichas/repo/imagenes-fotosmedellin-webp-guatape-img-4731-400.webp",
+        "srcset": "/media/fichas/repo/imagenes-fotosmedellin-webp-guatape-img-4731-400.webp 400w, /media/fichas/repo/imagenes-fotosmedellin-webp-guatape-img-4731-800.webp 800w, /media/fichas/repo/imagenes-fotosmedellin-webp-guatape-img-4731-1200.webp 1200w",
+        "width": 1200,
+        "height": 1600,
+        "source": "IMAGENES/FotosMedellin-webp/GUATAPE/IMG_4731.webp",
+        "focus": "50% 45%",
+        "alt": "Grupo de viajeras posando en un mirador frente al embalse al atardecer"
       },
       {
         "src": "/media/oficial/orig/guatape-piedra-del-penol/img-4491-1600.webp",

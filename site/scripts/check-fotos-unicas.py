@@ -141,6 +141,13 @@ for a in range(len(hashes)):
         d = bin(ha ^ hb).count('1')
         if ra != rb and d <= DUP and not declarada(ka, kb, ra, rb):
             err(f'foto repetida (dHash {d}): {ca}:{ka} {ra}  ~  {cb}:{kb} {rb}')
+# vetadas (usuario, 2026-10-24): fotos que no deben usarse en ningún lugar; falla si una en uso es esa foto o se le parece (dHash <= DUP).
+for vid in sel.get('vetadas', []):
+    try: vp = F.resolver(vid)
+    except FileNotFoundError: continue
+    hv = dhash(vp)
+    for capa, clave, rel, hx in hashes:
+        if bin(hv ^ hx).count('1') <= DUP: err(f'foto vetada en uso: {capa}:{clave} ({rel}) ~ {vid}')
 # regla del usuario (revisión 4): la 1.ª diapositiva de la cabecera no es la portada, que es la 1.ª tarjeta del archivo y de la mano.
 for slug in F.TOURS:
     m = media.get(slug)

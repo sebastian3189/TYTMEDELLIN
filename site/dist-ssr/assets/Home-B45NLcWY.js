@@ -1080,50 +1080,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 							animated && !mobile && /* @__PURE__ */ jsxs("span", {
 								className: "md-deco",
 								"aria-hidden": "true",
-								children: [
-									/* @__PURE__ */ jsx("i", { className: "md-frame" }),
-									/* @__PURE__ */ jsx("i", { className: "md-sheen" }),
-									/* @__PURE__ */ jsx("i", {
-										className: "md-stamp",
-										children: /* @__PURE__ */ jsxs("svg", {
-											viewBox: "0 0 48 48",
-											focusable: "false",
-											children: [
-												/* @__PURE__ */ jsx("circle", {
-													cx: "24",
-													cy: "24",
-													r: "21",
-													fill: "none",
-													stroke: "currentColor",
-													strokeWidth: "1.6",
-													strokeDasharray: "3 2.6"
-												}),
-												/* @__PURE__ */ jsx("circle", {
-													cx: "24",
-													cy: "24",
-													r: "15",
-													fill: "none",
-													stroke: "currentColor",
-													strokeWidth: "1.3"
-												}),
-												/* @__PURE__ */ jsx("path", {
-													d: "M15 29l6-7 4 4 3-3 5 6",
-													fill: "none",
-													stroke: "currentColor",
-													strokeWidth: "1.8",
-													strokeLinecap: "round",
-													strokeLinejoin: "round"
-												}),
-												/* @__PURE__ */ jsx("circle", {
-													cx: "30.5",
-													cy: "18.5",
-													r: "2",
-													fill: "currentColor"
-												})
-											]
-										})
-									})
-								]
+								children: [/* @__PURE__ */ jsx("i", { className: "md-frame" }), /* @__PURE__ */ jsx("i", { className: "md-sheen" })]
 							})
 						]
 					}),
@@ -1259,9 +1216,9 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 						}), animated && cards.map((c) => /* @__PURE__ */ jsx("div", {
 							className: "bd-card",
 							"aria-hidden": "true",
-							children: /* @__PURE__ */ jsxs("span", {
+							children: /* @__PURE__ */ jsx("span", {
 								className: "bd-tilt",
-								children: [/* @__PURE__ */ jsx("img", {
+								children: /* @__PURE__ */ jsx("img", {
 									className: "bd-thumb",
 									src: cardImg(c.slug, "t"),
 									width: "320",
@@ -1269,46 +1226,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 									alt: "",
 									decoding: "async",
 									loading: "lazy"
-								}), /* @__PURE__ */ jsx("i", {
-									className: "bd-stamp",
-									children: /* @__PURE__ */ jsxs("svg", {
-										viewBox: "0 0 48 48",
-										focusable: "false",
-										children: [
-											/* @__PURE__ */ jsx("circle", {
-												cx: "24",
-												cy: "24",
-												r: "21",
-												fill: "none",
-												stroke: "currentColor",
-												strokeWidth: "1.6",
-												strokeDasharray: "3 2.6"
-											}),
-											/* @__PURE__ */ jsx("circle", {
-												cx: "24",
-												cy: "24",
-												r: "15",
-												fill: "none",
-												stroke: "currentColor",
-												strokeWidth: "1.3"
-											}),
-											/* @__PURE__ */ jsx("path", {
-												d: "M15 29l6-7 4 4 3-3 5 6",
-												fill: "none",
-												stroke: "currentColor",
-												strokeWidth: "1.8",
-												strokeLinecap: "round",
-												strokeLinejoin: "round"
-											}),
-											/* @__PURE__ */ jsx("circle", {
-												cx: "30.5",
-												cy: "18.5",
-												r: "2",
-												fill: "currentColor"
-											})
-										]
-									})
-								})]
+								})
 							})
 						}, c.slug))]
 					})

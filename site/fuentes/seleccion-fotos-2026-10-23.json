@@ -293,8 +293,9 @@
     "alt": "Alpacas y llamas en primer plano y una viajera detrás, bajo una gran estructura de madera"
    },
    {
-    "id": "antigua:site/public/media/oficial/orig/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp",
-    "alt": "Viajero con sombrero en un mirador de baranda azul, con el embalse y sus islas detrás"
+    "id": "antigua:IMAGENES/FotosMedellin-webp/GUATAPE/IMG_4731.webp",
+    "foco": "50% 45%",
+    "alt": "Grupo de viajeras posando en un mirador frente al embalse al atardecer"
    },
    {
     "id": "antigua:site/public/media/oficial/orig/guatape-piedra-del-penol/img-4491-1600.webp",
@@ -1363,5 +1364,10 @@
  ],
  "descartadas_globales": [
   "antigua:site/public/media/oficial/orig/_sede/comuna13-parce-medellin-grupo-1600.webp: retirada de catalogo_slides por pedido del usuario (2026-10-23); la reemplaza la toma de dron 16:9"
- ]
+ ],
+ "vetadas": [
+  "antigua:site/public/media/oficial/orig/guatape-piedra-del-penol/guatape-piedra-mirador-poncho-1600.webp",
+  "antigua:IMAGENES/FotosMedellin-webp/GUATAPE/IMG_3500.webp"
+ ],
+ "_nota_vetadas": "Fotos que el usuario pidió no usar en ningún lugar (2026-10-24): hombre con sombrero en el mirador de la Piedra (dos copias)."
 }

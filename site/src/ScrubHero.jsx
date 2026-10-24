@@ -432,7 +432,7 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
               <img src={`${BASE}/poster-1600.webp`} srcSet={`${BASE}/poster-1280.webp 1280w, ${BASE}/poster-1600.webp 1600w`} sizes="100vw" width="1600" height="900" alt="Vista de Medellín desde la ladera de la Comuna 13" loading="lazy" decoding="async" />
             </picture>
             {animated && <canvas ref={canvas} className="scrub-canvas" aria-hidden="true" />}
-            {animated && !mobile && <span className="md-deco" aria-hidden="true"><i className="md-frame" /><i className="md-sheen" /><i className="md-stamp"><svg viewBox="0 0 48 48" focusable="false"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 2.6" /><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" strokeWidth="1.3" /><path d="M15 29l6-7 4 4 3-3 5 6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /><circle cx="30.5" cy="18.5" r="2" fill="currentColor" /></svg></i></span>}
+            {animated && !mobile && <span className="md-deco" aria-hidden="true"><i className="md-frame" /><i className="md-sheen" /></span>}
           </div>
           <div ref={titleRef} className="scrub-title">
             <p className="eyebrow scrub-lema" data-fx="0">Experiencias</p>
@@ -487,7 +487,7 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
             {animated && !mobile && <i ref={haloRef} className="bd-halo" aria-hidden="true" />}
             {animated && cards.map((c) => (
               <div key={c.slug} className="bd-card" aria-hidden="true">
-                <span className="bd-tilt"><img className="bd-thumb" src={cardImg(c.slug, 't')} width="320" height="400" alt="" decoding="async" loading="lazy" /><i className="bd-stamp"><svg viewBox="0 0 48 48" focusable="false"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 2.6" /><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" strokeWidth="1.3" /><path d="M15 29l6-7 4 4 3-3 5 6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /><circle cx="30.5" cy="18.5" r="2" fill="currentColor" /></svg></i></span>
+                <span className="bd-tilt"><img className="bd-thumb" src={cardImg(c.slug, 't')} width="320" height="400" alt="" decoding="async" loading="lazy" /></span>
               </div>
             ))}
           </div>
