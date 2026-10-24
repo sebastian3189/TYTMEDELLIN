@@ -1751,7 +1751,7 @@ var itinerarios_media_default = {
 		],
 		"width": 899,
 		"height": 1599,
-		"origen": "site/public/media/oficial/orig/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp"
+		"origen": "site/fuentes/oficial-orig/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp"
 	},
 	"traslados-03": {
 		"w": [
@@ -1772,6 +1772,26 @@ var itinerarios_media_default = {
 		"width": 1200,
 		"height": 1600,
 		"origen": "IMAGENES/NuevasFotos-webp/traslados-aeropuerto-jmc/img-6507.webp"
+	},
+	"miradores-01": {
+		"w": [
+			480,
+			800,
+			1200
+		],
+		"width": 1200,
+		"height": 1600,
+		"origen": "IMAGENES/NuevasFotos-webp/tour-miradores/photos-1-001-1-img-0784.webp"
+	},
+	"miradores-02": {
+		"w": [
+			480,
+			800,
+			1200
+		],
+		"width": 1200,
+		"height": 1600,
+		"origen": "IMAGENES/NuevasFotos-webp/tour-miradores/photos-1-001-1-img-0789.webp"
 	},
 	"compras-01": {
 		"w": [
@@ -1892,7 +1912,7 @@ var itinerarios = {
 		tituloSeccion: null,
 		aviso: null,
 		estado: "confirmada",
-		paradas: [p(1, "La ciudad a nuestros pies", "Mirador La Palma", "Desde La Palma apreciamos Medellín desde otra perspectiva: barrios, montañas y la inmensidad del valle.", "Vistas, fotografías y parada contemplativa.", null, null), p(2, "Montañas y horizonte", "Cerro El Picacho", "Seguimos hacia un punto privilegiado para observar la geografía del Valle de Aburrá y disfrutar de una de las vistas más representativas de la ciudad.", "Mirador y fotografías, sujeto a acceso y condiciones de seguridad.", null, null)]
+		paradas: [p(1, "La ciudad a nuestros pies", "Mirador La Palma", "Desde La Palma apreciamos Medellín desde otra perspectiva: barrios, montañas y la inmensidad del valle.", "Vistas, fotografías y parada contemplativa.", "miradores-01", "Pareja de espaldas en la baranda de un mirador, contemplando la ciudad iluminada en el valle", { foco: "50% 55%" }), p(2, "Montañas y horizonte", "Cerro El Picacho", "Seguimos hacia un punto privilegiado para observar la geografía del Valle de Aburrá y disfrutar de una de las vistas más representativas de la ciudad.", "Mirador y fotografías, sujeto a acceso y condiciones de seguridad.", "miradores-02", "Viajero sentado en la baranda de un mirador de noche, con el valle de Medellín iluminado detrás", { foco: "50% 50%" })]
 	},
 	"tour-del-cafe-medellin": {
 		corto: "Tour del Café",

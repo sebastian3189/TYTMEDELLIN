@@ -556,7 +556,7 @@
   ],
   "width": 899,
   "height": 1599,
-  "origen": "site/public/media/oficial/orig/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp"
+  "origen": "site/fuentes/oficial-orig/traslados-aeropuerto-jmc/74a9a0c4-31fb-42d5-b794-5b24f4c76d81-1600.webp"
  },
  "traslados-03": {
   "w": [
@@ -577,6 +577,26 @@
   "width": 1200,
   "height": 1600,
   "origen": "IMAGENES/NuevasFotos-webp/traslados-aeropuerto-jmc/img-6507.webp"
+ },
+ "miradores-01": {
+  "w": [
+   480,
+   800,
+   1200
+  ],
+  "width": 1200,
+  "height": 1600,
+  "origen": "IMAGENES/NuevasFotos-webp/tour-miradores/photos-1-001-1-img-0784.webp"
+ },
+ "miradores-02": {
+  "w": [
+   480,
+   800,
+   1200
+  ],
+  "width": 1200,
+  "height": 1600,
+  "origen": "IMAGENES/NuevasFotos-webp/tour-miradores/photos-1-001-1-img-0789.webp"
  },
  "compras-01": {
   "w": [

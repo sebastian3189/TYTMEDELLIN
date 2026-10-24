@@ -184,8 +184,8 @@ var S = globalThis.__ttI18n || (globalThis.__ttI18n = {
 var dictionaries = S.dictionaries;
 S.localizedProps = localizedProps;
 var loaders = {
-	en: () => import("./assets/en-KGYVZKOu.js"),
-	"pt-BR": () => import("./assets/pt-BR-CEtx2oPy.js")
+	en: () => import("./assets/en-DIVHT4Nu.js"),
+	"pt-BR": () => import("./assets/pt-BR-DxGIO9_1.js")
 };
 var language = () => S.locale;
 var setLanguage = (value) => {
@@ -2520,7 +2520,7 @@ var company_ = () => import("./assets/Company-BJhEQKvh.js");
 var R = {
 	home: lazyRoute(() => import("./assets/Home-Bcbz4Xe5.js").then((m) => m.default)),
 	catalog: lazyRoute(() => import("./assets/Catalog-CSr4huTl.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-CETMUmw5.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-B31qT1XU.js").then((m) => m.default)),
 	fleet: lazyRoute(() => import("./assets/Fleet-BVxxzf6D.js").then((m) => m.default)),
 	blog: lazyRoute(pick(() => import("./assets/Blog-D_VKyTZO.js"), "Blog")),
 	article: lazyRoute(() => import("./assets/Blog-D_VKyTZO.js").then((m) => m.default)),
@@ -3979,10 +3979,97 @@ var media_default = {
 		]
 	},
 	"tour-miradores": {
-		"portada": null,
-		"cabecera": [],
-		"galeria": [],
-		"inicio": []
+		"portada": {
+			"src": "/media/fichas/tour-miradores/photos-1-001-img-5801-1200.webp",
+			"small": "/media/fichas/tour-miradores/photos-1-001-img-5801-400.webp",
+			"srcset": "/media/fichas/tour-miradores/photos-1-001-img-5801-400.webp 400w, /media/fichas/tour-miradores/photos-1-001-img-5801-800.webp 800w, /media/fichas/tour-miradores/photos-1-001-img-5801-1200.webp 1200w",
+			"width": 1200,
+			"height": 1600,
+			"source": "IMAGENES/NuevasFotos-webp/tour-miradores/photos-1-001-img-5801.webp",
+			"focus": "50% 55%",
+			"alt": "Viajera de espaldas con los brazos abiertos frente a las luces de Medellín de noche, en un mirador con luces colgantes"
+		},
+		"cabecera": [{
+			"src": "/media/fichas/tour-miradores/photos-1-001-img-5756-1-h1800.webp",
+			"small": "/media/fichas/tour-miradores/photos-1-001-img-5756-1-h640.webp",
+			"srcset": "/media/fichas/tour-miradores/photos-1-001-img-5756-1-h640.webp 640w, /media/fichas/tour-miradores/photos-1-001-img-5756-1-h972.webp 972w, /media/fichas/tour-miradores/photos-1-001-img-5756-1-h1800.webp 1800w",
+			"width": 1800,
+			"height": 2400,
+			"source": "IMAGENES/NuevasFotos-webp/tour-miradores/photos-1-001-img-5756-1.webp",
+			"focus": "50% 55%",
+			"alt": "Dos viajeras brindan sentadas frente a la ciudad iluminada, bajo una guirnalda de luces"
+		}],
+		"galeria": [{
+			"src": "/media/fichas/tour-miradores/img-5853-3-1200.webp",
+			"small": "/media/fichas/tour-miradores/img-5853-3-400.webp",
+			"srcset": "/media/fichas/tour-miradores/img-5853-3-400.webp 400w, /media/fichas/tour-miradores/img-5853-3-800.webp 800w, /media/fichas/tour-miradores/img-5853-3-1200.webp 1200w",
+			"width": 1200,
+			"height": 1600,
+			"source": "IMAGENES/NuevasFotos-webp/tour-miradores/img-5853-3.webp",
+			"focus": "50% 55%",
+			"alt": "Viajera recostada en un puf junto a los ventanales de un mirador, con la ciudad iluminada de fondo"
+		}, {
+			"src": "/media/fichas/tour-miradores/photos-1-001-img-5676-1200.webp",
+			"small": "/media/fichas/tour-miradores/photos-1-001-img-5676-400.webp",
+			"srcset": "/media/fichas/tour-miradores/photos-1-001-img-5676-400.webp 400w, /media/fichas/tour-miradores/photos-1-001-img-5676-800.webp 800w, /media/fichas/tour-miradores/photos-1-001-img-5676-1200.webp 1200w",
+			"width": 1200,
+			"height": 1600,
+			"source": "IMAGENES/NuevasFotos-webp/tour-miradores/photos-1-001-img-5676.webp",
+			"focus": "50% 60%",
+			"alt": "Fogata en la terraza de un mirador de noche, con viajeros sentados alrededor y luces colgantes"
+		}],
+		"inicio": [
+			{
+				"src": "/media/fichas/tour-miradores/photos-1-001-1-img-0784-1200.webp",
+				"small": "/media/fichas/tour-miradores/photos-1-001-1-img-0784-400.webp",
+				"srcset": "/media/fichas/tour-miradores/photos-1-001-1-img-0784-400.webp 400w, /media/fichas/tour-miradores/photos-1-001-1-img-0784-800.webp 800w, /media/fichas/tour-miradores/photos-1-001-1-img-0784-1200.webp 1200w",
+				"width": 1200,
+				"height": 1600,
+				"source": "IMAGENES/NuevasFotos-webp/tour-miradores/photos-1-001-1-img-0784.webp",
+				"focus": "50% 55%",
+				"alt": "Pareja de espaldas en la baranda de un mirador, contemplando la ciudad iluminada en el valle"
+			},
+			{
+				"src": "/media/fichas/tour-miradores/photos-1-001-img-5756-1-1200.webp",
+				"small": "/media/fichas/tour-miradores/photos-1-001-img-5756-1-400.webp",
+				"srcset": "/media/fichas/tour-miradores/photos-1-001-img-5756-1-400.webp 400w, /media/fichas/tour-miradores/photos-1-001-img-5756-1-800.webp 800w, /media/fichas/tour-miradores/photos-1-001-img-5756-1-1200.webp 1200w",
+				"width": 1200,
+				"height": 1600,
+				"source": "IMAGENES/NuevasFotos-webp/tour-miradores/photos-1-001-img-5756-1.webp",
+				"focus": "50% 55%",
+				"alt": "Dos viajeras brindan sentadas frente a la ciudad iluminada, bajo una guirnalda de luces"
+			},
+			{
+				"src": "/media/fichas/tour-miradores/img-5853-3-1200.webp",
+				"small": "/media/fichas/tour-miradores/img-5853-3-400.webp",
+				"srcset": "/media/fichas/tour-miradores/img-5853-3-400.webp 400w, /media/fichas/tour-miradores/img-5853-3-800.webp 800w, /media/fichas/tour-miradores/img-5853-3-1200.webp 1200w",
+				"width": 1200,
+				"height": 1600,
+				"source": "IMAGENES/NuevasFotos-webp/tour-miradores/img-5853-3.webp",
+				"focus": "50% 55%",
+				"alt": "Viajera recostada en un puf junto a los ventanales de un mirador, con la ciudad iluminada de fondo"
+			},
+			{
+				"src": "/media/fichas/tour-miradores/photos-1-001-img-5676-1200.webp",
+				"small": "/media/fichas/tour-miradores/photos-1-001-img-5676-400.webp",
+				"srcset": "/media/fichas/tour-miradores/photos-1-001-img-5676-400.webp 400w, /media/fichas/tour-miradores/photos-1-001-img-5676-800.webp 800w, /media/fichas/tour-miradores/photos-1-001-img-5676-1200.webp 1200w",
+				"width": 1200,
+				"height": 1600,
+				"source": "IMAGENES/NuevasFotos-webp/tour-miradores/photos-1-001-img-5676.webp",
+				"focus": "50% 60%",
+				"alt": "Fogata en la terraza de un mirador de noche, con viajeros sentados alrededor y luces colgantes"
+			},
+			{
+				"src": "/media/fichas/tour-miradores/photos-1-001-1-img-0789-1200.webp",
+				"small": "/media/fichas/tour-miradores/photos-1-001-1-img-0789-400.webp",
+				"srcset": "/media/fichas/tour-miradores/photos-1-001-1-img-0789-400.webp 400w, /media/fichas/tour-miradores/photos-1-001-1-img-0789-800.webp 800w, /media/fichas/tour-miradores/photos-1-001-1-img-0789-1200.webp 1200w",
+				"width": 1200,
+				"height": 1600,
+				"source": "IMAGENES/NuevasFotos-webp/tour-miradores/photos-1-001-1-img-0789.webp",
+				"focus": "50% 50%",
+				"alt": "Viajero sentado en la baranda de un mirador de noche, con el valle de Medellín iluminado detrás"
+			}
+		]
 	},
 	vehiculos: [
 		{

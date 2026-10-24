@@ -72,8 +72,8 @@ export const itinerarios = {
   ] },
 
   'tour-miradores': { corto: 'Miradores', tituloSeccion: null, aviso: null, estado: 'confirmada', paradas: [
-    p(1, 'La ciudad a nuestros pies', 'Mirador La Palma', 'Desde La Palma apreciamos Medellín desde otra perspectiva: barrios, montañas y la inmensidad del valle.', 'Vistas, fotografías y parada contemplativa.', null, null),
-    p(2, 'Montañas y horizonte', 'Cerro El Picacho', 'Seguimos hacia un punto privilegiado para observar la geografía del Valle de Aburrá y disfrutar de una de las vistas más representativas de la ciudad.', 'Mirador y fotografías, sujeto a acceso y condiciones de seguridad.', null, null),
+    p(1, 'La ciudad a nuestros pies', 'Mirador La Palma', 'Desde La Palma apreciamos Medellín desde otra perspectiva: barrios, montañas y la inmensidad del valle.', 'Vistas, fotografías y parada contemplativa.', 'miradores-01', 'Pareja de espaldas en la baranda de un mirador, contemplando la ciudad iluminada en el valle', { foco: '50% 55%' }),
+    p(2, 'Montañas y horizonte', 'Cerro El Picacho', 'Seguimos hacia un punto privilegiado para observar la geografía del Valle de Aburrá y disfrutar de una de las vistas más representativas de la ciudad.', 'Mirador y fotografías, sujeto a acceso y condiciones de seguridad.', 'miradores-02', 'Viajero sentado en la baranda de un mirador de noche, con el valle de Medellín iluminado detrás', { foco: '50% 50%' }),
   ] },
 
   'tour-del-cafe-medellin': { corto: 'Tour del Café', tituloSeccion: null, aviso: null, estado: 'confirmada', paradas: [

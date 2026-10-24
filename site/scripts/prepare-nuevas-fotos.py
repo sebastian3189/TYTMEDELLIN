@@ -26,6 +26,8 @@ FOLDERS = {
 ZIPS = {ROOT / 'nosotros.zip': 'nosotros'}
 # Fotos sueltas en la raíz (aportadas 2026-10-23): paradas de Guatapé «Plazoleta de los Zócalos» y «Malecón».
 SUELTAS = {ROOT / 'Zocalos.HEIC': 'guatape-piedra-del-penol', ROOT / 'Malecon.jpg': 'guatape-piedra-del-penol'}
+# Carpetas en la raíz con fotos sueltas y .zip (aportada 2026-10-24): Tour Miradores, que estaba sin fotos.
+CARPETAS_RAIZ = {ROOT / 'Miradores': 'tour-miradores'}
 # Uso: sin argumentos procesa todo; con slugs (p. ej. «nosotros») solo esos y fusiona en el manifiesto existente.
 ONLY = set(sys.argv[1:])
 EXT = {'.jpg', '.jpeg', '.png', '.heic', '.heif'}
@@ -58,6 +60,11 @@ def sources():
         if not ONLY or slug in ONLY: yield from from_zip(slug, f, f.relative_to(ROOT).as_posix())
     for f, slug in SUELTAS.items():
         if (not ONLY or slug in ONLY) and f.exists(): yield slug, f.relative_to(ROOT).as_posix(), f.stem, f.read_bytes
+    for carpeta, slug in CARPETAS_RAIZ.items():
+        if (ONLY and slug not in ONLY) or not carpeta.exists(): continue
+        for f in sorted(carpeta.rglob('*')):
+            if f.suffix.lower() in EXT: yield slug, f.relative_to(ROOT).as_posix(), f.stem, f.read_bytes
+            elif f.suffix.lower() == '.zip': yield from from_zip(slug, f, f.relative_to(ROOT).as_posix())
 
 existing = {}
 for base in (ROOT / 'site/public/media/oficial/orig', ROOT / 'IMAGENES/FotosMedellin-webp'):

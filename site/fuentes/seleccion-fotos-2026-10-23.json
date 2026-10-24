@@ -1177,26 +1177,73 @@
   ]
  },
  "tour-miradores": {
-  "portada": null,
-  "cabecera_slides": [],
+  "portada": {
+   "id": "tour-miradores/photos-1-001-img-5801",
+   "foco": "50% 55%",
+   "alt": "Viajera de espaldas con los brazos abiertos frente a las luces de Medellín de noche, en un mirador con luces colgantes"
+  },
+  "cabecera_slides": [
+   {
+    "id": "tour-miradores/photos-1-001-img-5756-1",
+    "foco": "50% 55%",
+    "alt": "Dos viajeras brindan sentadas frente a la ciudad iluminada, bajo una guirnalda de luces"
+   }
+  ],
   "paradas": [
    {
     "orden": 1,
     "ubicacion": "Mirador La Palma",
-    "id": null,
-    "foco": null,
-    "alt": null
+    "id": "tour-miradores/photos-1-001-1-img-0784",
+    "foco": "50% 55%",
+    "alt": "Pareja de espaldas en la baranda de un mirador, contemplando la ciudad iluminada en el valle"
    },
    {
     "orden": 2,
     "ubicacion": "Cerro El Picacho",
-    "id": null,
-    "foco": null,
-    "alt": null
+    "id": "tour-miradores/photos-1-001-1-img-0789",
+    "foco": "50% 50%",
+    "alt": "Viajero sentado en la baranda de un mirador de noche, con el valle de Medellín iluminado detrás"
    }
   ],
-  "galeria": [],
-  "inicio_tarjeta": [],
+  "galeria": [
+   {
+    "id": "tour-miradores/img-5853-3",
+    "foco": "50% 55%",
+    "alt": "Viajera recostada en un puf junto a los ventanales de un mirador, con la ciudad iluminada de fondo"
+   },
+   {
+    "id": "tour-miradores/photos-1-001-img-5676",
+    "foco": "50% 60%",
+    "alt": "Fogata en la terraza de un mirador de noche, con viajeros sentados alrededor y luces colgantes"
+   }
+  ],
+  "inicio_tarjeta": [
+   {
+    "id": "tour-miradores/photos-1-001-1-img-0784",
+    "foco": "50% 55%",
+    "alt": "Pareja de espaldas en la baranda de un mirador, contemplando la ciudad iluminada en el valle"
+   },
+   {
+    "id": "tour-miradores/photos-1-001-img-5756-1",
+    "foco": "50% 55%",
+    "alt": "Dos viajeras brindan sentadas frente a la ciudad iluminada, bajo una guirnalda de luces"
+   },
+   {
+    "id": "tour-miradores/img-5853-3",
+    "foco": "50% 55%",
+    "alt": "Viajera recostada en un puf junto a los ventanales de un mirador, con la ciudad iluminada de fondo"
+   },
+   {
+    "id": "tour-miradores/photos-1-001-img-5676",
+    "foco": "50% 60%",
+    "alt": "Fogata en la terraza de un mirador de noche, con viajeros sentados alrededor y luces colgantes"
+   },
+   {
+    "id": "tour-miradores/photos-1-001-1-img-0789",
+    "foco": "50% 50%",
+    "alt": "Viajero sentado en la baranda de un mirador de noche, con el valle de Medellín iluminado detrás"
+   }
+  ],
   "descartadas": [
    "Decisión del usuario: sin fotos. La tarjeta usará un marcador de marca sin foto (constructor). Las fotos _sede que tenía quedan libres y algunas pasan al Tour Nocturno (tarjeta del inicio) y al catálogo"
   ]
@@ -1371,7 +1418,8 @@
   "Paradas llenadas por relación y no por lugar exacto (regla de la revisión 6): Café P6 (degustación de dulce y queso), Café P5 (máquina manual), Nápoles P3 (recinto de animales), Nápoles P6 (patio con mesas de Aldea Plaza), Compras P2 (carro de limonada en la calle) y P3 (bolsas de compras), Traslados E1 (aeropuerto) y E2 (equipo con van), Guatapé P4/P6/P7/P8. Los alt describen lo que se ve sin afirmar el lugar",
   "tour-de-compras (usuario, 2026-10-23): la parada 2 usa la portada img-2686-1600 (la carta central de Compras en la mano del inicio); en la ficha se ve en la pila de la cabecera y en la parada 2",
   "nosotros (usuario, 2026-10-23): img-9257 está en el collage de /nosotros y en el bloque «Nuestro equipo» del inicio (páginas distintas)",
-  "traslados-aeropuerto-jmc y nosotros (usuario, 2026-10-24): nosotros-img-0995 es la cabecera de Traslados y está en el collage de /nosotros (páginas distintas)"
+  "traslados-aeropuerto-jmc y nosotros (usuario, 2026-10-24): nosotros-img-0995 es la cabecera de Traslados y está en el collage de /nosotros (páginas distintas)",
+  "tour-miradores (usuario, 2026-10-24): con solo 6 fotos, la mano del inicio repite fotos de la ficha (img-0784, img-0789, img-5756-1, img-5853-3, img-5676); páginas distintas"
  ],
  "descartadas_globales": [
   "antigua:site/public/media/oficial/orig/_sede/comuna13-parce-medellin-grupo-1600.webp: retirada de catalogo_slides por pedido del usuario (2026-10-23); la reemplaza la toma de dron 16:9"
