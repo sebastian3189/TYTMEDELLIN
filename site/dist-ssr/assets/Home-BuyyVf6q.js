@@ -3,7 +3,7 @@ import { A as SoundIcon, D as tourPath, M as SocialIcon, S as textoFase, a as to
 import { n as useGlassPill, t as GlassPill } from "./glass-CL2rTD-m.js";
 import { a as tourEntry, c as prepVideo, l as safePlay, n as HeroBlock, o as inicioVideos, s as instagram } from "./Hero-CUcIYVym.js";
 import { t as Reviews } from "./Reviews-BChyAlMu.js";
-import { a as FAQ_HOME, l as Faq } from "./faq-data-DcW563WG.js";
+import { a as FAQ_HOME, l as Faq } from "./faq-data-CNlnD8uD.js";
 import { a as smooth$1, r as placePhotos } from "./mobile-motion-o2zoinXe.js";
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";

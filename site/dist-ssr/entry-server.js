@@ -2089,12 +2089,12 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-DLgQ3Dql.js");
+var company_ = () => import("./assets/Company-C04MFKuj.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-DXNYVUt3.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-DIDlYdhK.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-De-AmSAw.js").then((m) => m.default)),
-	fleet: lazyRoute(() => import("./assets/Fleet-DlcjrL22.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-BuyyVf6q.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-Demy7OD0.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-DU8F9v9I.js").then((m) => m.default)),
+	fleet: lazyRoute(() => import("./assets/Fleet-BB1f3CaP.js").then((m) => m.default)),
 	blog: lazyRoute(pick(() => import("./assets/Blog-CI_kE4bo.js"), "Blog")),
 	article: lazyRoute(() => import("./assets/Blog-CI_kE4bo.js").then((m) => m.default)),
 	about: lazyRoute(pick(company_, "About")),

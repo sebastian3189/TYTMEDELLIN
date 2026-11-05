@@ -94,7 +94,9 @@ function structuredData({ path, localPath, code, title }) {
       hasMap: company.reviews, sameAs: [company.instagram, company.tiktok],
       hasOfferCatalog: { '@type': 'OfferCatalog', name: texto.catalogo, itemListElement: SERVICIOS[code].map((itemOffered) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', ...itemOffered } })) },
     });
-    out.push({ '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${SITE}/#sitio`, url: abs(pathForLanguage('/', code)), name: 'T&T Medellín', inLanguage: languageInfo(code).html, publisher: { '@id': ORG_ID } });
+    out.push({ '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${SITE}/#sitio`, url: abs(pathForLanguage('/', code)), name: 'T&T Medellín', description: texto.description, inLanguage: languageInfo(code).html, publisher: { '@id': ORG_ID },
+      // Búsqueda real: el buscador de /tours lee ?buscar= (pages/Catalog.jsx).
+      potentialAction: { '@type': 'SearchAction', target: { '@type': 'EntryPoint', urlTemplate: `${abs(pathForLanguage(RUTA_TOURS, code))}?buscar={search_term_string}` }, 'query-input': 'required name=search_term_string' } });
   }
   const crumbs = [];
   const [home, exp, blog, transporte] = CRUMB[code] || CRUMB.es;
@@ -182,6 +184,8 @@ const urls = paths.filter((path) => !FUERA_DEL_SITEMAP.has(stripLanguage(path)))
   return `  <url><loc>${abs(path)}</loc>${LANGUAGES.map(l=>`<xhtml:link rel="alternate" hreflang="${l.code}" href="${abs(pathForLanguage(local,l.code))}"/>`).join('')}<xhtml:link rel="alternate" hreflang="x-default" href="${abs(local)}"/></url>`;
 });
 await writeFile(join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls.join('\n')}\n</urlset>\n`);
-await writeFile(join(dist, 'robots.txt'), INDEXABLE ? `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n` : `# Prototipo: sin indexación hasta la publicación (Spec 01/06).\nUser-agent: *\nDisallow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
+// Índice de sitemaps: la entrada que se envía a Search Console y anuncia robots.txt. Sin <lastmod>: no hay fecha real de modificación.
+await writeFile(join(dist, 'sitemap_index.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <sitemap><loc>${SITE}/sitemap.xml</loc></sitemap>\n</sitemapindex>\n`);
+await writeFile(join(dist, 'robots.txt'), INDEXABLE ? `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap_index.xml\n` : `# Prototipo: sin indexación hasta la publicación (Spec 01/06).\nUser-agent: *\nDisallow: /\n\nSitemap: ${SITE}/sitemap_index.xml\n`);
 console.log(`prerender: ${pages.length} rutas + 404.html + 200.html + /site + /flota + sitemap.xml + robots.txt`);
 for (const page of pages) console.log(`  ${page.path.padEnd(48)} ${page.kb} KB`);

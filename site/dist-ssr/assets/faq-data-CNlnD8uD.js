@@ -1,10 +1,11 @@
-import { C as t, h as jsxs, m as jsx } from "./Arrow-CIGPWPkK.js";
+import { C as t, D as languageInfo, h as jsxs, m as jsx, v as language } from "./Arrow-CIGPWPkK.js";
 import { j as Icon } from "../entry-server.js";
 import { useId } from "react";
 //#region src/Faq.jsx
 var ld = (items) => JSON.stringify({
 	"@context": "https://schema.org",
 	"@type": "FAQPage",
+	inLanguage: languageInfo(language()).html,
 	mainEntity: items.map((x) => ({
 		"@type": "Question",
 		name: t(x.q),

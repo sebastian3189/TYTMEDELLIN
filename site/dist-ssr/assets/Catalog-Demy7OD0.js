@@ -2,11 +2,17 @@ import { h as jsxs, m as jsx, o as Trust, p as Fragment$1, s as useFlipGrid } fr
 import { _ as TourCard, a as tours } from "../entry-server.js";
 import { n as useGlassPill, t as GlassPill } from "./glass-CL2rTD-m.js";
 import { t as CatalogHero } from "./Hero-CUcIYVym.js";
-import { useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 //#region src/pages/Catalog.jsx
 function Catalog() {
 	const [filter, setFilter] = useState("Todos");
 	const [query, setQuery] = useState("");
+	const { search } = useLocation();
+	useEffect(() => {
+		const term = new URLSearchParams(search).get("buscar");
+		if (term) setQuery(term.slice(0, 80));
+	}, [search]);
 	const categories = ["Todos", ...new Set(tours.map((t) => t.category))];
 	const grid = useRef(null), tabs = useRef(null);
 	useGlassPill(tabs, filter);

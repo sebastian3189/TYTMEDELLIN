@@ -56,6 +56,9 @@ for (const file of paginas) {
   soft(enSitemap.has(rel) !== legal, legal ? `sitemap: incluye la página legal ${rel}` : `sitemap: falta ${rel}`);
 }
 soft((sitemap.match(/hreflang="x-default"/g) || []).length === 72, 'sitemap: faltan alternos x-default');
+const indice = readFileSync(join(dist, 'sitemap_index.xml'), 'utf8');
+soft(/<sitemapindex [^>]*>\s*<sitemap><loc>https:\/\/[^<]+\/sitemap\.xml<\/loc><\/sitemap>\s*<\/sitemapindex>/.test(indice), 'sitemap_index.xml: no apunta a sitemap.xml');
+soft(/^Sitemap: https:\/\/[^\n]+\/sitemap_index\.xml$/m.test(readFileSync(join(dist, 'robots.txt'), 'utf8')), 'robots.txt: no anuncia sitemap_index.xml');
 soft(!/\/(experiencias|servicios|vehiculos)(["/<])/.test(sitemap), 'sitemap: contiene rutas antiguas');
 
 // 5) Inicio: h1, título y descripción con la keyword de su idioma; un solo bloque de empresa con servicios que existen. Todo JSON-LD debe ser válido.
@@ -69,6 +72,10 @@ for (const pre of PREFIJOS) {
   const empresa = bloques.filter((b) => b['@type'] === 'TravelAgency');
   soft(empresa.length === 1, `${pre || '/'}: hay ${empresa.length} bloques TravelAgency`);
   soft(empresa[0]?.description.startsWith(kw), `${pre || '/'}: JSON-LD sin la keyword`);
+  const sitio = bloques.find((b) => b['@type'] === 'WebSite'), lang = pre === '/en' ? 'en' : pre === '/pt-br' ? 'pt-BR' : 'es-CO';
+  soft(sitio?.description?.startsWith(kw), `${pre || '/'}: WebSite sin description`);
+  soft(sitio?.potentialAction?.target?.urlTemplate?.endsWith(`${pre}/tours?buscar={search_term_string}`) && sitio.potentialAction['query-input'] === 'required name=search_term_string', `${pre || '/'}: WebSite sin SearchAction válida`);
+  soft(bloques.find((b) => b['@type'] === 'FAQPage')?.inLanguage === lang, `${pre || '/'}: FAQPage sin inLanguage ${lang}`);
   for (const campo of ['name', 'url', 'telephone', 'email', 'address', 'areaServed', 'sameAs', 'identifier', 'taxID']) soft(empresa[0]?.[campo], `${pre || '/'}: JSON-LD sin ${campo}`);
   for (const { itemOffered } of empresa[0]?.hasOfferCatalog.itemListElement || []) { const ruta = new URL(itemOffered.url).pathname; soft(existsSync(htmlDe(ruta)), `${pre || '/'}: servicio sin página ${ruta}`); soft(pre ? ruta.startsWith(pre) : !/^\/(en|pt-br)\//.test(ruta), `${pre || '/'}: servicio de otro idioma ${ruta}`); }
 }

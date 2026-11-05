@@ -5,7 +5,7 @@ import { n as useGlassPill, t as GlassPill } from "./glass-CL2rTD-m.js";
 import { i as archiveEntry, r as TourHeroVideo } from "./Hero-CUcIYVym.js";
 import { t as FeaturedGallery } from "./FeaturedGallery-DYXqIvMS.js";
 import { t as Reviews } from "./Reviews-BChyAlMu.js";
-import { l as Faq, o as FAQ_TOUR, s as FAQ_TRANSFER, t as DURACIONES } from "./faq-data-DcW563WG.js";
+import { l as Faq, o as FAQ_TOUR, s as FAQ_TRANSFER, t as DURACIONES } from "./faq-data-CNlnD8uD.js";
 import { i as smallCaps, n as placeLugar, r as placePhotos, t as clamp } from "./mobile-motion-o2zoinXe.js";
 import { useLocation } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";

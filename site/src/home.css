@@ -23,6 +23,7 @@ html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .socials a{col
 .hero-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(15,17,15,.28) 0%,rgba(15,17,15,0) 50%),rgba(15,17,15,.6)}
 .hero-copy{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;width:100%;max-width:1440px;padding:calc(var(--hero-h) + 24px) var(--pad) 56px}
 .home-hero .hero-eyebrow{margin:0 0 clamp(16px,3svh,28px);color:#F5F5F0}
+.home-hero .hero-keyword{font-family:var(--font)}
 .home-hero h1:where(:not(.hero-keyword)),.home-hero .hero-display{margin:0;color:#F5F5F0;font:800 clamp(64px,min(11vw,17svh),184px)/.88 var(--heading);letter-spacing:-.05em;max-width:14ch}
 .hero-l1,.hero-l2{display:block;white-space:nowrap;animation:hero-rise .6s var(--ease-out-strong) both}
 .hero-l2{animation-delay:60ms}

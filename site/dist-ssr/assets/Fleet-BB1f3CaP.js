@@ -1,6 +1,6 @@
 import { h as jsxs, m as jsx, p as Fragment } from "./Arrow-CIGPWPkK.js";
 import { d as Button, f as Eyebrow, j as Icon, m as Picture, p as PageTitle, s as vehicles } from "../entry-server.js";
-import { i as FAQ_FLEET, l as Faq } from "./faq-data-DcW563WG.js";
+import { i as FAQ_FLEET, l as Faq } from "./faq-data-CNlnD8uD.js";
 //#region src/pages/Fleet.jsx
 function Fleet() {
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
