@@ -1525,7 +1525,6 @@ var en_default = {
 	Tours,
 	Transporte,
 	"Agencia de turismo en Medellín": "Tour agency in Medellín",
-	"Agencia de turismo con tours privados y transporte en Medellín y Antioquia, RNT 176384. Cuéntanos tu plan y cotiza una experiencia para tu grupo.": "Tour agency offering private tours and transport in Medellín and Antioquia, RNT 176384. Tell us your plan and get a quote for your group.",
 	"Tours privados en Medellín": "Private tours in Medellín",
 	"Tours privados en Medellín y Antioquia: Comuna 13, Guatapé, café, pueblos y naturaleza. Conoce los recorridos y consulta las condiciones para tu grupo.": "Private tours in Medellín and Antioquia: Comuna 13, Guatapé, coffee, towns and nature. Explore the routes and check the conditions for your group.",
 	"Alquiler de vans y buses en Medellín": "Van and bus rental in Medellín",
@@ -1566,7 +1565,9 @@ var en_default = {
 	"Tour por el Oriente": "Eastern Antioquia tour",
 	"Tour del café Medellín": "Medellín coffee tour",
 	"Tour de compras": "Shopping tour",
-	"Transporte aeropuerto": "Airport transfer"
+	"Transporte aeropuerto": "Airport transfer",
+	"Agencia de turismo en Medellín: tours privados": "Tour agency in Medellín: private tours",
+	"Agencia de turismo en Medellín con RNT 176384: tours 100% privados a Guatapé y Comuna 13 y transporte desde el aeropuerto. Cotiza por WhatsApp.": "Tour agency in Medellín with RNT 176384: 100% private tours to Guatapé and Comuna 13, plus airport transfers. Get a quote on WhatsApp."
 };
 //#endregion
 export { Aceptar, Ampliar, Autenticidad, Blog, Buses, Calidad, Calificaciones, Cercanía, Cerrar, Ciudad, Compromiso, Conecta, Confianza, Configurar, Contacto, Correo, Cotizar, Cultivos, Descubre, Detalles, Disfruta, Empresa, Enamórate, Experiencias, Explora, Familia, Felicitación, Foto, Fotografía, Fotografías, Guatapé, Hospitalidad, Hoy, Indicativo, Inicio, Inspiración, Inspírate, Jardín, Llámanos, Mensaje, Menú, Miradores, Naturaleza, Necesarias, Nevera, Noche, Nombre, Nosotros, Número, Opcional, Personalizable, Personas, Petición, Planeación, Preferencias, Principal, Privacidad, Provenza, Pueblos, Queja, Rechazar, Reclamo, Recolección, Recuerda, Revisa, Rionegro, Santorini, Seguir, Seguridad, Sencillez, Servicio, Servicios, Siente, Silenciar, Sorpréndete, Sugerencia, Síguenos, Tequendamita, Todas, Todos, Tours, Transporte, Traslados, Vehículos, Vive, aquí, compartido, control, conversación, de, en_default as default, descubrir, empieza, encuentros, es, escuchemos, experiencia, importa, mueven, necesitas, nota, notas, pasajeros, personas, planeémoslo, por, quieres, recuerdo, sentido, tu, viajó, vive };

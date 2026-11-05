@@ -37,8 +37,8 @@ var S = globalThis.__ttI18n || (globalThis.__ttI18n = {
 var dictionaries = S.dictionaries;
 S.localizedProps = localizedProps;
 var loaders = {
-	en: () => import("./en-Bz6KRm3T.js"),
-	"pt-BR": () => import("./pt-BR-Dgdb2PJh.js")
+	en: () => import("./en-BbsH6lTz.js"),
+	"pt-BR": () => import("./pt-BR-CFgXe07O.js")
 };
 var language = () => S.locale;
 var setLanguage = (value) => {

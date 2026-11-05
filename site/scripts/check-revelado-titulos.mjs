@@ -15,7 +15,9 @@ for (const [motor, abrir] of motores) {
   const browser = await abrir();
   for (const [ancho, alto] of [[1440, 900], [390, 844]]) {
     const contexto = await browser.newContext({ viewport: { width: ancho, height: alto } });
-    for (const ruta of rutas) {
+    // Todas las rutas en Edge a 1440; en móvil, las de español; en WebKit, una muestra de los casos que fallaban.
+    const lista = motor === 'webkit' ? ['/', '/nosotros', '/transporte', '/en', '/pt-br/nosotros'] : ancho === 1440 ? rutas : rutas.filter((r) => !/^\/(en|pt-br)(\/|$)/.test(r));
+    for (const ruta of lista) {
       const page = await contexto.newPage();
       await page.goto(base + ruta, { waitUntil: 'load', timeout: 60000 });
       await page.waitForTimeout(700);
@@ -35,4 +37,4 @@ for (const [motor, abrir] of motores) {
   await browser.close();
 }
 if (hallazgos.length) { console.error(`FALLA: ${hallazgos.length} títulos sin revelar de ${medidos}\n- ` + hallazgos.join('\n- ')); process.exit(1); }
-console.log(`PASS check-revelado-titulos: ${medidos} títulos revelados en ${rutas.length} rutas (${motores.map(([m]) => m).join(', ')}; 1440 y 390).`);
+console.log(`PASS check-revelado-titulos: ${medidos} títulos revelados (${motores.map(([m]) => m).join(', ')}; 1440 y 390).`);

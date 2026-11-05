@@ -1,4 +1,4 @@
-import { C as t, h as jsxs, m as jsx } from "./Arrow-BF3-UVf1.js";
+import { C as t, h as jsxs, m as jsx } from "./Arrow-CIGPWPkK.js";
 import { j as Icon } from "../entry-server.js";
 import { useId } from "react";
 //#region src/Faq.jsx

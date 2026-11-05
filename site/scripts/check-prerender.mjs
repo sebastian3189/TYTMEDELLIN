@@ -74,7 +74,7 @@ try {
   await nav.close();
   // 4) sitemap.xml y robots.txt.
   const sitemap = await (await fetch(base + '/sitemap.xml')).text(), robots = await (await fetch(base + '/robots.txt')).text();
-  soft((sitemap.match(/<url>/g) || []).length === paths.length * 3, `sitemap: ${(sitemap.match(/<url>/g) || []).length} URLs (se esperaban ${paths.length * 3}: es + en + pt-br)`);
+  soft((sitemap.match(/<url>/g) || []).length === (paths.length - 2) * 3, `sitemap: ${(sitemap.match(/<url>/g) || []).length} URLs (se esperaban ${(paths.length - 2) * 3}: es + en + pt-br, sin las 2 legales)`);
   soft(!/\/(site|flota|404)</.test(sitemap), 'sitemap incluye /site, /flota o 404');
   soft(/^User-agent: \*/m.test(robots) && /Sitemap: /.test(robots), 'robots.txt sin User-agent o Sitemap');
   // 5) Reescritura SPA: cualquier ruta devuelve el mismo HTML; el cliente no debe hidratar el HTML de otra ruta (React #418).

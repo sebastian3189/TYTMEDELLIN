@@ -1,4 +1,4 @@
-import { g as company, h as jsxs, m as jsx, p as Fragment, v as language } from "./Arrow-BF3-UVf1.js";
+import { g as company, h as jsxs, m as jsx, p as Fragment, v as language } from "./Arrow-CIGPWPkK.js";
 import { p as PageTitle } from "../entry-server.js";
 //#region src/pages/DataPolicy.jsx
 var SECTIONS = [

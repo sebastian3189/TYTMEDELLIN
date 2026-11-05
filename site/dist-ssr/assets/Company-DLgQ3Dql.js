@@ -1,8 +1,8 @@
-import { _ as whatsapp, g as company, h as jsxs, i as Manifesto, m as jsx, p as Fragment$1, t as Arrow } from "./Arrow-BF3-UVf1.js";
+import { _ as whatsapp, g as company, h as jsxs, i as Manifesto, m as jsx, p as Fragment$1, t as Arrow } from "./Arrow-CIGPWPkK.js";
 import { N as Socials, d as Button, f as Eyebrow, h as QuoteSection, i as photos, m as Picture, o as values, p as PageTitle, r as nosotros } from "../entry-server.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-Cm711e1k.js";
-import { t as Reviews } from "./Reviews-CIw8VUSP.js";
-import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-C94VqTI6.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-DYXqIvMS.js";
+import { t as Reviews } from "./Reviews-BChyAlMu.js";
+import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-DcW563WG.js";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 //#region src/AboutFx.jsx

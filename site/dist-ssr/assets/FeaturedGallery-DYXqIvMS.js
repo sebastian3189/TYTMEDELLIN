@@ -1,4 +1,4 @@
-import { c as useLightMotion, h as jsxs, m as jsx, t as Arrow } from "./Arrow-BF3-UVf1.js";
+import { c as useLightMotion, h as jsxs, m as jsx, t as Arrow } from "./Arrow-CIGPWPkK.js";
 import { v as hiddenByCover } from "../entry-server.js";
 import { useLayoutEffect, useRef, useState } from "react";
 //#region src/FeaturedGallery.jsx

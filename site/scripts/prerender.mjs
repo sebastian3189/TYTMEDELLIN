@@ -175,8 +175,9 @@ for (const path of LANGUAGES.flatMap(l=>['/site','/flota'].map(p=>pathForLanguag
 }
 // Cáscara vacía para hosts que solo saben reescribir a un HTML (Netlify/Surge `200.html`): el cliente la renderiza con createRoot (sin hidratar HTML ajeno).
 await writeFile(join(dist, '200.html'), shell);
-// sitemap.xml: solo las rutas 200 indexables (sin /site, /flota ni 404), con alternos es/en.
-const urls = paths.map((path) => {
+// sitemap.xml: las páginas de la arquitectura SEO (Spec 02) en los tres idiomas, con sus alternos. Sin /site, /flota ni 404; las páginas legales se publican pero no buscan posicionarse.
+const FUERA_DEL_SITEMAP = new Set(['/privacidad', '/politica-de-tratamiento-de-datos']);
+const urls = paths.filter((path) => !FUERA_DEL_SITEMAP.has(stripLanguage(path))).map((path) => {
   const local = stripLanguage(path);
   return `  <url><loc>${abs(path)}</loc>${LANGUAGES.map(l=>`<xhtml:link rel="alternate" hreflang="${l.code}" href="${abs(pathForLanguage(local,l.code))}"/>`).join('')}<xhtml:link rel="alternate" hreflang="x-default" href="${abs(local)}"/></url>`;
 });

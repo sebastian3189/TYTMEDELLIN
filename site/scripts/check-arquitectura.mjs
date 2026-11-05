@@ -49,7 +49,13 @@ for (const file of paginas) {
 
 // 4) Sitemap.
 const sitemap = readFileSync(join(dist, 'sitemap.xml'), 'utf8');
-soft((sitemap.match(/<url>/g) || []).length === 78, 'sitemap: no tiene 78 URL');
+const enSitemap = new Set([...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname));
+soft(enSitemap.size === 72 && (sitemap.match(/<url>/g) || []).length === 72, `sitemap: se esperaban 72 URL y hay ${enSitemap.size}`);
+for (const file of paginas) {
+  const rel = '/' + relative(dist, file).replaceAll('\\', '/').replace(/\/?index\.html$/, ''), legal = /(^|\/)(privacidad|politica-de-tratamiento-de-datos)$/.test(rel);
+  soft(enSitemap.has(rel) !== legal, legal ? `sitemap: incluye la página legal ${rel}` : `sitemap: falta ${rel}`);
+}
+soft((sitemap.match(/hreflang="x-default"/g) || []).length === 72, 'sitemap: faltan alternos x-default');
 soft(!/\/(experiencias|servicios|vehiculos)(["/<])/.test(sitemap), 'sitemap: contiene rutas antiguas');
 
 // 5) Inicio: h1, título y descripción con la keyword de su idioma; un solo bloque de empresa con servicios que existen. Todo JSON-LD debe ser válido.

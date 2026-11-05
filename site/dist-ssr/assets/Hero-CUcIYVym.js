@@ -1,4 +1,4 @@
-import { c as useLightMotion, g as company, h as jsxs, m as jsx, p as Fragment$1, t as Arrow } from "./Arrow-BF3-UVf1.js";
+import { c as useLightMotion, g as company, h as jsxs, m as jsx, p as Fragment$1, t as Arrow } from "./Arrow-CIGPWPkK.js";
 import { O as tourSeo, T as RUTA_TOURS, a as tours, k as PlayIcon, l as media_default, n as catalogo, x as inicioTextos } from "../entry-server.js";
 import { Link } from "react-router-dom";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
@@ -498,7 +498,7 @@ function HeroBlock({ video, slides, eyebrow, title, support, actions, tour = fal
 			/* @__PURE__ */ jsxs("div", {
 				className: "hero-copy",
 				children: [
-					/* @__PURE__ */ jsx("p", {
+					eyebrow && /* @__PURE__ */ jsx("p", {
 						className: "eyebrow hero-eyebrow",
 						children: eyebrow
 					}),

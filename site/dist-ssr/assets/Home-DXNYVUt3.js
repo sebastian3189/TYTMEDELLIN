@@ -1,9 +1,9 @@
-import { C as t, _ as whatsapp, c as useLightMotion, h as jsxs, l as useMedia, m as jsx, p as Fragment$1, t as Arrow, v as language } from "./Arrow-BF3-UVf1.js";
+import { C as t, _ as whatsapp, c as useLightMotion, h as jsxs, l as useMedia, m as jsx, p as Fragment$1, t as Arrow, v as language } from "./Arrow-CIGPWPkK.js";
 import { A as SoundIcon, D as tourPath, M as SocialIcon, S as textoFase, a as tours, b as CHAPTERS, d as Button, f as Eyebrow, j as Icon, k as PlayIcon, m as Picture, r as nosotros, t as articles, u as Logo, x as inicioTextos, y as GoogleBadgeStatic } from "../entry-server.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-B3GpDxIs.js";
-import { a as tourEntry, c as prepVideo, l as safePlay, n as HeroBlock, o as inicioVideos, s as instagram } from "./Hero-CasFwL6a.js";
-import { t as Reviews } from "./Reviews-CIw8VUSP.js";
-import { a as FAQ_HOME, l as Faq } from "./faq-data-C94VqTI6.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-CL2rTD-m.js";
+import { a as tourEntry, c as prepVideo, l as safePlay, n as HeroBlock, o as inicioVideos, s as instagram } from "./Hero-CUcIYVym.js";
+import { t as Reviews } from "./Reviews-BChyAlMu.js";
+import { a as FAQ_HOME, l as Faq } from "./faq-data-DcW563WG.js";
 import { a as smooth$1, r as placePhotos } from "./mobile-motion-o2zoinXe.js";
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -3074,10 +3074,13 @@ function HomeHero() {
 	const t = inicioTextos;
 	return /* @__PURE__ */ jsx(HeroBlock, {
 		video: inicioVideos.hero,
-		eyebrow: t.lema,
 		support: t.confianza,
-		title: /* @__PURE__ */ jsxs("h1", {
+		title: /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx("h1", {
 			id: "hero-titulo",
+			className: "eyebrow hero-eyebrow hero-keyword",
+			children: t.h1
+		}), /* @__PURE__ */ jsxs("p", {
+			className: "hero-display",
 			children: [
 				/* @__PURE__ */ jsx("span", {
 					className: "hero-l1",
@@ -3089,7 +3092,7 @@ function HomeHero() {
 					children: t.titular[1]
 				})
 			]
-		}),
+		})] }),
 		actions: /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsxs(Link, {
 			className: "button hero-btn hero-btn--explore",
 			to: "/tours",

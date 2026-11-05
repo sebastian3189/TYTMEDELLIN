@@ -1,4 +1,4 @@
-import { C as t, D as languageInfo, E as languageFromPath, O as pathForLanguage, S as switchLanguage, T as LANGUAGES, _ as whatsapp, b as prepareLanguage, g as company, h as jsxs, m as jsx, n as QuoteCopy, p as Fragment$1, r as EditorialMotion, t as Arrow, u as useMounted, v as language, w as unprefix, x as setLanguage, y as languagePath } from "./assets/Arrow-BF3-UVf1.js";
+import { C as t, D as languageInfo, E as languageFromPath, O as pathForLanguage, S as switchLanguage, T as LANGUAGES, _ as whatsapp, b as prepareLanguage, g as company, h as jsxs, m as jsx, n as QuoteCopy, p as Fragment$1, r as EditorialMotion, t as Arrow, u as useMounted, v as language, w as unprefix, x as setLanguage, y as languagePath } from "./assets/Arrow-CIGPWPkK.js";
 import { renderToString } from "react-dom/server";
 import { Link, NavLink, Navigate, Route, Routes, StaticRouter, useLocation, useNavigationType } from "react-router-dom";
 import { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -628,7 +628,7 @@ var slugFromPath = (path) => {
 //#endregion
 //#region src/meta.js
 var staticMeta = {
-	"/": ["Agencia de turismo en Medellín", "Agencia de turismo con tours privados y transporte en Medellín y Antioquia, RNT 176384. Cuéntanos tu plan y cotiza una experiencia para tu grupo."],
+	"/": ["Agencia de turismo en Medellín: tours privados", "Agencia de turismo en Medellín con RNT 176384: tours 100% privados a Guatapé y Comuna 13 y transporte desde el aeropuerto. Cotiza por WhatsApp."],
 	[RUTA_TOURS]: ["Tours privados en Medellín", "Tours privados en Medellín y Antioquia: Comuna 13, Guatapé, café, pueblos y naturaleza. Conoce los recorridos y consulta las condiciones para tu grupo."],
 	[RUTA_VEHICULOS]: ["Alquiler de vans y buses en Medellín", "Alquiler con conductor de vans, buses, SUV y sedanes para traslados y grupos desde Medellín. Consulta capacidad, equipaje y disponibilidad."],
 	[RUTA_TRANSPORTE]: ["Transporte privado en Medellín", "Organiza transporte privado, traslados al aeropuerto y movilidad para empresas, eventos o agencias en Medellín. Comparte tu ruta y solicita una propuesta."],
@@ -708,6 +708,7 @@ function usePageMeta(title, description) {
 //#region src/inicio-textos.js
 var inicioTextos = {
 	estado: "APROBADO — concepto H1, copy del inicio (2026-10-12)",
+	h1: "Agencia de turismo en Medellín",
 	titular: ["Medellín,", "a otro nivel"],
 	lema: "Experiencias a otro nivel",
 	confianza: "Tours 100% privados · Guía-conductor exclusivo · Horarios flexibles",
@@ -1166,7 +1167,7 @@ var hiddenByCover = (photo, frame) => {
 };
 //#endregion
 //#region src/shared.jsx
-var Quote = lazy(() => import("./assets/Quote-BeIowx98.js"));
+var Quote = lazy(() => import("./assets/Quote-BKZCSNfj.js"));
 var reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 function Picture({ photo, alt, priority = false, className = "", native = false, sizes = "(max-width: 700px) 100vw, 65vw", frame = 0, max = .5 }) {
 	if (!photo) return null;
@@ -2088,22 +2089,22 @@ function lazyRoute(loader) {
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-DNpF74os.js");
+var company_ = () => import("./assets/Company-DLgQ3Dql.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-DaxWZJZA.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-CjrQ72b_.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-DDSWnBfM.js").then((m) => m.default)),
-	fleet: lazyRoute(() => import("./assets/Fleet-CVT14S54.js").then((m) => m.default)),
-	blog: lazyRoute(pick(() => import("./assets/Blog-DST4_4pg.js"), "Blog")),
-	article: lazyRoute(() => import("./assets/Blog-DST4_4pg.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-DXNYVUt3.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-DIDlYdhK.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-De-AmSAw.js").then((m) => m.default)),
+	fleet: lazyRoute(() => import("./assets/Fleet-DlcjrL22.js").then((m) => m.default)),
+	blog: lazyRoute(pick(() => import("./assets/Blog-CI_kE4bo.js"), "Blog")),
+	article: lazyRoute(() => import("./assets/Blog-CI_kE4bo.js").then((m) => m.default)),
 	about: lazyRoute(pick(company_, "About")),
 	services: lazyRoute(pick(company_, "Services")),
 	contact: lazyRoute(pick(company_, "Contact")),
 	quote: lazyRoute(pick(company_, "QuotePage")),
 	privacy: lazyRoute(pick(company_, "Privacy")),
 	ratings: lazyRoute(pick(company_, "Ratings")),
-	dataPolicy: lazyRoute(() => import("./assets/DataPolicy-BmO_iWfj.js").then((m) => m.default)),
-	notFound: lazyRoute(() => import("./assets/NotFound-BXXkp8Qw.js").then((m) => m.default))
+	dataPolicy: lazyRoute(() => import("./assets/DataPolicy-CjL3j14P.js").then((m) => m.default)),
+	notFound: lazyRoute(() => import("./assets/NotFound-BYhCG2zq.js").then((m) => m.default))
 };
 R.home, R.catalog, `${RUTA_TOURS}`, R.tour, tourPath("traslados-aeropuerto-jmc"), R.tour, R.fleet, R.blog, R.article, R.about, R.services, R.contact, R.quote, R.privacy, R.dataPolicy, R.ratings;
 var preloadAllRoutes = () => Promise.all(Object.values(R).map((route) => route.preload()));

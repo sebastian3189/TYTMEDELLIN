@@ -1,4 +1,4 @@
-import { h as jsxs, m as jsx, p as Fragment, t as Arrow } from "./Arrow-BF3-UVf1.js";
+import { h as jsxs, m as jsx, p as Fragment, t as Arrow } from "./Arrow-CIGPWPkK.js";
 import { C as NOT_FOUND, _ as TourCard, a as tours, p as PageTitle, w as usePageMeta } from "../entry-server.js";
 import { Link } from "react-router-dom";
 //#region src/pages/NotFound.jsx
