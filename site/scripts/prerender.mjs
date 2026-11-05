@@ -16,10 +16,12 @@ const { render, paths, metaFor } = await import(pathToFileURL(join(site, 'dist-s
 const manifest = JSON.parse(await readFile(join(dist, '.vite', 'manifest.json'), 'utf8'));
 const shell = (await readFile(join(dist, 'index.html'), 'utf8')).split('\r\n').join('\n');
 
-const SITE_PENDING = 'https://dominio-pendiente-cliente.invalid';
-const SITE = (process.env.TYT_SITE_URL || SITE_PENDING).replace(/\/+$/, '');
+// Dominio definitivo (cliente, 2026-11-05): www.transporteenmedellin.com. El dominio sin «www» redirige (308) a este en Vercel.
+// TYT_SITE_URL permite sobrescribirlo (p. ej. un dominio de pruebas). La indexación NO se activa sola: es un interruptor aparte (TYT_INDEXABLE=1).
+const SITE_DEFAULT = 'https://www.transporteenmedellin.com';
+const SITE = (process.env.TYT_SITE_URL || SITE_DEFAULT).replace(/\/+$/, '');
 const INDEXABLE = process.env.TYT_INDEXABLE === '1';
-if (SITE === SITE_PENDING) console.warn('prerender: TYT_SITE_URL no definido; canonical y sitemap usan el marcador PENDIENTE CLIENTE (' + SITE_PENDING + ')');
+if (!INDEXABLE) console.warn('prerender: TYT_INDEXABLE no es 1; el sitio se publica con noindex y robots.txt cerrado (prototipo). Dominio: ' + SITE);
 const abs = (path) => SITE + (path === '/' ? '/' : path.replace(/\/+$/, ''));
 const esc = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const strip = (html, name) => html.replace(new RegExp(`[ \\t]*<!--${name}:start-->[\\s\\S]*?<!--${name}:end-->\\n?`), '');
@@ -58,6 +60,34 @@ function go(){if(done)return;done=1;x.forEach(function(h){var l=d.createElement(
 function arm(){var i=d.querySelector('img[fetchpriority=high]');if(i&&!i.complete){i.addEventListener('load',go);i.addEventListener('error',go);setTimeout(go,3500)}else go()}
 if(d.readyState==='loading')d.addEventListener('DOMContentLoaded',arm);else arm()})()</script>`;
 
+// Datos estructurados (Spec 05): solo datos reales del negocio (src/company.js y la página de contacto). NO se incluyen horarios, precios, calificaciones
+// ni reseñas (PENDIENTE CLIENTE / no se inventan). Inicio: empresa (TravelAgency) + sitio web. Fichas y artículos: migas de pan.
+// `code` = es | en | pt-BR. Las FAQ ya llevan su propio FAQPage en la página (Faq.jsx).
+const { company } = await import('../src/company.js');
+const ORG_ID = `${SITE}/#organizacion`;
+const CRUMB = { es: ['Inicio', 'Experiencias', 'Blog'], en: ['Home', 'Experiences', 'Blog'], 'pt-BR': ['Início', 'Experiências', 'Blog'] };
+function structuredData({ path, localPath, code, title }) {
+  const out = [];
+  if (localPath === '/') {
+    const street = company.address.split(',')[0].trim();
+    out.push({
+      '@context': 'https://schema.org', '@type': 'TravelAgency', '@id': ORG_ID, name: 'T&T Medellín', alternateName: 'Transporte y Turismo Medellín',
+      url: abs(pathForLanguage('/', code)), logo: `${SITE}/media/marca/logo/logo-400.webp`, image: `${SITE}/media/marca/logo/logo-400.webp`,
+      telephone: `+${company.whatsapp}`, email: company.email,
+      address: { '@type': 'PostalAddress', streetAddress: street, addressLocality: 'Medellín', addressRegion: 'Antioquia', addressCountry: 'CO' },
+      areaServed: [{ '@type': 'City', name: 'Medellín' }, { '@type': 'AdministrativeArea', name: 'Antioquia' }],
+      sameAs: [company.instagram, company.tiktok], hasMap: company.reviews,
+    });
+    out.push({ '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${SITE}/#sitio`, url: abs(pathForLanguage('/', code)), name: 'T&T Medellín', inLanguage: languageInfo(code).html, publisher: { '@id': ORG_ID } });
+  }
+  const crumbs = [];
+  const [home, exp, blog] = CRUMB[code] || CRUMB.es;
+  if (/^\/experiencias\/[^/]+$/.test(localPath)) crumbs.push([home, '/'], [exp, '/experiencias'], [title, localPath]);
+  else if (/^\/blog\/[^/]+$/.test(localPath)) crumbs.push([home, '/'], [blog, '/blog'], [title, localPath]);
+  if (crumbs.length) out.push({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: crumbs.map(([name, p], i) => ({ '@type': 'ListItem', position: i + 1, name, item: abs(pathForLanguage(p, code)) })) });
+  return out;
+}
+
 // Compone el HTML de una ruta a partir de la cáscara. `mark` marca el root: 404 → el cliente lo renderiza con createRoot (no se hidrata: el mismo HTML
 // sirve para cualquier URL desconocida, p. ej. /experiencias/inexistente, donde el menú activo difiere).
 function compose({ path, body, title, description, chunk, mark }) {
@@ -73,6 +103,8 @@ function compose({ path, body, title, description, chunk, mark }) {
   if (!mark) social.push(['property','og:url',abs(path)]);
   html = html.replace('</head>', () => social.map(([attribute,key,value]) => `<meta ${attribute}="${key}" content="${esc(value)}"/>`).join('') + '</head>');
   if (INDEXABLE) html = html.replace(/[ \t]*<meta name="robots" content="noindex, nofollow" \/>\n?/, '');
+  const ld = structuredData({ path, localPath, code: info.code, title });
+  if (!mark && ld.length) html = html.replace('</head>', () => ld.map((o) => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, '\\u003c')}</script>`).join('') + '</head>');
   html = html.replace(/<title>[\s\S]*?<\/title>/, () => `<title>${esc(`${title} | T&T Medellín`)}</title>`);
   html = html.replace(/(<meta name="description" content=")[^"]*(")/, (_, a, b) => `${a}${esc(description)}${b}`);
   html = strip(strip(html, 'inter'), 'cormorant');

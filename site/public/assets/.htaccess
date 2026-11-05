@@ -1,0 +1,4 @@
+# Vite pone un hash en estos nombres: se pueden guardar en caché sin caducidad.
+<IfModule mod_headers.c>
+  Header set Cache-Control "public, max-age=31536000, immutable"
+</IfModule>

@@ -18,7 +18,7 @@ import './travel-hand.css';
  * Relevo desde la película: la sección se superpone a la pista de ScrubHero (margen negativo) y su escenario, fijo en el mismo sitio, se funde sobre el
  * de la película mientras el mazo ya está en su caja (relayDeck, compartida con baraja-geometria.js). Escrituras solo en `style` (transform/opacity).
  */
-const ORDER = ['city-tour-comuna-13', 'tour-de-compras', 'guatape-piedra-del-penol', 'vuelta-a-oriente', 'santa-fe-de-antioquia', 'jardin-antioquia', 'tour-del-cafe-medellin', 'salto-del-buey', 'hacienda-napoles', 'tour-nocturno-medellin', 'tour-miradores']; // Miradores (sin foto) al final (usuario, 2026-10-24)
+const ORDER = ['city-tour-comuna-13', 'guatape-piedra-del-penol', 'tour-nocturno-medellin', 'tour-del-cafe-medellin', 'vuelta-a-oriente', 'hacienda-napoles', 'salto-del-buey', 'santa-fe-de-antioquia', 'jardin-antioquia', 'tour-miradores', 'tour-de-compras']; // orden indicado por el usuario (2026-11-05)
 const N = ORDER.length;
 const CARDS = '/media/baraja';
 const SEG = { wide: 30, compact: 80 }; // svh por experiencia (móvil: ≈0,8 pantallas por tour, sin tramos muertos)
