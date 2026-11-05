@@ -6,7 +6,7 @@ for (const theme of ['light', 'dark']) for (const [w, h, dpr] of [[1440, 900, 1]
   const tag = `${w}-${theme}`, mobile = w < 800, ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: dpr, isMobile: mobile, hasTouch: mobile, colorScheme: theme });
   await ctx.addInitScript((t) => { try { localStorage.setItem('tyt-theme', t); } catch { /* */ } }, theme);
   const page = await ctx.newPage(); const errors = []; page.on('pageerror', (e) => errors.push(e.message));
-  await page.goto(base + '/experiencias', { waitUntil: 'load' }); await page.waitForTimeout(1500);
+  await page.goto(base + '/tours', { waitUntil: 'load' }); await page.waitForTimeout(1500);
   await page.locator('.catalog-tools').scrollIntoViewIfNeeded(); await page.waitForTimeout(500);
   await page.screenshot({ path: `${out}/glass-selector-${tag}.png` });
   await page.getByRole('button', { name: 'Naturaleza y café' }).click().catch(async () => { await page.locator('.filters button').nth(3).click(); }); await page.waitForTimeout(500);
@@ -20,7 +20,7 @@ for (const theme of ['light', 'dark']) for (const [w, h, dpr] of [[1440, 900, 1]
   await page.getByRole('menuitem', { name: 'Copiar enlace' }).click().catch(() => {}); await page.waitForTimeout(400);
   await page.screenshot({ path: `${out}/glass-compartir-copiado-${tag}.png` });
   await page.keyboard.press('Escape'); await page.waitForTimeout(200);
-  await page.goto(base + '/vehiculos', { waitUntil: 'load' }); await page.waitForTimeout(1200);
+  await page.goto(base + '/transporte/alquiler-vans-buses', { waitUntil: 'load' }); await page.waitForTimeout(1200);
   await page.locator('.fleet-grid').scrollIntoViewIfNeeded(); await page.waitForTimeout(500);
   await page.screenshot({ path: `${out}/flota-${tag}.png` });
   if (!mobile) { await page.locator('.vehicle').nth(1).hover(); await page.waitForTimeout(450); await page.screenshot({ path: `${out}/flota-hover-${tag}.png` }); }

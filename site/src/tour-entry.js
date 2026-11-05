@@ -11,7 +11,7 @@ const photoOf = (p) => ({ src: p.src, srcSet: p.srcset || `${p.small} 640w, ${p.
 const find = (slug) => tours.find((x) => x.slug === slug);
 /** Diaporama de la cabecera de la ficha (`cabecera_slides`; la 1.ª es la portada). Sin fotos (Tour Miradores) devuelve [] y la cabecera queda sin diaporama. */
 export function tourSlides(slug) { return find(slug).slides; }
-/** Diaporama de la cabecera de /experiencias (`catalogo_slides`). */
+/** Diaporama de la cabecera de /tours (`catalogo_slides`). */
 export function catalogSlides() { return catalogo; }
 /** Carta de portada de la baraja (4:5). Tour Miradores (sin foto): carta de marca generada por prepare-baraja.py. */
 const cover = (slug) => ({ src: `${CARDS}/${slug}-d.webp`, srcSet: `${CARDS}/${slug}-m.webp 400w, ${CARDS}/${slug}-d.webp 640w, ${CARDS}/${slug}-h.webp 960w`, width: 960, height: 1200, small: `${CARDS}/${slug}-t.webp` });

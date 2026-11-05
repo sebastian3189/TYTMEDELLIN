@@ -7,7 +7,7 @@ const base = process.env.TYT_TEST_URL || 'http://127.0.0.1:4402';
 const out = 'test-results/ronda-cierre';
 await mkdir(out, { recursive: true });
 const browser = await chromium.launch({ channel: 'msedge', headless: true });
-const routes = [['inicio', '/'], ['ficha', '/experiencias/guatape-piedra-del-penol'], ['vehiculos', '/vehiculos'], ['contacto', '/contacto'], ['cotizar', '/cotizar']];
+const routes = [['inicio', '/'], ['ficha', '/tours/guatape'], ['vehiculos', '/transporte/alquiler-vans-buses'], ['contacto', '/contacto'], ['cotizar', '/cotizar']];
 for (const [width, height, mobile] of [[390, 844, true], [1440, 900, false]]) {
   const ctx = await browser.newContext({ viewport: { width, height }, isMobile: mobile, hasTouch: mobile, deviceScaleFactor: mobile ? 2 : 1 });
   const page = await ctx.newPage();

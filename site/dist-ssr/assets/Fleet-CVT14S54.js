@@ -1,11 +1,12 @@
-import { H as jsx, R as Icon, U as jsxs, V as Fragment, d as Button, f as Eyebrow, m as Picture, p as PageTitle, s as vehicles } from "../entry-server.js";
-import { i as FAQ_FLEET, l as Faq } from "./faq-data-BaHZP5K7.js";
+import { h as jsxs, m as jsx, p as Fragment } from "./Arrow-BF3-UVf1.js";
+import { d as Button, f as Eyebrow, j as Icon, m as Picture, p as PageTitle, s as vehicles } from "../entry-server.js";
+import { i as FAQ_FLEET, l as Faq } from "./faq-data-C94VqTI6.js";
 //#region src/pages/Fleet.jsx
 function Fleet() {
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsx(PageTitle, {
 			tag: "Nuestra flota",
-			title: "Vehículos para cada tipo de viaje",
+			title: "Alquiler de vans y buses en Medellín",
 			text: "Elige la categoría según el tamaño de tu grupo y tu equipaje. Confirmamos la unidad al cotizar."
 		}),
 		/* @__PURE__ */ jsx("section", {

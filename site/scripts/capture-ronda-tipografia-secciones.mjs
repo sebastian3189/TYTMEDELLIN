@@ -3,7 +3,7 @@ import { chromium } from '@playwright/test';
 const base = process.env.TYT_TEST_URL || 'http://127.0.0.1:5199', out = 'test-results/ronda-tipografia';
 const env = (k, d) => (process.env[k] ? process.env[k].split(',') : d);
 const browser = await chromium.launch({ channel: 'msedge', headless: true });
-const sets = { inicio: ['', ['.home-story', '.service-band', '.df', '.faq-page', '.home-close']], experiencia: ['/experiencias/guatape-piedra-del-penol', ['.tour-intro', '.faq-page,.faq', '.quote-section']], nosotros: ['/nosotros', ['.about-hero,.page-title', '.timeline', '.quote-section,.contact-place']], vehiculos: ['/vehiculos', ['.page-title', '.vehicle']] };
+const sets = { inicio: ['', ['.home-story', '.service-band', '.df', '.faq-page', '.home-close']], experiencia: ['/tours/guatape', ['.tour-intro', '.faq-page,.faq', '.quote-section']], nosotros: ['/nosotros', ['.about-hero,.page-title', '.timeline', '.quote-section,.contact-place']], vehiculos: ['/transporte/alquiler-vans-buses', ['.page-title', '.vehicle']] };
 const log = [];
 for (const lang of env('LANGS', ['es'])) for (const w of env('WIDTHS', [1440]).map(Number)) for (const theme of env('THEMES', ['light', 'dark'])) for (const [name, [p, sels]] of Object.entries(sets).filter(([n]) => env('PAGES', [n]).includes(n))) {
   const ctx = await browser.newContext({ viewport: { width: w, height: w < 800 ? 844 : 900 }, isMobile: w < 800, hasTouch: w < 800, colorScheme: theme });

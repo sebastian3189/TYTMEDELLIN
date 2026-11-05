@@ -18,6 +18,6 @@ for (const theme of ['light', 'dark']) {
   await ctx.close();
 }
 const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
-const p = await ctx.newPage(); await p.goto(base + '/experiencias/hacienda-napoles', { waitUntil: 'load' }); await p.waitForTimeout(1200);
+const p = await ctx.newPage(); await p.goto(base + '/tours/hacienda-napoles', { waitUntil: 'load' }); await p.waitForTimeout(1200);
 await p.evaluate(() => scrollTo({ top: 1700, behavior: 'instant' })); await p.waitForTimeout(700); await p.screenshot({ path: `${out}/ficha-movil-sin-barra-390.png` });
 await ctx.close(); await browser.close(); console.log('listo');

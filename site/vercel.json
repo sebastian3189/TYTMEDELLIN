@@ -1,23 +1,271 @@
 {
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/experiencias",
+      "destination": "/tours",
+      "statusCode": 301
+    },
+    {
+      "source": "/servicios",
+      "destination": "/transporte",
+      "statusCode": 301
+    },
+    {
+      "source": "/vehiculos",
+      "destination": "/transporte/alquiler-vans-buses",
+      "statusCode": 301
+    },
+    {
+      "source": "/experiencias/city-tour-comuna-13",
+      "destination": "/tours/comuna-13",
+      "statusCode": 301
+    },
+    {
+      "source": "/experiencias/guatape-piedra-del-penol",
+      "destination": "/tours/guatape",
+      "statusCode": 301
+    },
+    {
+      "source": "/experiencias/tour-nocturno-medellin",
+      "destination": "/tours/nocturno-medellin",
+      "statusCode": 301
+    },
+    {
+      "source": "/experiencias/vuelta-a-oriente",
+      "destination": "/tours/oriente-antioqueno",
+      "statusCode": 301
+    },
+    {
+      "source": "/experiencias/tour-del-cafe-medellin",
+      "destination": "/tours/cafe-medellin",
+      "statusCode": 301
+    },
+    {
+      "source": "/experiencias/hacienda-napoles",
+      "destination": "/tours/hacienda-napoles",
+      "statusCode": 301
+    },
+    {
+      "source": "/experiencias/salto-del-buey",
+      "destination": "/tours/salto-del-buey",
+      "statusCode": 301
+    },
+    {
+      "source": "/experiencias/santa-fe-de-antioquia",
+      "destination": "/tours/santa-fe-de-antioquia",
+      "statusCode": 301
+    },
+    {
+      "source": "/experiencias/jardin-antioquia",
+      "destination": "/tours/jardin-antioquia",
+      "statusCode": 301
+    },
+    {
+      "source": "/experiencias/tour-de-compras",
+      "destination": "/tours/compras-medellin",
+      "statusCode": 301
+    },
+    {
+      "source": "/experiencias/tour-miradores",
+      "destination": "/tours/miradores-medellin",
+      "statusCode": 301
+    },
+    {
+      "source": "/experiencias/traslados-aeropuerto-jmc",
+      "destination": "/transporte/aeropuerto-medellin",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/experiencias",
+      "destination": "/en/tours",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/servicios",
+      "destination": "/en/transporte",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/vehiculos",
+      "destination": "/en/transporte/alquiler-vans-buses",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/experiencias/city-tour-comuna-13",
+      "destination": "/en/tours/comuna-13",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/experiencias/guatape-piedra-del-penol",
+      "destination": "/en/tours/guatape",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/experiencias/tour-nocturno-medellin",
+      "destination": "/en/tours/nocturno-medellin",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/experiencias/vuelta-a-oriente",
+      "destination": "/en/tours/oriente-antioqueno",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/experiencias/tour-del-cafe-medellin",
+      "destination": "/en/tours/cafe-medellin",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/experiencias/hacienda-napoles",
+      "destination": "/en/tours/hacienda-napoles",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/experiencias/salto-del-buey",
+      "destination": "/en/tours/salto-del-buey",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/experiencias/santa-fe-de-antioquia",
+      "destination": "/en/tours/santa-fe-de-antioquia",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/experiencias/jardin-antioquia",
+      "destination": "/en/tours/jardin-antioquia",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/experiencias/tour-de-compras",
+      "destination": "/en/tours/compras-medellin",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/experiencias/tour-miradores",
+      "destination": "/en/tours/miradores-medellin",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/experiencias/traslados-aeropuerto-jmc",
+      "destination": "/en/transporte/aeropuerto-medellin",
+      "statusCode": 301
+    },
+    {
+      "source": "/pt-br/experiencias",
+      "destination": "/pt-br/tours",
+      "statusCode": 301
+    },
+    {
+      "source": "/pt-br/servicios",
+      "destination": "/pt-br/transporte",
+      "statusCode": 301
+    },
+    {
+      "source": "/pt-br/vehiculos",
+      "destination": "/pt-br/transporte/alquiler-vans-buses",
+      "statusCode": 301
+    },
+    {
+      "source": "/pt-br/experiencias/city-tour-comuna-13",
+      "destination": "/pt-br/tours/comuna-13",
+      "statusCode": 301
+    },
+    {
+      "source": "/pt-br/experiencias/guatape-piedra-del-penol",
+      "destination": "/pt-br/tours/guatape",
+      "statusCode": 301
+    },
+    {
+      "source": "/pt-br/experiencias/tour-nocturno-medellin",
+      "destination": "/pt-br/tours/nocturno-medellin",
+      "statusCode": 301
+    },
+    {
+      "source": "/pt-br/experiencias/vuelta-a-oriente",
+      "destination": "/pt-br/tours/oriente-antioqueno",
+      "statusCode": 301
+    },
+    {
+      "source": "/pt-br/experiencias/tour-del-cafe-medellin",
+      "destination": "/pt-br/tours/cafe-medellin",
+      "statusCode": 301
+    },
+    {
+      "source": "/pt-br/experiencias/hacienda-napoles",
+      "destination": "/pt-br/tours/hacienda-napoles",
+      "statusCode": 301
+    },
+    {
+      "source": "/pt-br/experiencias/salto-del-buey",
+      "destination": "/pt-br/tours/salto-del-buey",
+      "statusCode": 301
+    },
+    {
+      "source": "/pt-br/experiencias/santa-fe-de-antioquia",
+      "destination": "/pt-br/tours/santa-fe-de-antioquia",
+      "statusCode": 301
+    },
+    {
+      "source": "/pt-br/experiencias/jardin-antioquia",
+      "destination": "/pt-br/tours/jardin-antioquia",
+      "statusCode": 301
+    },
+    {
+      "source": "/pt-br/experiencias/tour-de-compras",
+      "destination": "/pt-br/tours/compras-medellin",
+      "statusCode": 301
+    },
+    {
+      "source": "/pt-br/experiencias/tour-miradores",
+      "destination": "/pt-br/tours/miradores-medellin",
+      "statusCode": 301
+    },
+    {
+      "source": "/pt-br/experiencias/traslados-aeropuerto-jmc",
+      "destination": "/pt-br/transporte/aeropuerto-medellin",
+      "statusCode": 301
+    }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     },
     {
       "source": "/fonts/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     },
     {
       "source": "/media/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=2592000" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=2592000"
+        }
+      ]
     },
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
       ]
     }
   ]

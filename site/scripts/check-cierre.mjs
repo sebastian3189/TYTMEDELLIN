@@ -17,7 +17,7 @@ try {
   for (const width of [320, 390, 768, 1024, 1440, 1920]) {
     const ctx = await browser.newContext({ viewport: { width, height: 900 } });
     const page = await ctx.newPage(); watch(page, `jmc-${width}`);
-    await page.goto(base + '/experiencias/traslados-aeropuerto-jmc', { waitUntil: 'load' });
+    await page.goto(base + '/transporte/aeropuerto-medellin', { waitUntil: 'load' });
     await page.waitForTimeout(500);
     const data = await page.evaluate((cover) => {
       const refs = (root) => [...root.querySelectorAll('img,source')].filter((n) => `${n.getAttribute('src') || ''} ${n.getAttribute('srcset') || ''} ${n.currentSrc || ''}`.includes(cover)).length;
@@ -40,7 +40,7 @@ try {
   }
   // Tarjeta de /experiencias: la portada sigue recortada (foco 92 %).
   { const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
-    await page.goto(base + '/experiencias', { waitUntil: 'load' });
+    await page.goto(base + '/tours', { waitUntil: 'load' });
     const card = await page.evaluate((c) => { const img = [...document.querySelectorAll('.tour-card img')].find((i) => (i.currentSrc || i.src).includes(c) || (i.srcset || '').includes(c)); return img && getComputedStyle(img).objectPosition; }, COVER);
     soft(/^9[0-9](\.\d+)?% /.test(card || ''), `tarjeta JMC: foco ${card}`);
     checks.push(`P1 JMC: portada fuera de galería/miniaturas/visor a 320–1920 px, contador «2 fotografías», ficha y tarjeta siguen recortadas (foco ${card})`);
@@ -83,7 +83,7 @@ try {
   // 5) [P3] Nápoles: la cabecera no amplía la portada de 480 px; el orden de la galería no cambia.
   for (const [width, dpr] of [[390, 2], [768, 2], [1440, 1]]) {
     const ctx = await browser.newContext({ viewport: { width, height: 900 }, deviceScaleFactor: dpr }); const page = await ctx.newPage();
-    await page.goto(base + '/experiencias/hacienda-napoles', { waitUntil: 'load' }); await page.waitForTimeout(800);
+    await page.goto(base + '/tours/hacienda-napoles', { waitUntil: 'load' }); await page.waitForTimeout(800);
     const hero = await page.evaluate(async () => { const i = document.querySelector('.tour-hero img'); const r = i.getBoundingClientRect(); const probe = new Image(); probe.src = i.currentSrc; await probe.decode(); return { nat: probe.naturalWidth, css: i.offsetWidth, src: i.currentSrc.split('/').pop(), dpr: devicePixelRatio }; });
     soft(hero.nat >= hero.css * hero.dpr * 0.98, `Nápoles ${width}: cabecera ampliada (${hero.nat}px nativos para ${hero.css}×${hero.dpr})`);
     const gallery = await page.evaluate(() => [...document.querySelectorAll('.gallery-thumbs img')].map((i) => i.src.split('/').pop()).slice(0, 2));
@@ -105,7 +105,7 @@ try {
   }
   for (const width of [768, 1024, 1440]) {
     const ctx = await browser.newContext({ viewport: { width, height: 900 } }); const page = await ctx.newPage(); watch(page, `fleet-${width}`);
-    await page.goto(base + '/vehiculos', { waitUntil: 'load' }); await page.waitForTimeout(500);
+    await page.goto(base + '/transporte/alquiler-vans-buses', { waitUntil: 'load' }); await page.waitForTimeout(500);
     const rows = await page.evaluate(() => { const cards = [...document.querySelectorAll('.vehicle')]; const tops = {}; for (const c of cards) { const h = c.querySelector('h2').getBoundingClientRect().top - c.getBoundingClientRect().top; const row = Math.round(c.getBoundingClientRect().top); (tops[row] ||= []).push(Math.round(h)); } return Object.values(tops); });
     soft(rows.every((r) => Math.max(...r) - Math.min(...r) <= 1), `/vehiculos ${width}: títulos desalineados dentro de la fila ${JSON.stringify(rows)}`);
     if (width === 1440) await page.screenshot({ path: `${out}/vehiculos-1440.png`, fullPage: false });

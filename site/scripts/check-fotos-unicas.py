@@ -9,7 +9,7 @@ dos usos distintos comparten archivo de origen o tienen dHash de 64 bits a dista
   cabecera        src/media.json[slug].cabecera (diaporama de la ficha; propias: ni la portada ni la 1.ª tarjeta del archivo)
   galeria         src/media.json[slug].galeria (TourArchive)
   inicio-tarjeta  src/media.json[slug].inicio (TravelHand)
-  catalogo        src/media.json.catalogo (cabecera de /experiencias)
+  catalogo        src/media.json.catalogo (cabecera de /tours)
   baraja          public/media/baraja/<slug>-h.webp: existe y no se parece (dHash <= 6) a ningún uso distinto de su portada
   blog            src/media.json.blog ; nosotros-equipo: collage de 4 (media.json.nosotros.equipo); carrusel (historia) y bloque del inicio (equipo[3]) = HEAD
 También verifica que lo generado coincide con la selección (mismos orígenes por capa) y que cada derivado referenciado existe.

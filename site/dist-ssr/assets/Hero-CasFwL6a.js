@@ -1,4 +1,5 @@
-import { E as useLightMotion, H as jsx, I as PlayIcon, M as inicioTextos, U as jsxs, V as Fragment$1, W as company, a as tours, b as Arrow, l as media_default, n as catalogo } from "../entry-server.js";
+import { c as useLightMotion, g as company, h as jsxs, m as jsx, p as Fragment$1, t as Arrow } from "./Arrow-BF3-UVf1.js";
+import { O as tourSeo, T as RUTA_TOURS, a as tours, k as PlayIcon, l as media_default, n as catalogo, x as inicioTextos } from "../entry-server.js";
 import { Link } from "react-router-dom";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 //#region src/videoPrep.js
@@ -131,7 +132,7 @@ var find = (slug) => tours.find((x) => x.slug === slug);
 function tourSlides(slug) {
 	return find(slug).slides;
 }
-/** Diaporama de la cabecera de /experiencias (`catalogo_slides`). */
+/** Diaporama de la cabecera de /tours (`catalogo_slides`). */
 function catalogSlides() {
 	return catalogo;
 }
@@ -542,7 +543,7 @@ function TourHeroVideo({ tour }) {
 		title: /* @__PURE__ */ jsx("h1", {
 			id: "tour-hero-titulo",
 			className: "hero-h1--tour",
-			children: tour.name
+			children: tourSeo[tour.slug].h1
 		}),
 		actions: /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsxs("a", {
 			className: "button hero-btn hero-btn--explore",
@@ -551,12 +552,12 @@ function TourHeroVideo({ tour }) {
 			children: ["Planea esta experiencia", /* @__PURE__ */ jsx(Arrow, {})]
 		}), /* @__PURE__ */ jsxs(Link, {
 			className: "button hero-btn hero-btn--quote",
-			to: "/experiencias",
+			to: RUTA_TOURS,
 			children: ["Todas las experiencias", /* @__PURE__ */ jsx(Arrow, {})]
 		})] })
 	});
 }
-/** Hero del catálogo /experiencias: mismo bloque, espacio de video propio (`catalogoVideo`) y fotos de varios tours mientras no haya video. */
+/** Hero del catálogo /tours: mismo bloque, espacio de video propio (`catalogoVideo`) y fotos de varios tours mientras no haya video. */
 function CatalogHero() {
 	return /* @__PURE__ */ jsx(HeroBlock, {
 		tour: true,
@@ -568,7 +569,7 @@ function CatalogHero() {
 		title: /* @__PURE__ */ jsx("h1", {
 			id: "catalogo-hero-titulo",
 			className: "hero-h1--tour",
-			children: "Experiencias desde Medellín"
+			children: "Tours privados en Medellín"
 		}),
 		actions: /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsxs("a", {
 			className: "button hero-btn hero-btn--explore",

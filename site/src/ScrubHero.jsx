@@ -1,3 +1,4 @@
+import { tourPath } from './rutas';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import manifest from './inicio-frames.json';
 import { inicioTextos, CHAPTERS, textoFase } from './inicio-textos';
@@ -470,7 +471,7 @@ export default function ScrubHero({ cards, skipLabel = 'Saltar introducción', n
           {staticMode && (
             <ul className="scrub-static-cards" role="list" aria-label="Experiencias">
               {cards.filter((c) => c.slug !== 'traslados-aeropuerto-jmc').map((c) => (
-                <li key={c.slug}><Link to={`/experiencias/${c.slug}`} className="ssc-card"><img src={cardImg(c.slug, 't')} width="320" height="400" alt={c.name} loading="lazy" decoding="async" /><span>{c.name}</span></Link></li>
+                <li key={c.slug}><Link to={`${tourPath(c.slug)}`} className="ssc-card"><img src={cardImg(c.slug, 't')} width="320" height="400" alt={c.name} loading="lazy" decoding="async" /><span>{c.name}</span></Link></li>
               ))}
             </ul>
           )}

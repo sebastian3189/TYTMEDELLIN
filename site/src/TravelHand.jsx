@@ -1,3 +1,4 @@
+import { tourPath } from './rutas';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { inicioTextos } from './inicio-textos';
@@ -281,11 +282,11 @@ export default function TravelHand() {
     // Estático / sin JS / reducido: lista de las 11 experiencias con foto, nombre, emoción y frase (K8).
     return (
       <section ref={root} className="th th--static wrap section" id="formas-de-viajar" tabIndex={-1} data-hydrated={ready ? 'true' : 'false'} aria-labelledby="th-titulo">
-        <div className="section-title"><div>{header}</div><Link className="text-link" to="/experiencias">Ver las 12 experiencias<Arrow /></Link></div>
+        <div className="section-title"><div>{header}</div><Link className="text-link" to="/tours">Ver las 12 experiencias<Arrow /></Link></div>
         <ul className="th-list" role="list">
           {ENTRIES.map((e, i) => (
             <li key={e.slug}>
-              <Link className="th-card" to={`/experiencias/${e.slug}`}>
+              <Link className="th-card" to={`${tourPath(e.slug)}`}>
                 <span className="th-card-img"><GoogleBadgeStatic className="th-card-badge" /><img src={e.photos[0].small} srcSet={e.photos[0].srcSet} sizes="(max-width: 699px) 92vw, (max-width: 1099px) 46vw, 30vw" width="400" height="500" alt="" loading="lazy" decoding="async" /></span>
                 <span className="th-card-count">{two(i + 1)} / {two(N)} · {e.category}</span>
                 <h3>{e.name}</h3>
@@ -309,7 +310,7 @@ export default function TravelHand() {
           <div className="th-mq-clip" aria-hidden="true"><div ref={mqEl} className="th-mq"><span>{entry.lugar}</span></div></div>
           {header}
           <div ref={titleHost} className="th-title-host">
-            <h3 className="th-title" style={{ fontSize: `${fit.size.toFixed(2)}px` }}><Link className="th-title-link" to={`/experiencias/${entry.slug}`}>{fit.lines.map((l) => <span key={l}>{l}</span>)}</Link></h3>
+            <h3 className="th-title" style={{ fontSize: `${fit.size.toFixed(2)}px` }}><Link className="th-title-link" to={`${tourPath(entry.slug)}`}>{fit.lines.map((l) => <span key={l}>{l}</span>)}</Link></h3>
           </div>
           <nav className="th-index" aria-label="Experiencias">
             <div ref={tabList} role="tablist" className={layout === 'compact' ? 'glass-tabs' : ''} aria-orientation={layout === 'wide' ? 'vertical' : 'horizontal'}>
@@ -346,7 +347,7 @@ export default function TravelHand() {
             </div>
           </div>
           <aside className="th-panel" aria-label="Detalle de la experiencia">
-            <Link className="button" to={`/experiencias/${entry.slug}#consulta`}>Planea esta experiencia<Arrow /></Link>
+            <Link className="button" to={`${tourPath(entry.slug)}#consulta`}>Planea esta experiencia<Arrow /></Link>
             <div className="th-row">
               <div className="th-arrows th-arrows--in">
                 <button type="button" aria-label="Fotografía anterior" onClick={() => select(active, nowFront - 1, true)}><Arrow dir="left" /></button>
@@ -363,7 +364,7 @@ export default function TravelHand() {
         </div>
       </div>
       <div id="th-inicio" className="th-marker" tabIndex={-1} role="group" aria-label="Un lugar para cada forma de viajar" style={{ top: `calc(${RELAY} * 1svh)` }} />
-      <p className="th-all"><Link className="text-link" to="/experiencias">Ver las 12 experiencias<Arrow /></Link></p>
+      <p className="th-all"><Link className="text-link" to="/tours">Ver las 12 experiencias<Arrow /></Link></p>
     </section>
   );
 }

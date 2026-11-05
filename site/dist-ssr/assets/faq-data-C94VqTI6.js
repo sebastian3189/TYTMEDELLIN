@@ -1,4 +1,5 @@
-import { H as jsx, R as Icon, U as jsxs, q as t } from "../entry-server.js";
+import { C as t, h as jsxs, m as jsx } from "./Arrow-BF3-UVf1.js";
+import { j as Icon } from "../entry-server.js";
 import { useId } from "react";
 //#region src/Faq.jsx
 var ld = (items) => JSON.stringify({

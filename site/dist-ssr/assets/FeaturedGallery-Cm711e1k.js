@@ -1,4 +1,5 @@
-import { E as useLightMotion, H as jsx, U as jsxs, b as Arrow, v as hiddenByCover } from "../entry-server.js";
+import { c as useLightMotion, h as jsxs, m as jsx, t as Arrow } from "./Arrow-BF3-UVf1.js";
+import { v as hiddenByCover } from "../entry-server.js";
 import { useLayoutEffect, useRef, useState } from "react";
 //#region src/FeaturedGallery.jsx
 function FeaturedGallery({ tour, eyebrow = "El archivo de nuestros viajes" }) {

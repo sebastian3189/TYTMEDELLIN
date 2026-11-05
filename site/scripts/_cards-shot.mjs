@@ -2,7 +2,7 @@ import { chromium } from '@playwright/test';
 const b = await chromium.launch({ channel: 'msedge', headless: true });
 const ctx = await b.newContext({ viewport: { width: 1440, height: 1000 } }); const p = await ctx.newPage();
 await p.addInitScript(() => { try { localStorage.setItem('tyt-privacy-v1', JSON.stringify({ version: 1, preferences: false, expires: Date.now() + 1e10 })); } catch {} });
-await p.goto('http://127.0.0.1:5199/experiencias', { waitUntil: 'load' }); await p.waitForTimeout(1500);
+await p.goto('http://127.0.0.1:5199/tours', { waitUntil: 'load' }); await p.waitForTimeout(1500);
 const els = await p.locator('.tour-card-image').all();
 for (let i = 0; i < els.length; i++) { await els[i].scrollIntoViewIfNeeded(); await p.waitForTimeout(250); }
 await p.evaluate(() => scrollTo(0, 0));

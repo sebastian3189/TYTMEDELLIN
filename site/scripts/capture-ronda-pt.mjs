@@ -39,5 +39,5 @@ for (const [lang, path] of [['es', '/'], ['en', '/en'], ['pt', '/pt-br']]) for (
 }
 // 4 · página PT-BR completa (escritorio)
 { const [ctx, page] = await open(1440, { consent: true, path: '/pt-br' }); await page.screenshot({ path: `${out}/pagina-pt-br-home-1440.png` });
-  await page.goto(base + '/pt-br/experiencias', { waitUntil: 'load' }); await page.waitForTimeout(1500); await page.screenshot({ path: `${out}/pagina-pt-br-experiencias-1440-full.png`, fullPage: true }); await ctx.close(); }
+  await page.goto(base + '/pt-br/tours', { waitUntil: 'load' }); await page.waitForTimeout(1500); await page.screenshot({ path: `${out}/pagina-pt-br-experiencias-1440-full.png`, fullPage: true }); await ctx.close(); }
 await browser.close(); console.log(log.join('\n'));

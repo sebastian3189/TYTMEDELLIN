@@ -1,5 +1,6 @@
 // Capturas de la ronda oficial (2026-10-12) en test-results/ronda-oficial a 1440 y 390.
 // Uso: TYT_TEST_URL=http://127.0.0.1:PUERTO node scripts/capture-ronda-oficial.mjs
+import { tourPath } from '../src/rutas.js';
 import { chromium } from '@playwright/test';
 import { mkdir } from 'node:fs/promises';
 const base = process.env.TYT_TEST_URL || 'http://127.0.0.1:4391';
@@ -30,12 +31,12 @@ for (const [label, width, height, mobile] of [['1440', 1440, 900, false], ['390'
   await page.getByRole('tab', { name: /Jardín/ }).click(); await page.waitForTimeout(1200); await shot('explorador-jardin');
 
   // Catálogo.
-  await go('/experiencias'); await page.waitForTimeout(1200); await shot('catalogo-arriba');
+  await go('/tours'); await page.waitForTimeout(1200); await shot('catalogo-arriba');
   await scrollTo('.tour-grid', 100); await page.waitForTimeout(1000); await shot('catalogo-tarjetas');
 
   // Fichas con sus galerías oficiales.
   for (const slug of ['guatape-piedra-del-penol', 'city-tour-comuna-13', 'jardin-antioquia']) {
-    await go(`/experiencias/${slug}`); await shot(`ficha-${slug}-arriba`);
+    await go(`${tourPath(slug)}`); await shot(`ficha-${slug}-arriba`);
     await scrollTo('#fotos .gallery', 80); await page.waitForTimeout(1200); await shot(`ficha-${slug}-galeria`);
     const count = await page.locator('.gallery-thumbs button').count();
     log.push({ viewport: label, slug, thumbs: count });
@@ -44,7 +45,7 @@ for (const [label, width, height, mobile] of [['1440', 1440, 900, false], ['390'
   await page.locator('.gallery-feature').click(); await page.waitForTimeout(900); await shot('ficha-visor'); await page.keyboard.press('Escape');
 
   // Barra móvil de cotizar (ficha, tras pasar el CTA) y formulario en la ficha.
-  await go('/experiencias/salto-del-buey');
+  await go('/tours/salto-del-buey');
   await scrollTo('#consulta', 80); await page.waitForTimeout(900); await shot('ficha-formulario');
 
   // /cotizar con errores de validación.
@@ -65,7 +66,7 @@ for (const [label, width, height, mobile] of [['1440', 1440, 900, false], ['390'
   await scrollTo('.quote-form', 60); await shot('contacto-formulario');
 
   // Vehículos y reseñas.
-  await go('/vehiculos'); await shot('vehiculos-arriba'); await scrollTo('.fleet-grid', 80); await shot('vehiculos-tarjetas');
+  await go('/transporte/alquiler-vans-buses'); await shot('vehiculos-arriba'); await scrollTo('.fleet-grid', 80); await shot('vehiculos-tarjetas');
   await page.evaluate(() => window.scrollTo(0, document.querySelector('.fleet-grid .vehicle:nth-child(4)').getBoundingClientRect().top + scrollY - 80)); await page.waitForTimeout(700); await shot('vehiculos-van-master');
   await page.evaluate(() => window.scrollTo(0, document.querySelector('.fleet-grid .vehicle:nth-child(5)').getBoundingClientRect().top + scrollY - 80)); await page.waitForTimeout(700); await shot('vehiculos-sprinter');
   await go('/calificaciones'); await scrollTo('.reviews-g', 40); await shot('resenas-estrellas');

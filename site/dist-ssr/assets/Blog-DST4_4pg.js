@@ -1,6 +1,7 @@
-import { F as usePageMeta, H as jsx, K as language, U as jsxs, V as Fragment$1, b as Arrow, d as Button, m as Picture, p as PageTitle, t as articles } from "../entry-server.js";
-import NotFound from "./NotFound-Cug1s3FC.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-nEhUSRvx.js";
+import { h as jsxs, m as jsx, p as Fragment$1, t as Arrow, v as language } from "./Arrow-BF3-UVf1.js";
+import { d as Button, m as Picture, p as PageTitle, t as articles, w as usePageMeta } from "../entry-server.js";
+import NotFound from "./NotFound-BXXkp8Qw.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-B3GpDxIs.js";
 import { Link, useParams } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
 //#region src/BlogIndex.jsx
@@ -362,7 +363,7 @@ function Article() {
 			children: [
 				article.sections.map(([t, p]) => /* @__PURE__ */ jsxs("section", { children: [/* @__PURE__ */ jsx("h2", { children: t }), /* @__PURE__ */ jsx("p", { children: p })] }, t)),
 				/* @__PURE__ */ jsx(Button, {
-					to: "/experiencias",
+					to: "/tours",
 					children: "Encuentra tu recorrido"
 				}),
 				/* @__PURE__ */ jsxs(Link, {

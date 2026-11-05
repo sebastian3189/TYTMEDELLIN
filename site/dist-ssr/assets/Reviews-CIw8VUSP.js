@@ -1,4 +1,4 @@
-import { H as jsx, U as jsxs, W as company, b as Arrow } from "../entry-server.js";
+import { g as company, h as jsxs, m as jsx, t as Arrow } from "./Arrow-BF3-UVf1.js";
 import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
 //#region src/reviews.json

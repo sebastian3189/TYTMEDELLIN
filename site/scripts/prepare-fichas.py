@@ -9,7 +9,7 @@ Salida:
   - site/public/media/fichas/<id>-h{640,1080,1800}.webp: diapositivas de la cabecera de la ficha y del catálogo (se ven a pantalla completa;
     ancho máx. 1800, nunca se amplía; si no cabe se reduce el ancho real; presupuesto: 640 <= 140 KB, 1080 <= 180 KB, mayor <= 450 KB; calidad >= 60);
   - site/src/media.json: por experiencia {portada (null = marcador de marca), cabecera[] (diapositivas propias, con su foco 16:9; NO incluye la portada), galeria[]
-    (TourArchive), inicio[] (TravelHand)}; `catalogo[]` (cabecera de /experiencias); `blog` (3 fotos, en el orden de los artículos) y `nosotros`
+    (TourArchive), inicio[] (TravelHand)}; `catalogo[]` (cabecera de /tours); `blog` (3 fotos, en el orden de los artículos) y `nosotros`
     {equipo: collage de 4 fotos de nosotros.zip}. `equipo` e `historia` (carrusel de /nosotros e inicio) son los de HEAD y no se tocan. Se conservan el resto de claves (vehiculos, marca, instagram-posts, hero-*).
     Las fotos antiguas conservan su escalera existente (w400/w800/w1200/orig).
 Cada entrada trae `source` = ruta del archivo de origen relativa a la raíz (la usa check-fotos-unicas.py), `alt` y `focus` de la selección.

@@ -54,7 +54,7 @@ export default function Welcome() {
       <div className="welcome-body">
         <h2 id="welcome-title">No dejes para mañana lo que puedes disfrutar hoy</h2>
         <p>Elige un destino y cotiza por WhatsApp en un minuto.</p>
-        <Link className="welcome-cta" to="/experiencias" onClick={() => setOpen(false)}>Ver destinos</Link>
+        <Link className="welcome-cta" to="/tours" onClick={() => setOpen(false)}>Ver destinos</Link>
       </div>
     </aside>}
   </div>;

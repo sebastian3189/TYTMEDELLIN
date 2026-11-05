@@ -15,7 +15,7 @@ try {
     const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: mobile, hasTouch: mobile, colorScheme: theme });
     await ctx.addInitScript((t) => { try { localStorage.setItem('tyt-theme', t); } catch { /* */ } }, theme);
     const page = await ctx.newPage();
-    for (const route of ['/', '/experiencias', '/experiencias/hacienda-napoles', '/cotizar', '/contacto', '/en/', '/en/cotizar']) {
+    for (const route of ['/', '/tours', '/tours/hacienda-napoles', '/cotizar', '/contacto', '/en/', '/en/cotizar']) {
       await page.goto(base + route, { waitUntil: 'load' }); await page.waitForTimeout(700);
       const info = await page.evaluate(() => { const f = document.querySelector('.wa-fab'); if (!f) return null; const r = f.getBoundingClientRect(), cs = getComputedStyle(f); return { w: r.width, right: innerWidth - r.right, bottom: innerHeight - r.bottom, href: f.href, label: f.getAttribute('aria-label'), bg: cs.backgroundColor, z: cs.zIndex, pos: cs.position, lang: document.documentElement.lang }; });
       assert(info, `${route} ${w}: sin botón`);
@@ -46,7 +46,7 @@ try {
     await page.screenshot({ path: `${out}/fab-libro-${w}-${theme}.png` });
     if (mobile) {
       // Ficha en móvil: el botón flotante y la barra «Cotizar por WhatsApp» NUNCA se ven a la vez (la barra aparece al bajar; se oculta al subir, al detenerse y con el formulario a la vista).
-      await page.goto(base + '/experiencias/hacienda-napoles', { waitUntil: 'load' }); await page.waitForTimeout(800);
+      await page.goto(base + '/tours/hacienda-napoles', { waitUntil: 'load' }); await page.waitForTimeout(800);
       const vis = () => page.evaluate(() => { const bar = document.querySelector('.tour-bar'), fab = document.querySelector('.wa-fab'); const on = bar.dataset.on === 'true' && getComputedStyle(bar).visibility === 'visible'; const fabOn = getComputedStyle(fab).visibility !== 'hidden' && fab.dataset.hidden !== 'true' && Number(getComputedStyle(fab).opacity) > 0.5; return { on, fabOn, href: bar.querySelector('a').href, name: bar.querySelector('.tour-bar-name').textContent, bottom: Math.round(innerHeight - bar.getBoundingClientRect().bottom), tourbar: document.documentElement.dataset.tourbar }; });
       assert.equal((await vis()).on, false, 'barra oculta en reposo');
       const both = []; for (let y = 0; y < 2200; y += 60) { await page.mouse.wheel(0, 60); await page.waitForTimeout(40); const v = await vis(); if (v.on && v.fabOn) both.push(y); }
@@ -70,7 +70,7 @@ try {
   }
   // Foco visible.
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }), page = await ctx.newPage();
-  await page.goto(base + '/vehiculos', { waitUntil: 'load' }); await page.waitForTimeout(500);
+  await page.goto(base + '/transporte/alquiler-vans-buses', { waitUntil: 'load' }); await page.waitForTimeout(500);
   await page.locator('.wa-fab').focus(); await page.keyboard.press('Shift+Tab'); await page.keyboard.press('Tab');
   const outline = await page.evaluate(() => getComputedStyle(document.querySelector('.wa-fab')).outlineStyle);
   assert.equal(outline, 'solid');

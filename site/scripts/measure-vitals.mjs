@@ -5,7 +5,7 @@ const base = process.env.TYT_TEST_URL || 'http://127.0.0.1:4391';
 const slow = process.argv.includes('slow4g');
 const arg = (name, fallback) => (process.argv.find((a) => a.startsWith(`--${name}=`)) || '').split('=')[1] || fallback;
 const widths = arg('w', '1440,390').split(',').map(Number);
-const routes = (arg('routes', '/,/contacto,/vehiculos,/experiencias/guatape-piedra-del-penol,/cotizar,/experiencias')).split(',');
+const routes = (arg('routes', '/,/contacto,/vehiculos,/tours/guatape,/cotizar,/tours')).split(',');
 const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const out = [];
 for (const width of widths) for (const route of routes) {

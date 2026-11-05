@@ -15,7 +15,7 @@ try {
   soft(await page.locator('.th-title').count() === 1 && await page.locator('#formas-de-viajar h2').count() === 1, 'un título gigante y un h2');
   soft((await page.locator('#formas-de-viajar h2').innerText()).replace(/\s+/g, ' ') === 'Un lugar para cada forma de viajar.', 'h2 «Un lugar para cada forma de viajar.»');
   soft((await page.locator('#formas-de-viajar .eyebrow').textContent()) === 'Elige tu próximo recuerdo', 'eyebrow «Elige tu próximo recuerdo»');
-  soft(await page.locator('.scrub-hero a[href^="/experiencias"], .sc-list').count() === 0, 'ScrubHero ya no repite experiencias');
+  soft(await page.locator('.scrub-hero a[href^="/tours"], .sc-list').count() === 0, 'ScrubHero ya no repite experiencias');
   soft(await page.locator('.bd-nav, .scrub-strip, .bd-mq, .bd-cap, .bd-plan, .ft-card').count() === 0, 'tramo de cartas de la película eliminado');
   soft(await page.locator('.experience-explorer').count() === 0, 'ExperienceExplorer retirado');
   const tabs = await page.locator('.th-index [role=tab]').allInnerTexts(); soft(JSON.stringify(tabs.map((t) => t.replace(/^\d+\s*/, '').trim())) === JSON.stringify(NAMES), `índice ${tabs}`);

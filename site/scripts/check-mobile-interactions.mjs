@@ -1,3 +1,4 @@
+import { tourPath } from '../src/rutas.js';
 import assert from 'node:assert/strict';
 import { chromium } from '@playwright/test';
 
@@ -11,7 +12,7 @@ try{
  const small=await browser.newContext({viewport:{width:360,height:640},isMobile:true,hasTouch:true});
  const tourPage=await small.newPage();tourPage.on('pageerror',e=>errors.push(e.stack));
  for(const [slug] of rawTours){
-  await tourPage.goto((process.env.TYT_TEST_URL||'http://127.0.0.1:4417')+'/experiencias/'+slug);
+  await tourPage.goto((process.env.TYT_TEST_URL||'http://127.0.0.1:4417')+tourPath(slug));
   await tourPage.waitForSelector('.story:not(.story-static)');
   await tourPage.evaluate(()=>{const el=document.querySelector('.story'),st=el.firstElementChild;scrollTo({top:scrollY+el.getBoundingClientRect().top-parseFloat(getComputedStyle(st).top)+60,behavior:'instant'})});
   await tourPage.waitForTimeout(350);

@@ -1,8 +1,9 @@
-import { D as useMedia, E as useLightMotion, G as whatsapp, H as jsx, I as PlayIcon, K as language, L as SoundIcon, M as inicioTextos, N as textoFase, R as Icon, U as jsxs, V as Fragment$1, a as tours, b as Arrow, d as Button, f as Eyebrow, j as CHAPTERS, m as Picture, q as t, r as nosotros, t as articles, u as Logo, y as GoogleBadgeStatic, z as SocialIcon } from "../entry-server.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-nEhUSRvx.js";
-import { a as tourEntry, c as prepVideo, l as safePlay, n as HeroBlock, o as inicioVideos, s as instagram } from "./Hero-CvbbLY17.js";
-import { t as Reviews } from "./Reviews-CLKwcIeX.js";
-import { a as FAQ_HOME, l as Faq } from "./faq-data-BaHZP5K7.js";
+import { C as t, _ as whatsapp, c as useLightMotion, h as jsxs, l as useMedia, m as jsx, p as Fragment$1, t as Arrow, v as language } from "./Arrow-BF3-UVf1.js";
+import { A as SoundIcon, D as tourPath, M as SocialIcon, S as textoFase, a as tours, b as CHAPTERS, d as Button, f as Eyebrow, j as Icon, k as PlayIcon, m as Picture, r as nosotros, t as articles, u as Logo, x as inicioTextos, y as GoogleBadgeStatic } from "../entry-server.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-B3GpDxIs.js";
+import { a as tourEntry, c as prepVideo, l as safePlay, n as HeroBlock, o as inicioVideos, s as instagram } from "./Hero-CasFwL6a.js";
+import { t as Reviews } from "./Reviews-CIw8VUSP.js";
+import { a as FAQ_HOME, l as Faq } from "./faq-data-C94VqTI6.js";
 import { a as smooth$1, r as placePhotos } from "./mobile-motion-o2zoinXe.js";
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -1160,7 +1161,7 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 						role: "list",
 						"aria-label": "Experiencias",
 						children: cards.filter((c) => c.slug !== "traslados-aeropuerto-jmc").map((c) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsxs(Link, {
-							to: `/experiencias/${c.slug}`,
+							to: `${tourPath(c.slug)}`,
 							className: "ssc-card",
 							children: [/* @__PURE__ */ jsx("img", {
 								src: cardImg(c.slug, "t"),
@@ -1242,16 +1243,16 @@ function ScrubHero({ cards, skipLabel = "Saltar introducción", nextId, summary 
 //#region src/TravelHand.jsx
 var ORDER = [
 	"city-tour-comuna-13",
-	"tour-de-compras",
 	"guatape-piedra-del-penol",
+	"tour-nocturno-medellin",
+	"tour-del-cafe-medellin",
 	"vuelta-a-oriente",
+	"hacienda-napoles",
+	"salto-del-buey",
 	"santa-fe-de-antioquia",
 	"jardin-antioquia",
-	"tour-del-cafe-medellin",
-	"salto-del-buey",
-	"hacienda-napoles",
-	"tour-nocturno-medellin",
-	"tour-miradores"
+	"tour-miradores",
+	"tour-de-compras"
 ];
 var N = ORDER.length;
 var SEG = {
@@ -1768,7 +1769,7 @@ function TravelHand() {
 			className: "section-title",
 			children: [/* @__PURE__ */ jsx("div", { children: header }), /* @__PURE__ */ jsxs(Link, {
 				className: "text-link",
-				to: "/experiencias",
+				to: "/tours",
 				children: ["Ver las 12 experiencias", /* @__PURE__ */ jsx(Arrow, {})]
 			})]
 		}), /* @__PURE__ */ jsx("ul", {
@@ -1776,7 +1777,7 @@ function TravelHand() {
 			role: "list",
 			children: ENTRIES.map((e, i) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsxs(Link, {
 				className: "th-card",
-				to: `/experiencias/${e.slug}`,
+				to: `${tourPath(e.slug)}`,
 				children: [
 					/* @__PURE__ */ jsxs("span", {
 						className: "th-card-img",
@@ -1858,7 +1859,7 @@ function TravelHand() {
 								style: { fontSize: `${fit.size.toFixed(2)}px` },
 								children: /* @__PURE__ */ jsx(Link, {
 									className: "th-title-link",
-									to: `/experiencias/${entry.slug}`,
+									to: `${tourPath(entry.slug)}`,
 									children: fit.lines.map((l) => /* @__PURE__ */ jsx("span", { children: l }, l))
 								})
 							})
@@ -1985,7 +1986,7 @@ function TravelHand() {
 							children: [
 								/* @__PURE__ */ jsxs(Link, {
 									className: "button",
-									to: `/experiencias/${entry.slug}#consulta`,
+									to: `${tourPath(entry.slug)}#consulta`,
 									children: ["Planea esta experiencia", /* @__PURE__ */ jsx(Arrow, {})]
 								}),
 								/* @__PURE__ */ jsx("div", {
@@ -2064,7 +2065,7 @@ function TravelHand() {
 				className: "th-all",
 				children: /* @__PURE__ */ jsxs(Link, {
 					className: "text-link",
-					to: "/experiencias",
+					to: "/tours",
 					children: ["Ver las 12 experiencias", /* @__PURE__ */ jsx(Arrow, {})]
 				})
 			})
@@ -3091,7 +3092,7 @@ function HomeHero() {
 		}),
 		actions: /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsxs(Link, {
 			className: "button hero-btn hero-btn--explore",
-			to: "/experiencias",
+			to: "/tours",
 			children: ["Explorar experiencias", /* @__PURE__ */ jsx(Arrow, {})]
 		}), /* @__PURE__ */ jsxs(Link, {
 			className: "button hero-btn hero-btn--quote",
@@ -3440,17 +3441,17 @@ function Home() {
 						[
 							"01",
 							"Traslados de aeropuerto",
-							"/experiencias/traslados-aeropuerto-jmc"
+							"/transporte/aeropuerto-medellin"
 						],
 						[
 							"02",
 							"Recorridos privados",
-							"/experiencias"
+							"/tours"
 						],
 						[
 							"03",
 							"Empresas, agencias y grupos",
-							"/servicios"
+							"/transporte"
 						]
 					].map(([n, name, url]) => /* @__PURE__ */ jsxs(Link, {
 						to: url,

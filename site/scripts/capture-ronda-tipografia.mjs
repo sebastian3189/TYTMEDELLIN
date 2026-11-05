@@ -3,7 +3,7 @@ import { chromium } from '@playwright/test';
 const base = process.env.TYT_TEST_URL || 'http://127.0.0.1:5199', out = 'test-results/ronda-tipografia';
 const full = process.argv[2] === 'full';
 const browser = await chromium.launch({ channel: 'msedge', headless: true });
-const pages = [['inicio', ''], ['experiencia', '/experiencias/guatape-piedra-del-penol'], ['nosotros', '/nosotros'], ['vehiculos', '/vehiculos']];
+const pages = [['inicio', ''], ['experiencia', '/tours/guatape'], ['nosotros', '/nosotros'], ['vehiculos', '/transporte/alquiler-vans-buses']];
 const log = [];
 const env = (k, d) => (process.env[k] ? process.env[k].split(',') : d);
 for (const lang of env('LANGS', ['es', 'pt'])) for (const [name, p] of pages.filter(([n]) => env('PAGES', [n]).includes(n))) for (const w of env('WIDTHS', [1440, 390]).map(Number)) for (const theme of env('THEMES', ['light', 'dark'])) {

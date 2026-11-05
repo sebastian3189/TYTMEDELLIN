@@ -1,4 +1,5 @@
-import { F as usePageMeta, H as jsx, P as NOT_FOUND, U as jsxs, V as Fragment, _ as TourCard, a as tours, b as Arrow, p as PageTitle } from "../entry-server.js";
+import { h as jsxs, m as jsx, p as Fragment, t as Arrow } from "./Arrow-BF3-UVf1.js";
+import { C as NOT_FOUND, _ as TourCard, a as tours, p as PageTitle, w as usePageMeta } from "../entry-server.js";
 import { Link } from "react-router-dom";
 //#region src/pages/NotFound.jsx
 function NotFound() {
@@ -17,7 +18,7 @@ function NotFound() {
 			].map((t) => /* @__PURE__ */ jsx(TourCard, { tour: t }, t.slug))
 		}), /* @__PURE__ */ jsxs(Link, {
 			className: "text-link",
-			to: "/experiencias",
+			to: "/tours",
 			children: ["Volver a las experiencias", /* @__PURE__ */ jsx(Arrow, {})]
 		})]
 	})] });

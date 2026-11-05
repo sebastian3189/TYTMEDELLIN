@@ -1,4 +1,5 @@
-import { H as jsx, K as language, U as jsxs, V as Fragment, W as company, p as PageTitle } from "../entry-server.js";
+import { g as company, h as jsxs, m as jsx, p as Fragment, v as language } from "./Arrow-BF3-UVf1.js";
+import { p as PageTitle } from "../entry-server.js";
 //#region src/pages/DataPolicy.jsx
 var SECTIONS = [
 	["responsable", "1. Responsable del tratamiento"],

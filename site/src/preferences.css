@@ -27,8 +27,8 @@ html[data-theme="dark"] input:-webkit-autofill,html[data-theme="dark"] input:-we
 html[data-theme="dark"] input,html[data-theme="dark"] textarea,html[data-theme="dark"] select{color-scheme:dark}
 /* Iconos de redes (TikTok usa currentColor): color explícito en ambos modos */
 .socials a{color:var(--text-strong)}
-html[lang="en"] .home-hero h1{font-size:clamp(48px,min(9vw,14svh),160px)}
-@media(max-width:799px){html[lang="en"] .home-hero h1{font-size:clamp(30px,calc((100vw - 40px) / 9.8),54px)}}
+html[lang="en"] .home-hero h1:where(:not(.hero-keyword)),html[lang="en"] .home-hero .hero-display{font-size:clamp(48px,min(9vw,14svh),160px)}
+@media(max-width:799px){html[lang="en"] .home-hero h1:where(:not(.hero-keyword)),html[lang="en"] .home-hero .hero-display{font-size:clamp(30px,calc((100vw - 40px) / 9.8),54px)}}
 
 /* Selector de idioma: botón compacto + lista (≥44 px de alto, cabe a 320 px) */
 .language-menu{position:relative}

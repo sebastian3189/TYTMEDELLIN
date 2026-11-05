@@ -2,7 +2,7 @@
 // Uso: TYT_TEST_URL=http://127.0.0.1:4417 node scripts/check-ronda-tipografia-mobile.mjs
 import { chromium, webkit, devices } from '@playwright/test';
 const base = process.env.TYT_TEST_URL || 'http://127.0.0.1:4417';
-const widths = [320, 360, 390, 412, 430], routes = ['/', '/experiencias', '/experiencias/guatape-piedra-del-penol', '/nosotros', '/vehiculos', '/cotizar', '/contacto'];
+const widths = [320, 360, 390, 412, 430], routes = ['/', '/tours', '/tours/guatape', '/nosotros', '/transporte/alquiler-vans-buses', '/cotizar', '/contacto'];
 const langs = ['', '/en', '/pt-br'];
 const problems = [];
 const run = async (engine, name, ctxOpts) => {

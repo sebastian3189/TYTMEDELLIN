@@ -36,11 +36,11 @@ async function rotation(page, seconds) {
   }
   return { distintas: seen.size, muestras: samples, oscuras: darkSamples };
 }
-const pages = quick ? ['/experiencias/guatape-piedra-del-penol'] : ['/experiencias/guatape-piedra-del-penol', '/experiencias/santa-fe-de-antioquia', '/experiencias/jardin-antioquia', '/experiencias/city-tour-comuna-13', '/experiencias/tour-miradores', '/experiencias', '/', '/nosotros'];
+const pages = quick ? ['/tours/guatape'] : ['/tours/guatape', '/tours/santa-fe-de-antioquia', '/tours/jardin-antioquia', '/tours/comuna-13', '/tours/miradores-medellin', '/tours', '/', '/nosotros'];
 for (const path of pages) {
   const name = path === '/' ? 'inicio' : path.slice(1).replace(/\//g, '_');
   const { ctx, page } = await open(path); await scrollAll(page);
-  const z = await zones(page); const rot = (path.startsWith('/experiencias')) ? await rotation(page, path === '/experiencias' ? 48 : 20) : null;
+  const z = await zones(page); const rot = (path.startsWith('/tours')) ? await rotation(page, path === '/tours' ? 48 : 20) : null;
   await page.screenshot({ path: `${out}/${name}-1440.png` });
   await page.evaluate(() => { const t = document.querySelector('.ta, .gallery, .th-hand'); t?.scrollIntoView({ block: 'center' }); }); await page.waitForTimeout(900);
   await page.screenshot({ path: `${out}/${name}-1440-archivo.png` });

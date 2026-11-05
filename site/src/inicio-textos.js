@@ -12,7 +12,8 @@
  */
 export const inicioTextos = {
   estado: 'APROBADO — concepto H1, copy del inicio (2026-10-12)',
-  titular: ['Medellín,', 'a otro nivel'], // 2026-10-12: pedido del usuario. PENDIENTE: el lema «Experiencias a otro nivel» repite «otro nivel» en la misma pantalla.
+  h1: 'Agencia de turismo en Medellín', // 2026-11-05: pedido del usuario. Ocupa la línea superior del hero con el estilo que tenía el lema.
+  titular: ['Medellín,', 'a otro nivel'], // 2026-10-12: pedido del usuario. Desde 2026-11-05 es pieza visual (`.hero-display`), no el h1.
   lema: 'Experiencias a otro nivel',
   confianza: 'Tours 100% privados · Guía-conductor exclusivo · Horarios flexibles',
   eleccion: 'Elige tu próximo recuerdo', // eyebrow existente del inicio

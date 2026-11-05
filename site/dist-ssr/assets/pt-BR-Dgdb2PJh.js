@@ -108,6 +108,8 @@ var Rechazar = "Rejeitar";
 var Tequendamita = "Tequendamita";
 var Santorini = "Santorini";
 var Blog = "Blog";
+var Tours = "Passeios";
+var Transporte = "Transporte";
 var pt_BR_default = {
 	"(se abre en una pestaña nueva)": "(abre em uma nova aba)",
 	". WhatsApp y los sitios externos aplican sus propias políticas al abrirlos.": ". O WhatsApp e os sites externos aplicam suas próprias políticas quando você os acessa.",
@@ -1550,7 +1552,52 @@ var pt_BR_default = {
 	"Viajera de espaldas con los brazos abiertos frente a las luces de Medellín de noche, en un mirador con luces colgantes": "Viajante de costas, de braços abertos diante das luzes de Medellín à noite, num mirante com cordões de luz",
 	"Viajera recostada en un puf junto a los ventanales de un mirador, con la ciudad iluminada de fondo": "Viajante recostada num pufe junto às janelas de um mirante, com a cidade iluminada ao fundo",
 	"Pareja de espaldas en la baranda de un mirador, contemplando la ciudad iluminada en el valle": "Casal de costas no parapeito de um mirante, contemplando a cidade iluminada no vale",
-	"Viajero sentado en la baranda de un mirador de noche, con el valle de Medellín iluminado detrás": "Viajante sentado no parapeito de um mirante à noite, com o vale de Medellín iluminado ao fundo"
+	"Viajero sentado en la baranda de un mirador de noche, con el valle de Medellín iluminado detrás": "Viajante sentado no parapeito de um mirante à noite, com o vale de Medellín iluminado ao fundo",
+	Tours,
+	Transporte,
+	"Agencia de turismo en Medellín": "Agência de turismo em Medellín",
+	"Agencia de turismo con tours privados y transporte en Medellín y Antioquia, RNT 176384. Cuéntanos tu plan y cotiza una experiencia para tu grupo.": "Agência de turismo com passeios privados e transporte em Medellín e Antioquia, RNT 176384. Conte seu plano e peça um orçamento para seu grupo.",
+	"Tours privados en Medellín": "Passeios privados em Medellín",
+	"Tours privados en Medellín y Antioquia: Comuna 13, Guatapé, café, pueblos y naturaleza. Conoce los recorridos y consulta las condiciones para tu grupo.": "Passeios privados em Medellín e Antioquia: Comuna 13, Guatapé, café, cidades e natureza. Conheça os roteiros e consulte as condições para seu grupo.",
+	"Alquiler de vans y buses en Medellín": "Aluguel de vans e ônibus em Medellín",
+	"Alquiler con conductor de vans, buses, SUV y sedanes para traslados y grupos desde Medellín. Consulta capacidad, equipaje y disponibilidad.": "Vans, ônibus, SUVs e sedãs com motorista para traslados e grupos saindo de Medellín. Consulte capacidade, bagagem e disponibilidade.",
+	"Transporte privado en Medellín": "Transporte privado em Medellín",
+	"Organiza transporte privado, traslados al aeropuerto y movilidad para empresas, eventos o agencias en Medellín. Comparte tu ruta y solicita una propuesta.": "Organize transporte privado, traslados ao aeroporto e mobilidade para empresas, eventos ou agências em Medellín. Compartilhe sua rota e peça uma proposta.",
+	"Medellín de noche: luces y Provenza": "Medellín à noite: luzes e Provenza",
+	"Tour Comuna 13 y city tour por Medellín": "Passeio Comuna 13 e city tour em Medellín",
+	"Tour privado por la Comuna 13 y city tour por las plazas de Medellín: arte urbano, historia y transporte privado. Cotiza tu recorrido.": "Passeio privado pela Comuna 13 e city tour pelas praças de Medellín: arte urbana, história e transporte privado. Peça um orçamento.",
+	"Tour a Guatapé desde Medellín": "Passeio a Guatapé saindo de Medellín",
+	"Tour privado a Guatapé desde Medellín: Piedra del Peñol, represa y zócalos, con recogida en tu hotel. Cuéntanos tu plan y cotiza.": "Passeio privado a Guatapé saindo de Medellín: Piedra del Peñol, represa e zócalos, com busca no hotel. Conte seu plano e peça um orçamento.",
+	"Tour nocturno por Medellín": "Passeio noturno em Medellín",
+	"Tour nocturno privado por Medellín: luces, vistas del valle y ambiente local. Coordinamos la salida y el regreso; cotiza para tu grupo.": "Passeio noturno privado em Medellín: luzes, vistas do vale e ambiente local. Coordenamos a saída e o retorno; peça um orçamento.",
+	"Tour Oriente antioqueño desde Medellín": "Passeio pelo Oriente de Antioquia saindo de Medellín",
+	"Tour privado por el Oriente antioqueño desde Medellín: pueblos, plazas y montañas. Acordamos las paradas contigo; cotiza para tu grupo.": "Passeio privado pelo Oriente de Antioquia saindo de Medellín: cidades, praças e montanhas. Combinamos as paradas; peça um orçamento.",
+	"Tour del café en Medellín": "Passeio do café em Medellín",
+	"Tour del café privado desde Medellín: cultura cafetera del cultivo a la taza. La finca y la degustación se confirman en tu propuesta.": "Passeio do café privado saindo de Medellín: cultura cafeeira do cultivo à xícara. A fazenda e a degustação são confirmadas na proposta.",
+	"Tour Hacienda Nápoles": "Passeio Hacienda Nápoles",
+	"Tour a Hacienda Nápoles desde Medellín": "Passeio à Hacienda Nápoles saindo de Medellín",
+	"Tour privado a Hacienda Nápoles desde Medellín: transporte y un día en familia. Confirma el pasaporte y las entradas al cotizar.": "Passeio privado à Hacienda Nápoles saindo de Medellín: transporte e um dia em família. Confirme o passaporte e as entradas no orçamento.",
+	"Tour Salto del Buey": "Passeio Salto del Buey",
+	"Tour Salto del Buey desde Medellín": "Passeio ao Salto del Buey saindo de Medellín",
+	"Tour privado al Salto del Buey desde Medellín: senderos y cascada. Revisamos contigo las condiciones del recorrido; cotiza para tu grupo.": "Passeio privado ao Salto del Buey saindo de Medellín: trilhas e cachoeira. Revisamos as condições do percurso; peça um orçamento.",
+	"Tour Santa Fe de Antioquia desde Medellín": "Passeio a Santa Fe de Antioquia saindo de Medellín",
+	"Tour privado a Santa Fe de Antioquia desde Medellín: Puente de Occidente, centro histórico y plaza, con recogida en tu hotel. Cotiza tu plan.": "Passeio privado a Santa Fe de Antioquia saindo de Medellín: Puente de Occidente, centro histórico e praça, com busca no hotel. Peça um orçamento.",
+	"Tour Jardín Antioquia": "Passeio Jardín Antioquia",
+	"Tour Jardín Antioquia desde Medellín": "Passeio a Jardín, Antioquia, saindo de Medellín",
+	"Tour privado a Jardín, Antioquia, desde Medellín: fachadas de color, plaza y cultura cafetera. Coordinamos el recorrido; cotiza para tu grupo.": "Passeio privado a Jardín, Antioquia, saindo de Medellín: fachadas coloridas, praça e cultura cafeeira. Coordenamos o roteiro; peça um orçamento.",
+	"Tour de compras en Medellín": "Passeio de compras em Medellín",
+	"Tour de compras privado en Medellín por El Hueco, outlets y tiendas locales. Cuéntanos qué buscas y acordamos las paradas. Cotiza aquí.": "Passeio de compras privado em Medellín por El Hueco, outlets e lojas locais. Conte o que procura e combinamos as paradas. Peça um orçamento.",
+	"Miradores de Medellín": "Mirantes de Medellín",
+	"Miradores de Medellín: tour privado": "Mirantes de Medellín: passeio privado",
+	"Conoce los miradores de Medellín en un tour privado: vistas del valle y cambio de luz. Acordamos las paradas; la visibilidad depende del clima.": "Conheça os mirantes de Medellín em um passeio privado: vistas do vale e mudança de luz. Combinamos as paradas; a visibilidade depende do clima.",
+	"Transporte aeropuerto Medellín": "Transfer aeroporto de Medellín",
+	"Transporte privado entre el Aeropuerto José María Córdova (Rionegro) y Medellín. Comparte vuelo, dirección y equipaje; seguimos tu vuelo.": "Transporte privado entre o Aeroporto José María Córdova (Rionegro) e Medellín. Compartilhe voo, endereço e bagagem; acompanhamos seu voo.",
+	"Tour Comuna 13": "Passeio Comuna 13",
+	"Tour nocturno Medellín": "Passeio noturno",
+	"Tour por el Oriente": "Passeio pelo Oriente",
+	"Tour del café Medellín": "Passeio do café",
+	"Tour de compras": "Passeio de compras",
+	"Transporte aeropuerto": "Transfer aeroporto"
 };
 //#endregion
-export { Aceptar, Ampliar, Autenticidad, Blog, Buses, Calidad, Calificaciones, Cercanía, Cerrar, Ciudad, Compromiso, Conecta, Confianza, Configurar, Contacto, Correo, Cotizar, Cultivos, Descubre, Detalles, Disfruta, Empresa, Enamórate, Experiencias, Explora, Familia, Felicitación, Foto, Fotografía, Fotografías, Guatapé, Hospitalidad, Hoy, Indicativo, Inicio, Inspiración, Inspírate, Jardín, Llámanos, Mensaje, Menú, Miradores, Naturaleza, Necesarias, Nevera, Noche, Nombre, Nosotros, Número, Opcional, Personalizable, Personas, Petición, Planeación, Preferencias, Principal, Privacidad, Provenza, Pueblos, Queja, Rechazar, Reclamo, Recolección, Recuerda, Revisa, Rionegro, Santorini, Seguir, Seguridad, Sencillez, Servicio, Servicios, Siente, Silenciar, Sorpréndete, Sugerencia, Síguenos, Tequendamita, Todas, Todos, Traslados, Vehículos, Vive, aquí, compartido, control, conversación, de, pt_BR_default as default, descubrir, empieza, encuentros, es, escuchemos, experiencia, importa, mueven, necesitas, nota, notas, pasajeros, personas, planeémoslo, por, quieres, recuerdo, sentido, tu, viajó, vive };
+export { Aceptar, Ampliar, Autenticidad, Blog, Buses, Calidad, Calificaciones, Cercanía, Cerrar, Ciudad, Compromiso, Conecta, Confianza, Configurar, Contacto, Correo, Cotizar, Cultivos, Descubre, Detalles, Disfruta, Empresa, Enamórate, Experiencias, Explora, Familia, Felicitación, Foto, Fotografía, Fotografías, Guatapé, Hospitalidad, Hoy, Indicativo, Inicio, Inspiración, Inspírate, Jardín, Llámanos, Mensaje, Menú, Miradores, Naturaleza, Necesarias, Nevera, Noche, Nombre, Nosotros, Número, Opcional, Personalizable, Personas, Petición, Planeación, Preferencias, Principal, Privacidad, Provenza, Pueblos, Queja, Rechazar, Reclamo, Recolección, Recuerda, Revisa, Rionegro, Santorini, Seguir, Seguridad, Sencillez, Servicio, Servicios, Siente, Silenciar, Sorpréndete, Sugerencia, Síguenos, Tequendamita, Todas, Todos, Tours, Transporte, Traslados, Vehículos, Vive, aquí, compartido, control, conversación, de, pt_BR_default as default, descubrir, empieza, encuentros, es, escuchemos, experiencia, importa, mueven, necesitas, nota, notas, pasajeros, personas, planeémoslo, por, quieres, recuerdo, sentido, tu, viajó, vive };

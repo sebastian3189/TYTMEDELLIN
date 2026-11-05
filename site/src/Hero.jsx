@@ -1,3 +1,4 @@
+import { RUTA_TOURS, tourSeo } from './rutas';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import PlayIcon from './PlayIcon';
 import { prepVideo, safePlay } from './videoPrep';
@@ -188,7 +189,7 @@ export function HeroBlock({ video, slides, eyebrow, title, support, actions, tou
       </div>
       {shade && <div className="hero-shade" aria-hidden="true" />}
       <div className="hero-copy">
-        <p className="eyebrow hero-eyebrow">{eyebrow}</p>
+        {eyebrow && <p className="eyebrow hero-eyebrow">{eyebrow}</p>}
         {title}
         <p className="hero-support">{support}</p>
         <div className="hero-actions">{actions}</div>
@@ -211,16 +212,16 @@ export function HeroBlock({ video, slides, eyebrow, title, support, actions, tou
 export function TourHeroVideo({ tour }) {
   return (
     <HeroBlock tour labelId="tour-hero-titulo" video={videoDeTour(tour.slug)} slides={tourSlides(tour.slug)} eyebrow={`${tour.category} · Desde Medellín`} support={tour.title}
-      title={<h1 id="tour-hero-titulo" className="hero-h1--tour">{tour.name}</h1>}
-      actions={<><a className="button hero-btn hero-btn--explore" id="cta-principal" href="#consulta">Planea esta experiencia<Arrow /></a><Link className="button hero-btn hero-btn--quote" to="/experiencias">Todas las experiencias<Arrow /></Link></>} />
+      title={<h1 id="tour-hero-titulo" className="hero-h1--tour">{tourSeo[tour.slug].h1}</h1>}
+      actions={<><a className="button hero-btn hero-btn--explore" id="cta-principal" href="#consulta">Planea esta experiencia<Arrow /></a><Link className="button hero-btn hero-btn--quote" to={RUTA_TOURS}>Todas las experiencias<Arrow /></Link></>} />
   );
 }
 
-/** Hero del catálogo /experiencias: mismo bloque, espacio de video propio (`catalogoVideo`) y fotos de varios tours mientras no haya video. */
+/** Hero del catálogo /tours: mismo bloque, espacio de video propio (`catalogoVideo`) y fotos de varios tours mientras no haya video. */
 export function CatalogHero() {
   return (
     <HeroBlock tour labelId="catalogo-hero-titulo" video={catalogoVideo} slides={catalogSlides()} eyebrow="La colección T&T" support="Ciudad, pueblos, café o naturaleza. Elige tu recorrido y planeemos los detalles para tu grupo."
-      title={<h1 id="catalogo-hero-titulo" className="hero-h1--tour">Experiencias desde Medellín</h1>}
+      title={<h1 id="catalogo-hero-titulo" className="hero-h1--tour">Tours privados en Medellín</h1>}
       actions={<><a className="button hero-btn hero-btn--explore" href="#catalogo">Ver las experiencias<Arrow /></a><Link className="button hero-btn hero-btn--quote" to="/cotizar">Planeemos tu viaje<Arrow /></Link></>} />
   );
 }

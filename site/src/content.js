@@ -5,7 +5,7 @@ export { company, whatsapp };
 // Selección fotográfica 2026-10-23, revisión 3 (site/fuentes/seleccion-fotos-2026-10-23.json; la genera scripts/prepare-fichas.py). `media.json` trae, por
 // experiencia, listas PROPIAS y distintas: portada (carta de la baraja = carta de portada de la mano = 1.ª diapositiva; única repetición admitida; null =
 // marcador de marca sin foto), cabecera (diaporama de la ficha, 16:9), galeria («Archivo de nuestros viajes» de la ficha) e inicio (mano de viaje del inicio).
-// `catalogo` = diaporama de /experiencias. Fuera de la portada ninguna foto está en dos listas (scripts/check-fotos-unicas.py).
+// `catalogo` = diaporama de /tours. Fuera de la portada ninguna foto está en dos listas (scripts/check-fotos-unicas.py).
 export const photos = (slug) => {
   const items = Array.isArray(media[slug]) ? media[slug] : [];
   if (slug === 'equipo') return [items[3], ...items.slice(0, 3)].filter(Boolean);

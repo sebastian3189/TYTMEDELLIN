@@ -10,7 +10,7 @@ for (const theme of ['light', 'dark']) for (const [w, h, dpr] of [[1440, 900, 1]
     await p.locator(sel).first().scrollIntoViewIfNeeded(); await p.waitForTimeout(700); await p.screenshot({ path: `${out}/tonos-${name}-${tag}.png` });
   }
   await p.screenshot({ path: `${out}/tonos-inicio-hero-${tag}.png`, clip: { x: 0, y: 0, width: w, height: h } }).catch(() => {});
-  await p.goto(base + '/experiencias/guatape-piedra-del-penol', { waitUntil: 'load' }); await p.waitForTimeout(1500);
+  await p.goto(base + '/tours/guatape', { waitUntil: 'load' }); await p.waitForTimeout(1500);
   await p.screenshot({ path: `${out}/tonos-ficha-arriba-${tag}.png` });
   await p.evaluate(() => scrollTo({ top: innerHeight * 3, behavior: 'instant' })); await p.waitForTimeout(900); await p.screenshot({ path: `${out}/tonos-ficha-medio-${tag}.png` });
   await p.locator('.site-footer').scrollIntoViewIfNeeded(); await p.waitForTimeout(700); await p.screenshot({ path: `${out}/tonos-ficha-pie-${tag}.png` });

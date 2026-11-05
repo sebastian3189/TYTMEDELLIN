@@ -22,9 +22,9 @@ const Provisional = () => <span className="vlabel">Video próximamente</span>;
 export function HomeHero() {
   const t = inicioTextos;
   return (
-    <HeroBlock video={inicioVideos.hero} eyebrow={t.lema} support={t.confianza}
-      title={<h1 id="hero-titulo"><span className="hero-l1">{t.titular[0]}</span> <span className="hero-l2">{t.titular[1]}</span></h1>}
-      actions={<><Link className="button hero-btn hero-btn--explore" to="/experiencias">Explorar experiencias<Arrow /></Link><Link className="button hero-btn hero-btn--quote" to="/cotizar">Planeemos tu viaje<Arrow /></Link></>} />
+    <HeroBlock video={inicioVideos.hero} support={t.confianza}
+      title={<><h1 id="hero-titulo" className="eyebrow hero-eyebrow hero-keyword">{t.h1}</h1><p className="hero-display"><span className="hero-l1">{t.titular[0]}</span> <span className="hero-l2">{t.titular[1]}</span></p></>}
+      actions={<><Link className="button hero-btn hero-btn--explore" to="/tours">Explorar experiencias<Arrow /></Link><Link className="button hero-btn hero-btn--quote" to="/cotizar">Planeemos tu viaje<Arrow /></Link></>} />
   );
 }
 

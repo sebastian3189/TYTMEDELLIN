@@ -1,7 +1,7 @@
 // Audita recortes: para cada <img> con object-fit:cover calcula qué % de la foto queda oculto por el marco. Uso: node scripts/audit-encuadre.mjs
 import { chromium } from '@playwright/test';
 const base = process.env.TYT_TEST_URL || 'http://127.0.0.1:5199';
-const routes = ['/', '/experiencias', '/experiencias/guatape-piedra-del-penol', '/experiencias/city-tour-comuna-13', '/vehiculos', '/nosotros', '/blog', '/servicios', '/contacto'];
+const routes = ['/', '/tours', '/tours/guatape', '/tours/comuna-13', '/transporte/alquiler-vans-buses', '/nosotros', '/blog', '/transporte', '/contacto'];
 const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const seen = new Map();
 for (const w of [390, 768, 1440]) for (const r of routes) {

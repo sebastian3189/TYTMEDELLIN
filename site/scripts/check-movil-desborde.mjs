@@ -1,10 +1,11 @@
 // Móvil 320–430, ES/EN/PT: cero scroll horizontal, ningún elemento visible fuera del viewport, titulares sin recorte.
 // Uso: TYT_TEST_URL=http://127.0.0.1:4731 [ENGINE=chromium|webkit] [WIDTHS=320,390] node scripts/check-movil-desborde.mjs
+import { tourPath } from '../src/rutas.js';
 import { chromium, webkit, devices } from '@playwright/test';
 const base = process.env.TYT_TEST_URL || 'http://127.0.0.1:4731';
 const widths = (process.env.WIDTHS || '320,360,390,412,430').split(',').map(Number);
-const es = ['/', '/experiencias', '/servicios', '/vehiculos', '/nosotros', '/blog', '/contacto', '/cotizar', '/calificaciones', '/privacidad', '/politica-de-tratamiento-de-datos',
-  ...'city-tour-comuna-13 guatape-piedra-del-penol tour-nocturno-medellin vuelta-a-oriente tour-del-cafe-medellin hacienda-napoles salto-del-buey santa-fe-de-antioquia jardin-antioquia tour-de-compras tour-miradores traslados-aeropuerto-jmc'.split(' ').map((s) => '/experiencias/' + s),
+const es = ['/', '/tours', '/transporte', '/transporte/alquiler-vans-buses', '/nosotros', '/blog', '/contacto', '/cotizar', '/calificaciones', '/privacidad', '/politica-de-tratamiento-de-datos',
+  ...'city-tour-comuna-13 guatape-piedra-del-penol tour-nocturno-medellin vuelta-a-oriente tour-del-cafe-medellin hacienda-napoles salto-del-buey santa-fe-de-antioquia jardin-antioquia tour-de-compras tour-miradores traslados-aeropuerto-jmc'.split(' ').map((s) => tourPath(s)),
   '/blog/preparar-tu-recorrido', '/blog/elegir-tu-experiencia', '/blog/viajar-en-grupo'];
 const only = process.env.ONLY ? process.env.ONLY.split(',') : null;
 const problems = [];

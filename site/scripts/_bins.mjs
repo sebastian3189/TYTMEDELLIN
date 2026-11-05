@@ -1,9 +1,10 @@
+import { tourPath } from '../src/rutas.js';
 import { chromium } from '@playwright/test';
 const base = process.env.B || 'http://127.0.0.1:5291', slug = process.env.SLUG || 'city-tour-comuna-13';
 const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
 const page = await ctx.newPage(); const cdp = await ctx.newCDPSession(page);
-await page.goto(`${base}/experiencias/${slug}`, { waitUntil: 'load' }); await page.waitForTimeout(2500);
+await page.goto(`${base}${tourPath(slug)}`, { waitUntil: 'load' }); await page.waitForTimeout(2500);
 await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
 const H = await page.evaluate(() => document.documentElement.scrollHeight);
 const res = await page.evaluate(({ to, step }) => new Promise((resolve) => { const fr = []; let last = performance.now(), y = 0; scrollTo(0, 0); const tick = (now) => { fr.push([y, now - last]); last = now; y += step; scrollTo({ top: y, behavior: 'instant' }); if (y < to) requestAnimationFrame(tick); else setTimeout(() => resolve(fr), 300); }; requestAnimationFrame(tick); }), { to: H - 844, step: 30 });

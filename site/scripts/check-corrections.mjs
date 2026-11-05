@@ -1,7 +1,7 @@
 import { chromium } from '@playwright/test';
 const browser=await chromium.launch({channel:'msedge',headless:true});
 const page=await browser.newPage({viewport:{width:1440,height:1000}});
-await page.goto((process.env.TYT_TEST_URL||'http://127.0.0.1:4173')+'/experiencias/guatape-piedra-del-penol',{waitUntil:'networkidle'});
+await page.goto((process.env.TYT_TEST_URL||'http://127.0.0.1:4173')+'/tours/guatape',{waitUntil:'networkidle'});
 await page.locator('.tour-hero img').evaluate(img=>img.decode());
 await page.screenshot({path:'test-results/tour-desktop.png'});
 await page.getByRole('button',{name:/Capítulo 2:/}).click();

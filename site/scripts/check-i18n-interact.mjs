@@ -28,7 +28,7 @@ for (const [w, h] of [[1440, 900], [390, 844]]) {
     note(`${w} ${path} errores`, await grab(page)); }
   await page.goto(base + '/en', { waitUntil: 'load' }); await page.waitForTimeout(800);
   const menu = page.locator('.menu-toggle, [aria-label*="enu"]').first(); if (await menu.count() && w < 1100) { await menu.click().catch(() => {}); await page.waitForTimeout(500); note(`${w} menú`, await grab(page)); }
-  await page.goto(base + '/en/experiencias/guatape-piedra-del-penol', { waitUntil: 'load' }); await page.waitForTimeout(900);
+  await page.goto(base + '/en/tours/guatape', { waitUntil: 'load' }); await page.waitForTimeout(900);
   for (const sel of ['button[aria-label*="hare"]', '.ta-photo, .th-photo, .gallery-feature, button[aria-label*="nlarge"]', '.tour-bar button']) { const el = page.locator(sel).first(); if (await el.count()) { await el.click({ force: true }).catch(() => {}); await page.waitForTimeout(500); note(`${w} ${sel}`, await grab(page)); await page.keyboard.press('Escape'); } }
   await page.goto(base + '/en/no-existe', { waitUntil: 'load' }); await page.waitForTimeout(500); note(`${w} 404`, await grab(page));
   await ctx.close();

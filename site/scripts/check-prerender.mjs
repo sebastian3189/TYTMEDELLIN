@@ -3,6 +3,7 @@
 // Uso: npm run build && node scripts/serve-static.mjs dist <puerto> (servidor estático tipo producción); TYT_TEST_URL=http://127.0.0.1:<puerto> node scripts/check-prerender.mjs
 // Además: canonical absoluto único por ruta, sitemap.xml y robots.txt, y despliegue con reescritura SPA (todo → index.html; se levanta serve-static en modo `spa`
 // en TYT_SPA_PORT, por defecto 4418): ninguna ruta debe dar errores de hidratación (React #418) ni mostrar el contenido de otra.
+import { tourPath } from '../src/rutas.js';
 import { chromium } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
@@ -12,8 +13,8 @@ import { fileURLToPath } from 'node:url';
 const base = process.env.TYT_TEST_URL || 'http://127.0.0.1:4402';
 const content = await readFile(new URL('../src/tours-text.js', import.meta.url), 'utf8');
 const slugs = [...content.matchAll(/^\s*\['([a-z0-9-]+)',/gm)].map((m) => m[1]);
-const paths = ['/', '/experiencias', '/servicios', '/vehiculos', '/nosotros', '/blog', '/contacto', '/cotizar', '/calificaciones', '/privacidad',
-  ...slugs.map((s) => `/experiencias/${s}`), '/blog/preparar-tu-recorrido', '/blog/elegir-tu-experiencia', '/blog/viajar-en-grupo'];
+const paths = ['/', '/tours', '/transporte', '/transporte/alquiler-vans-buses', '/nosotros', '/blog', '/contacto', '/cotizar', '/calificaciones', '/privacidad', '/politica-de-tratamiento-de-datos',
+  ...slugs.map((s) => `${tourPath(s)}`), '/blog/preparar-tu-recorrido', '/blog/elegir-tu-experiencia', '/blog/viajar-en-grupo'];
 const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const findings = [], rows = [];
 const soft = (cond, msg) => { if (!cond) findings.push(msg); return cond; };
@@ -57,23 +58,23 @@ try {
   // 3) Navegación cliente entre rutas y 404 real.
   const nav = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   const page = await nav.newPage();
-  await page.goto(base + '/vehiculos', { waitUntil: 'load' });
-  await page.getByRole('link', { name: 'Experiencias', exact: true }).first().click();
-  await page.waitForURL('**/experiencias'); await page.waitForSelector('h1');
-  soft(/Experiencias \| T&T/.test(await page.title()), `título tras navegar: ${await page.title()}`);
-  await page.locator('.tour-card').first().click(); await page.waitForURL('**/experiencias/**'); await page.waitForSelector('#tour-hero-titulo');
+  await page.goto(base + '/transporte/alquiler-vans-buses', { waitUntil: 'load' });
+  await page.getByRole('link', { name: 'Tours', exact: true }).first().click();
+  await page.waitForURL('**/tours'); await page.waitForSelector('h1');
+  soft(/Tours privados en Medellín \| T&T/.test(await page.title()), `título tras navegar: ${await page.title()}`);
+  await page.locator('.tour-card').first().click(); await page.waitForURL('**/tours/**'); await page.waitForSelector('#tour-hero-titulo');
   soft(/\| T&T Medellín$/.test(await page.title()), `título de la ficha tras navegar: ${await page.title()}`);
-  const missing = await nav.request.get(base + '/experiencias/no-existe', { headers: { accept: 'text/html' } });
+  const missing = await nav.request.get(base + '/tours/no-existe', { headers: { accept: 'text/html' } });
   soft(missing.status() === 404, `ficha inexistente: estado ${missing.status()}`);
   const missing2 = await nav.request.get(base + '/ruta-inexistente', { headers: { accept: 'text/html' } });
   soft(missing2.status() === 404, `ruta inexistente: estado ${missing2.status()}`);
   const notFound = await nav.newPage(); await notFound.goto(base + '/ruta-inexistente', { waitUntil: 'load' }); await notFound.waitForSelector('h1');
-  soft(/Este recorrido/.test(await notFound.locator('h1').innerText()), '404: el cliente pinta la página «Este recorrido no está aquí»');
-  for (const p of ['/site', '/flota']) { const q = await nav.newPage(); await q.goto(base + p, { waitUntil: 'load' }); await q.waitForTimeout(800); soft(new URL(q.url()).pathname === (p === '/site' ? '/' : '/vehiculos'), `${p} redirige a ${new URL(q.url()).pathname}`); await q.close(); }
+  soft(/No encontramos/.test(await notFound.locator('h1').innerText()), '404: el cliente pinta la página «No encontramos esta página»');
+  for (const p of ['/site', '/flota']) { const q = await nav.newPage(); await q.goto(base + p, { waitUntil: 'load' }); await q.waitForTimeout(800); soft(new URL(q.url()).pathname === (p === '/site' ? '/' : '/transporte/alquiler-vans-buses'), `${p} redirige a ${new URL(q.url()).pathname}`); await q.close(); }
   await nav.close();
   // 4) sitemap.xml y robots.txt.
   const sitemap = await (await fetch(base + '/sitemap.xml')).text(), robots = await (await fetch(base + '/robots.txt')).text();
-  soft((sitemap.match(/<url>/g) || []).length === paths.length * 2, `sitemap: ${(sitemap.match(/<url>/g) || []).length} URLs (se esperaban ${paths.length * 2}: es + en)`);
+  soft((sitemap.match(/<url>/g) || []).length === paths.length * 3, `sitemap: ${(sitemap.match(/<url>/g) || []).length} URLs (se esperaban ${paths.length * 3}: es + en + pt-br)`);
   soft(!/\/(site|flota|404)</.test(sitemap), 'sitemap incluye /site, /flota o 404');
   soft(/^User-agent: \*/m.test(robots) && /Sitemap: /.test(robots), 'robots.txt sin User-agent o Sitemap');
   // 5) Reescritura SPA: cualquier ruta devuelve el mismo HTML; el cliente no debe hidratar el HTML de otra ruta (React #418).
@@ -81,7 +82,7 @@ try {
   try {
     await new Promise((resolve) => setTimeout(resolve, 900));
     const spa = await browser.newContext({ viewport: { width: 390, height: 844 } });
-    for (const [path, h1] of [['/contacto', /escuchemos|plan/i], ['/experiencias/hacienda-napoles', /Hacienda N/], ['/cotizar', /tiempos/], ['/en/contacto', /./], ['/experiencias', /historia/i], ['/', /nivel/]]) {
+    for (const [path, h1] of [['/contacto', /Hablemos/], ['/tours/hacienda-napoles', /Hacienda N/], ['/cotizar', /tiempos/], ['/en/contacto', /./], ['/tours', /Tours privados/], ['/', /Agencia de turismo en Medellín/]]) {
       const page = await spa.newPage(), errors = [];
       page.on('pageerror', (e) => errors.push(e.message.slice(0, 120))); page.on('console', (m) => { if (['error', 'warning'].includes(m.type()) && !/Failed to load resource/.test(m.text())) errors.push(m.text().slice(0, 160)); });
       await page.goto(`http://127.0.0.1:${spaPort}${path}`, { waitUntil: 'load' }); await page.waitForTimeout(1400);

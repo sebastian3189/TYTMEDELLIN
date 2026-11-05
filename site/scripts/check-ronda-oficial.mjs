@@ -29,7 +29,7 @@ const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const results = { photosPerTour: counts, overflow: [], smallTargets: [] };
 
 // 2) Desborde horizontal y objetivos táctiles.
-const routes = ['/', '/experiencias', '/experiencias/guatape-piedra-del-penol', '/vehiculos', '/cotizar', '/contacto', '/nosotros', '/servicios', '/calificaciones', '/blog', '/privacidad'];
+const routes = ['/', '/tours', '/tours/guatape', '/transporte/alquiler-vans-buses', '/cotizar', '/contacto', '/nosotros', '/transporte', '/calificaciones', '/blog', '/privacidad'];
 for (const width of [320, 390, 768, 1440]) {
   const context = await browser.newContext({ viewport: { width, height: width < 800 ? 800 : 900 }, deviceScaleFactor: 1, isMobile: width < 800 });
   const page = await context.newPage();
@@ -58,7 +58,7 @@ await page.goto(base + '/nosotros', { waitUntil: 'load' }); await page.waitForTi
 const links = await page.evaluate(() => [...document.querySelectorAll('.footer-socials a, .header-socials a')].map((a) => a.href));
 ok(links.some((l) => l === 'https://www.instagram.com/transporteenmedellin') && links.some((l) => l === 'https://www.tiktok.com/@tytmedellin') && links.some((l) => l.startsWith('https://wa.me/573044961698')), `redes: ${links}`);
 ok(!links.some((l) => /facebook|tytcolombia|transporteyturismocolombia/.test(l)), 'sin Facebook ni cuentas de Colombia');
-await page.goto(base + '/vehiculos', { waitUntil: 'load' }); await page.waitForTimeout(500);
+await page.goto(base + '/transporte/alquiler-vans-buses', { waitUntil: 'load' }); await page.waitForTimeout(500);
 ok(!(await page.locator('body').innerText()).includes('EN RUTA'), 'sin «EN RUTA»');
 await page.goto(base + '/', { waitUntil: 'load' }); await page.waitForTimeout(700);
 ok((await page.locator('meta[name=description]').getAttribute('content')).startsWith('Medellín, a otro nivel.'), 'meta description del inicio');

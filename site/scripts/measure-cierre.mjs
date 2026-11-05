@@ -1,12 +1,12 @@
 // LCP / TBT / CLS / tarea larga por ruta en Slow 4G + CPU×4 (Spec 04/05), mediana de N mediciones (por defecto 3), en serie.
-// Uso: TYT_TEST_URL=http://127.0.0.1:<puerto> node scripts/measure-cierre.mjs [--w=390,1440] [--routes=/,/experiencias,...] [--runs=3] [--cpu=4] [--wait=7000]
+// Uso: TYT_TEST_URL=http://127.0.0.1:<puerto> node scripts/measure-cierre.mjs [--w=390,1440] [--routes=/,/tours,...] [--runs=3] [--cpu=4] [--wait=7000]
 // TBT = suma de (duración − 50 ms) de las tareas largas entre FCP y el final de la espera; «mount» = momento en que React reemplaza el póster/hidrata.
 import { chromium } from '@playwright/test';
 
 const base = process.env.TYT_TEST_URL || 'http://127.0.0.1:4402';
 const arg = (name, fallback) => (process.argv.find((a) => a.startsWith(`--${name}=`)) || '').split('=')[1] || fallback;
 const widths = arg('w', '390,1440').split(',').map(Number);
-const routes = arg('routes', '/,/experiencias,/experiencias/guatape-piedra-del-penol,/vehiculos,/contacto,/cotizar').split(',');
+const routes = arg('routes', '/,/tours,/tours/guatape,/vehiculos,/contacto,/cotizar').split(',');
 const runs = Number(arg('runs', 3)), cpu = Number(arg('cpu', 4)), wait = Number(arg('wait', 7000));
 const median = (list) => { const v = list.filter((x) => x != null).sort((a, b) => a - b); return v.length ? v[Math.floor(v.length / 2)] : null; };
 const browser = await chromium.launch({ channel: 'msedge', headless: true });

@@ -1,10 +1,11 @@
 // Traza de scroll en móvil: agrega la duración por tipo de evento (Layout, UpdateLayoutTree, Paint, FunctionCall...) y los scripts más pesados.
+import { tourPath } from '../src/rutas.js';
 import { chromium } from '@playwright/test'; import { writeFileSync } from 'node:fs';
 const base = process.env.B || 'http://127.0.0.1:5291', slug = process.env.SLUG || 'city-tour-comuna-13', cpu = Number(process.env.CPU || 4);
 const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
 const page = await ctx.newPage(); const cdp = await ctx.newCDPSession(page);
-await page.goto(`${base}/experiencias/${slug}`, { waitUntil: 'load' }); await page.waitForTimeout(2500);
+await page.goto(`${base}${tourPath(slug)}`, { waitUntil: 'load' }); await page.waitForTimeout(2500);
 await cdp.send('Emulation.setCPUThrottlingRate', { rate: cpu });
 const events = []; cdp.on('Tracing.dataCollected', (d) => events.push(...d.value));
 await cdp.send('Tracing.start', { categories: 'devtools.timeline,disabled-by-default-devtools.timeline,v8.execute', transferMode: 'ReportEvents' });

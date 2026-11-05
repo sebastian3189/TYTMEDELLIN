@@ -1,7 +1,8 @@
-import { B as Socials, G as whatsapp, H as jsx, S as Manifesto, U as jsxs, V as Fragment$1, W as company, b as Arrow, d as Button, f as Eyebrow, h as QuoteSection, i as photos, m as Picture, o as values, p as PageTitle, r as nosotros } from "../entry-server.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-7UODtH_G.js";
-import { t as Reviews } from "./Reviews-CLKwcIeX.js";
-import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-BaHZP5K7.js";
+import { _ as whatsapp, g as company, h as jsxs, i as Manifesto, m as jsx, p as Fragment$1, t as Arrow } from "./Arrow-BF3-UVf1.js";
+import { N as Socials, d as Button, f as Eyebrow, h as QuoteSection, i as photos, m as Picture, o as values, p as PageTitle, r as nosotros } from "../entry-server.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-Cm711e1k.js";
+import { t as Reviews } from "./Reviews-CIw8VUSP.js";
+import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-C94VqTI6.js";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 //#region src/AboutFx.jsx
@@ -333,7 +334,7 @@ function Services() {
 	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
 		/* @__PURE__ */ jsx(PageTitle, {
 			tag: "Servicios",
-			title: "Transporte y turismo a tu medida",
+			title: "Transporte privado en Medellín",
 			text: "Recorridos, traslados y movilidad coordinada desde Medellín para viajeros, empresas y aliados."
 		}),
 		/* @__PURE__ */ jsx("section", {
@@ -342,13 +343,13 @@ function Services() {
 				[
 					"Viajeros y familias",
 					"Tiempo para conocer, acompañamiento para organizar. Explora recorridos por Medellín y excursiones por Antioquia.",
-					"/experiencias",
+					"/tours",
 					"Explorar experiencias"
 				],
 				[
 					"Aeropuerto y traslados",
 					"Comparte vuelo, dirección, equipaje y fecha. Preparamos la recogida y el recorrido.",
-					"/experiencias/traslados-aeropuerto-jmc",
+					"/transporte/aeropuerto-medellin",
 					"Conocer el traslado"
 				],
 				[

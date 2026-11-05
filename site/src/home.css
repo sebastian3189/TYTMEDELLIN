@@ -23,7 +23,7 @@ html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .socials a{col
 .hero-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(15,17,15,.28) 0%,rgba(15,17,15,0) 50%),rgba(15,17,15,.6)}
 .hero-copy{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;width:100%;max-width:1440px;padding:calc(var(--hero-h) + 24px) var(--pad) 56px}
 .home-hero .hero-eyebrow{margin:0 0 clamp(16px,3svh,28px);color:#F5F5F0}
-.home-hero h1{margin:0;color:#F5F5F0;font:800 clamp(64px,min(11vw,17svh),184px)/.88 var(--heading);letter-spacing:-.05em;max-width:14ch}
+.home-hero h1:where(:not(.hero-keyword)),.home-hero .hero-display{margin:0;color:#F5F5F0;font:800 clamp(64px,min(11vw,17svh),184px)/.88 var(--heading);letter-spacing:-.05em;max-width:14ch}
 .hero-l1,.hero-l2{display:block;white-space:nowrap;animation:hero-rise .6s var(--ease-out-strong) both}
 .hero-l2{animation-delay:60ms}
 @keyframes hero-rise{from{transform:translate3d(0,40px,0)}to{transform:none}}
@@ -39,7 +39,7 @@ html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .socials a{col
 @media(max-width:799px){
  .home-hero{min-height:560px;align-items:flex-end}
  .hero-copy{padding:calc(var(--hero-h) + 16px) var(--pad) calc(92px + env(safe-area-inset-bottom))} /* zona segura: los botones quedan siempre por encima del botón flotante de WhatsApp (58 px + 16 px) */
- .home-hero h1{font-size:clamp(38px,min(13.5vw,calc((100vw - 40px) / 7.3)),64px)}
+ .home-hero h1:where(:not(.hero-keyword)),.home-hero .hero-display{font-size:clamp(38px,min(13.5vw,calc((100vw - 40px) / 7.3)),64px)}
  .hero-actions{flex-direction:column;align-items:stretch;width:100%}
  .hero-btn{width:100%;justify-content:center;gap:14px;min-height:48px}
  .hero-pause{top:calc(var(--hero-h) + 8px);bottom:auto}
@@ -124,7 +124,7 @@ html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .socials a{col
 
 /* Hero con la foto aérea «PARCE MEDELLIN»: velo base ≥ 0,60 + oscurecimiento extra detrás del titular y los botones para que el letrero pintado no compita (AA) */
 .home-hero[data-video="image"] .hero-shade{background:radial-gradient(ellipse 82% 66% at 50% 56%,rgba(15,17,15,.56) 0%,rgba(15,17,15,.32) 62%,rgba(15,17,15,0) 100%),linear-gradient(to top,rgba(15,17,15,.4) 0%,rgba(15,17,15,0) 55%),rgba(15,17,15,.62)}
-.home-hero[data-video="image"] .hero-copy h1,.home-hero[data-video="image"] .hero-support{text-shadow:0 2px 24px rgba(15,17,15,.55)}
+.home-hero[data-video="image"] .hero-copy h1,.home-hero[data-video="image"] .hero-display,.home-hero[data-video="image"] .hero-support{text-shadow:0 2px 24px rgba(15,17,15,.55)}
 .home-hero[data-video="image"] .hero-img{filter:blur(2px) saturate(.92);transform:scale(1.04)} /* desenfoque leve: el letrero pintado queda como textura y no compite con el titular */
 @media(prefers-reduced-motion:reduce){.home-hero[data-video="image"] .hero-img{transform:none}}
 .vsound{position:absolute;left:12px;bottom:12px;z-index:2;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1.5px solid rgba(245,245,240,.8);border-radius:50%;background:rgba(15,17,15,.6);color:#F5F5F0}
@@ -136,6 +136,6 @@ html:not([data-hero="past"]) .site-header.is-home:not(.menu-open) .socials a{col
 .hero-media .hero-dron[data-ready="true"]{opacity:1}
 .home-hero[data-video="on"] .hero-media .hero-img,.hero-media .hero-dron{object-position:50% 28%} /* caras y letrero quedan dentro del recorte en 16:9, 2:1 y 9:16 */
 .home-hero[data-video="on"] .hero-shade{background:radial-gradient(ellipse 85% 70% at 50% 54%,rgba(15,17,15,.34) 0%,rgba(15,17,15,.18) 60%,rgba(15,17,15,0) 100%),linear-gradient(to top,rgba(15,17,15,.4) 0%,rgba(15,17,15,0) 55%),rgba(15,17,15,.62)}
-.home-hero[data-video="on"] .hero-copy h1,.home-hero[data-video="on"] .hero-support,.home-hero[data-video="on"] .hero-eyebrow{text-shadow:0 2px 24px rgba(15,17,15,.55)}
+.home-hero[data-video="on"] .hero-copy h1,.home-hero[data-video="on"] .hero-display,.home-hero[data-video="on"] .hero-support,.home-hero[data-video="on"] .hero-eyebrow{text-shadow:0 2px 24px rgba(15,17,15,.55)}
 @media(prefers-reduced-motion:reduce){.hero-media .hero-dron{transition:none}}
 @media(min-width:800px){.hero-pause{right:max(var(--pad),92px)}} /* el botón de pausa no queda tras el botón flotante de WhatsApp (64 px + 16 px) */

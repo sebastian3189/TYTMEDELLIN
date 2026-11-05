@@ -35,7 +35,8 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-o
 [data-tx="h"] .tx-w{display:inline-block;vertical-align:top;overflow:hidden;overflow:clip;padding:.12em .04em;margin:-.12em -.04em}
 [data-tx="h"] .tx-wi{display:inline-block;transform:translate3d(0,112%,0);opacity:0;transition:transform .8s var(--tx-ease),opacity .5s ease;transition-delay:min(calc(var(--i,0) * 45ms),560ms);will-change:transform}
 [data-tx="h"].tx-in .tx-wi{transform:none;opacity:1}
-[data-tx="b"]{opacity:0;transform:translate3d(0,.3em,0);clip-path:inset(-.12em -.12em 100% -.12em);transition:opacity .6s ease,transform .9s var(--tx-ease),clip-path .9s var(--tx-ease)}
+/* El recorte inicial deja un 2 % de área: con 100 % el área es cero, IntersectionObserver nunca lo ve y el título no se revela en carga directa. La opacidad 0 lo mantiene oculto. */
+[data-tx="b"]{opacity:0;transform:translate3d(0,.3em,0);clip-path:inset(-.12em -.12em 98% -.12em);transition:opacity .6s ease,transform .9s var(--tx-ease),clip-path .9s var(--tx-ease)}
 [data-tx="b"].tx-in{opacity:1;transform:none;clip-path:inset(-.12em)}
 [data-tx="e"]{opacity:0;letter-spacing:.02em;transition:opacity .6s ease,letter-spacing 1s var(--tx-ease)}
 [data-tx="e"].tx-in{opacity:1;letter-spacing:var(--tr-eyebrow)}

@@ -6,6 +6,7 @@
 // Dominio (PENDIENTE CLIENTE, Spec 06): TYT_SITE_URL=https://dominio-final; indexación: TYT_INDEXABLE=1 (sin él, el prototipo conserva noindex y robots.txt cierra todo).
 // Uso: `npm run build` (vite build && vite build --ssr … && node scripts/prerender.mjs).
 import { LANGUAGES, languageFromPath, languageInfo, stripLanguage, pathForLanguage } from '../src/languages.js';
+import { RUTA_TOURS, RUTA_TRANSPORTE, RUTA_VEHICULOS, slugFromPath, tourPath } from '../src/rutas.js';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -29,9 +30,9 @@ const attr = (tag, name) => tag.match(new RegExp(`\\s${name}="([^"]*)"`, 'i'))?.
 const chunkFor = (path) => {
   path=stripLanguage(path);
   if (path === '/') return 'Home';
-  if (path === '/experiencias') return 'Catalog';
-  if (path.startsWith('/experiencias/')) return 'Tour';
-  if (path === '/vehiculos') return 'Fleet';
+  if (path === RUTA_TOURS) return 'Catalog';
+  if (slugFromPath(path)) return 'Tour';
+  if (path === RUTA_VEHICULOS) return 'Fleet';
   if (path === '/blog' || path.startsWith('/blog/')) return 'Blog';
   return 'Company';
 };
@@ -65,31 +66,47 @@ if(d.readyState==='loading')d.addEventListener('DOMContentLoaded',arm);else arm(
 // `code` = es | en | pt-BR. Las FAQ ya llevan su propio FAQPage en la página (Faq.jsx).
 const { company } = await import('../src/company.js');
 const ORG_ID = `${SITE}/#organizacion`;
-const CRUMB = { es: ['Inicio', 'Experiencias', 'Blog'], en: ['Home', 'Experiences', 'Blog'], 'pt-BR': ['Início', 'Experiências', 'Blog'] };
+const CRUMB = { es: ['Inicio', 'Tours', 'Blog', 'Transporte'], en: ['Home', 'Tours', 'Blog', 'Transport'], 'pt-BR': ['Início', 'Passeios', 'Blog', 'Transporte'] };
+// Empresa (aprobado por el usuario, 2026-11-05). Horario, código postal, coordenadas, Facebook y rango de precios: PENDIENTE CLIENTE. Sin calificación de Google: no se marca una reseña de terceros.
+const ORG_TEXTO = {
+  es: { description: 'Agencia de turismo en Medellín con RNT 176384: tours 100% privados a Guatapé y Comuna 13 y transporte desde el aeropuerto.', slogan: 'Experiencias a otro nivel', catalogo: 'Tours privados y transporte en Medellín' },
+  en: { description: 'Tour agency in Medellín with RNT 176384: 100% private tours to Guatapé and Comuna 13, plus airport transfers.', slogan: 'Experiences on another level', catalogo: 'Private tours and transport in Medellín' },
+  'pt-BR': { description: 'Agência de turismo em Medellín com RNT 176384: passeios 100% privados a Guatapé e Comuna 13 e transporte do aeroporto.', slogan: 'Experiências em outro nível', catalogo: 'Passeios privados e transporte em Medellín' },
+};
+const RUTAS_SERVICIO = [tourPath('city-tour-comuna-13'), tourPath('guatape-piedra-del-penol'), tourPath('traslados-aeropuerto-jmc'), RUTA_VEHICULOS];
+const SERVICIOS = {};
+for (const { code } of LANGUAGES) {
+  SERVICIOS[code] = [];
+  for (const ruta of RUTAS_SERVICIO) SERVICIOS[code].push({ name: (await metaFor(pathForLanguage(ruta, code)))[0], url: abs(pathForLanguage(ruta, code)) });
+}
 function structuredData({ path, localPath, code, title }) {
   const out = [];
   if (localPath === '/') {
-    const street = company.address.split(',')[0].trim();
+    const street = company.address.split(',')[0].trim(), texto = ORG_TEXTO[code];
     out.push({
-      '@context': 'https://schema.org', '@type': 'TravelAgency', '@id': ORG_ID, name: 'T&T Medellín', alternateName: 'Transporte y Turismo Medellín',
+      '@context': 'https://schema.org', '@type': 'TravelAgency', '@id': ORG_ID, name: 'Transporte y Turismo Medellín', alternateName: ['T&T Medellín', 'Transporte & Turismo Medellín'],
+      description: texto.description, slogan: texto.slogan,
       url: abs(pathForLanguage('/', code)), logo: `${SITE}/media/marca/logo/logo-400.webp`, image: `${SITE}/media/marca/logo/logo-400.webp`,
-      telephone: `+${company.whatsapp}`, email: company.email,
+      telephone: `+${company.whatsapp}`, email: company.email, taxID: '901738550-6',
+      identifier: { '@type': 'PropertyValue', name: 'Registro Nacional de Turismo (RNT)', value: '176384' },
       address: { '@type': 'PostalAddress', streetAddress: street, addressLocality: 'Medellín', addressRegion: 'Antioquia', addressCountry: 'CO' },
       areaServed: [{ '@type': 'City', name: 'Medellín' }, { '@type': 'AdministrativeArea', name: 'Antioquia' }],
-      sameAs: [company.instagram, company.tiktok], hasMap: company.reviews,
+      hasMap: company.reviews, sameAs: [company.instagram, company.tiktok],
+      hasOfferCatalog: { '@type': 'OfferCatalog', name: texto.catalogo, itemListElement: SERVICIOS[code].map((itemOffered) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', ...itemOffered } })) },
     });
     out.push({ '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${SITE}/#sitio`, url: abs(pathForLanguage('/', code)), name: 'T&T Medellín', inLanguage: languageInfo(code).html, publisher: { '@id': ORG_ID } });
   }
   const crumbs = [];
-  const [home, exp, blog] = CRUMB[code] || CRUMB.es;
-  if (/^\/experiencias\/[^/]+$/.test(localPath)) crumbs.push([home, '/'], [exp, '/experiencias'], [title, localPath]);
+  const [home, exp, blog, transporte] = CRUMB[code] || CRUMB.es;
+  if (localPath.startsWith(`${RUTA_TRANSPORTE}/`)) crumbs.push([home, '/'], [transporte, RUTA_TRANSPORTE], [title, localPath]);
+  else if (slugFromPath(localPath)) crumbs.push([home, '/'], [exp, RUTA_TOURS], [title, localPath]);
   else if (/^\/blog\/[^/]+$/.test(localPath)) crumbs.push([home, '/'], [blog, '/blog'], [title, localPath]);
   if (crumbs.length) out.push({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: crumbs.map(([name, p], i) => ({ '@type': 'ListItem', position: i + 1, name, item: abs(pathForLanguage(p, code)) })) });
   return out;
 }
 
 // Compone el HTML de una ruta a partir de la cáscara. `mark` marca el root: 404 → el cliente lo renderiza con createRoot (no se hidrata: el mismo HTML
-// sirve para cualquier URL desconocida, p. ej. /experiencias/inexistente, donde el menú activo difiere).
+// sirve para cualquier URL desconocida, p. ej. /tours/inexistente, donde el menú activo difiere).
 function compose({ path, body, title, description, chunk, mark }) {
   const info=languageInfo(languageFromPath(path)),localPath=stripLanguage(path);
   // renderToString no falla ante un error de render: cae a render de cliente y deja una plantilla. Aquí sí debe fallar el build.

@@ -1,3 +1,4 @@
+import { tourPath } from '../src/rutas.js';
 import fs from 'node:fs/promises';
 import { chromium } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -13,7 +14,7 @@ await page.goto(base, {waitUntil:'networkidle'});
 await page.screenshot({path:path.join(output,'home-desktop.png'),fullPage:false});
 // Slugs desde el código fuente (la prueba corre contra el build prerenderizado, no contra el servidor de desarrollo).
 const slugs=[...(await fs.readFile(new URL('../src/tours-text.js',import.meta.url),'utf8')).matchAll(/^\s*\['([a-z0-9-]+)',/gm)].map(m=>m[1]);
-const routes=['/','/experiencias','/vehiculos','/nosotros','/blog','/contacto','/servicios','/calificaciones','/privacidad','/cotizar',...slugs.map(s=>`/experiencias/${s}`),'/blog/preparar-tu-recorrido','/blog/elegir-tu-experiencia','/blog/viajar-en-grupo'];
+const routes=['/','/tours','/transporte/alquiler-vans-buses','/nosotros','/blog','/contacto','/transporte','/calificaciones','/privacidad','/cotizar',...slugs.map(s=>`${tourPath(s)}`),'/blog/preparar-tu-recorrido','/blog/elegir-tu-experiencia','/blog/viajar-en-grupo'];
 const results=[];
 for(const route of routes){
  await page.goto(base+route,{waitUntil:'networkidle'});
@@ -23,13 +24,13 @@ for(const route of routes){
  if(h1!==1||broken.length||overflow)issues.push(`${route}: h1=${h1}, broken=${broken}, overflow=${overflow}`);
  results.push({route,h1,broken,overflow});
 }
-await page.goto(base+'/experiencias');
+await page.goto(base+'/tours');
 await page.getByRole('button',{name:'Naturaleza',exact:true}).click();
 if(await page.locator('.tour-card').count()!==2)issues.push('Nature filter count');
 await page.getByRole('button',{name:'Todos',exact:true}).click();
 await page.getByPlaceholder('Café, Guatapé, ciudad…').fill('guatape');
 if(await page.locator('.tour-card').count()!==1)issues.push('Accent-insensitive search');
-await page.goto(base+'/experiencias/guatape-piedra-del-penol');
+await page.goto(base+'/tours/guatape');
 await page.screenshot({path:path.join(output,'tour-desktop.png')});
 if(await page.locator('.journey-line, .scroll-scene, .route-story').count())issues.push('Quedan restos de JourneyLine/ScrollScene en la ficha');
 if((await page.locator('header nav a').first().textContent()).trim()!=='Inicio')issues.push('El primer enlace de la navegación no es Inicio');
@@ -51,12 +52,12 @@ await page.getByRole('button',{name:'Preparar mi consulta'}).click();
 if(!await page.locator('.summary').isVisible())issues.push('Valid form does not show summary');
 if(!(await page.getByLabel('Resumen de solicitud').inputValue()).includes('Guatapé'))issues.push('Form lost tour context');
 if((await page.locator('.summary a').getAttribute('href')).includes('Prueba'))issues.push('PII in WhatsApp URL');
-const missing=await page.goto(base+'/experiencias/no-existe');
+const missing=await page.goto(base+'/tours/no-existe');
 if(missing.status()!==404)issues.push('Missing HTTP 404 status');
 if(!(await page.locator('h1').textContent()).includes('no está'))issues.push('404 component absent');
 for(const width of [320,360,390,768,1024,1280,1440,1920]){
  await page.setViewportSize({width,height:900});
- for(const route of ['/','/experiencias','/experiencias/guatape-piedra-del-penol','/contacto','/vehiculos']){
+ for(const route of ['/','/tours','/tours/guatape','/contacto','/transporte/alquiler-vans-buses']){
   await page.goto(base+route,{waitUntil:'networkidle'});
   if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1))issues.push(`Overflow ${width}px ${route}`);
  }
@@ -66,10 +67,10 @@ await page.goto(base);
 await page.screenshot({path:path.join(output,'home-mobile.png'),fullPage:true});
 await page.getByRole('button',{name:'Menú'}).click();
 await page.getByRole('navigation',{name:'Principal',exact:true}).getByRole('link',{name:'Experiencias',exact:true}).click();
-if(!page.url().endsWith('/experiencias'))issues.push('Mobile navigation');
+if(!page.url().endsWith('/tours'))issues.push('Mobile navigation');
 await page.emulateMedia({reducedMotion:'reduce'});
 await page.setViewportSize({width:1440,height:1000});
-await page.goto(base+'/experiencias/tour-del-cafe-medellin');
+await page.goto(base+'/tours/cafe-medellin');
 if(await page.locator('.story article:visible').count()!==3)issues.push('Reduced-motion chapters missing');
 await page.screenshot({path:path.join(output,'tour-reduced.png'),fullPage:true});
 await writeFile(path.join(output,'browser-report.json'),JSON.stringify({results,issues},null,2));

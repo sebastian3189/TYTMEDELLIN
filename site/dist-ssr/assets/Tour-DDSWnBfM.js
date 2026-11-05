@@ -1,12 +1,13 @@
-import { A as watchScroll, C as Marquee, D as useMedia, E as useLightMotion, F as usePageMeta, G as whatsapp, H as jsx, K as language, O as useMounted, R as Icon$1, U as jsxs, V as Fragment$1, _ as TourCard, a as tours, b as Arrow, f as Eyebrow, g as Rail, h as QuoteSection, k as docTop, m as Picture, q as t, w as Trust } from "../entry-server.js";
-import NotFound from "./NotFound-Cug1s3FC.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-nEhUSRvx.js";
-import { i as archiveEntry, r as TourHeroVideo } from "./Hero-CvbbLY17.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-7UODtH_G.js";
-import { t as Reviews } from "./Reviews-CLKwcIeX.js";
-import { l as Faq, o as FAQ_TOUR, s as FAQ_TRANSFER, t as DURACIONES } from "./faq-data-BaHZP5K7.js";
+import { C as t, _ as whatsapp, a as Marquee, c as useLightMotion, d as docTop, f as watchScroll, h as jsxs, l as useMedia, m as jsx, o as Trust, p as Fragment$1, t as Arrow, u as useMounted, v as language } from "./Arrow-BF3-UVf1.js";
+import { E as slugFromPath, O as tourSeo, _ as TourCard, a as tours, f as Eyebrow, g as Rail, h as QuoteSection, j as Icon$1, m as Picture, w as usePageMeta } from "../entry-server.js";
+import NotFound from "./NotFound-BXXkp8Qw.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-B3GpDxIs.js";
+import { i as archiveEntry, r as TourHeroVideo } from "./Hero-CasFwL6a.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-Cm711e1k.js";
+import { t as Reviews } from "./Reviews-CIw8VUSP.js";
+import { l as Faq, o as FAQ_TOUR, s as FAQ_TRANSFER, t as DURACIONES } from "./faq-data-C94VqTI6.js";
 import { i as smallCaps, n as placeLugar, r as placePhotos, t as clamp } from "./mobile-motion-o2zoinXe.js";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 //#region src/tour-info.json
 var tour_info_default = {
@@ -2538,9 +2539,9 @@ var ORGANIZAR = {
 	a: "Coordinamos el transporte privado y el recorrido contigo. La propuesta confirma las paradas, el acompañamiento, los horarios y el valor antes de contratar."
 };
 function Tour() {
-	const { slug } = useParams();
-	const tour = tours.find((t) => t.slug === slug);
-	usePageMeta(tour?.name, tour?.description);
+	const slug = slugFromPath(useLocation().pathname);
+	const tour = tours.find((t) => t.slug === slug), seo = tourSeo[slug];
+	usePageMeta(seo?.title || seo?.h1, seo?.description);
 	const page = useRef(null);
 	useTourReveal(page, slug);
 	if (!tour) return /* @__PURE__ */ jsx(NotFound, {});

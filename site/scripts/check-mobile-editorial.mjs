@@ -20,7 +20,7 @@ try{
   await page.getByRole('button',{name:'Nota anterior',exact:true}).click();await page.waitForTimeout(650);
   // (El explorador se retiró, Spec 03 §K: su cobertura vive en check-mano.mjs.)
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);
-  await page.goto((process.env.TYT_TEST_URL||'http://127.0.0.1:4417')+'/experiencias/guatape-piedra-del-penol');
+  await page.goto((process.env.TYT_TEST_URL||'http://127.0.0.1:4417')+'/tours/guatape');
   await page.waitForTimeout(1100);
   if(height>600){
    assert.equal(await page.locator('.story-static').count(),0);

@@ -18,8 +18,8 @@ h1 em,h2 em,.pie-top em{font-family:var(--serif);font-style:italic;font-weight:6
 .page-title h1 em{padding-right:.08em}
 
 /* Hero del inicio: 2.ª línea «a otro nivel» en Cormorant cursiva (Montserrat 800 en la 1.ª); blanco #F5F5F0 sobre el velo del video >12:1 */
-.home-hero h1 .hero-l2{margin-top:.05em;font-family:var(--serif);font-style:italic;font-weight:600;font-size:1.16em;line-height:.86;letter-spacing:-.015em;padding-right:.08em;font-synthesis:none}
-@media(min-width:900px){.home-hero h1 .hero-l2{font-weight:500}}
+.home-hero .hero-display .hero-l2{margin-top:.05em;font-family:var(--serif);font-style:italic;font-weight:600;font-size:1.16em;line-height:.86;letter-spacing:-.015em;padding-right:.08em;font-synthesis:none}
+@media(min-width:900px){.home-hero .hero-display .hero-l2{font-weight:500}}
 
 /* ---------- Naranja sutil en pequeñas zonas del fondo (Spec 03 §I.2, escala --o-*; petición del usuario 2026-10-16) ----------
    Reglas: halos suaves que se desvanecen antes del borde de su caja (closest-side: nunca un corte), líneas finas y fondos --brand-soft. Nunca texto naranja sin AA

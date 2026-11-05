@@ -3,6 +3,7 @@
 // - capturas: 3 paradas por tour a 1440 (claro) y 2 a 390; oscuro en 2 tours; 390/768/1024/1440/844x390 en 2 tours.
 // - medidas: en 320…2560 (ES y EN, claro/oscuro) comprueba desbordamiento horizontal de la página, texto recortado en el panel, indicador dentro de su
 //   contenedor, objetivos táctiles ≥44 px y errores de consola, parada por parada.
+import { tourPath } from '../src/rutas.js';
 import { chromium, webkit, devices } from '@playwright/test';
 import { mkdir, readFile } from 'node:fs/promises';
 const enDict = JSON.parse(await readFile('src/locales/en.json', 'utf8'));
@@ -17,7 +18,7 @@ async function open(w, h, { theme = 'light', mobile = w < 800, en = false, slug,
   await ctx.addInitScript((t) => { try { localStorage.setItem('tyt-theme', t); } catch { /* */ } }, theme);
   const page = await ctx.newPage(); page.errors = [];
   page.on('pageerror', (e) => page.errors.push(e.message)); page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) page.errors.push(m.text().slice(0, 160)); });
-  await page.goto(`${base}${en ? '/en' : ''}/experiencias/${slug}`, { waitUntil: 'load' });
+  await page.goto(`${base}${en ? '/en' : ''}${tourPath(slug)}`, { waitUntil: 'load' });
   await page.waitForSelector('.it'); await page.waitForTimeout(600);
   return { ctx, page };
 }
@@ -98,7 +99,7 @@ if (mode === 'medidas' || mode === 'todo') {
     const wk = await webkit.launch();
     for (const slug of ['guatape-piedra-del-penol', 'tour-de-compras']) {
       const ctx = await wk.newContext({ ...devices['iPhone 13'] }); const page = await ctx.newPage(); page.errors = []; page.on('pageerror', (e) => page.errors.push(e.message));
-      await page.goto(`${base}/experiencias/${slug}`, { waitUntil: 'load' }); await page.waitForSelector('.it'); await page.waitForTimeout(800);
+      await page.goto(`${base}${tourPath(slug)}`, { waitUntil: 'load' }); await page.waitForSelector('.it'); await page.waitForTimeout(800);
       await showStop(page, 2); await page.screenshot({ path: `${out}/webkit-iphone13-${slug}.png` });
       const ov = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1); if (ov || page.errors.length) bad.push(`webkit ${slug}: desborde=${ov} errores=${page.errors.slice(0, 2)}`);
       await ctx.close();
