@@ -12,17 +12,17 @@ try {
   await page.goto(base+prefix+'/tours');await page.locator('.consent-banner').waitFor();
   check(prefix+' no optional persistence',await page.evaluate(()=>localStorage.getItem('tyt-theme')===null));
   await page.locator('.consent-banner button').nth(2).click();
-  check(prefix+' preferences initially off',!(await page.locator('.consent-dialog input').isChecked()));
-  await page.locator('.consent-dialog input').check();await page.keyboard.press('Escape');
+  check(prefix+' preferences initially off',!(await page.locator('.consent-dialog input >> nth=0').isChecked()));
+  await page.locator('.consent-dialog input >> nth=0').check();await page.keyboard.press('Escape');
   check(prefix+' Escape no consent',await page.evaluate(()=>localStorage.getItem('tyt-privacy-v1')===null));
   await page.locator('.consent-banner button').nth(1).click();
   check(prefix+' reject recorded',await page.evaluate(()=>JSON.parse(localStorage.getItem('tyt-privacy-v1')).preferences===false));
   await page.reload();await page.locator('.consent-link').waitFor();await page.waitForTimeout(300);
   check(prefix+' persists reload',await page.locator('.consent-banner').count()===0);
-  await page.locator('.consent-link').click();await page.locator('.consent-dialog input').check();await page.locator('.consent-dialog .consent-actions button').first().click();
+  await page.locator('.consent-link').click();await page.locator('.consent-dialog input >> nth=0').check();await page.locator('.consent-dialog .consent-actions button').first().click();
   check(prefix+' accept preferences',await page.evaluate(()=>JSON.parse(localStorage.getItem('tyt-privacy-v1')).preferences===true));
   const second=await context.newPage();await second.goto(base+prefix+'/transporte/alquiler-vans-buses');await second.locator('.consent-link').click();await second.locator('.consent-dialog .consent-actions button').last().click();await page.waitForTimeout(150);
-  await page.locator('.consent-link').click();await page.waitForTimeout(100);check(prefix+' cross tab revoke',!(await page.locator('.consent-dialog input').isChecked()));await page.keyboard.press('Escape');await second.close();
+  await page.locator('.consent-link').click();await page.waitForTimeout(100);check(prefix+' cross tab revoke',!(await page.locator('.consent-dialog input >> nth=0').isChecked()));await page.keyboard.press('Escape');await second.close();
   await page.evaluate(()=>window.scrollTo({top:1200,behavior:'instant'}));await page.waitForTimeout(300);
   check(prefix+' source scroll verified',await page.evaluate(()=>scrollY===1200),await page.evaluate(()=>scrollY));
   await page.locator('.site-header a[href="'+prefix+'/transporte/alquiler-vans-buses"]').first().dispatchEvent('click');await page.waitForTimeout(1000);
@@ -35,7 +35,7 @@ try {
   check(prefix+' language preserves query/hash',page.url().endsWith('/pt-br/cotizar?test=1#contenido'));
   await context.close();
  }
- const expired=await browser.newContext();await expired.addInitScript(()=>localStorage.setItem('tyt-privacy-v1',JSON.stringify({version:1,preferences:true,expires:1})));
+ const expired=await browser.newContext();await expired.addInitScript(()=>localStorage.setItem('tyt-privacy-v1',JSON.stringify({version: 2, preferences: true, analytics: false,expires:1})));
  const expiredPage=await expired.newPage();await expiredPage.goto(base+'/');await expiredPage.locator('.consent-banner').waitFor();check('expired consent requests choice',true);await expired.close();
  const blocked=await browser.newContext();await blocked.addInitScript(()=>{Storage.prototype.setItem=function(){throw new DOMException('blocked','SecurityError')}});
  const blockedPage=await blocked.newPage();await blockedPage.goto(base+'/');await blockedPage.locator('.consent-banner button').first().click();await blockedPage.locator('.consent-notice').waitFor();check('blocked storage uses session choice',await blockedPage.locator('.consent-banner').count()===0);await blocked.close();

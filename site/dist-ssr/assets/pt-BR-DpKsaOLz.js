@@ -110,6 +110,8 @@ var Santorini = "Santorini";
 var Blog = "Blog";
 var Tours = "Passeios";
 var Transporte = "Transporte";
+var Analítica = "Análise";
+var Publicidad = "Publicidade";
 var pt_BR_default = {
 	"(se abre en una pestaña nueva)": "(abre em uma nova aba)",
 	". WhatsApp y los sitios externos aplican sus propias políticas al abrirlos.": ". O WhatsApp e os sites externos aplicam suas próprias políticas quando você os acessa.",
@@ -313,7 +315,6 @@ var pt_BR_default = {
 	"Esperar el cambio de luz": "Esperar a mudança da luz",
 	"Este recorrido": "Este roteiro",
 	"Este recorrido acerca la historia de Medellín a través de sus lugares emblemáticos y sus barrios. En la Comuna 13, las escaleras eléctricas y los murales forman parte del paisaje urbano que conocerás.": "Este roteiro aproxima você da história de Medellín por seus lugares emblemáticos e bairros. Na Comuna 13, as escadas rolantes e os murais fazem parte da paisagem urbana que você vai conhecer.",
-	"Este sitio no incorpora analítica publicitaria ni almacenamiento de solicitudes. Las fotografías y las fuentes se sirven desde el proyecto.": "Este site não utiliza análise publicitária nem armazena solicitações. As fotografias e as fontes são servidas pelo próprio projeto.",
 	"Esto también": "Isto também",
 	"Excelente experiencia de principio a fin. Desde la planificación del viaje hasta la ejecución de cada actividad, el equipo demostró un alto nivel de profesionalismo, organización y conocimiento. Todo el personal fue sumamente amable y atento.": "Excelente experiência do início ao fim. Do planejamento da viagem à realização de cada atividade, a equipe demonstrou alto nível de profissionalismo, organização e conhecimento. Todos foram muito gentis e atenciosos.",
 	"Excelente para grupos familiares o pequeños equipos de trabajo, con asientos individuales y sitio de sobra para el equipaje.": "Excelente para famílias ou pequenas equipes de trabalho, com assentos individuais e bastante espaço para bagagem.",
@@ -1347,7 +1348,6 @@ var pt_BR_default = {
 	"Grupo de personas junto a automóviles y vans en una calle de Medellín": "Grupo de pessoas junto a automóveis e vans em uma rua de Medellín",
 	"Hombre junto a una baranda con Medellín y las montañas al fondo": "Homem junto a uma grade, com Medellín e as montanhas ao fundo",
 	"Tu privacidad": "Sua privacidade",
-	"Usamos almacenamiento local para recordar ajustes del sitio. No usamos analítica ni publicidad. Tú decides si guardamos tu tema preferido.": "Usamos armazenamento local para lembrar as configurações do site. Não usamos ferramentas de análise nem publicidade. Você decide se podemos guardar seu tema preferido.",
 	Aceptar,
 	"Rechazar no esenciales": "Rejeitar não essenciais",
 	Configurar,
@@ -1357,8 +1357,6 @@ var pt_BR_default = {
 	"Guardan tu decisión de privacidad y ajustes funcionales, como reducir el movimiento y la ayuda de navegación.": "Guardam sua decisão de privacidade e configurações funcionais, como a redução de movimento e a ajuda de navegação.",
 	Preferencias,
 	"Recordar el tema claro u oscuro entre visitas.": "Lembrar o tema claro ou escuro entre visitas.",
-	"Analítica y publicidad": "Análise e publicidade",
-	"No utilizadas actualmente": "Não utilizadas atualmente",
 	"Guardar preferencias": "Salvar preferências",
 	"Retirar consentimiento": "Retirar consentimento",
 	"Cookies y preferencias": "Cookies e preferências",
@@ -1393,9 +1391,7 @@ var pt_BR_default = {
 	"Escribiendo a": "Escrevendo para",
 	"con el asunto «Protección de datos». Atendemos consultas en un plazo máximo de diez días hábiles y reclamos en quince, conforme a la ley.": "com o assunto «Protección de datos» (proteção de dados). Respondemos às consultas em até dez dias úteis e às reclamações em até quinze dias úteis, conforme a lei.",
 	"Conservamos los datos mientras dure la relación comercial y, después, durante el plazo legal aplicable a las obligaciones contables y fiscales. Cumplido ese plazo, se suprimen.": "Conservamos os dados enquanto durar a relação comercial e, depois, pelo prazo legal aplicável às obrigações contábeis e fiscais. Ao fim desse prazo, eles são excluídos.",
-	"Este sitio no instala cookies de analítica ni publicidad. Usa almacenamiento local para guardar tu decisión de privacidad durante seis meses y ajustes funcionales de accesibilidad; la ayuda de navegación se recuerda solo durante la sesión.": "Este site não instala cookies de análise nem de publicidade. Usa armazenamento local para guardar sua decisão de privacidade por seis meses e configurações funcionais de acessibilidade; a ajuda de navegação é lembrada apenas durante a sessão.",
 	"Guardar el tema claro u oscuro entre visitas es opcional y requiere tu aceptación. El idioma se determina por la dirección de la página. Puedes configurar o retirar tu consentimiento desde «Cookies y preferencias» en el pie del sitio.": "Guardar o tema claro ou escuro entre visitas é opcional e exige sua aceitação. O idioma é determinado pelo endereço da página. Você pode configurar ou retirar seu consentimento em «Cookies e preferências» no rodapé do site.",
-	"No usamos Google Analytics, Google Tag Manager ni otras herramientas de medición o publicidad. No enviamos eventos ni datos de los formularios a servicios de analítica.": "Não usamos Google Analytics, Google Tag Manager nem outras ferramentas de medição ou publicidade. Não enviamos eventos nem dados dos formulários a serviços de análise.",
 	"El mapa de OpenStreetMap solo se carga cuando pulsas el botón para mostrarlo. Ese clic establece una conexión con el proveedor del mapa. Los enlaces a WhatsApp y otras plataformas se abren cuando tú los eliges.": "O mapa do OpenStreetMap só é carregado quando você toca no botão para exibi-lo. Esse clique estabelece uma conexão com o provedor do mapa. Os links para o WhatsApp e outras plataformas são abertos quando você os escolhe.",
 	"Ubicación de la oficina en Medellín: Carrera 79AA #1A Sur-280": "Localização do escritório em Medellín: Carrera 79AA #1A Sur-280",
 	Rechazar,
@@ -1598,7 +1594,17 @@ var pt_BR_default = {
 	"Tour de compras": "Passeio de compras",
 	"Transporte aeropuerto": "Transfer aeroporto",
 	"Agencia de turismo en Medellín: tours privados": "Agência de turismo em Medellín: passeios privados",
-	"Agencia de turismo en Medellín con RNT 176384: tours 100% privados a Guatapé y Comuna 13 y transporte desde el aeropuerto. Cotiza por WhatsApp.": "Agência de turismo em Medellín com RNT 176384: passeios 100% privados a Guatapé e Comuna 13 e transporte do aeroporto. Peça um orçamento pelo WhatsApp."
+	"Agencia de turismo en Medellín con RNT 176384: tours 100% privados a Guatapé y Comuna 13 y transporte desde el aeropuerto. Cotiza por WhatsApp.": "Agência de turismo em Medellín com RNT 176384: passeios 100% privados a Guatapé e Comuna 13 e transporte do aeroporto. Peça um orçamento pelo WhatsApp.",
+	"Recordamos tus ajustes y, si aceptas, usamos Google Analytics para saber qué páginas se visitan. No enviamos tu nombre, teléfono ni mensajes.": "Lembramos suas configurações e, se você aceitar, usamos o Google Analytics para saber quais páginas são visitadas. Não enviamos seu nome, telefone nem mensagens.",
+	"Google Analytics mide visitas y clics para mejorar el sitio, con cookies como _ga. No enviamos tu nombre, teléfono, correo ni mensajes.": "O Google Analytics mede visitas e cliques para melhorar o site, com cookies como _ga. Não enviamos seu nome, telefone, e-mail nem mensagens.",
+	Analítica,
+	Publicidad,
+	"No utilizada actualmente": "Não utilizada atualmente",
+	"Este sitio no usa publicidad ni almacena solicitudes. Solo si lo aceptas, usa Google Analytics para medir visitas, sin tu nombre, teléfono ni mensajes. Las fotografías y las fuentes se sirven desde el proyecto.": "Este site não usa publicidade nem armazena solicitações. Somente se você aceitar, usa o Google Analytics para medir visitas, sem seu nome, telefone nem mensagens. As fotografias e as fontes são servidas pelo próprio projeto.",
+	"Este sitio instala cookies de analítica solo si lo aceptas y no usa cookies de publicidad. Usa almacenamiento local para guardar tu decisión de privacidad durante seis meses y ajustes funcionales de accesibilidad; la ayuda de navegación se recuerda solo durante la sesión.": "Este site instala cookies de análise somente se você aceitar e não usa cookies de publicidade. Usa armazenamento local para guardar sua decisão de privacidade durante seis meses e ajustes funcionais de acessibilidade; a ajuda de navegação é lembrada apenas durante a sessão.",
+	"Si aceptas la analítica, Google Analytics instala las cookies «_ga» y «_ga_*», que pueden durar hasta dos años. Las eliminamos de este sitio si retiras tu consentimiento.": "Se você aceitar a análise, o Google Analytics instala os cookies «_ga» e «_ga_*», que podem durar até dois anos. Nós os eliminamos deste site se você retirar seu consentimento.",
+	"Solo si aceptas la categoría «Analítica» usamos Google Tag Manager y Google Analytics, de Google LLC, para saber qué páginas se visitan y cómo se usan el formulario y los botones de WhatsApp. Google puede tratar estos datos fuera de Colombia, y la información de eventos se conserva hasta 14 meses.": "Somente se você aceitar a categoria «Análise» usamos o Google Tag Manager e o Google Analytics, da Google LLC, para saber quais páginas são visitadas e como o formulário e os botões de WhatsApp são usados. O Google pode tratar esses dados fora da Colômbia, e as informações de eventos são conservadas por até 14 meses.",
+	"Medimos acciones como ver una experiencia o enviar una cotización, junto con la página de origen y el idioma. No enviamos a estos servicios tu nombre, teléfono, correo, mensajes ni el contenido de los formularios. No usamos herramientas de publicidad. Puedes aceptar o retirar la medición en cualquier momento desde «Cookies y preferencias».": "Medimos ações como ver uma experiência ou enviar um orçamento, junto com a página de origem e o idioma. Não enviamos a esses serviços seu nome, telefone, e-mail, mensagens nem o conteúdo dos formulários. Não usamos ferramentas de publicidade. Você pode aceitar ou retirar a medição a qualquer momento em «Cookies e preferências»."
 };
 //#endregion
-export { Aceptar, Ampliar, Autenticidad, Blog, Buses, Calidad, Calificaciones, Cercanía, Cerrar, Ciudad, Compromiso, Conecta, Confianza, Configurar, Contacto, Correo, Cotizar, Cultivos, Descubre, Detalles, Disfruta, Empresa, Enamórate, Experiencias, Explora, Familia, Felicitación, Foto, Fotografía, Fotografías, Guatapé, Hospitalidad, Hoy, Indicativo, Inicio, Inspiración, Inspírate, Jardín, Llámanos, Mensaje, Menú, Miradores, Naturaleza, Necesarias, Nevera, Noche, Nombre, Nosotros, Número, Opcional, Personalizable, Personas, Petición, Planeación, Preferencias, Principal, Privacidad, Provenza, Pueblos, Queja, Rechazar, Reclamo, Recolección, Recuerda, Revisa, Rionegro, Santorini, Seguir, Seguridad, Sencillez, Servicio, Servicios, Siente, Silenciar, Sorpréndete, Sugerencia, Síguenos, Tequendamita, Todas, Todos, Tours, Transporte, Traslados, Vehículos, Vive, aquí, compartido, control, conversación, de, pt_BR_default as default, descubrir, empieza, encuentros, es, escuchemos, experiencia, importa, mueven, necesitas, nota, notas, pasajeros, personas, planeémoslo, por, quieres, recuerdo, sentido, tu, viajó, vive };
+export { Aceptar, Ampliar, Analítica, Autenticidad, Blog, Buses, Calidad, Calificaciones, Cercanía, Cerrar, Ciudad, Compromiso, Conecta, Confianza, Configurar, Contacto, Correo, Cotizar, Cultivos, Descubre, Detalles, Disfruta, Empresa, Enamórate, Experiencias, Explora, Familia, Felicitación, Foto, Fotografía, Fotografías, Guatapé, Hospitalidad, Hoy, Indicativo, Inicio, Inspiración, Inspírate, Jardín, Llámanos, Mensaje, Menú, Miradores, Naturaleza, Necesarias, Nevera, Noche, Nombre, Nosotros, Número, Opcional, Personalizable, Personas, Petición, Planeación, Preferencias, Principal, Privacidad, Provenza, Publicidad, Pueblos, Queja, Rechazar, Reclamo, Recolección, Recuerda, Revisa, Rionegro, Santorini, Seguir, Seguridad, Sencillez, Servicio, Servicios, Siente, Silenciar, Sorpréndete, Sugerencia, Síguenos, Tequendamita, Todas, Todos, Tours, Transporte, Traslados, Vehículos, Vive, aquí, compartido, control, conversación, de, pt_BR_default as default, descubrir, empieza, encuentros, es, escuchemos, experiencia, importa, mueven, necesitas, nota, notas, pasajeros, personas, planeémoslo, por, quieres, recuerdo, sentido, tu, viajó, vive };

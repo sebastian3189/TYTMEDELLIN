@@ -6,6 +6,7 @@ import indicativos from './indicativos.json';
 import QuoteCopy from './QuoteCopy';
 import { language, t } from './i18n';
 import Arrow from './Arrow';
+import { contextoPagina, track } from './analytics';
 const countryLabel = row => language()!=='es' ? new Intl.DisplayNames([language()],{type:'region'}).of(row[1]) : row[2];
 
 /*
@@ -14,7 +15,7 @@ const countryLabel = row => language()!=='es' ? new Intl.DisplayNames([language(
  * reconocido en vivo, tipo de solicitud PQRSF solo en /contacto, foco al primer error, honeypot) al sistema claro premium de este sitio.
  * Canal: sin backend. Se valida y, tras la autorización de datos, se abre wa.me con el mensaje completo ya escrito (excepción aprobada por el usuario el
  * 2026-10-15, Spec 04 «Excepción WhatsApp»); la persona solo pulsa Enviar. «Copiar mensaje» como alternativa. Honeypot y time-trap en cliente; sin
- * localStorage ni analítica con datos personales.
+ * localStorage. Analítica solo con consentimiento y sin el contenido de los campos (analytics.js).
  */
 const TIPOS = [['turismo', 'Turismo y traslados'], ['peticion', 'Petición'], ['queja', 'Queja'], ['reclamo', 'Reclamo'], ['sugerencia', 'Sugerencia'], ['contacto', 'Contacto'], ['felicitacion', 'Felicitación']];
 const ORDER = ['experiencia', 'fecha', 'personas', 'salida', 'nombre', 'indicativo', 'telefono', 'correo', 'empresa', 'mensaje', 'consentimiento'];
@@ -63,7 +64,7 @@ export default function Quote({ context = 'Un recorrido a mi medida', mode = 'co
   const withType = mode === 'contacto';
   const [v, setV] = useState({ tipo: 'turismo', experiencia: context, fecha: '', personas: '', salida: '', nombre: '', indicativo: '+57', telefono: '', correo: '', empresa: '', mensaje: '', consentimiento: false });
   const [errors, setErrors] = useState({}), [summary, setSummary] = useState(''), [copied, setCopied] = useState('idle'), [retry, setRetry] = useState(false);
-  const form = useRef(null), opened = useRef(Date.now()), honey = useRef(null), touched = useRef(false);
+  const form = useRef(null), opened = useRef(Date.now()), honey = useRef(null), touched = useRef(false), started = useRef(false);
   const plan = !withType || v.tipo === 'turismo';
   const set = (key) => (event) => { const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value; setV((p) => ({ ...p, [key]: value })); setSummary(''); setCopied('idle'); setRetry(false); if (errors[key]) setErrors((p) => { const n = { ...p }; delete n[key]; return n; }); };
   useEffect(() => { setV((p) => ({ ...p, experiencia: context })); setSummary(''); setErrors({}); setCopied('idle'); }, [context]);
@@ -74,6 +75,9 @@ export default function Quote({ context = 'Un recorrido a mi medida', mode = 'co
   const attrs = (name, extra, own = true) => ({ id: name, name, 'aria-invalid': Boolean(errors[name]), 'aria-describedby': [own && errors[name] && `${name}-error`, extra].filter(Boolean).join(' ') || undefined });
   const error = (name) => errors[name] && <small id={`${name}-error`} className="error">{errors[name]}</small>;
 
+  const medicion = () => { const { origen, slug, tipo } = contextoPagina(); return { origen, slug, tipo: withType ? 'contacto' : tipo === 'general' ? 'cotizacion' : tipo }; };
+  const onFirstInput = () => { touched.current = true; if (!started.current) { started.current = true; track('quote_start', medicion()); } };
+
   function submit(event) {
     event.preventDefault();
     // Honeypot (los bots lo rellenan) y time-trap (envío en <2 s SIN ninguna interacción previa: teclado, puntero o autocompletado cuentan como interacción, así
@@ -83,11 +87,12 @@ export default function Quote({ context = 'Un recorrido a mi medida', mode = 'co
     const next = validate(v, plan);
     setErrors(next); setCopied('idle');
     const first = ORDER.find((name) => next[name]);
-    if (first) { setSummary(''); requestAnimationFrame(() => form.current?.querySelector(`#${first}`)?.focus()); return; }
+    if (first) { track('quote_error', { tipo_error: 'validacion', origen: medicion().origen }); setSummary(''); requestAnimationFrame(() => form.current?.querySelector(`#${first}`)?.focus()); return; }
     const text = buildMessage(v, plan, withType, pais);
     const url = waUrl(text);
     // Excepción aprobada por el usuario (Spec 04 «Excepción WhatsApp»): el mensaje completo va en el enlace de wa.me. Se abre de forma síncrona dentro del gesto
     // del usuario (no se bloquea). Con 'noopener' window.open devuelve siempre null, así que el bloqueo no es detectable: el panel con el botón grande queda siempre visible.
+    { const { origen, tipo } = medicion(); track('quote_submit', { origen, tipo }); }
     window.open(url, '_blank', 'noopener,noreferrer');
     startTransition(() => setSummary(text));
     requestAnimationFrame(() => document.querySelector('#resumen-solicitud')?.focus());
@@ -96,7 +101,7 @@ export default function Quote({ context = 'Un recorrido a mi medida', mode = 'co
   const errorList = ORDER.filter((name) => errors[name]);
 
   return <section className="quote-section wrap"><QuoteCopy withType={withType}/>
-    <form ref={form} className="quote-form" noValidate onSubmit={submit} onInputCapture={() => { touched.current = true; }} onKeyDownCapture={() => { touched.current = true; }} onPointerDownCapture={() => { touched.current = true; }} aria-label={withType ? 'Formulario de contacto' : 'Formulario de cotización'}>
+    <form ref={form} className="quote-form" noValidate onSubmit={submit} onInputCapture={onFirstInput} onKeyDownCapture={() => { touched.current = true; }} onPointerDownCapture={() => { touched.current = true; }} aria-label={withType ? 'Formulario de contacto' : 'Formulario de cotización'}>
       <div className="honeypot" aria-hidden="true"><label>No completar<input ref={honey} name="website" tabIndex={-1} autoComplete="off"/></label></div>
       <p className="form-note full">Los campos con * son obligatorios.</p>
       {withType && <fieldset className="form-group full"><legend>Tipo de solicitud *</legend><div className="chips" role="radiogroup" aria-label="Tipo de solicitud">{TIPOS.map(([id, label]) => <label key={id} className={`chip ${v.tipo === id ? 'is-on' : ''}`}><input type="radio" name="tipo" value={id} checked={v.tipo === id} onChange={set('tipo')}/><span>{label}</span></label>)}</div></fieldset>}

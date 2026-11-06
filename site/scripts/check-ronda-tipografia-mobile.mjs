@@ -10,7 +10,7 @@ const run = async (engine, name, ctxOpts) => {
   for (const w of widths) for (const lang of langs) for (const r of routes) {
     const ctx = await browser.newContext({ ...ctxOpts, viewport: { width: w, height: 844 } });
     const page = await ctx.newPage();
-    await page.addInitScript(() => { try { localStorage.setItem('tyt-privacy-v1', JSON.stringify({ version: 1, preferences: false, expires: Date.now() + 1e10 })); sessionStorage.setItem('tyt-bienvenida', '1'); } catch {} });
+    await page.addInitScript(() => { try { localStorage.setItem('tyt-privacy-v1', JSON.stringify({ version: 2, preferences: false, analytics: false, expires: Date.now() + 1e10 })); sessionStorage.setItem('tyt-bienvenida', '1'); } catch {} });
     await page.goto(base + (lang + r === '' ? '/' : lang + r), { waitUntil: 'load' }); await page.waitForTimeout(1200);
     const res = await page.evaluate(async () => {
       const out = [], H = document.documentElement.scrollHeight;

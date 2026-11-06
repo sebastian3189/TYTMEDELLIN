@@ -7,7 +7,7 @@ const seen = new Map();
 for (const w of [390, 768, 1440]) for (const r of routes) {
   const ctx = await browser.newContext({ viewport: { width: w, height: w < 800 ? 844 : 900 }, isMobile: w < 800, hasTouch: w < 800 });
   const page = await ctx.newPage();
-  await page.addInitScript(() => { try { localStorage.setItem('tyt-privacy-v1', JSON.stringify({ version: 1, preferences: false, expires: Date.now() + 1e10 })); } catch {} });
+  await page.addInitScript(() => { try { localStorage.setItem('tyt-privacy-v1', JSON.stringify({ version: 2, preferences: false, analytics: false, expires: Date.now() + 1e10 })); } catch {} });
   await page.goto(base + r, { waitUntil: 'load' }); await page.waitForTimeout(1200);
   const H = await page.evaluate(() => document.documentElement.scrollHeight);
   const rows = [];

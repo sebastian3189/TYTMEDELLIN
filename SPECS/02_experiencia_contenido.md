@@ -133,8 +133,35 @@ consideran verificadas por el cliente. Fuente: guía de marca del cliente.
 - Emociones: Descubre, Explora, Siente, Conecta, Vive, Sorpréndete, Disfruta,
   Inspírate, Recuerda, Enamórate de Medellín.
 
-**3. Palabras clave SEO para Google:** el cliente anunció la sección pero no entregó
-la lista. `PENDIENTE CLIENTE`. No se inventan términos ni volúmenes.
+**3. Palabras clave SEO para Google (2026-11-05).** Fuentes: tres exportaciones de Keyword
+Planner del cliente (oct. 2025–sep. 2026, volúmenes por órdenes de magnitud) y consulta
+de volumen de Google Ads para Colombia/es y Estados Unidos/en. Una keyword principal por
+URL; fuente técnica: `site/src/rutas.js` y `site/src/meta.js`. Volumen: mensual en Colombia.
+
+| URL | Keyword principal | Volumen |
+|---|---|---|
+| `/` | agencia de turismo en Medellín | 170 |
+| `/tours` | tours en Medellín | 2.400 |
+| `/tours/comuna-13` | tour Comuna 13 (y city tour Medellín, misma página) | 22.200 / 880 |
+| `/tours/guatape` | tour a Guatapé desde Medellín | 320 |
+| `/tours/cafe-medellin` | tour del café Medellín | orden de 500 |
+| `/tours/hacienda-napoles` | tour Hacienda Nápoles desde Medellín | orden de 500 |
+| `/tours/nocturno-medellin` | tour nocturno Medellín | 30 |
+| `/tours/miradores-medellin` | miradores Medellín | 3.600 (intención mixta) |
+| `/tours/santa-fe-de-antioquia` | tour Santa Fe de Antioquia | 170 |
+| `/tours/jardin-antioquia` | tour Jardín Antioquia | 170 |
+| `/tours/oriente-antioqueno` | tour Oriente antioqueño | 30 |
+| `/tours/salto-del-buey` | tour Salto del Buey | sin datos; «salto del buey» 4.400 |
+| `/tours/compras-medellin` | tour de compras Medellín | 10 |
+| `/transporte` | transporte privado Medellín | orden de 50 |
+| `/transporte/aeropuerto-medellin` | transporte aeropuerto Medellín | 260 |
+| `/transporte/alquiler-vans-buses` | alquiler de vans y buses en Medellín | 90–110 |
+
+`PENDIENTE CLIENTE`: si Comuna 13 se vende sin city tour (separaría `/tours/city-tour-medellin`);
+si el transporte a Guatapé se vende sin tour (crearía `/transporte/medellin-guatape`, 500);
+si se ofrecen chiva (hasta 5.000) o rafting (500). Sin página propia hasta medir demanda:
+eventos y conciertos. Excluidas por decisión: «tour Pablo Escobar» (fuera de catálogo),
+«gratis» y bus público. No se crean páginas por barrio ni por variante de una keyword.
 
 **Reglas de uso**
 

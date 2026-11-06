@@ -9,7 +9,7 @@ const env = (k, d) => (process.env[k] ? process.env[k].split(',') : d);
 for (const lang of env('LANGS', ['es', 'pt'])) for (const [name, p] of pages.filter(([n]) => env('PAGES', [n]).includes(n))) for (const w of env('WIDTHS', [1440, 390]).map(Number)) for (const theme of env('THEMES', ['light', 'dark'])) {
   const ctx = await browser.newContext({ viewport: { width: w, height: w < 800 ? 844 : 900 }, isMobile: w < 800, hasTouch: w < 800, colorScheme: theme });
   const page = await ctx.newPage(); page.on('pageerror', (e) => log.push(`pageerror ${name} ${e.message.slice(0, 100)}`));
-  await page.addInitScript(() => { try { localStorage.setItem('tyt-privacy-v1', JSON.stringify({ version: 1, preferences: false, expires: Date.now() + 1e10 })); } catch {} });
+  await page.addInitScript(() => { try { localStorage.setItem('tyt-privacy-v1', JSON.stringify({ version: 2, preferences: false, analytics: false, expires: Date.now() + 1e10 })); } catch {} });
   const path = (lang === 'pt' ? '/pt-br' : '') + p;
   await page.goto(base + (path || '/'), { waitUntil: 'load' }); await page.waitForTimeout(2500);
   const f = `${out}/${name}-${lang}-${w}-${theme}`;

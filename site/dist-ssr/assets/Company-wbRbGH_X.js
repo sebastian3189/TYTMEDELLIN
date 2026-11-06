@@ -1,8 +1,7 @@
-import { _ as whatsapp, g as company, h as jsxs, i as Manifesto, m as jsx, p as Fragment$1, t as Arrow } from "./Arrow-CIGPWPkK.js";
-import { N as Socials, d as Button, f as Eyebrow, h as QuoteSection, i as photos, m as Picture, o as values, p as PageTitle, r as nosotros } from "../entry-server.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-DYXqIvMS.js";
-import { t as Reviews } from "./Reviews-BChyAlMu.js";
-import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-CNlnD8uD.js";
+import { C as Manifesto, G as Socials, J as jsxs, K as Fragment$1, X as whatsapp, Y as company, f as Button, g as QuoteSection, h as Picture, i as photos, m as PageTitle, o as values, p as Eyebrow, q as jsx, r as nosotros, x as Arrow } from "../entry-server.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-CVK1DbXM.js";
+import { t as Reviews } from "./Reviews-C6mpLsK5.js";
+import { l as Faq, n as FAQ_ABOUT, r as FAQ_CONTACT } from "./faq-data-CvY6kltd.js";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 //#region src/AboutFx.jsx
@@ -484,7 +483,7 @@ function Privacy() {
 				to: "/politica-de-tratamiento-de-datos",
 				children: ["Consultar la política de tratamiento de datos de la empresa", /* @__PURE__ */ jsx(Arrow, {})]
 			})] }),
-			/* @__PURE__ */ jsx("p", { children: "Este sitio no incorpora analítica publicitaria ni almacenamiento de solicitudes. Las fotografías y las fuentes se sirven desde el proyecto." })
+			/* @__PURE__ */ jsx("p", { children: "Este sitio no usa publicidad ni almacena solicitudes. Solo si lo aceptas, usa Google Analytics para medir visitas, sin tu nombre, teléfono ni mensajes. Las fotografías y las fuentes se sirven desde el proyecto." })
 		]
 	})] });
 }

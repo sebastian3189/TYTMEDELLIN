@@ -286,8 +286,10 @@ carga perezosa), `BlogBook.jsx` + `experience-book.css` (libro), `preferences.cs
   flotantes ni tira hasta acercarse (margen 100 %); resumen del formulario con `startTransition`; logo de cabecera `fetchPriority="low"`.
 
 **Despliegue y reglas de host.** `npm run build` escribe `dist/<ruta>/index.html` (25 rutas × es/en), `404.html`, `200.html` (cáscara vacía), `sitemap.xml`,
-`robots.txt` y un `canonical` absoluto por ruta. Variables: `TYT_SITE_URL` (dominio; sin ella se usa el marcador `dominio-pendiente-cliente.invalid`,
-PENDIENTE CLIENTE) y `TYT_INDEXABLE=1` (quita `noindex`, abre `robots.txt`; por defecto el prototipo sigue cerrado). Reglas de host:
+`robots.txt` y un `canonical` absoluto por ruta. Variables: `TYT_SITE_URL` (dominio; **por defecto `https://www.transporteenmedellin.com`**, definitivo desde
+2026-11-05; el dominio sin «www» redirige a este) y `TYT_INDEXABLE=1` (quita `noindex`, abre `robots.txt`; por defecto el sitio sigue cerrado: publicar = decisión
+expresa). `npm run build:produccion` compila con ambas. Datos estructurados (prerender): `TravelAgency` + `WebSite` en el inicio y `BreadcrumbList` en fichas y
+artículos, solo con datos reales (sin horarios, precios ni reseñas). Hosting actual: Vercel (`site/vercel.json`: sin barra final y caché de `/assets`, `/fonts`, `/media`). Reglas de host:
 1. Estático ideal: `try_files $uri $uri/index.html =404` con `error_page 404 /404.html` (estado 404 real) y gzip/brotli de texto; `/assets/*` inmutable.
 2. Host solo SPA (reescribe todo a un HTML): usar `/200.html` como destino de la reescritura (Netlify `/* /200.html 200`; Cloudflare Pages lo hace por
    defecto). Si se reescribe a `/index.html` (que es el inicio prerenderizado), `main.jsx` compara `#root[data-path]` con la URL y, si no coincide, descarta el
@@ -314,3 +316,22 @@ No se creó la página de Términos y Condiciones: requiere datos del cliente/as
 (razón social exacta, responsable de PQR, vigencia, postura sobre retracto, cancelación
 por la empresa, fuerza mayor, responsabilidad). Al recibirlos: ruta /terminos (ES/EN/PT),
 enlace desde el pie y desde la casilla del formulario, con fecha de versión.
+
+## Arquitectura de rutas SEO — 2026-11-05
+
+Compuertas: ENCUADRAR con petición del usuario («Sí, impleméntala»); DISEÑAR no aplica porque el usuario fijó que el apartado visual no cambia; CONSTRUIR en la sesión principal; AUDITAR/CERRAR corresponden a `auditor-calidad`. Keywords por URL en Spec 02.
+
+- **Fuente única:** `site/src/rutas.js` traduce el `slug` interno de cada tour (fotos, itinerarios, `tour-info.json`) a su URL pública, h1, título y descripción. `tour.name` no cambia: cartas, cinta y formularios siguen igual.
+- **Rutas:** `/experiencias` → `/tours`; `/servicios` → `/transporte`; `/vehiculos` → `/transporte/alquiler-vans-buses`; fichas en `/tours/<nombre>` y traslado en `/transporte/aeropuerto-medellin`. La baraja conserva 12 cartas.
+- **Redirecciones:** 45 reglas 301 (15 × 3 idiomas) en `site/vercel.json` y `site/public/.htaccess`. `rutasAnteriores` es su referencia.
+- **Prueba:** `node scripts/check-arquitectura.mjs` (rutas, h1, canonical, títulos y descripciones únicos, enlaces internos, sitemap y 301 sincronizadas).
+
+### Inicio: keyword y datos estructurados — 2026-11-05
+
+Pedido expreso del usuario. El h1 del inicio es «Agencia de turismo en Medellín» y ocupa la línea superior del hero con su estilo; «Medellín, a otro nivel» sigue igual como pieza visual (`.hero-display`), sin cambiar de aspecto. Título y descripción empiezan por la keyword. El bloque `TravelAgency` (tipo de `LocalBusiness`) de `scripts/prerender.mjs` se amplió en los tres idiomas con descripción, lema, RNT, NIT y catálogo de servicios sin precios. `PENDIENTE CLIENTE`: horario, código postal, coordenadas, Facebook, rango de precios y nombre oficial frente al Perfil de Empresa. También se corrigió el revelado de títulos en carga directa (`ronda-textos.css`, prueba `scripts/check-revelado-titulos.mjs`).
+
+**Sitemap (2026-11-05).** `sitemap.xml` lista las 24 páginas de la arquitectura SEO por idioma (72 URL, con alternos `hreflang`). `/privacidad` y `/politica-de-tratamiento-de-datos` siguen publicadas pero fuera del sitemap. Sin `lastmod`: no hay fecha real de modificación por página.
+
+## Analítica con consentimiento — 2026-11-05
+
+Decisión del usuario: se pasa de «sin rastreadores» a «analítica solo con consentimiento». Sustituye lo dicho sobre analítica en la nota del 2026-10-15. `consent.js` sube a versión 2 con la categoría `analytics`, desactivada por defecto; a quien decidió antes se le vuelve a preguntar. `analytics.js` declara el consentimiento denegado y carga Tag Manager solo tras aceptar. Sin `VITE_GTM_ID`, definida solo en Production, no hace nada. Al retirar el consentimiento se deniega y se borran las cookies `_ga`. Los eventos sin consentimiento se descartan y solo salen los parámetros permitidos. Aviso, `/privacidad` y `/politica-de-tratamiento-de-datos` actualizados en ES, EN y PT-BR; **requieren revisión del asesor legal**. Prueba: `scripts/check-analitica.mjs`, con Google simulado. La configuración real de Tag Manager se valida con su vista previa.

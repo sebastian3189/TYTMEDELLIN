@@ -1,7 +1,7 @@
-import { C as t, D as languageInfo, E as languageFromPath, O as pathForLanguage, S as switchLanguage, T as LANGUAGES, _ as whatsapp, b as prepareLanguage, g as company, h as jsxs, m as jsx, n as QuoteCopy, p as Fragment$1, r as EditorialMotion, t as Arrow, u as useMounted, v as language, w as unprefix, x as setLanguage, y as languagePath } from "./assets/Arrow-CIGPWPkK.js";
 import { renderToString } from "react-dom/server";
 import { Link, NavLink, Navigate, Route, Routes, StaticRouter, useLocation, useNavigationType } from "react-router-dom";
-import { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
+import { Fragment as Fragment$1, jsx, jsxs } from "react/jsx-runtime";
 import { createPortal } from "react-dom";
 //#region src/text-motion.js
 var SCENES = ".home-hero,.scrub-hero,.th,.it,.blog-book,.different,.story,.explorer-track,[data-rv],.afx,[data-no-tx],dialog,form,details,[aria-live],.review-panel,.consent,.welcome,.tour-bar";
@@ -147,8 +147,168 @@ function notifyRouteReady() {
 	setTimeout(wait, 16);
 }
 //#endregion
+//#region src/languages.js
+var LANGUAGES = [
+	{
+		code: "es",
+		prefix: "",
+		label: "Español",
+		html: "es-CO",
+		og: "es_CO"
+	},
+	{
+		code: "en",
+		prefix: "/en",
+		label: "English",
+		html: "en",
+		og: "en_US"
+	},
+	{
+		code: "pt-BR",
+		prefix: "/pt-br",
+		label: "Português (Brasil)",
+		html: "pt-BR",
+		og: "pt_BR"
+	}
+];
+var languageInfo = (code) => LANGUAGES.find((x) => x.code === code) || LANGUAGES[0];
+var languageFromPath = (path) => /^\/pt-br(?:\/|$)/i.test(path) ? "pt-BR" : /^\/en(?:\/|$)/.test(path) ? "en" : "es";
+var stripLanguage = (path) => path.replace(/^\/(?:en|pt-br)(?=\/|$)/i, "") || "/";
+var pathForLanguage = (path, code) => languageInfo(code).prefix + (stripLanguage(path) === "/" ? "/" : stripLanguage(path));
+//#endregion
+//#region src/i18n.js
+var S = globalThis.__ttI18n || (globalThis.__ttI18n = {
+	locale: typeof window !== "undefined" ? languageFromPath(window.location.pathname) : "es",
+	dictionaries: { es: {} }
+});
+var dictionaries = S.dictionaries;
+S.localizedProps = localizedProps;
+var loaders = {
+	en: () => import("./assets/en-BsoLatUr.js"),
+	"pt-BR": () => import("./assets/pt-BR-DpKsaOLz.js")
+};
+var language = () => S.locale;
+var setLanguage = (value) => {
+	S.locale = languageInfo(value).code;
+};
+async function prepareLanguage(value) {
+	const code = languageInfo(value).code;
+	if (!dictionaries[code]) dictionaries[code] = (await loaders[code]()).default;
+}
+async function switchLanguage(value) {
+	const code = languageInfo(value).code;
+	if (code === S.locale) return;
+	await prepareLanguage(code);
+	const { pathname, search, hash } = window.location, next = pathForLanguage(pathname, code) + search + hash;
+	history.pushState(null, "", next);
+	setLanguage(code);
+	document.documentElement.lang = languageInfo(code).html;
+	window.dispatchEvent(new CustomEvent("tyt-language-change", { detail: code }));
+}
+var unprefix = stripLanguage;
+var languagePath = pathForLanguage;
+var normalize = (value) => value.replace(/\s+/g, " ").trim();
+function t(value) {
+	if (S.locale === "es" || typeof value !== "string" || !value.trim()) return value;
+	const key = normalize(value);
+	const english = dictionaries[S.locale] || {};
+	if (Object.hasOwn(english, key)) return value.replace(value.trim(), english[key]);
+	const patterns = [
+		[/^estos (\d+) campos$/, (n) => `these ${n} fields`],
+		[/^Foto (\d+) de (\d+), (.+)$/, (n, total, name) => `Photo ${n} of ${total}, ${t(name)}`],
+		[/^(.+)\. (Descubre|Explora|Siente|Conecta|Vive|Disfruta|Sorpréndete|Recuerda|Enamórate|Inspírate): (.+)$/, (name, verb, text) => `${t(name)}. ${t(verb)}: ${t(text)}`],
+		[/^Ampliar fotografía (\d+) de (.+)$/, (n, name) => `Enlarge photo ${n} of ${t(name)}`],
+		[/^Fotografía (\d+) de (.+)$/, (n, name) => `Photo ${n} of ${t(name)}`],
+		[/^Mostrar fotografía (\d+) de (.+)$/, (n, name) => `Show photo ${n} of ${t(name)}`],
+		[/^(.+), fotografía (\d+) de (\d+)$/, (name, n, total) => `${t(name)}, photo ${n} of ${total}`],
+		[/^Foto (\d+) de (\d+)$/, (n, total) => `Photo ${n} of ${total}`],
+		[/^(.+) \(se abre en una pestaña nueva\)$/, (name) => `${t(name)} (opens in a new tab)`],
+		[/^Seguir a (.+) en Instagram$/, (handle) => `Follow ${handle} on Instagram`],
+		[/^También en TikTok (@.+)$/, (handle) => `Also on TikTok ${handle}`],
+		[/^(.+) · Desde Medellín$/, (cat) => `${t(cat)} · From Medellín`],
+		[/^(.+), fotografía (\d+)$/, (name, n) => `${t(name)}, photo ${n}`],
+		[/^(.+), capítulo (\d+)$/, (name, n) => `${t(name)}, chapter ${n}`],
+		[/^Capítulo (\d+): (.+)$/, (n, title) => `Chapter ${n}: ${t(title)}`],
+		[/^Fotografías de (.+)$/, (name) => `Photos of ${t(name)}`],
+		[/^Elegir fotografía de (.+)$/, (name) => `Choose a photo of ${t(name)}`],
+		[/^Galería ampliada de (.+)$/, (name) => `Enlarged gallery of ${t(name)}`],
+		[/^Un recorrido por (.+)$/, (name) => `A journey through ${t(name)}`],
+		[/^Planea esta experiencia: (.+)$/, (name) => `Plan this experience: ${t(name)}`],
+		[/^Leer la nota: (.+)$/, (name) => `Read the article: ${t(name)}`],
+		[/^Categoría (.+)$/, (name) => `Category: ${t(name)}`],
+		[/^(.+) \| T&T Medellín$/, (title) => `${t(title)} | T&T Medellín`]
+	];
+	const portuguesePatterns = [
+		[/^estos (\d+) campos$/, (n) => `estes ${n} campos`],
+		[/^Foto (\d+) de (\d+), (.+)$/, (n, total, name) => `Foto ${n} de ${total}, ${t(name)}`],
+		[/^(.+)\. (Descubre|Explora|Siente|Conecta|Vive|Disfruta|Sorpréndete|Recuerda|Enamórate|Inspírate): (.+)$/, (name, verb, text) => `${t(name)}. ${t(verb)}: ${t(text)}`],
+		[/^Ampliar fotografía (\d+) de (.+)$/, (n, name) => `Ampliar foto ${n} de ${t(name)}`],
+		[/^Fotografía (\d+) de (.+)$/, (n, name) => `Foto ${n} de ${t(name)}`],
+		[/^Mostrar fotografía (\d+) de (.+)$/, (n, name) => `Mostrar foto ${n} de ${t(name)}`],
+		[/^(.+), fotografía (\d+) de (\d+)$/, (name, n, total) => `${t(name)}, foto ${n} de ${total}`],
+		[/^Foto (\d+) de (\d+)$/, (n, total) => `Foto ${n} de ${total}`],
+		[/^(.+) \(se abre en una pestaña nueva\)$/, (name) => `${t(name)} (abre em uma nova aba)`],
+		[/^Seguir a (.+) en Instagram$/, (name) => `Seguir ${name} no Instagram`],
+		[/^También en TikTok (@.+)$/, (name) => `Também no TikTok ${name}`],
+		[/^(.+) · Desde Medellín$/, (cat) => `${t(cat)} · Saindo de Medellín`],
+		[/^(.+), fotografía (\d+)$/, (name, n) => `${t(name)}, foto ${n}`],
+		[/^(.+), capítulo (\d+)$/, (name, n) => `${t(name)}, capítulo ${n}`],
+		[/^Capítulo (\d+): (.+)$/, (n, title) => `Capítulo ${n}: ${t(title)}`],
+		[/^Fotografías de (.+)$/, (name) => `Fotos de ${t(name)}`],
+		[/^Elegir fotografía de (.+)$/, (name) => `Escolher foto de ${t(name)}`],
+		[/^Galería ampliada de (.+)$/, (name) => `Galeria ampliada de ${t(name)}`],
+		[/^Un recorrido por (.+)$/, (name) => `Um passeio por ${t(name)}`],
+		[/^Planea esta experiencia: (.+)$/, (name) => `Planeje esta experiência: ${t(name)}`],
+		[/^Leer la nota: (.+)$/, (name) => `Ler o artigo: ${t(name)}`],
+		[/^Categoría (.+)$/, (name) => `Categoria: ${t(name)}`],
+		[/^(.+) \| T&T Medellín$/, (title) => `${t(title)} | T&T Medellín`]
+	];
+	for (const [pattern, convert] of S.locale === "pt-BR" ? portuguesePatterns : patterns) {
+		const match = key.match(pattern);
+		if (match) return convert(...match.slice(1));
+	}
+	const punctuation = key.match(/^(.+?)([.:*→↗↓]+)$/);
+	if (punctuation && Object.hasOwn(english, punctuation[1].trim())) return english[punctuation[1].trim()] + punctuation[2];
+	return value;
+}
+function localizedProps(type, props) {
+	if (S.locale === "es" || !props || props.translate === "no") return props;
+	const next = { ...props };
+	const children = (value) => Array.isArray(value) ? value.map(children) : typeof value === "string" ? t(value) : value;
+	if (type !== "script" && type !== "style" && type !== "textarea") next.children = children(props.children);
+	for (const key of [
+		"aria-label",
+		"aria-description",
+		"title",
+		"alt",
+		"placeholder"
+	]) if (typeof props[key] === "string") next[key] = t(props[key]);
+	if (type === "option" && props.value === void 0 && typeof props.children === "string") next.value = props.children;
+	return next;
+}
+//#endregion
+//#region src/company.js
+var company = {
+	phone: "+57 304 496 1698",
+	whatsapp: "573044961698",
+	email: "transporteyturismomedellin@gmail.com",
+	address: "Carrera 79AA #1A Sur-280, Medellín",
+	reviews: "https://www.google.com/maps/place/Transporte+%26+Turismo+Medellin/data=!4m2!3m1!1s0x0:0x676cebadb662a88a",
+	instagram: "https://www.instagram.com/transporteenmedellin",
+	tiktok: "https://www.tiktok.com/@tytmedellin"
+};
+var whatsapp = (context = "mi recorrido") => `https://wa.me/${company.whatsapp}?text=${encodeURIComponent(language() === "pt-BR" ? `Olá, gostaria de consultar a T&T Medellín sobre ${t(context)}.` : language() === "en" ? `Hello, I'd like to ask T&T Medellín about ${t(context)}.` : `Hola, quiero consultar con T&T Medellín sobre ${context}.`)}`;
+//#endregion
+//#region src/i18n-runtime/jsx-runtime.js
+var localize = (type, props) => {
+	const f = globalThis.__ttI18n && globalThis.__ttI18n.localizedProps;
+	return f ? f(type, props) : props;
+};
+var jsx$1 = (type, props, key) => jsx(type, localize(type, props), key);
+var jsxs$1 = (type, props, key) => jsxs(type, localize(type, props), key);
+//#endregion
 //#region src/Socials.jsx
-var PATHS = {
+var PATHS$1 = {
 	instagram: "M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0Zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03Zm0 3.678a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324ZM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm7.846-10.405a1.441 1.441 0 0 1-2.88 0 1.44 1.44 0 0 1 2.88 0Z",
 	tiktok: "M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07Z",
 	whatsapp: "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.1-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 016.988 2.896 9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488"
@@ -174,7 +334,7 @@ var SOCIALS = () => [
 	}
 ];
 function SocialIcon({ id, size = 24, color, className = "" }) {
-	return /* @__PURE__ */ jsx("svg", {
+	return /* @__PURE__ */ jsx$1("svg", {
 		className,
 		viewBox: "0 0 24 24",
 		width: size,
@@ -183,24 +343,24 @@ function SocialIcon({ id, size = 24, color, className = "" }) {
 		"aria-hidden": "true",
 		focusable: "false",
 		style: color ? { color } : void 0,
-		children: /* @__PURE__ */ jsx("path", { d: PATHS[id] })
+		children: /* @__PURE__ */ jsx$1("path", { d: PATHS$1[id] })
 	});
 }
 function Socials({ className = "", only }) {
-	return /* @__PURE__ */ jsx("ul", {
+	return /* @__PURE__ */ jsx$1("ul", {
 		role: "list",
 		className: `socials ${className}`,
-		children: SOCIALS().filter((s) => !only || only.includes(s.id)).map((s) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx("a", {
+		children: SOCIALS().filter((s) => !only || only.includes(s.id)).map((s) => /* @__PURE__ */ jsx$1("li", { children: /* @__PURE__ */ jsx$1("a", {
 			href: s.url,
 			target: "_blank",
 			rel: "noopener noreferrer",
 			"aria-label": `${s.label} (se abre en una pestaña nueva)`,
-			children: /* @__PURE__ */ jsx("svg", {
+			children: /* @__PURE__ */ jsx$1("svg", {
 				viewBox: "0 0 24 24",
 				fill: "currentColor",
 				"aria-hidden": "true",
 				style: { color: s.color },
-				children: /* @__PURE__ */ jsx("path", { d: PATHS[s.id] })
+				children: /* @__PURE__ */ jsx$1("path", { d: PATHS$1[s.id] })
 			})
 		}) }, s.id))
 	});
@@ -353,7 +513,7 @@ var NODES = {
 	]
 };
 function Icon({ name, size = 16, className = "", draw = false }) {
-	return /* @__PURE__ */ jsx("svg", {
+	return /* @__PURE__ */ jsx$1("svg", {
 		className: `ico ${className}`,
 		viewBox: "0 0 24 24",
 		width: size,
@@ -366,7 +526,7 @@ function Icon({ name, size = 16, className = "", draw = false }) {
 		"aria-hidden": "true",
 		focusable: "false",
 		children: NODES[name].map(([tag, attrs], i) => {
-			return /* @__PURE__ */ jsx(tag, {
+			return /* @__PURE__ */ jsx$1(tag, {
 				...attrs,
 				...draw ? { pathLength: 1 } : null
 			}, i);
@@ -376,22 +536,22 @@ function Icon({ name, size = 16, className = "", draw = false }) {
 //#endregion
 //#region src/Skyline.jsx
 function Skyline() {
-	return /* @__PURE__ */ jsxs("svg", {
+	return /* @__PURE__ */ jsxs$1("svg", {
 		className: "skyline",
 		viewBox: "0 0 1440 120",
 		preserveAspectRatio: "xMidYMax slice",
 		"aria-hidden": "true",
 		focusable: "false",
 		children: [
-			/* @__PURE__ */ jsx("path", {
+			/* @__PURE__ */ jsx$1("path", {
 				className: "skyline-far",
 				d: "M0 120V74C90 52 170 60 260 66C350 72 400 38 510 34C600 31 650 56 760 58C880 60 930 30 1050 28C1160 26 1220 52 1320 50C1380 49 1415 58 1440 54V120Z"
 			}),
-			/* @__PURE__ */ jsx("path", {
+			/* @__PURE__ */ jsx$1("path", {
 				className: "skyline-mid",
 				d: "M0 120V92C120 72 220 84 330 80C450 76 520 56 640 60C760 64 840 84 960 80C1080 76 1160 60 1290 66C1360 69 1410 78 1440 74V120Z"
 			}),
-			/* @__PURE__ */ jsx("path", {
+			/* @__PURE__ */ jsx$1("path", {
 				className: "skyline-near",
 				d: "M0 120V92H34V120ZM42 120V104H92V120ZM92 120V52H150V120ZM98 120V44H144V120ZM162 120V52H188V120ZM168 120V44H182V120ZM188 120V66H226V120ZM194 120V58H220V120ZM226 120V66H270V120ZM232 120V58H264V120ZM282 120V86H308V120ZM320 120V66H346V120ZM326 120V58H340V120ZM346 120V52H372V120ZM376 120V92H414V120ZM426 120V80H452V120ZM464 120V92H522V120ZM522 120V86H566V120ZM570 120V86H596V120ZM596 120V104H640V120ZM652 120V86H682V120ZM694 120V86H732V120ZM762 120V86H806V120ZM810 120V86H844V120ZM844 120V86H894V120ZM894 120V80H938V120ZM950 120V74H988V120ZM992 120V98H1036V120ZM1036 120V66H1080V120ZM1042 120V58H1074V120ZM1084 120V60H1114V120ZM1090 120V52H1108V120ZM1114 120V52H1172V120ZM1176 120V74H1210V120ZM1222 120V60H1280V120ZM1228 120V52H1274V120ZM1280 120V60H1314V120ZM1314 120V80H1340V120ZM1352 120V60H1402V120ZM1358 120V52H1396V120ZM1410 120V74H1460V120ZM1416 120V66H1454V120ZM708 120V58H716V44H722V30H727V18H730V4H731V0H732V4H734V18H737V30H742V44H748V58H756V120Z"
 			})
@@ -401,7 +561,7 @@ function Skyline() {
 //#endregion
 //#region src/PlayIcon.jsx
 function PlayIcon({ playing, size = 16 }) {
-	return /* @__PURE__ */ jsx("svg", {
+	return /* @__PURE__ */ jsx$1("svg", {
 		className: "ico-play",
 		viewBox: "0 0 24 24",
 		width: size,
@@ -409,11 +569,11 @@ function PlayIcon({ playing, size = 16 }) {
 		fill: "currentColor",
 		"aria-hidden": "true",
 		focusable: "false",
-		children: playing ? /* @__PURE__ */ jsx("path", { d: "M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" }) : /* @__PURE__ */ jsx("path", { d: "M8 5.5v13l10.5-6.5z" })
+		children: playing ? /* @__PURE__ */ jsx$1("path", { d: "M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" }) : /* @__PURE__ */ jsx$1("path", { d: "M8 5.5v13l10.5-6.5z" })
 	});
 }
 function SoundIcon({ on, size = 20 }) {
-	return /* @__PURE__ */ jsxs("svg", {
+	return /* @__PURE__ */ jsxs$1("svg", {
 		className: "ico-sound",
 		viewBox: "0 0 24 24",
 		width: size,
@@ -425,11 +585,11 @@ function SoundIcon({ on, size = 20 }) {
 		strokeLinejoin: "round",
 		"aria-hidden": "true",
 		focusable: "false",
-		children: [/* @__PURE__ */ jsx("path", {
+		children: [/* @__PURE__ */ jsx$1("path", {
 			d: "M4 9.5h3.5L12 6v12l-4.5-3.5H4z",
 			fill: "currentColor",
 			stroke: "none"
-		}), on ? /* @__PURE__ */ jsx("path", { d: "M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" }) : /* @__PURE__ */ jsx("path", { d: "M16 9.5l5 5M21 9.5l-5 5" })]
+		}), on ? /* @__PURE__ */ jsx$1("path", { d: "M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" }) : /* @__PURE__ */ jsx$1("path", { d: "M16 9.5l5 5M21 9.5l-5 5" })]
 	});
 }
 //#endregion
@@ -490,15 +650,15 @@ var ITEMS = [
 	}
 ];
 function Item({ item, hidden }) {
-	return /* @__PURE__ */ jsx("li", {
+	return /* @__PURE__ */ jsx$1("li", {
 		"aria-hidden": hidden || void 0,
 		className: "ally",
-		children: item.text ? /* @__PURE__ */ jsx("span", {
+		children: item.text ? /* @__PURE__ */ jsx$1("span", {
 			className: "ally-rnt",
 			children: item.name
-		}) : /* @__PURE__ */ jsx("span", {
+		}) : /* @__PURE__ */ jsx$1("span", {
 			className: `ally-chip ${item.dark ? "is-dark" : ""}`,
-			children: /* @__PURE__ */ jsx("img", {
+			children: /* @__PURE__ */ jsx$1("img", {
 				src: `/media/marca/${item.logo}`,
 				alt: hidden ? "" : item.name,
 				width: item.w,
@@ -511,33 +671,33 @@ function Item({ item, hidden }) {
 }
 function Allies() {
 	const [paused, setPaused] = useState(false);
-	return /* @__PURE__ */ jsxs("section", {
+	return /* @__PURE__ */ jsxs$1("section", {
 		className: "allies wrap",
 		"aria-label": "Aliados y reconocimientos",
-		children: [/* @__PURE__ */ jsx("div", {
+		children: [/* @__PURE__ */ jsx$1("div", {
 			className: `allies-viewport ${paused ? "is-paused" : ""}`,
-			children: /* @__PURE__ */ jsxs("div", {
+			children: /* @__PURE__ */ jsxs$1("div", {
 				className: "allies-track",
-				children: [/* @__PURE__ */ jsx("ul", {
+				children: [/* @__PURE__ */ jsx$1("ul", {
 					role: "list",
-					children: ITEMS.map((i) => /* @__PURE__ */ jsx(Item, { item: i }, i.name))
-				}), /* @__PURE__ */ jsx("ul", {
+					children: ITEMS.map((i) => /* @__PURE__ */ jsx$1(Item, { item: i }, i.name))
+				}), /* @__PURE__ */ jsx$1("ul", {
 					role: "list",
 					"aria-hidden": "true",
 					className: "allies-copy",
-					children: ITEMS.map((i) => /* @__PURE__ */ jsx(Item, {
+					children: ITEMS.map((i) => /* @__PURE__ */ jsx$1(Item, {
 						item: i,
 						hidden: true
 					}, i.name))
 				})]
 			})
-		}), /* @__PURE__ */ jsx("button", {
+		}), /* @__PURE__ */ jsx$1("button", {
 			type: "button",
 			className: "allies-pause",
 			"aria-pressed": paused,
 			"aria-label": paused ? "Reanudar el movimiento de los aliados" : "Pausar el movimiento de los aliados",
 			onClick: () => setPaused(!paused),
-			children: /* @__PURE__ */ jsx(PlayIcon, { playing: !paused })
+			children: /* @__PURE__ */ jsx$1(PlayIcon, { playing: !paused })
 		})]
 	});
 }
@@ -832,6 +992,359 @@ function textoFase(id) {
 	};
 }
 //#endregion
+//#region src/scroll-bus.js
+var subs = /* @__PURE__ */ new Set();
+var raf = 0;
+var bound = false;
+var dirty = false;
+var lastY = -1;
+var lastVH = -1;
+var ro = null;
+var frame = () => {
+	raf = 0;
+	if (document.hidden) return;
+	const y = window.scrollY, vh = window.innerHeight, force = vh !== lastVH;
+	let measured = false;
+	for (const s of subs) if (s.on && (s.needsMeasure || dirty)) {
+		s.measure?.();
+		s.needsMeasure = false;
+		measured = true;
+	}
+	dirty = false;
+	if (y === lastY && !force && !measured) {
+		for (const s of subs) if (s.on && s.fresh) {
+			s.update(y, vh);
+			s.fresh = false;
+		}
+		return;
+	}
+	lastY = y;
+	lastVH = vh;
+	for (const s of subs) if (s.on) {
+		s.update(y, vh);
+		s.fresh = false;
+	}
+};
+var kick = () => {
+	if (!raf) raf = requestAnimationFrame(frame);
+};
+var onResize = () => {
+	dirty = true;
+	kick();
+};
+var bind = () => {
+	if (bound) return;
+	bound = true;
+	window.addEventListener("scroll", kick, { passive: true });
+	window.addEventListener("resize", onResize);
+	document.addEventListener("visibilitychange", kick);
+	ro = new ResizeObserver(onResize);
+	ro.observe(document.body);
+	document.fonts?.ready.then(onResize);
+};
+var unbind = () => {
+	if (!bound || subs.size) return;
+	bound = false;
+	window.removeEventListener("scroll", kick);
+	window.removeEventListener("resize", onResize);
+	document.removeEventListener("visibilitychange", kick);
+	ro?.disconnect();
+	ro = null;
+	cancelAnimationFrame(raf);
+	raf = 0;
+	lastY = -1;
+};
+/** `el`: elemento que gobierna la visibilidad (o null = siempre activo); `margin`: px extra alrededor de la ventana. Devuelve la función que desregistra. */
+function watchScroll({ el = null, margin = 240, measure, update }) {
+	const s = {
+		on: !el,
+		needsMeasure: true,
+		fresh: true,
+		measure,
+		update
+	};
+	subs.add(s);
+	bind();
+	let io = null;
+	if (el) {
+		io = new IntersectionObserver(([e]) => {
+			const on = e.isIntersecting;
+			if (on && !s.on) {
+				s.needsMeasure = true;
+				s.fresh = true;
+			}
+			s.on = on;
+			if (on) {
+				lastY = -1;
+				kick();
+			}
+		}, { rootMargin: `${margin}px 0px` });
+		io.observe(el);
+	}
+	lastY = -1;
+	kick();
+	return () => {
+		io?.disconnect();
+		subs.delete(s);
+		unbind();
+	};
+}
+/** Coordenada de documento del borde superior de un elemento (lectura de layout: solo dentro de `measure`). */
+var docTop = (el) => el.getBoundingClientRect().top + window.scrollY;
+var clamp01 = (v) => v < 0 ? 0 : v > 1 ? 1 : v;
+//#endregion
+//#region src/PremiumMotion.jsx
+var reducedQuery = () => window.matchMedia("(prefers-reduced-motion: reduce)");
+var subscribeLight = (notify) => {
+	const mq = reducedQuery();
+	mq.addEventListener("change", notify);
+	return () => mq.removeEventListener("change", notify);
+};
+var readLight = () => reducedQuery().matches;
+function useLightMotion() {
+	return useSyncExternalStore(subscribeLight, readLight, () => false);
+}
+var noSubscribe = () => () => {};
+function useMounted() {
+	return useSyncExternalStore(noSubscribe, () => true, () => false);
+}
+function useMedia(query, server = false) {
+	return useSyncExternalStore((notify) => {
+		const mq = window.matchMedia(query);
+		mq.addEventListener("change", notify);
+		return () => mq.removeEventListener("change", notify);
+	}, () => window.matchMedia(query).matches, () => server);
+}
+function EditorialMotion({ children, className = "" }) {
+	const ref = useRef(null), light = useLightMotion();
+	useEffect(() => {
+		const node = ref.current;
+		if (light || !node) return;
+		let top = 0, h = 1, last = -1;
+		const stop = watchScroll({
+			el: node,
+			margin: 0,
+			measure: () => {
+				top = docTop(node);
+				h = node.offsetHeight || 1;
+			},
+			update: (y) => {
+				const p = Math.round(clamp01((y - top) / h) * 200) / 200;
+				if (p === last) return;
+				last = p;
+				node.style.setProperty("--editorial-shift", `${p * 4}vw`);
+				node.style.setProperty("--photo-shift", `${p * -24}px`);
+			}
+		});
+		return () => {
+			stop();
+			node.style.removeProperty("--editorial-shift");
+			node.style.removeProperty("--photo-shift");
+		};
+	}, [light]);
+	return /* @__PURE__ */ jsx$1("section", {
+		ref,
+		className: `editorial-motion ${className}`,
+		children
+	});
+}
+function measureWidth(host, text) {
+	const m = document.createElement("span");
+	m.textContent = text;
+	m.setAttribute("aria-hidden", "true");
+	m.style.cssText = "position:absolute;left:0;top:0;visibility:hidden;white-space:nowrap;font:800 100px/1 Montserrat,Arial,sans-serif;letter-spacing:-.04em";
+	host.appendChild(m);
+	const w = m.getBoundingClientRect().width / 100;
+	m.remove();
+	return w;
+}
+function fitMarquee(host, text) {
+	const cs = getComputedStyle(host), avail = host.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+	if (avail <= 0) return null;
+	const target = avail * .92, one = Math.min(128, target / measureWidth(host, text));
+	if (one >= 28 || innerWidth >= 900) return {
+		size: one,
+		lines: [text]
+	};
+	const words = text.split(" ");
+	let best = null;
+	for (let i = 1; i < words.length; i++) {
+		const a = words.slice(0, i).join(" "), b = words.slice(i).join(" "), w = Math.max(measureWidth(host, a), measureWidth(host, b));
+		if (!best || w < best.w) best = {
+			w,
+			lines: [a, b]
+		};
+	}
+	return best ? {
+		size: Math.min(128, target / best.w),
+		lines: best.lines
+	} : {
+		size: one,
+		lines: [text]
+	};
+}
+function Marquee({ text }) {
+	const ref = useRef(null), light = useLightMotion(), [fit, setFit] = useState({
+		size: 56,
+		lines: [text]
+	});
+	useLayoutEffect(() => {
+		const node = ref.current;
+		if (!node) return;
+		let alive = true;
+		const run = () => {
+			if (!alive) return;
+			const f = fitMarquee(node, text);
+			if (f) setFit((prev) => prev.size === f.size && prev.lines.join("|") === f.lines.join("|") ? prev : f);
+		};
+		run();
+		document.fonts?.ready.then(run);
+		const ro = new ResizeObserver(run);
+		ro.observe(node);
+		return () => {
+			alive = false;
+			ro.disconnect();
+		};
+	}, [text]);
+	useEffect(() => {
+		const node = ref.current;
+		if (light || !node) return;
+		let top = 0, h = 1, last = -1;
+		const stop = watchScroll({
+			el: node,
+			margin: 0,
+			measure: () => {
+				top = docTop(node);
+				h = node.offsetHeight || 1;
+			},
+			update: (y, vh) => {
+				const p = Math.round(clamp01((y + vh - top) / (vh + h)) * 500) / 500;
+				if (p === last) return;
+				last = p;
+				node.style.setProperty("--mq-p", p.toFixed(3));
+			}
+		});
+		return () => {
+			stop();
+			node.style.removeProperty("--mq-p");
+		};
+	}, [light]);
+	return /* @__PURE__ */ jsx$1("section", {
+		ref,
+		className: "place-marquee",
+		children: /* @__PURE__ */ jsx$1("p", {
+			"aria-hidden": "true",
+			style: { fontSize: `${fit.size.toFixed(2)}px` },
+			children: fit.lines.map((l) => /* @__PURE__ */ jsx$1("span", { children: l }, l))
+		})
+	});
+}
+function Manifesto({ words }) {
+	return /* @__PURE__ */ jsx$1("section", {
+		className: "manifesto wrap",
+		"aria-label": words.map((w) => t(w)).join(" "),
+		children: words.map((word) => /* @__PURE__ */ jsx$1(EditorialMotion, { children: /* @__PURE__ */ jsx$1("p", { children: word }) }, word))
+	});
+}
+function Trust() {
+	return /* @__PURE__ */ jsx$1("div", {
+		className: "trust wrap",
+		children: /* @__PURE__ */ jsx$1("p", { children: "Tours 100% privados · Guía-conductor exclusivo · Horarios flexibles" })
+	});
+}
+function useFlipGrid(ref, keys) {
+	const previous = useRef(/* @__PURE__ */ new Map()), light = useLightMotion();
+	useLayoutEffect(() => {
+		const node = ref.current;
+		if (!node) return;
+		const next = /* @__PURE__ */ new Map(), animations = [];
+		for (const card of node.querySelectorAll("[data-flip-key]")) {
+			card.getAnimations().forEach((a) => a.cancel());
+			const key = card.dataset.flipKey, to = card.getBoundingClientRect(), from = previous.current.get(key);
+			next.set(key, to);
+			if (!light && card.animate) {
+				const first = from ? {
+					transform: `translate(${from.left - to.left}px,${from.top - to.top}px) scale(${from.width / to.width},${from.height / to.height})`,
+					opacity: 1
+				} : {
+					transform: "translateY(16px)",
+					opacity: 0
+				};
+				animations.push(card.animate([first, {
+					transform: "none",
+					opacity: 1
+				}], {
+					duration: 450,
+					easing: "cubic-bezier(.77,0,.175,1)"
+				}));
+			}
+		}
+		previous.current = next;
+		return () => animations.forEach((a) => a.cancel());
+	}, [
+		keys,
+		light,
+		ref
+	]);
+}
+//#endregion
+//#region src/QuoteCopy.jsx
+function QuoteCopy({ withType = false }) {
+	return /* @__PURE__ */ jsxs$1("div", {
+		className: "quote-copy",
+		children: [
+			/* @__PURE__ */ jsx$1(Trust, {}),
+			/* @__PURE__ */ jsx$1("p", {
+				className: "eyebrow",
+				children: "Hecho para ti"
+			}),
+			/* @__PURE__ */ jsx$1("h2", { children: withType ? /* @__PURE__ */ jsxs$1(Fragment$1, { children: [
+				"Cuéntanos qué",
+				/* @__PURE__ */ jsx$1("br", {}),
+				"necesitas"
+			] }) : /* @__PURE__ */ jsxs$1(Fragment$1, { children: [
+				"Tu experiencia",
+				/* @__PURE__ */ jsx$1("br", {}),
+				"empieza con una",
+				/* @__PURE__ */ jsx$1("br", {}),
+				/* @__PURE__ */ jsx$1("em", { children: "conversación" })
+			] }) }),
+			/* @__PURE__ */ jsx$1("p", { children: withType ? "Elige el tipo de solicitud y completa tus datos. Te dejamos el mensaje listo en WhatsApp para que solo pulses Enviar." : "Completa tus datos y te dejamos el mensaje listo en WhatsApp para que solo pulses Enviar." }),
+			/* @__PURE__ */ jsx$1("a", {
+				href: `tel:${company.phone.replaceAll(" ", "")}`,
+				className: "contact-number",
+				children: company.phone
+			}),
+			/* @__PURE__ */ jsx$1("small", { children: "La disponibilidad y el valor se confirman con el equipo." })
+		]
+	});
+}
+//#endregion
+//#region src/Arrow.jsx
+var PATHS = {
+	ne: "M7 17 17 7M8 7h9v9",
+	right: "M5 12h14M13 6l6 6-6 6",
+	left: "M19 12H5M11 6l-6 6 6 6",
+	down: "M12 5v14M6 13l6 6 6-6",
+	up: "M12 19V5M6 11l6-6 6 6"
+};
+function Arrow({ dir = "ne" }) {
+	return /* @__PURE__ */ jsx$1("svg", {
+		className: "ico-arrow",
+		viewBox: "0 0 24 24",
+		width: "18",
+		height: "18",
+		fill: "none",
+		stroke: "currentColor",
+		strokeWidth: "1.75",
+		strokeLinecap: "round",
+		strokeLinejoin: "round",
+		"aria-hidden": "true",
+		focusable: "false",
+		children: /* @__PURE__ */ jsx$1("path", { d: PATHS[dir] })
+	});
+}
+//#endregion
 //#region src/CardExtras.jsx
 var RATING = 5;
 var reviewsText = () => language() === "pt-BR" ? "265 avaliações no Google" : language() === "en" ? "265 Google reviews" : "265 reseñas en Google";
@@ -842,7 +1355,7 @@ function GoogleBadge({ className = "" }) {
 		maximumFractionDigits: 1
 	});
 	const label = fullLabel(figure);
-	return /* @__PURE__ */ jsxs("a", {
+	return /* @__PURE__ */ jsxs$1("a", {
 		className: `card-google ${className}`,
 		href: company.reviews,
 		target: "_blank",
@@ -850,16 +1363,16 @@ function GoogleBadge({ className = "" }) {
 		"aria-label": label,
 		title: label,
 		children: [
-			/* @__PURE__ */ jsx("span", {
+			/* @__PURE__ */ jsx$1("span", {
 				className: "card-google-stars",
 				"aria-hidden": "true",
 				children: "★★★★★"
 			}),
-			/* @__PURE__ */ jsx("span", {
+			/* @__PURE__ */ jsx$1("span", {
 				"aria-hidden": "true",
 				children: figure
 			}),
-			/* @__PURE__ */ jsxs("span", {
+			/* @__PURE__ */ jsxs$1("span", {
 				"aria-hidden": "true",
 				className: "card-google-brand",
 				children: ["· ", reviewsText()]
@@ -873,21 +1386,21 @@ function GoogleBadgeStatic({ className = "" }) {
 		maximumFractionDigits: 1
 	});
 	const label = fullLabel(figure);
-	return /* @__PURE__ */ jsxs("span", {
+	return /* @__PURE__ */ jsxs$1("span", {
 		className: `card-google card-google--static ${className}`,
 		role: "img",
 		"aria-label": label,
 		children: [
-			/* @__PURE__ */ jsx("span", {
+			/* @__PURE__ */ jsx$1("span", {
 				className: "card-google-stars",
 				"aria-hidden": "true",
 				children: "★★★★★"
 			}),
-			/* @__PURE__ */ jsx("span", {
+			/* @__PURE__ */ jsx$1("span", {
 				"aria-hidden": "true",
 				children: figure
 			}),
-			/* @__PURE__ */ jsxs("span", {
+			/* @__PURE__ */ jsxs$1("span", {
 				"aria-hidden": "true",
 				className: "card-google-brand",
 				children: ["· ", reviewsText()]
@@ -897,7 +1410,7 @@ function GoogleBadgeStatic({ className = "" }) {
 }
 var FACEBOOK = "M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z";
 var X_PATH = "M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z";
-var Brand = ({ d, size = 18 }) => /* @__PURE__ */ jsx("svg", {
+var Brand = ({ d, size = 18 }) => /* @__PURE__ */ jsx$1("svg", {
 	className: "ico",
 	viewBox: "0 0 24 24",
 	width: size,
@@ -905,7 +1418,7 @@ var Brand = ({ d, size = 18 }) => /* @__PURE__ */ jsx("svg", {
 	fill: "currentColor",
 	"aria-hidden": "true",
 	focusable: "false",
-	children: /* @__PURE__ */ jsx("path", { d })
+	children: /* @__PURE__ */ jsx$1("path", { d })
 });
 function shareUrl(path) {
 	let origin = location.origin;
@@ -1010,7 +1523,7 @@ function ShareMenu({ name: rawName, path, className = "" }) {
 		...native ? [{
 			id: "native",
 			label: tx.more,
-			icon: /* @__PURE__ */ jsx(Icon, {
+			icon: /* @__PURE__ */ jsx$1(Icon, {
 				name: "more",
 				size: 18
 			}),
@@ -1028,7 +1541,7 @@ function ShareMenu({ name: rawName, path, className = "" }) {
 		{
 			id: "wa",
 			label: "WhatsApp",
-			icon: /* @__PURE__ */ jsx(SocialIcon, {
+			icon: /* @__PURE__ */ jsx$1(SocialIcon, {
 				id: "whatsapp",
 				size: 18
 			}),
@@ -1037,19 +1550,19 @@ function ShareMenu({ name: rawName, path, className = "" }) {
 		{
 			id: "fb",
 			label: "Facebook",
-			icon: /* @__PURE__ */ jsx(Brand, { d: FACEBOOK }),
+			icon: /* @__PURE__ */ jsx$1(Brand, { d: FACEBOOK }),
 			run: () => openNew(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url())}`)
 		},
 		{
 			id: "x",
 			label: "X",
-			icon: /* @__PURE__ */ jsx(Brand, { d: X_PATH }),
+			icon: /* @__PURE__ */ jsx$1(Brand, { d: X_PATH }),
 			run: () => openNew(`https://x.com/intent/post?text=${encodeURIComponent(text())}&url=${encodeURIComponent(url())}`)
 		},
 		{
 			id: "ig",
 			label: "Instagram",
-			icon: /* @__PURE__ */ jsx(SocialIcon, {
+			icon: /* @__PURE__ */ jsx$1(SocialIcon, {
 				id: "instagram",
 				size: 18
 			}),
@@ -1061,7 +1574,7 @@ function ShareMenu({ name: rawName, path, className = "" }) {
 		{
 			id: "tt",
 			label: "TikTok",
-			icon: /* @__PURE__ */ jsx(SocialIcon, {
+			icon: /* @__PURE__ */ jsx$1(SocialIcon, {
 				id: "tiktok",
 				size: 18
 			}),
@@ -1073,7 +1586,7 @@ function ShareMenu({ name: rawName, path, className = "" }) {
 		{
 			id: "mail",
 			label: tx.mail,
-			icon: /* @__PURE__ */ jsx(Icon, {
+			icon: /* @__PURE__ */ jsx$1(Icon, {
 				name: "mail",
 				size: 18
 			}),
@@ -1085,7 +1598,7 @@ function ShareMenu({ name: rawName, path, className = "" }) {
 		{
 			id: "copy",
 			label: tx.copy,
-			icon: /* @__PURE__ */ jsx(Icon, {
+			icon: /* @__PURE__ */ jsx$1(Icon, {
 				name: "link",
 				size: 18
 			}),
@@ -1114,7 +1627,7 @@ function ShareMenu({ name: rawName, path, className = "" }) {
 			els[(i + (e.shiftKey ? -1 : 1) + els.length) % els.length].focus();
 		}
 	};
-	return /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx("button", {
+	return /* @__PURE__ */ jsxs$1(Fragment$1, { children: [/* @__PURE__ */ jsx$1("button", {
 		ref: btn,
 		type: "button",
 		className: `card-share ${className}`,
@@ -1122,11 +1635,11 @@ function ShareMenu({ name: rawName, path, className = "" }) {
 		"aria-haspopup": "menu",
 		"aria-expanded": open,
 		onClick: () => open ? close() : setOpen(true),
-		children: /* @__PURE__ */ jsx(Icon, {
+		children: /* @__PURE__ */ jsx$1(Icon, {
 			name: "share",
 			size: 18
 		})
-	}), open && pos && createPortal(/* @__PURE__ */ jsxs("div", {
+	}), open && pos && createPortal(/* @__PURE__ */ jsxs$1("div", {
 		ref: menu,
 		className: "share-menu",
 		role: "menu",
@@ -1137,19 +1650,19 @@ function ShareMenu({ name: rawName, path, className = "" }) {
 		},
 		onKeyDown: onKey,
 		children: [
-			/* @__PURE__ */ jsx("p", {
+			/* @__PURE__ */ jsx$1("p", {
 				className: "share-menu-title",
 				"aria-hidden": "true",
 				children: tx.title
 			}),
-			items.map((it) => /* @__PURE__ */ jsxs("button", {
+			items.map((it) => /* @__PURE__ */ jsxs$1("button", {
 				type: "button",
 				role: "menuitem",
 				className: "share-item",
 				onClick: it.run,
-				children: [it.icon, /* @__PURE__ */ jsx("span", { children: it.label })]
+				children: [it.icon, /* @__PURE__ */ jsx$1("span", { children: it.label })]
 			}, it.id)),
-			/* @__PURE__ */ jsx("p", {
+			/* @__PURE__ */ jsx$1("p", {
 				className: "share-notice",
 				role: "status",
 				"aria-live": "polite",
@@ -1167,14 +1680,14 @@ var hiddenByCover = (photo, frame) => {
 };
 //#endregion
 //#region src/shared.jsx
-var Quote = lazy(() => import("./assets/Quote-BKZCSNfj.js"));
+var Quote = lazy(() => import("./assets/Quote-FI1-YxdS.js"));
 var reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 function Picture({ photo, alt, priority = false, className = "", native = false, sizes = "(max-width: 700px) 100vw, 65vw", frame = 0, max = .5 }) {
 	if (!photo) return null;
-	if (frame && hiddenByCover(photo, frame) > max) return /* @__PURE__ */ jsx("span", {
+	if (frame && hiddenByCover(photo, frame) > max) return /* @__PURE__ */ jsx$1("span", {
 		className: "pic-fit",
 		style: { "--ph": `url(${photo.small || photo.src})` },
-		children: /* @__PURE__ */ jsx(Picture, {
+		children: /* @__PURE__ */ jsx$1(Picture, {
 			photo,
 			alt,
 			priority,
@@ -1183,10 +1696,9 @@ function Picture({ photo, alt, priority = false, className = "", native = false,
 			sizes
 		})
 	});
-	const style = native ? { maxWidth: `min(100%, ${photo.width}px)` } : photo.focus ? { objectPosition: photo.focus } : void 0;
-	return /* @__PURE__ */ jsx("img", {
+	return /* @__PURE__ */ jsx$1("img", {
 		className,
-		style,
+		style: native ? { maxWidth: `min(100%, ${photo.width}px)` } : photo.focus ? { objectPosition: photo.focus } : void 0,
 		src: photo.src,
 		srcSet: photo.srcset || `${photo.small} 640w, ${photo.src} ${photo.width}w`,
 		sizes,
@@ -1199,17 +1711,17 @@ function Picture({ photo, alt, priority = false, className = "", native = false,
 	});
 }
 function Eyebrow({ children }) {
-	return /* @__PURE__ */ jsx("p", {
+	return /* @__PURE__ */ jsx$1("p", {
 		className: "eyebrow",
 		children
 	});
 }
 function Button({ to, children, ...props }) {
-	return /* @__PURE__ */ jsxs(Link, {
+	return /* @__PURE__ */ jsxs$1(Link, {
 		className: "button",
 		to,
 		...props,
-		children: [children, /* @__PURE__ */ jsx(Arrow, {})]
+		children: [children, /* @__PURE__ */ jsx$1(Arrow, {})]
 	});
 }
 function Rail({ children, label }) {
@@ -1218,24 +1730,24 @@ function Rail({ children, label }) {
 		left: d * ref.current.clientWidth * .8,
 		behavior: reduced() ? "instant" : "smooth"
 	});
-	return /* @__PURE__ */ jsxs("div", {
+	return /* @__PURE__ */ jsxs$1("div", {
 		className: "rail-shell",
-		children: [/* @__PURE__ */ jsxs("div", {
+		children: [/* @__PURE__ */ jsxs$1("div", {
 			className: "rail-controls",
 			children: [
-				/* @__PURE__ */ jsx("span", { children: "Explora a tu ritmo" }),
-				/* @__PURE__ */ jsx("button", {
+				/* @__PURE__ */ jsx$1("span", { children: "Explora a tu ritmo" }),
+				/* @__PURE__ */ jsx$1("button", {
 					onClick: () => move(-1),
 					"aria-label": `Anterior: ${label}`,
-					children: /* @__PURE__ */ jsx(Arrow, { dir: "left" })
+					children: /* @__PURE__ */ jsx$1(Arrow, { dir: "left" })
 				}),
-				/* @__PURE__ */ jsx("button", {
+				/* @__PURE__ */ jsx$1("button", {
 					onClick: () => move(1),
 					"aria-label": `Siguiente: ${label}`,
-					children: /* @__PURE__ */ jsx(Arrow, { dir: "right" })
+					children: /* @__PURE__ */ jsx$1(Arrow, { dir: "right" })
 				})
 			]
-		}), /* @__PURE__ */ jsx("div", {
+		}), /* @__PURE__ */ jsx$1("div", {
 			ref,
 			className: "rail",
 			role: "region",
@@ -1284,90 +1796,90 @@ function Rail({ children, label }) {
 }
 function TourCard({ tour }) {
 	const copy = inicioTextos.cartas[tour.slug];
-	return /* @__PURE__ */ jsxs("article", {
+	return /* @__PURE__ */ jsxs$1("article", {
 		className: "tour-card",
 		"data-flip-key": tour.slug,
 		children: [
-			/* @__PURE__ */ jsxs(Link, {
+			/* @__PURE__ */ jsxs$1(Link, {
 				className: "tour-card-main",
 				to: `${tourPath(tour.slug)}`,
-				children: [/* @__PURE__ */ jsx("div", {
+				children: [/* @__PURE__ */ jsx$1("div", {
 					className: "tour-card-image",
-					children: tour.hero ? /* @__PURE__ */ jsx(Picture, {
+					children: tour.hero ? /* @__PURE__ */ jsx$1(Picture, {
 						photo: tour.hero,
 						alt: tour.name,
 						sizes: "(max-width: 700px) 100vw, (max-width: 1099px) 50vw, 33vw"
-					}) : /* @__PURE__ */ jsxs("div", {
+					}) : /* @__PURE__ */ jsxs$1("div", {
 						className: "tour-card-ph",
 						role: "img",
 						"aria-label": tour.name,
-						children: [/* @__PURE__ */ jsxs("svg", {
+						children: [/* @__PURE__ */ jsxs$1("svg", {
 							viewBox: "0 0 120 80",
 							"aria-hidden": "true",
 							focusable: "false",
-							children: [/* @__PURE__ */ jsx("path", { d: "M6 66 38 26l18 22 14-16 44 34Z" }), /* @__PURE__ */ jsx("circle", {
+							children: [/* @__PURE__ */ jsx$1("path", { d: "M6 66 38 26l18 22 14-16 44 34Z" }), /* @__PURE__ */ jsx$1("circle", {
 								cx: "92",
 								cy: "20",
 								r: "7"
 							})]
-						}), /* @__PURE__ */ jsx("b", {
+						}), /* @__PURE__ */ jsx$1("b", {
 							"aria-hidden": "true",
 							children: tour.name
 						})]
 					})
-				}), /* @__PURE__ */ jsxs("div", {
+				}), /* @__PURE__ */ jsxs$1("div", {
 					className: "card-copy",
 					children: [
-						/* @__PURE__ */ jsxs("div", {
+						/* @__PURE__ */ jsxs$1("div", {
 							className: "card-meta",
-							children: [/* @__PURE__ */ jsx("span", { children: tour.category }), /* @__PURE__ */ jsxs("span", { children: [tour.number, " / T&T"] })]
+							children: [/* @__PURE__ */ jsx$1("span", { children: tour.category }), /* @__PURE__ */ jsxs$1("span", { children: [tour.number, " / T&T"] })]
 						}),
-						/* @__PURE__ */ jsx("h3", { children: tour.name }),
-						/* @__PURE__ */ jsxs("p", { children: [
-							/* @__PURE__ */ jsxs("b", { children: [copy.emocion, ":"] }),
+						/* @__PURE__ */ jsx$1("h3", { children: tour.name }),
+						/* @__PURE__ */ jsxs$1("p", { children: [
+							/* @__PURE__ */ jsxs$1("b", { children: [copy.emocion, ":"] }),
 							" ",
 							copy.frase
 						] }),
-						/* @__PURE__ */ jsxs("span", {
+						/* @__PURE__ */ jsxs$1("span", {
 							className: "card-action",
-							children: ["Planea esta experiencia ", /* @__PURE__ */ jsx(Arrow, {})]
+							children: ["Planea esta experiencia ", /* @__PURE__ */ jsx$1(Arrow, {})]
 						})
 					]
 				})]
 			}),
-			/* @__PURE__ */ jsx(ShareMenu, {
+			/* @__PURE__ */ jsx$1(ShareMenu, {
 				name: tour.name,
 				path: `${tourPath(tour.slug)}`,
 				className: "tour-card-share"
 			}),
-			/* @__PURE__ */ jsx(GoogleBadge, { className: "tour-card-badge" })
+			/* @__PURE__ */ jsx$1(GoogleBadge, { className: "tour-card-badge" })
 		]
 	});
 }
 function PageTitle({ tag, title, text, photo, photoAlt = tag, floating = [] }) {
-	return /* @__PURE__ */ jsxs(EditorialMotion, {
+	return /* @__PURE__ */ jsxs$1(EditorialMotion, {
 		className: `page-title wrap ${photo ? "page-title-with-photo" : ""}`,
-		children: [/* @__PURE__ */ jsxs("div", {
+		children: [/* @__PURE__ */ jsxs$1("div", {
 			className: "page-title-copy",
 			children: [
-				/* @__PURE__ */ jsx(Eyebrow, { children: tag }),
-				/* @__PURE__ */ jsx("h1", { children: title }),
-				text && /* @__PURE__ */ jsx("p", { children: text })
+				/* @__PURE__ */ jsx$1(Eyebrow, { children: tag }),
+				/* @__PURE__ */ jsx$1("h1", { children: title }),
+				text && /* @__PURE__ */ jsx$1("p", { children: text })
 			]
-		}), photo && /* @__PURE__ */ jsxs("div", {
+		}), photo && /* @__PURE__ */ jsxs$1("div", {
 			className: "page-title-media",
-			children: [/* @__PURE__ */ jsx("figure", {
+			children: [/* @__PURE__ */ jsx$1("figure", {
 				className: "page-title-card",
-				children: /* @__PURE__ */ jsx(Picture, {
+				children: /* @__PURE__ */ jsx$1(Picture, {
 					photo,
 					alt: photoAlt,
 					priority: true,
 					sizes: "(max-width: 700px) 72vw, 320px"
 				})
-			}), floating.map((p, i) => /* @__PURE__ */ jsx("figure", {
+			}), floating.map((p, i) => /* @__PURE__ */ jsx$1("figure", {
 				className: `editorial-float editorial-float-${i}`,
 				"aria-hidden": "true",
-				children: /* @__PURE__ */ jsx(Picture, {
+				children: /* @__PURE__ */ jsx$1(Picture, {
 					photo: p,
 					alt: "",
 					sizes: "140px"
@@ -1378,20 +1890,20 @@ function PageTitle({ tag, title, text, photo, photoAlt = tag, floating = [] }) {
 }
 function QuoteSection({ context, mode }) {
 	const mounted = useMounted();
-	const frame = /* @__PURE__ */ jsxs("section", {
+	const frame = /* @__PURE__ */ jsxs$1("section", {
 		className: "quote-section wrap",
 		"aria-busy": "true",
-		children: [/* @__PURE__ */ jsx(QuoteCopy, { withType: mode === "contacto" }), /* @__PURE__ */ jsx("div", {
+		children: [/* @__PURE__ */ jsx$1(QuoteCopy, { withType: mode === "contacto" }), /* @__PURE__ */ jsx$1("div", {
 			className: "quote-form quote-form-frame",
 			"aria-hidden": "true"
 		})]
 	});
-	return /* @__PURE__ */ jsx("div", {
+	return /* @__PURE__ */ jsx$1("div", {
 		id: "consulta",
 		"data-tn": "3",
-		children: mounted ? /* @__PURE__ */ jsx(Suspense, {
+		children: mounted ? /* @__PURE__ */ jsx$1(Suspense, {
 			fallback: frame,
-			children: /* @__PURE__ */ jsx(Quote, {
+			children: /* @__PURE__ */ jsx$1(Quote, {
 				context,
 				mode
 			})
@@ -1493,7 +2005,7 @@ function RouteScroll() {
 //#endregion
 //#region src/consent.js
 var CONSENT_KEY = "tyt-privacy-v1";
-var VERSION = 1;
+var VERSION = 2;
 var LIFETIME = 15552e6;
 var memory = null;
 if (typeof window !== "undefined") window.addEventListener("storage", (event) => {
@@ -1503,15 +2015,17 @@ function readConsent() {
 	if (memory && memory.expires > Date.now()) return memory;
 	try {
 		const value = JSON.parse(localStorage.getItem(CONSENT_KEY));
-		if (value?.version === VERSION && typeof value.preferences === "boolean" && value.expires > Date.now()) return value;
+		if (value?.version === VERSION && typeof value.preferences === "boolean" && typeof value.analytics === "boolean" && value.expires > Date.now()) return value;
 	} catch {}
 	return null;
 }
 var allowPreferences = () => readConsent()?.preferences === true;
-function saveConsent(preferences) {
+var allowAnalytics = () => readConsent()?.analytics === true;
+function saveConsent(preferences, analytics) {
 	memory = {
 		version: VERSION,
 		preferences: Boolean(preferences),
+		analytics: Boolean(analytics),
 		expires: Date.now() + LIFETIME
 	};
 	let persisted = false;
@@ -1570,10 +2084,10 @@ function LanguageMenu() {
 		holdScroll();
 		switchLanguage(code);
 	};
-	return /* @__PURE__ */ jsxs("div", {
+	return /* @__PURE__ */ jsxs$1("div", {
 		className: "language-menu",
 		ref: root,
-		children: [/* @__PURE__ */ jsxs("button", {
+		children: [/* @__PURE__ */ jsxs$1("button", {
 			ref: button,
 			type: "button",
 			className: "language-toggle",
@@ -1582,7 +2096,7 @@ function LanguageMenu() {
 			"aria-expanded": open,
 			"aria-label": `${t("Idioma del sitio")}: ${info.label}`,
 			onClick: () => setOpen(!open),
-			children: [/* @__PURE__ */ jsxs("svg", {
+			children: [/* @__PURE__ */ jsxs$1("svg", {
 				"aria-hidden": "true",
 				width: "18",
 				height: "18",
@@ -1590,23 +2104,23 @@ function LanguageMenu() {
 				fill: "none",
 				stroke: "currentColor",
 				strokeWidth: "1.7",
-				children: [/* @__PURE__ */ jsx("circle", {
+				children: [/* @__PURE__ */ jsx$1("circle", {
 					cx: "12",
 					cy: "12",
 					r: "9"
-				}), /* @__PURE__ */ jsx("path", { d: "M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3Z" })]
-			}), /* @__PURE__ */ jsx("span", { children: SHORT[current] })]
-		}), open && /* @__PURE__ */ jsx("ul", {
+				}), /* @__PURE__ */ jsx$1("path", { d: "M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3Z" })]
+			}), /* @__PURE__ */ jsx$1("span", { children: SHORT[current] })]
+		}), open && /* @__PURE__ */ jsx$1("ul", {
 			className: "language-list",
 			role: "list",
-			children: LANGUAGES.map((lang) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsxs("a", {
+			children: LANGUAGES.map((lang) => /* @__PURE__ */ jsx$1("li", { children: /* @__PURE__ */ jsxs$1("a", {
 				href: languagePath(pathname, lang.code) + search + hash,
 				hrefLang: lang.html,
 				lang: lang.html,
 				translate: "no",
 				"aria-current": lang.code === current ? "true" : void 0,
 				onClick: (e) => choose(e, lang.code),
-				children: [/* @__PURE__ */ jsx("span", { children: lang.label }), /* @__PURE__ */ jsx("span", {
+				children: [/* @__PURE__ */ jsx$1("span", { children: lang.label }), /* @__PURE__ */ jsx$1("span", {
 					className: "language-code",
 					"aria-hidden": "true",
 					children: SHORT[lang.code]
@@ -1648,15 +2162,15 @@ function Preferences() {
 			localStorage.setItem("tyt-theme", next ? "dark" : "light");
 		} catch {}
 	};
-	return /* @__PURE__ */ jsxs("div", {
+	return /* @__PURE__ */ jsxs$1("div", {
 		className: "site-preferences",
-		children: [/* @__PURE__ */ jsx("button", {
+		children: [/* @__PURE__ */ jsx$1("button", {
 			type: "button",
 			className: "theme-toggle",
 			"aria-label": dark ? "Activar modo claro" : "Activar modo oscuro",
 			"aria-pressed": dark,
 			onClick: toggle,
-			children: /* @__PURE__ */ jsx("svg", {
+			children: /* @__PURE__ */ jsx$1("svg", {
 				"aria-hidden": "true",
 				width: "20",
 				height: "20",
@@ -1664,26 +2178,26 @@ function Preferences() {
 				fill: "none",
 				stroke: "currentColor",
 				strokeWidth: "1.7",
-				children: dark ? /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx("circle", {
+				children: dark ? /* @__PURE__ */ jsxs$1(Fragment$1, { children: [/* @__PURE__ */ jsx$1("circle", {
 					cx: "12",
 					cy: "12",
 					r: "4"
-				}), /* @__PURE__ */ jsx("path", { d: "M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" })] }) : /* @__PURE__ */ jsx("path", { d: "M20 15A8.5 8.5 0 0 1 9 4a8.5 8.5 0 1 0 11 11Z" })
+				}), /* @__PURE__ */ jsx$1("path", { d: "M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" })] }) : /* @__PURE__ */ jsx$1("path", { d: "M20 15A8.5 8.5 0 0 1 9 4a8.5 8.5 0 1 0 11 11Z" })
 			})
-		}), /* @__PURE__ */ jsx(LanguageMenu, {})]
+		}), /* @__PURE__ */ jsx$1(LanguageMenu, {})]
 	});
 }
 //#endregion
 //#region src/Consent.jsx
 function ConsentLink() {
-	return /* @__PURE__ */ jsx("button", {
+	return /* @__PURE__ */ jsx$1("button", {
 		className: "consent-link",
 		type: "button",
 		onClick: openConsent,
 		children: "Cookies y preferencias"
 	});
 }
-var CookieIcon = () => /* @__PURE__ */ jsxs("svg", {
+var CookieIcon = () => /* @__PURE__ */ jsxs$1("svg", {
 	"aria-hidden": "true",
 	width: "26",
 	height: "26",
@@ -1694,20 +2208,20 @@ var CookieIcon = () => /* @__PURE__ */ jsxs("svg", {
 	strokeLinecap: "round",
 	strokeLinejoin: "round",
 	children: [
-		/* @__PURE__ */ jsx("path", { d: "M12 3a9 9 0 1 0 9 9 4 4 0 0 1-4-4 4 4 0 0 1-4-4 1 1 0 0 0-1-1Z" }),
-		/* @__PURE__ */ jsx("circle", {
+		/* @__PURE__ */ jsx$1("path", { d: "M12 3a9 9 0 1 0 9 9 4 4 0 0 1-4-4 4 4 0 0 1-4-4 1 1 0 0 0-1-1Z" }),
+		/* @__PURE__ */ jsx$1("circle", {
 			cx: "8.5",
 			cy: "11",
 			r: ".9",
 			fill: "currentColor"
 		}),
-		/* @__PURE__ */ jsx("circle", {
+		/* @__PURE__ */ jsx$1("circle", {
 			cx: "12.5",
 			cy: "15.5",
 			r: ".9",
 			fill: "currentColor"
 		}),
-		/* @__PURE__ */ jsx("circle", {
+		/* @__PURE__ */ jsx$1("circle", {
 			cx: "15.5",
 			cy: "12",
 			r: ".9",
@@ -1716,13 +2230,14 @@ var CookieIcon = () => /* @__PURE__ */ jsxs("svg", {
 	]
 });
 function Consent() {
-	const [ready, setReady] = useState(false), [chosen, setChosen] = useState(false), [leaving, setLeaving] = useState(false), [draft, setDraft] = useState(false), [notice, setNotice] = useState("");
+	const [ready, setReady] = useState(false), [chosen, setChosen] = useState(false), [leaving, setLeaving] = useState(false), [draft, setDraft] = useState(false), [draftAnalytics, setDraftAnalytics] = useState(false), [notice, setNotice] = useState("");
 	const banner = useRef(null), dialog = useRef(null), returnFocus = useRef(null);
 	useEffect(() => {
 		setChosen(Boolean(readConsent()));
 		setReady(true);
 		const open = () => {
 			setDraft(readConsent()?.preferences === true);
+			setDraftAnalytics(readConsent()?.analytics === true);
 			returnFocus.current = document.activeElement;
 			dialog.current?.showModal();
 		};
@@ -1755,8 +2270,8 @@ function Consent() {
 		};
 	}, [ready, chosen]);
 	const close = () => dialog.current?.close();
-	const choose = (value) => {
-		const persisted = saveConsent(value);
+	const choose = (preferences, analytics) => {
+		const persisted = saveConsent(preferences, analytics);
 		setNotice(persisted ? "" : "La configuración no pudo guardarse. Se aplicará durante esta visita.");
 		close();
 		if (banner.current && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -1768,37 +2283,37 @@ function Consent() {
 		} else setChosen(true);
 	};
 	if (!ready) return null;
-	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
-		!chosen && /* @__PURE__ */ jsxs("section", {
+	return /* @__PURE__ */ jsxs$1(Fragment$1, { children: [
+		!chosen && /* @__PURE__ */ jsxs$1("section", {
 			ref: banner,
 			className: `consent-banner${leaving ? " is-leaving" : ""}`,
 			"aria-labelledby": "privacy-banner-title",
 			children: [
-				/* @__PURE__ */ jsxs("div", {
+				/* @__PURE__ */ jsxs$1("div", {
 					className: "consent-top",
-					children: [/* @__PURE__ */ jsx("span", {
+					children: [/* @__PURE__ */ jsx$1("span", {
 						className: "consent-icon",
-						children: /* @__PURE__ */ jsx(CookieIcon, {})
-					}), /* @__PURE__ */ jsx("h2", {
+						children: /* @__PURE__ */ jsx$1(CookieIcon, {})
+					}), /* @__PURE__ */ jsx$1("h2", {
 						id: "privacy-banner-title",
 						children: "Tu privacidad"
 					})]
 				}),
-				/* @__PURE__ */ jsx("p", { children: "Usamos almacenamiento local para recordar ajustes del sitio. No usamos analítica ni publicidad. Tú decides si guardamos tu tema preferido." }),
-				/* @__PURE__ */ jsxs("div", {
+				/* @__PURE__ */ jsx$1("p", { children: "Recordamos tus ajustes y, si aceptas, usamos Google Analytics para saber qué páginas se visitan. No enviamos tu nombre, teléfono ni mensajes." }),
+				/* @__PURE__ */ jsxs$1("div", {
 					className: "consent-actions",
 					children: [
-						/* @__PURE__ */ jsx("button", {
+						/* @__PURE__ */ jsx$1("button", {
 							type: "button",
-							onClick: () => choose(true),
+							onClick: () => choose(true, true),
 							children: "Aceptar"
 						}),
-						/* @__PURE__ */ jsx("button", {
+						/* @__PURE__ */ jsx$1("button", {
 							type: "button",
-							onClick: () => choose(false),
+							onClick: () => choose(false, false),
 							children: "Rechazar"
 						}),
-						/* @__PURE__ */ jsx("button", {
+						/* @__PURE__ */ jsx$1("button", {
 							type: "button",
 							onClick: openConsent,
 							children: "Configurar"
@@ -1807,7 +2322,7 @@ function Consent() {
 				})
 			]
 		}),
-		/* @__PURE__ */ jsxs("dialog", {
+		/* @__PURE__ */ jsxs$1("dialog", {
 			ref: dialog,
 			className: "consent-dialog",
 			"aria-labelledby": "privacy-title",
@@ -1817,18 +2332,18 @@ function Consent() {
 				else document.querySelector(".consent-link")?.focus({ preventScroll: true });
 			},
 			children: [
-				/* @__PURE__ */ jsxs("div", {
+				/* @__PURE__ */ jsxs$1("div", {
 					className: "consent-head",
 					children: [
-						/* @__PURE__ */ jsx("span", {
+						/* @__PURE__ */ jsx$1("span", {
 							className: "consent-icon",
-							children: /* @__PURE__ */ jsx(CookieIcon, {})
+							children: /* @__PURE__ */ jsx$1(CookieIcon, {})
 						}),
-						/* @__PURE__ */ jsx("h2", {
+						/* @__PURE__ */ jsx$1("h2", {
 							id: "privacy-title",
 							children: "Preferencias de privacidad"
 						}),
-						/* @__PURE__ */ jsx("button", {
+						/* @__PURE__ */ jsx$1("button", {
 							type: "button",
 							onClick: close,
 							"aria-label": "Cerrar preferencias",
@@ -1836,45 +2351,53 @@ function Consent() {
 						})
 					]
 				}),
-				/* @__PURE__ */ jsx("p", {
+				/* @__PURE__ */ jsx$1("p", {
 					id: "privacy-description",
 					children: "Tu elección se guarda durante seis meses en este navegador."
 				}),
-				/* @__PURE__ */ jsxs("section", { children: [
-					/* @__PURE__ */ jsx("h3", { children: "Necesarias" }),
-					/* @__PURE__ */ jsx("strong", { children: "Siempre activas" }),
-					/* @__PURE__ */ jsx("p", { children: "Guardan tu decisión de privacidad y ajustes funcionales, como reducir el movimiento y la ayuda de navegación." })
+				/* @__PURE__ */ jsxs$1("section", { children: [
+					/* @__PURE__ */ jsx$1("h3", { children: "Necesarias" }),
+					/* @__PURE__ */ jsx$1("strong", { children: "Siempre activas" }),
+					/* @__PURE__ */ jsx$1("p", { children: "Guardan tu decisión de privacidad y ajustes funcionales, como reducir el movimiento y la ayuda de navegación." })
 				] }),
-				/* @__PURE__ */ jsxs("section", { children: [/* @__PURE__ */ jsxs("label", {
+				/* @__PURE__ */ jsxs$1("section", { children: [/* @__PURE__ */ jsxs$1("label", {
 					className: "consent-option",
-					children: [/* @__PURE__ */ jsx("input", {
+					children: [/* @__PURE__ */ jsx$1("input", {
 						type: "checkbox",
 						checked: draft,
 						onChange: (e) => setDraft(e.target.checked)
-					}), /* @__PURE__ */ jsx("strong", { children: "Preferencias" })]
-				}), /* @__PURE__ */ jsx("p", { children: "Recordar el tema claro u oscuro entre visitas." })] }),
-				/* @__PURE__ */ jsxs("section", { children: [/* @__PURE__ */ jsx("h3", { children: "Analítica y publicidad" }), /* @__PURE__ */ jsx("p", { children: "No utilizadas actualmente" })] }),
-				/* @__PURE__ */ jsx(Link, {
+					}), /* @__PURE__ */ jsx$1("strong", { children: "Preferencias" })]
+				}), /* @__PURE__ */ jsx$1("p", { children: "Recordar el tema claro u oscuro entre visitas." })] }),
+				/* @__PURE__ */ jsxs$1("section", { children: [/* @__PURE__ */ jsxs$1("label", {
+					className: "consent-option",
+					children: [/* @__PURE__ */ jsx$1("input", {
+						type: "checkbox",
+						checked: draftAnalytics,
+						onChange: (e) => setDraftAnalytics(e.target.checked)
+					}), /* @__PURE__ */ jsx$1("strong", { children: "Analítica" })]
+				}), /* @__PURE__ */ jsx$1("p", { children: "Google Analytics mide visitas y clics para mejorar el sitio, con cookies como _ga. No enviamos tu nombre, teléfono, correo ni mensajes." })] }),
+				/* @__PURE__ */ jsxs$1("section", { children: [/* @__PURE__ */ jsx$1("h3", { children: "Publicidad" }), /* @__PURE__ */ jsx$1("p", { children: "No utilizada actualmente" })] }),
+				/* @__PURE__ */ jsx$1(Link, {
 					className: "consent-policy",
 					to: "/privacidad",
 					onClick: close,
 					children: "Privacidad"
 				}),
-				/* @__PURE__ */ jsxs("div", {
+				/* @__PURE__ */ jsxs$1("div", {
 					className: "consent-actions",
-					children: [/* @__PURE__ */ jsx("button", {
+					children: [/* @__PURE__ */ jsx$1("button", {
 						type: "button",
-						onClick: () => choose(draft),
+						onClick: () => choose(draft, draftAnalytics),
 						children: "Guardar preferencias"
-					}), /* @__PURE__ */ jsx("button", {
+					}), /* @__PURE__ */ jsx$1("button", {
 						type: "button",
-						onClick: () => choose(false),
+						onClick: () => choose(false, false),
 						children: "Retirar consentimiento"
 					})]
 				})
 			]
 		}),
-		notice && /* @__PURE__ */ jsx("p", {
+		notice && /* @__PURE__ */ jsx$1("p", {
 			className: "consent-notice",
 			role: "status",
 			children: notice
@@ -1902,7 +2425,7 @@ var markSeen = () => {
 		sessionStorage.setItem(KEY, "1");
 	} catch {}
 };
-var Sun = () => /* @__PURE__ */ jsxs("svg", {
+var Sun = () => /* @__PURE__ */ jsxs$1("svg", {
 	"aria-hidden": "true",
 	width: "28",
 	height: "28",
@@ -1911,13 +2434,13 @@ var Sun = () => /* @__PURE__ */ jsxs("svg", {
 	stroke: "currentColor",
 	strokeWidth: "1.8",
 	strokeLinecap: "round",
-	children: [/* @__PURE__ */ jsx("circle", {
+	children: [/* @__PURE__ */ jsx$1("circle", {
 		cx: "12",
 		cy: "12",
 		r: "4.2",
 		fill: "currentColor",
 		fillOpacity: ".22"
-	}), /* @__PURE__ */ jsx("path", { d: "M12 2.5v2.3M12 19.2v2.3M2.5 12h2.3M19.2 12h2.3M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" })]
+	}), /* @__PURE__ */ jsx$1("path", { d: "M12 2.5v2.3M12 19.2v2.3M2.5 12h2.3M19.2 12h2.3M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" })]
 });
 function Welcome() {
 	const { pathname } = useLocation();
@@ -1974,38 +2497,38 @@ function Welcome() {
 		document.addEventListener("keydown", key);
 		return () => document.removeEventListener("keydown", key);
 	}, [open]);
-	return /* @__PURE__ */ jsx("div", {
+	return /* @__PURE__ */ jsx$1("div", {
 		className: "welcome-live",
 		role: "status",
 		"aria-live": "polite",
-		children: open && !blocked && /* @__PURE__ */ jsxs("aside", {
+		children: open && !blocked && /* @__PURE__ */ jsxs$1("aside", {
 			ref: card,
 			className: `welcome${leaving ? " is-leaving" : ""}`,
 			"aria-labelledby": "welcome-title",
 			children: [
-				/* @__PURE__ */ jsx("button", {
+				/* @__PURE__ */ jsx$1("button", {
 					type: "button",
 					className: "welcome-close",
 					onClick: close,
 					"aria-label": "Cerrar mensaje de bienvenida",
-					children: /* @__PURE__ */ jsx("span", {
+					children: /* @__PURE__ */ jsx$1("span", {
 						"aria-hidden": "true",
 						children: "×"
 					})
 				}),
-				/* @__PURE__ */ jsx("span", {
+				/* @__PURE__ */ jsx$1("span", {
 					className: "welcome-icon",
-					children: /* @__PURE__ */ jsx(Sun, {})
+					children: /* @__PURE__ */ jsx$1(Sun, {})
 				}),
-				/* @__PURE__ */ jsxs("div", {
+				/* @__PURE__ */ jsxs$1("div", {
 					className: "welcome-body",
 					children: [
-						/* @__PURE__ */ jsx("h2", {
+						/* @__PURE__ */ jsx$1("h2", {
 							id: "welcome-title",
 							children: "No dejes para mañana lo que puedes disfrutar hoy"
 						}),
-						/* @__PURE__ */ jsx("p", { children: "Elige un destino y cotiza por WhatsApp en un minuto." }),
-						/* @__PURE__ */ jsx(Link, {
+						/* @__PURE__ */ jsx$1("p", { children: "Elige un destino y cotiza por WhatsApp en un minuto." }),
+						/* @__PURE__ */ jsx$1(Link, {
 							className: "welcome-cta",
 							to: "/tours",
 							onClick: () => setOpen(false),
@@ -2038,7 +2561,7 @@ function WhatsAppFab() {
 			mo.disconnect();
 		};
 	}, []);
-	return /* @__PURE__ */ jsxs("a", {
+	return /* @__PURE__ */ jsxs$1("a", {
 		ref,
 		className: "wa-fab",
 		"data-hidden": "false",
@@ -2046,10 +2569,10 @@ function WhatsAppFab() {
 		target: "_blank",
 		rel: "noopener noreferrer",
 		"aria-label": "Escribir por WhatsApp",
-		children: [/* @__PURE__ */ jsx(SocialIcon, {
+		children: [/* @__PURE__ */ jsx$1(SocialIcon, {
 			id: "whatsapp",
 			size: 32
-		}), /* @__PURE__ */ jsx("span", {
+		}), /* @__PURE__ */ jsx$1("span", {
 			className: "wa-label",
 			"aria-hidden": "true",
 			children: language() === "pt-BR" ? "Vamos conversar?" : language() === "en" ? "Shall we talk?" : "¿Hablamos?"
@@ -2060,7 +2583,7 @@ function WhatsAppFab() {
 //#region src/Logo.jsx
 var LOGO_SRCSET = "/media/marca/logo/logo-40.webp 40w, /media/marca/logo/logo-44.webp 44w, /media/marca/logo/logo-56.webp 56w, /media/marca/logo/logo-80.webp 80w, /media/marca/logo/logo-88.webp 88w, /media/marca/logo/logo-112.webp 112w, /media/marca/logo/logo-120.webp 120w, /media/marca/logo/logo-132.webp 132w, /media/marca/logo/logo-168.webp 168w, /media/marca/logo/logo-224.webp 224w, /media/marca/logo/logo-240.webp 240w, /media/marca/logo/logo-336.webp 336w, /media/marca/logo/logo-360.webp 360w, /media/marca/logo/logo-400.webp 400w";
 function Logo({ size, sizes, className = "", lazy = false }) {
-	return /* @__PURE__ */ jsx("img", {
+	return /* @__PURE__ */ jsx$1("img", {
 		className: `logo-mark ${className}`,
 		fetchPriority: lazy ? void 0 : "low",
 		loading: lazy ? "lazy" : void 0,
@@ -2083,28 +2606,28 @@ function lazyRoute(loader) {
 	}));
 	const Lazy = lazy(() => preload().then((component) => ({ default: component })));
 	function Route() {
-		return useRef(Loaded !== null).current ? /* @__PURE__ */ jsx(Loaded, {}) : /* @__PURE__ */ jsx(Lazy, {});
+		return useRef(Loaded !== null).current ? /* @__PURE__ */ jsx$1(Loaded, {}) : /* @__PURE__ */ jsx$1(Lazy, {});
 	}
 	Route.preload = preload;
 	return Route;
 }
 var pick = (loader, name) => () => loader().then((m) => m[name]);
-var company_ = () => import("./assets/Company-C04MFKuj.js");
+var company_ = () => import("./assets/Company-wbRbGH_X.js");
 var R = {
-	home: lazyRoute(() => import("./assets/Home-BuyyVf6q.js").then((m) => m.default)),
-	catalog: lazyRoute(() => import("./assets/Catalog-Demy7OD0.js").then((m) => m.default)),
-	tour: lazyRoute(() => import("./assets/Tour-DU8F9v9I.js").then((m) => m.default)),
-	fleet: lazyRoute(() => import("./assets/Fleet-BB1f3CaP.js").then((m) => m.default)),
-	blog: lazyRoute(pick(() => import("./assets/Blog-CI_kE4bo.js"), "Blog")),
-	article: lazyRoute(() => import("./assets/Blog-CI_kE4bo.js").then((m) => m.default)),
+	home: lazyRoute(() => import("./assets/Home-MU2LND-z.js").then((m) => m.default)),
+	catalog: lazyRoute(() => import("./assets/Catalog-C9yhOI6b.js").then((m) => m.default)),
+	tour: lazyRoute(() => import("./assets/Tour-B0GAimt6.js").then((m) => m.default)),
+	fleet: lazyRoute(() => import("./assets/Fleet-Dkn2RadF.js").then((m) => m.default)),
+	blog: lazyRoute(pick(() => import("./assets/Blog-LHKalHSt.js"), "Blog")),
+	article: lazyRoute(() => import("./assets/Blog-LHKalHSt.js").then((m) => m.default)),
 	about: lazyRoute(pick(company_, "About")),
 	services: lazyRoute(pick(company_, "Services")),
 	contact: lazyRoute(pick(company_, "Contact")),
 	quote: lazyRoute(pick(company_, "QuotePage")),
 	privacy: lazyRoute(pick(company_, "Privacy")),
 	ratings: lazyRoute(pick(company_, "Ratings")),
-	dataPolicy: lazyRoute(() => import("./assets/DataPolicy-CjL3j14P.js").then((m) => m.default)),
-	notFound: lazyRoute(() => import("./assets/NotFound-BYhCG2zq.js").then((m) => m.default))
+	dataPolicy: lazyRoute(() => import("./assets/DataPolicy-U_kIoLJ8.js").then((m) => m.default)),
+	notFound: lazyRoute(() => import("./assets/NotFound-0y499Wu3.js").then((m) => m.default))
 };
 R.home, R.catalog, `${RUTA_TOURS}`, R.tour, tourPath("traslados-aeropuerto-jmc"), R.tour, R.fleet, R.blog, R.article, R.about, R.services, R.contact, R.quote, R.privacy, R.dataPolicy, R.ratings;
 var preloadAllRoutes = () => Promise.all(Object.values(R).map((route) => route.preload()));
@@ -2141,26 +2664,26 @@ function Header() {
 		window.addEventListener("keydown", key);
 		return () => window.removeEventListener("keydown", key);
 	}, [open]);
-	const path = unprefix(location.pathname), home = path === "/" || path === "/tours" || Boolean(slugFromPath(path));
-	return /* @__PURE__ */ jsxs("header", {
-		className: `site-header${home ? " is-home" : ""}${open ? " menu-open" : ""}`,
+	const path = unprefix(location.pathname);
+	return /* @__PURE__ */ jsxs$1("header", {
+		className: `site-header${path === "/" || path === "/tours" || Boolean(slugFromPath(path)) ? " is-home" : ""}${open ? " menu-open" : ""}`,
 		children: [
-			/* @__PURE__ */ jsx(Link, {
+			/* @__PURE__ */ jsx$1(Link, {
 				to: "/",
 				className: "brand",
 				"aria-label": "Transporte y Turismo Medellín, inicio",
-				children: /* @__PURE__ */ jsx(Logo, {
+				children: /* @__PURE__ */ jsx$1(Logo, {
 					size: 56,
 					sizes: "(max-width: 899px) 44px, 56px"
 				})
 			}),
-			/* @__PURE__ */ jsx(Preferences, {}),
-			/* @__PURE__ */ jsx("a", {
+			/* @__PURE__ */ jsx$1(Preferences, {}),
+			/* @__PURE__ */ jsx$1("a", {
 				className: "menu-nojs",
 				href: "#pie",
 				children: "Menú"
 			}),
-			/* @__PURE__ */ jsxs("button", {
+			/* @__PURE__ */ jsxs$1("button", {
 				ref: toggle,
 				className: "menu-toggle",
 				onClick: () => setOpen(!open),
@@ -2169,27 +2692,27 @@ function Header() {
 				children: [
 					open ? "Cerrar" : "Menú",
 					" ",
-					/* @__PURE__ */ jsx("span", {
+					/* @__PURE__ */ jsx$1("span", {
 						"aria-hidden": "true",
 						children: open ? "−" : "+"
 					})
 				]
 			}),
-			/* @__PURE__ */ jsxs("nav", {
+			/* @__PURE__ */ jsxs$1("nav", {
 				id: "navigation",
 				className: open ? "open" : "",
 				"aria-label": "Principal",
 				children: [
-					nav.map(([label, url]) => /* @__PURE__ */ jsx(NavLink, {
+					nav.map(([label, url]) => /* @__PURE__ */ jsx$1(NavLink, {
 						to: url,
 						end: url === "/" || url === "/transporte",
 						children: label
 					}, url)),
-					/* @__PURE__ */ jsx(Socials, { className: "header-socials" }),
-					/* @__PURE__ */ jsxs(Link, {
+					/* @__PURE__ */ jsx$1(Socials, { className: "header-socials" }),
+					/* @__PURE__ */ jsxs$1(Link, {
 						to: "/cotizar",
 						className: "nav-cta",
-						children: ["Planeemos tu viaje ", /* @__PURE__ */ jsx(Arrow, {})]
+						children: ["Planeemos tu viaje ", /* @__PURE__ */ jsx$1(Arrow, {})]
 					})
 				]
 			})
@@ -2197,58 +2720,58 @@ function Header() {
 	});
 }
 function Footer() {
-	return /* @__PURE__ */ jsxs("div", {
+	return /* @__PURE__ */ jsxs$1("div", {
 		className: "pie-wrap",
-		children: [/* @__PURE__ */ jsx(Skyline, {}), /* @__PURE__ */ jsxs("footer", {
+		children: [/* @__PURE__ */ jsx$1(Skyline, {}), /* @__PURE__ */ jsxs$1("footer", {
 			className: "site-footer tone-dark",
 			id: "pie",
 			children: [
-				/* @__PURE__ */ jsxs("div", {
+				/* @__PURE__ */ jsxs$1("div", {
 					className: "pie-top",
-					children: [/* @__PURE__ */ jsxs("p", { children: [
+					children: [/* @__PURE__ */ jsxs$1("p", { children: [
 						"Tu próximo viaje",
-						/* @__PURE__ */ jsx("br", {}),
+						/* @__PURE__ */ jsx$1("br", {}),
 						"empieza ",
-						/* @__PURE__ */ jsx("em", { children: "aquí" })
-					] }), /* @__PURE__ */ jsx(Button, {
+						/* @__PURE__ */ jsx$1("em", { children: "aquí" })
+					] }), /* @__PURE__ */ jsx$1(Button, {
 						to: RUTA_TOURS,
 						children: "Encuentra tu experiencia"
 					})]
 				}),
-				/* @__PURE__ */ jsxs("div", {
+				/* @__PURE__ */ jsxs$1("div", {
 					className: "pie-grid",
 					children: [
-						/* @__PURE__ */ jsxs("div", {
+						/* @__PURE__ */ jsxs$1("div", {
 							className: "pie-brand",
 							children: [
-								/* @__PURE__ */ jsx(Link, {
+								/* @__PURE__ */ jsx$1(Link, {
 									className: "footer-brand",
 									to: "/",
 									"aria-label": "Transporte y Turismo Medellín, inicio",
-									children: /* @__PURE__ */ jsx(Logo, {
+									children: /* @__PURE__ */ jsx$1(Logo, {
 										size: 120,
 										sizes: "120px",
 										className: "logo-footer",
 										lazy: true
 									})
 								}),
-								/* @__PURE__ */ jsx("p", {
+								/* @__PURE__ */ jsx$1("p", {
 									className: "pie-line",
 									children: "Experiencias a otro nivel"
 								}),
-								/* @__PURE__ */ jsxs("p", { children: [
+								/* @__PURE__ */ jsxs$1("p", { children: [
 									"Nos mueve nuestra tierra.",
-									/* @__PURE__ */ jsx("br", {}),
+									/* @__PURE__ */ jsx$1("br", {}),
 									"Nos importan las personas"
 								] })
 							]
 						}),
-						/* @__PURE__ */ jsxs("nav", {
+						/* @__PURE__ */ jsxs$1("nav", {
 							"aria-label": "Enlaces rápidos",
-							children: [/* @__PURE__ */ jsx("h2", {
+							children: [/* @__PURE__ */ jsx$1("h2", {
 								className: "pie-h",
 								children: "Enlaces rápidos"
-							}), /* @__PURE__ */ jsx("ul", {
+							}), /* @__PURE__ */ jsx$1("ul", {
 								role: "list",
 								children: [
 									["Inicio", "/"],
@@ -2256,52 +2779,52 @@ function Footer() {
 									["Vehículos", RUTA_VEHICULOS],
 									["Nosotros", "/nosotros"],
 									["Contacto", "/contacto"]
-								].map(([label, url]) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx(Link, {
+								].map(([label, url]) => /* @__PURE__ */ jsx$1("li", { children: /* @__PURE__ */ jsx$1(Link, {
 									to: url,
 									children: label
 								}) }, url))
 							})]
 						}),
-						/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("h2", {
+						/* @__PURE__ */ jsxs$1("div", { children: [/* @__PURE__ */ jsx$1("h2", {
 							className: "pie-h",
 							children: "Contacto directo"
-						}), /* @__PURE__ */ jsxs("ul", {
+						}), /* @__PURE__ */ jsxs$1("ul", {
 							role: "list",
 							className: "pie-contact",
 							children: [
-								/* @__PURE__ */ jsxs("li", { children: [/* @__PURE__ */ jsx("span", {
+								/* @__PURE__ */ jsxs$1("li", { children: [/* @__PURE__ */ jsx$1("span", {
 									className: "pie-ico",
-									children: /* @__PURE__ */ jsx(Icon, {
+									children: /* @__PURE__ */ jsx$1(Icon, {
 										name: "mapPin",
 										size: 18
 									})
-								}), /* @__PURE__ */ jsx("span", { children: company.address })] }),
-								/* @__PURE__ */ jsxs("li", { children: [/* @__PURE__ */ jsx("span", {
+								}), /* @__PURE__ */ jsx$1("span", { children: company.address })] }),
+								/* @__PURE__ */ jsxs$1("li", { children: [/* @__PURE__ */ jsx$1("span", {
 									className: "pie-ico",
-									children: /* @__PURE__ */ jsx(Icon, {
+									children: /* @__PURE__ */ jsx$1(Icon, {
 										name: "phone",
 										size: 18
 									})
-								}), /* @__PURE__ */ jsx("a", {
+								}), /* @__PURE__ */ jsx$1("a", {
 									href: `tel:${company.phone.replaceAll(" ", "")}`,
 									children: company.phone
 								})] }),
-								/* @__PURE__ */ jsxs("li", { children: [/* @__PURE__ */ jsx("span", {
+								/* @__PURE__ */ jsxs$1("li", { children: [/* @__PURE__ */ jsx$1("span", {
 									className: "pie-ico",
-									children: /* @__PURE__ */ jsx(Icon, {
+									children: /* @__PURE__ */ jsx$1(Icon, {
 										name: "mail",
 										size: 18
 									})
-								}), /* @__PURE__ */ jsx("a", {
+								}), /* @__PURE__ */ jsx$1("a", {
 									href: `mailto:${company.email}`,
 									children: company.email
 								})] })
 							]
 						})] }),
-						/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("h2", {
+						/* @__PURE__ */ jsxs$1("div", { children: [/* @__PURE__ */ jsx$1("h2", {
 							className: "pie-h",
 							children: "Síguenos"
-						}), /* @__PURE__ */ jsx("ul", {
+						}), /* @__PURE__ */ jsx$1("ul", {
 							role: "list",
 							className: "pie-social",
 							children: [[
@@ -2314,32 +2837,32 @@ function Footer() {
 								"TikTok",
 								company.tiktok,
 								"@tytmedellin"
-							]].map(([id, name, url, handle]) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsxs("a", {
+							]].map(([id, name, url, handle]) => /* @__PURE__ */ jsx$1("li", { children: /* @__PURE__ */ jsxs$1("a", {
 								href: url,
 								target: "_blank",
 								rel: "noopener noreferrer",
 								"aria-label": `Síguenos en ${name} (se abre en una pestaña nueva)`,
-								children: [/* @__PURE__ */ jsx("span", {
+								children: [/* @__PURE__ */ jsx$1("span", {
 									className: "pie-circle",
-									children: /* @__PURE__ */ jsx(SocialIcon, {
+									children: /* @__PURE__ */ jsx$1(SocialIcon, {
 										id,
 										size: 20
 									})
-								}), /* @__PURE__ */ jsx("span", { children: handle })]
+								}), /* @__PURE__ */ jsx$1("span", { children: handle })]
 							}) }, id))
 						})] })
 					]
 				}),
-				/* @__PURE__ */ jsxs("div", {
+				/* @__PURE__ */ jsxs$1("div", {
 					className: "pie-legal",
-					children: [/* @__PURE__ */ jsx("p", { children: "Transporte y Turismo Medellín rechaza la explotación y el abuso sexual de niños, niñas y adolescentes. Denuncia: Línea 141 ICBF y Línea 123. Ley 679 de 2001 y Ley 1336 de 2009." }), /* @__PURE__ */ jsxs("p", { children: [
+					children: [/* @__PURE__ */ jsx$1("p", { children: "Transporte y Turismo Medellín rechaza la explotación y el abuso sexual de niños, niñas y adolescentes. Denuncia: Línea 141 ICBF y Línea 123. Ley 679 de 2001 y Ley 1336 de 2009." }), /* @__PURE__ */ jsxs$1("p", { children: [
 						"PQRS: ",
-						/* @__PURE__ */ jsx("a", {
+						/* @__PURE__ */ jsx$1("a", {
 							href: `mailto:${company.email}`,
 							children: company.email
 						}),
 						" · ",
-						/* @__PURE__ */ jsx("a", {
+						/* @__PURE__ */ jsx$1("a", {
 							href: "https://www.sic.gov.co",
 							target: "_blank",
 							rel: "noopener noreferrer",
@@ -2347,25 +2870,25 @@ function Footer() {
 						})
 					] })]
 				}),
-				/* @__PURE__ */ jsxs("div", {
+				/* @__PURE__ */ jsxs$1("div", {
 					className: "pie-bottom",
 					children: [
-						/* @__PURE__ */ jsx("span", { children: "RNT 176384" }),
-						/* @__PURE__ */ jsx("span", { children: "NIT 901738550-6" }),
-						/* @__PURE__ */ jsx("span", { children: "© 2026 Transporte y Turismo Medellín" }),
-						/* @__PURE__ */ jsx(Link, {
+						/* @__PURE__ */ jsx$1("span", { children: "RNT 176384" }),
+						/* @__PURE__ */ jsx$1("span", { children: "NIT 901738550-6" }),
+						/* @__PURE__ */ jsx$1("span", { children: "© 2026 Transporte y Turismo Medellín" }),
+						/* @__PURE__ */ jsx$1(Link, {
 							to: "/privacidad",
 							children: "Privacidad"
 						}),
-						/* @__PURE__ */ jsx(Link, {
+						/* @__PURE__ */ jsx$1(Link, {
 							to: "/politica-de-tratamiento-de-datos",
 							children: "Tratamiento de datos"
 						}),
-						/* @__PURE__ */ jsx(Link, {
+						/* @__PURE__ */ jsx$1(Link, {
 							to: "/calificaciones",
 							children: "Calificaciones"
 						}),
-						/* @__PURE__ */ jsx(ConsentLink, {})
+						/* @__PURE__ */ jsx$1(ConsentLink, {})
 					]
 				})
 			]
@@ -2378,106 +2901,106 @@ function Layout() {
 	useEffect(() => {
 		notifyRouteReady();
 	}, [pathname]);
-	return /* @__PURE__ */ jsxs(Fragment$1, { children: [
-		/* @__PURE__ */ jsx("a", {
+	return /* @__PURE__ */ jsxs$1(Fragment$1, { children: [
+		/* @__PURE__ */ jsx$1("a", {
 			className: "skip-link",
 			href: "#contenido",
 			children: "Saltar al contenido"
 		}),
-		/* @__PURE__ */ jsx(PageEffects, {}),
-		/* @__PURE__ */ jsx(Header, {}),
-		/* @__PURE__ */ jsx("main", {
+		/* @__PURE__ */ jsx$1(PageEffects, {}),
+		/* @__PURE__ */ jsx$1(Header, {}),
+		/* @__PURE__ */ jsx$1("main", {
 			id: "contenido",
 			tabIndex: -1,
-			children: /* @__PURE__ */ jsxs(Suspense, {
+			children: /* @__PURE__ */ jsxs$1(Suspense, {
 				fallback: null,
-				children: [/* @__PURE__ */ jsxs(Routes, { children: [
-					/* @__PURE__ */ jsx(Route, {
+				children: [/* @__PURE__ */ jsxs$1(Routes, { children: [
+					/* @__PURE__ */ jsx$1(Route, {
 						path: "/",
-						element: /* @__PURE__ */ jsx(R.home, {})
+						element: /* @__PURE__ */ jsx$1(R.home, {})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: "/site",
-						element: /* @__PURE__ */ jsx(Navigate, {
+						element: /* @__PURE__ */ jsx$1(Navigate, {
 							to: "/",
 							replace: true
 						})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: RUTA_TOURS,
-						element: /* @__PURE__ */ jsx(R.catalog, {})
+						element: /* @__PURE__ */ jsx$1(R.catalog, {})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: `${RUTA_TOURS}/:slug`,
-						element: /* @__PURE__ */ jsx(R.tour, {})
+						element: /* @__PURE__ */ jsx$1(R.tour, {})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: tourPath("traslados-aeropuerto-jmc"),
-						element: /* @__PURE__ */ jsx(R.tour, {})
+						element: /* @__PURE__ */ jsx$1(R.tour, {})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: RUTA_TRANSPORTE,
-						element: /* @__PURE__ */ jsx(R.services, {})
+						element: /* @__PURE__ */ jsx$1(R.services, {})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: RUTA_VEHICULOS,
-						element: /* @__PURE__ */ jsx(R.fleet, {})
+						element: /* @__PURE__ */ jsx$1(R.fleet, {})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: "/flota",
-						element: /* @__PURE__ */ jsx(Navigate, {
+						element: /* @__PURE__ */ jsx$1(Navigate, {
 							to: RUTA_VEHICULOS,
 							replace: true
 						})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: "/nosotros",
-						element: /* @__PURE__ */ jsx(R.about, {})
+						element: /* @__PURE__ */ jsx$1(R.about, {})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: "/blog",
-						element: /* @__PURE__ */ jsx(R.blog, {})
+						element: /* @__PURE__ */ jsx$1(R.blog, {})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: "/blog/:slug",
-						element: /* @__PURE__ */ jsx(R.article, {})
+						element: /* @__PURE__ */ jsx$1(R.article, {})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: "/contacto",
-						element: /* @__PURE__ */ jsx(R.contact, {})
+						element: /* @__PURE__ */ jsx$1(R.contact, {})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: "/cotizar",
-						element: /* @__PURE__ */ jsx(R.quote, {})
+						element: /* @__PURE__ */ jsx$1(R.quote, {})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: "/calificaciones",
-						element: /* @__PURE__ */ jsx(R.ratings, {})
+						element: /* @__PURE__ */ jsx$1(R.ratings, {})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: "/privacidad",
-						element: /* @__PURE__ */ jsx(R.privacy, {})
+						element: /* @__PURE__ */ jsx$1(R.privacy, {})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: "/politica-de-tratamiento-de-datos",
-						element: /* @__PURE__ */ jsx(R.dataPolicy, {})
+						element: /* @__PURE__ */ jsx$1(R.dataPolicy, {})
 					}),
-					/* @__PURE__ */ jsx(Route, {
+					/* @__PURE__ */ jsx$1(Route, {
 						path: "*",
-						element: /* @__PURE__ */ jsx(R.notFound, {})
+						element: /* @__PURE__ */ jsx$1(R.notFound, {})
 					})
-				] }), /* @__PURE__ */ jsx(RouteScroll, {})]
+				] }), /* @__PURE__ */ jsx$1(RouteScroll, {})]
 			})
 		}, pathname),
-		/* @__PURE__ */ jsx(Allies, {}),
-		/* @__PURE__ */ jsx(Footer, {}),
-		/* @__PURE__ */ jsx(WhatsAppFab, {}),
-		/* @__PURE__ */ jsx(Consent, {}),
-		/* @__PURE__ */ jsx(Welcome, {})
+		/* @__PURE__ */ jsx$1(Allies, {}),
+		/* @__PURE__ */ jsx$1(Footer, {}),
+		/* @__PURE__ */ jsx$1(WhatsAppFab, {}),
+		/* @__PURE__ */ jsx$1(Consent, {}),
+		/* @__PURE__ */ jsx$1(Welcome, {})
 	] });
 }
 function Website() {
-	return /* @__PURE__ */ jsx(Layout, {});
+	return /* @__PURE__ */ jsx$1(Layout, {});
 }
 var media_default = {
 	"city-tour-comuna-13": /*#__PURE__*/ JSON.parse("{\"portada\":{\"src\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7966-2-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7966-2-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7966-2-400.webp 400w, /media/fichas/city-tour-comuna-13/city-tour-img-7966-2-800.webp 800w, /media/fichas/city-tour-comuna-13/city-tour-img-7966-2-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/city-tour-img-7966-2.webp\",\"focus\":\"50% 55%\",\"alt\":\"Tres viajeros sonríen dentro de la canasta de un globo decorado con la palabra «Comuna», con los barrios de ladera y las montañas de Medellín al fondo\"},\"cabecera\":[{\"src\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6179-h1800.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6179-h640.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6179-h640.webp 640w, /media/fichas/city-tour-comuna-13/photos-1-001-2-img-6179-h1080.webp 1080w, /media/fichas/city-tour-comuna-13/photos-1-001-2-img-6179-h1800.webp 1800w, /media/fichas/city-tour-comuna-13/photos-1-001-2-img-6179-h1800.webp 1800w\",\"width\":1800,\"height\":1080,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/photos-1-001-2-img-6179.webp\",\"focus\":\"45% 55%\",\"alt\":\"Viajeros en una terraza techada junto a grandes letras de colores «Comuna 13», con los barrios de ladera y las montañas al fondo\"},{\"src\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-dji-fly-20231109-170700-729-1699567695965-photo-optimized-h1800.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-dji-fly-20231109-170700-729-1699567695965-photo-optimized-h640.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-dji-fly-20231109-170700-729-1699567695965-photo-optimized-h640.webp 640w, /media/fichas/city-tour-comuna-13/photos-1-001-2-dji-fly-20231109-170700-729-1699567695965-photo-optimized-h1080.webp 1080w, /media/fichas/city-tour-comuna-13/photos-1-001-2-dji-fly-20231109-170700-729-1699567695965-photo-optimized-h1800.webp 1800w, /media/fichas/city-tour-comuna-13/photos-1-001-2-dji-fly-20231109-170700-729-1699567695965-photo-optimized-h1800.webp 1800w\",\"width\":1800,\"height\":1012,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/photos-1-001-2-dji-fly-20231109-170700-729-1699567695965-photo-optimized.webp\",\"focus\":\"50% 50%\",\"alt\":\"Vista cenital de viajeros tendidos en un patio bajo un letrero pintado «Esto es Medellín»\"},{\"src\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-1083-h1800.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-1083-h640.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-1083-h640.webp 640w, /media/fichas/city-tour-comuna-13/photos-1-001-img-1083-h1080.webp 1080w, /media/fichas/city-tour-comuna-13/photos-1-001-img-1083-h1800.webp 1800w\",\"width\":1800,\"height\":2400,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/photos-1-001-img-1083.webp\",\"focus\":\"40% 45%\",\"alt\":\"Viajera de gorra blanca en una baranda mirando los barrios de ladera y el valle de Medellín\"}],\"galeria\":[{\"src\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7385-1-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7385-1-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7385-1-400.webp 400w, /media/fichas/city-tour-comuna-13/city-tour-img-7385-1-800.webp 800w, /media/fichas/city-tour-comuna-13/city-tour-img-7385-1-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/city-tour-img-7385-1.webp\",\"alt\":\"Viajeros en el balcón de una gran escultura de brazos abiertos, sobre un mirador con los barrios de ladera al fondo\"},{\"src\":\"/media/fichas/city-tour-comuna-13/img-1587-2-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/img-1587-2-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/img-1587-2-400.webp 400w, /media/fichas/city-tour-comuna-13/img-1587-2-800.webp 800w, /media/fichas/city-tour-comuna-13/img-1587-2-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/img-1587-2.webp\",\"alt\":\"Viajera sentada en la palma de una escultura de manos con un rostro gigante de piedra, frente a las montañas\"},{\"src\":\"/media/fichas/city-tour-comuna-13/img-4127-1-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/img-4127-1-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/img-4127-1-400.webp 400w, /media/fichas/city-tour-comuna-13/img-4127-1-800.webp 800w, /media/fichas/city-tour-comuna-13/img-4127-1-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/img-4127-1.webp\",\"alt\":\"Un guía con camiseta de T&T se toma una foto con tres viajeras en un parque de la ciudad\"},{\"src\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6111-1-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6111-1-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6111-1-400.webp 400w, /media/fichas/city-tour-comuna-13/photos-1-001-2-img-6111-1-800.webp 800w, /media/fichas/city-tour-comuna-13/photos-1-001-2-img-6111-1-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/photos-1-001-2-img-6111-1.webp\",\"alt\":\"Grupo de viajeros en una cancha pintada de azul, con casas de ladera y murales detrás\"},{\"src\":\"/media/fichas/city-tour-comuna-13/img-9058-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/img-9058-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/img-9058-400.webp 400w, /media/fichas/city-tour-comuna-13/img-9058-800.webp 800w, /media/fichas/city-tour-comuna-13/img-9058-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/img-9058.webp\",\"alt\":\"Viajera apoyada en una baranda de piedra calada, con el edificio Coltejer y el centro de Medellín al fondo\"},{\"src\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-1189-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-1189-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-1189-400.webp 400w, /media/fichas/city-tour-comuna-13/photos-1-001-img-1189-800.webp 800w, /media/fichas/city-tour-comuna-13/photos-1-001-img-1189-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/photos-1-001-img-1189.webp\",\"alt\":\"Viajera recostada en un banco frente a un muro verde con el letrero «Medellín, aquí todo florece»\"},{\"src\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7328-1-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7328-1-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/city-tour-img-7328-1-400.webp 400w, /media/fichas/city-tour-comuna-13/city-tour-img-7328-1-800.webp 800w, /media/fichas/city-tour-comuna-13/city-tour-img-7328-1-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/city-tour-img-7328-1.webp\",\"alt\":\"Viajeros sentados en unas escaleras pintadas bajo grandes letras «Comuna 13 Medellín» con los colores de la bandera\"}],\"inicio\":[{\"src\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6091-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6091-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/photos-1-001-2-img-6091-400.webp 400w, /media/fichas/city-tour-comuna-13/photos-1-001-2-img-6091-800.webp 800w, /media/fichas/city-tour-comuna-13/photos-1-001-2-img-6091-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/photos-1-001-2-img-6091.webp\",\"alt\":\"Grupo de viajeros en unas escaleras pintadas de colores bajo un letrero «Welcome»\"},{\"src\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-0757-2-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-0757-2-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/photos-1-001-img-0757-2-400.webp 400w, /media/fichas/city-tour-comuna-13/photos-1-001-img-0757-2-800.webp 800w, /media/fichas/city-tour-comuna-13/photos-1-001-img-0757-2-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/photos-1-001-img-0757-2.webp\",\"alt\":\"Dos viajeras en una baranda de piedra calada, con un tren del Metro sobre el viaducto y el centro de la ciudad detrás\"},{\"src\":\"/media/fichas/city-tour-comuna-13/img-4132-1-1200.webp\",\"small\":\"/media/fichas/city-tour-comuna-13/img-4132-1-400.webp\",\"srcset\":\"/media/fichas/city-tour-comuna-13/img-4132-1-400.webp 400w, /media/fichas/city-tour-comuna-13/img-4132-1-800.webp 800w, /media/fichas/city-tour-comuna-13/img-4132-1-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/NuevasFotos-webp/city-tour-comuna-13/img-4132-1.webp\",\"alt\":\"Tres viajeras sonríen en un sendero de un parque, con torres de ladrillo y árboles detrás\"},{\"src\":\"/media/oficial/orig/city-tour-comuna-13/img-2776-1600.webp\",\"small\":\"/media/oficial/w400/city-tour-comuna-13/img-2776-1600.webp\",\"srcset\":\"/media/oficial/w400/city-tour-comuna-13/img-2776-1600.webp 400w, /media/oficial/w800/city-tour-comuna-13/img-2776-1600.webp 800w, /media/oficial/orig/city-tour-comuna-13/img-2776-1600.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"site/public/media/oficial/orig/city-tour-comuna-13/img-2776-1600.webp\",\"alt\":\"Visitantes frente a un muro de piedra oscura con la frase «Somos lo que dejamos a los demás» y una torre de apartamentos al fondo\"},{\"src\":\"/media/oficial/orig/city-tour-comuna-13/img-2275-1600.webp\",\"small\":\"/media/oficial/w400/city-tour-comuna-13/img-2275-1600.webp\",\"srcset\":\"/media/oficial/w400/city-tour-comuna-13/img-2275-1600.webp 400w, /media/oficial/w800/city-tour-comuna-13/img-2275-1600.webp 800w, /media/oficial/orig/city-tour-comuna-13/img-2275-1600.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"site/public/media/oficial/orig/city-tour-comuna-13/img-2275-1600.webp\",\"alt\":\"Escultura reclinada de Fernando Botero frente a la fachada de piedra a cuadros del Palacio de la Cultura\"},{\"src\":\"/media/oficial/orig/city-tour-comuna-13/citytour-medellin-letras-plaza-botero-1600.webp\",\"small\":\"/media/oficial/w400/city-tour-comuna-13/citytour-medellin-letras-plaza-botero-1600.webp\",\"srcset\":\"/media/oficial/w400/city-tour-comuna-13/citytour-medellin-letras-plaza-botero-1600.webp 400w, /media/oficial/w800/city-tour-comuna-13/citytour-medellin-letras-plaza-botero-1600.webp 800w, /media/oficial/w1200/city-tour-comuna-13/citytour-medellin-letras-plaza-botero-1600.webp 1200w, /media/oficial/orig/city-tour-comuna-13/citytour-medellin-letras-plaza-botero-1600.webp 1600w\",\"width\":1600,\"height\":2133,\"source\":\"site/public/media/oficial/orig/city-tour-comuna-13/citytour-medellin-letras-plaza-botero-1600.webp\",\"alt\":\"Viajeros junto a letras de colores de Medellín en una plaza del centro\"},{\"src\":\"/media/fichas/repo/imagenes-fotosmedellin-webp-city-tour-img-4983-1200.webp\",\"small\":\"/media/fichas/repo/imagenes-fotosmedellin-webp-city-tour-img-4983-400.webp\",\"srcset\":\"/media/fichas/repo/imagenes-fotosmedellin-webp-city-tour-img-4983-400.webp 400w, /media/fichas/repo/imagenes-fotosmedellin-webp-city-tour-img-4983-800.webp 800w, /media/fichas/repo/imagenes-fotosmedellin-webp-city-tour-img-4983-1200.webp 1200w\",\"width\":1200,\"height\":1600,\"source\":\"IMAGENES/FotosMedellin-webp/City Tour/IMG_4983.webp\",\"alt\":\"Mural de un rostro de mujer con un colibrí en una calle de la Comuna 13\"}]}"),
@@ -4510,11 +5033,11 @@ async function render(url) {
 	const lang = languageFromPath(url);
 	await prepareLanguage(lang);
 	setLanguage(lang);
-	return renderToString(/* @__PURE__ */ jsx(StaticRouter, {
+	return renderToString(/* @__PURE__ */ jsx$1(StaticRouter, {
 		basename: languageInfo(lang).prefix || "/",
 		location: url,
-		children: /* @__PURE__ */ jsx(Website, {})
+		children: /* @__PURE__ */ jsx$1(Website, {})
 	}));
 }
 //#endregion
-export { SoundIcon as A, NOT_FOUND as C, tourPath as D, slugFromPath as E, SocialIcon as M, Socials as N, tourSeo as O, textoFase as S, RUTA_TOURS as T, TourCard as _, tours as a, CHAPTERS as b, rawTours as c, Button as d, Eyebrow as f, Rail as g, QuoteSection as h, photos as i, Icon as j, PlayIcon as k, media_default as l, Picture as m, metaFor, catalogo as n, values as o, PageTitle as p, paths, nosotros as r, render, vehicles as s, articles as t, Logo as u, hiddenByCover as v, usePageMeta as w, inicioTextos as x, GoogleBadgeStatic as y };
+export { languageInfo as $, docTop as A, tourSeo as B, Manifesto as C, useLightMotion as D, useFlipGrid as E, NOT_FOUND as F, Socials as G, SoundIcon as H, usePageMeta as I, jsxs$1 as J, Fragment$1 as K, RUTA_TOURS as L, CHAPTERS as M, inicioTextos as N, useMedia as O, textoFase as P, t as Q, slugFromPath as R, QuoteCopy as S, Trust as T, Icon as U, PlayIcon as V, SocialIcon as W, whatsapp as X, company as Y, language as Z, Rail as _, tours as a, GoogleBadgeStatic as b, rawTours as c, allowAnalytics as d, stripLanguage as et, Button as f, QuoteSection as g, Picture as h, photos as i, watchScroll as j, useMounted as k, media_default as l, PageTitle as m, metaFor, catalogo as n, values as o, Eyebrow as p, paths, jsx$1 as q, nosotros as r, render, vehicles as s, articles as t, Logo as u, TourCard as v, Marquee as w, Arrow as x, hiddenByCover as y, tourPath as z };

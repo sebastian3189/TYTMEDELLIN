@@ -16,6 +16,7 @@ import { inicioTextos } from '../inicio-textos';
 import { Marquee, Trust, EditorialMotion, useMedia, useLightMotion } from '../PremiumMotion';
 import { Picture, Arrow, Eyebrow, Rail, TourCard, QuoteSection } from '../shared';
 import { usePageMeta } from '../meta';
+import { trackView } from '../analytics';
 import { slugFromPath, tourSeo } from '../rutas';
 import { t, language } from '../i18n';
 import NotFound from './NotFound';
@@ -33,7 +34,7 @@ function Story({tour}){
  return <section ref={ref} data-tn="0" className={`story mood-${tour.mood} ${staticMode?'story-static':''}`} aria-label={`Un recorrido por ${tour.name}`}><div className="story-inner"><div className="story-images" aria-hidden="true">{tour.moments.map((_,i)=><Picture key={i} photo={tour.images[Math.min(i+1,tour.images.length-1)]} alt="" className={active===i?'active':''}/>)}</div><div className="story-content"><Eyebrow>{tour.name}</Eyebrow><div className="story-articles">{tour.moments.map((title,i)=><article key={title} className={active===i?'active':''}>{staticMode&&<Picture photo={tour.images[Math.min(i+1,tour.images.length-1)]} alt={`${tour.name}, capítulo ${i+1}`} className="chapter-photo"/>}<span className="chapter">0{i+1}</span><h2>{title}</h2><p>{tour.stories[i]}</p></article>)}</div>{!staticMode&&<div className="chapter-controls" aria-label="Elegir capítulo">{tour.moments.map((title,i)=><button key={title} aria-label={`Capítulo ${i+1}: ${title}`} aria-pressed={active===i} onClick={()=>{const el=ref.current;const top=window.scrollY+el.getBoundingClientRect().top;window.scrollTo({top:top-(parseFloat(getComputedStyle(el.querySelector('.story-inner')).top)||0)+(el.offsetHeight-el.querySelector('.story-inner').offsetHeight)*(i/3+.02),behavior:'instant'});setActive(i)}}>{String(i+1).padStart(2,'0')}</button>)}</div>}<div className="story-meter" aria-hidden="true"><i/></div><span className="story-hint">{staticMode?'A tu ritmo':<>Desliza para seguir la historia <Arrow dir="down"/></>}</span></div></div></section>
 }
 const ORGANIZAR={id:'organizar',q:'¿Cómo organizamos la experiencia?',a:'Coordinamos el transporte privado y el recorrido contigo. La propuesta confirma las paradas, el acompañamiento, los horarios y el valor antes de contratar.'};
-export default function Tour(){const slug=slugFromPath(useLocation().pathname);const tour=tours.find(t=>t.slug===slug),seo=tourSeo[slug];usePageMeta(seo?.title||seo?.h1,seo?.description);const page=useRef(null);useTourReveal(page,slug);if(!tour)return <NotFound/>;
+export default function Tour(){const slug=slugFromPath(useLocation().pathname);const tour=tours.find(t=>t.slug===slug),seo=tourSeo[slug];usePageMeta(seo?.title||seo?.h1,seo?.description);const page=useRef(null);useTourReveal(page,slug);useEffect(()=>tour?trackView({tipo:'experiencia',slug}):undefined,[slug]);if(!tour)return <NotFound/>;
  const faq=[ORGANIZAR,...(slug==='traslados-aeropuerto-jmc'?FAQ_TRANSFER:FAQ_TOUR)],duracion=DURACIONES[slug];
  return <div ref={page} className={`tour-page mood-${tour.mood}`}>
  <TourRoute/>

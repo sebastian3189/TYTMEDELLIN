@@ -11,11 +11,11 @@ const CookieIcon = () => <svg aria-hidden="true" width="26" height="26" viewBox=
  * La lógica de decisión (180 días, memoria si no hay almacenamiento, retirada) vive en consent.js. Al resolverse emite `tyt-consent-change` (lo escucha el mensaje de bienvenida).
  */
 export default function Consent() {
-  const [ready,setReady]=useState(false),[chosen,setChosen]=useState(false),[leaving,setLeaving]=useState(false),[draft,setDraft]=useState(false),[notice,setNotice]=useState('');
+  const [ready,setReady]=useState(false),[chosen,setChosen]=useState(false),[leaving,setLeaving]=useState(false),[draft,setDraft]=useState(false),[draftAnalytics,setDraftAnalytics]=useState(false),[notice,setNotice]=useState('');
   const banner=useRef(null),dialog=useRef(null),returnFocus=useRef(null);
   useEffect(()=>{
     setChosen(Boolean(readConsent())); setReady(true);
-    const open=()=>{setDraft(readConsent()?.preferences===true);returnFocus.current=document.activeElement;dialog.current?.showModal();};
+    const open=()=>{setDraft(readConsent()?.preferences===true);setDraftAnalytics(readConsent()?.analytics===true);returnFocus.current=document.activeElement;dialog.current?.showModal();};
     const sync=()=>setChosen(Boolean(readConsent()));
     window.addEventListener('tyt-open-consent',open);window.addEventListener('storage',sync);
     return()=>{window.removeEventListener('tyt-open-consent',open);window.removeEventListener('storage',sync)};
@@ -29,8 +29,8 @@ export default function Consent() {
     return()=>{ro.disconnect();narrow.removeEventListener('change',size);document.documentElement.style.removeProperty('--consent-space');};
   },[ready,chosen]);
   const close=()=>dialog.current?.close();
-  const choose=(value)=>{
-    const persisted=saveConsent(value);setNotice(persisted?'':'La configuración no pudo guardarse. Se aplicará durante esta visita.');close();
+  const choose=(preferences,analytics)=>{
+    const persisted=saveConsent(preferences,analytics);setNotice(persisted?'':'La configuración no pudo guardarse. Se aplicará durante esta visita.');close();
     // Salida breve (ninguna con movimiento reducido) y después se retira la tarjeta.
     if(banner.current&&!matchMedia('(prefers-reduced-motion: reduce)').matches){setLeaving(true);setTimeout(()=>{setChosen(true);setLeaving(false);},200);}else setChosen(true);
   };
@@ -38,17 +38,18 @@ export default function Consent() {
   return <>
     {!chosen&&<section ref={banner} className={`consent-banner${leaving?' is-leaving':''}`} aria-labelledby="privacy-banner-title">
       <div className="consent-top"><span className="consent-icon"><CookieIcon/></span><h2 id="privacy-banner-title">Tu privacidad</h2></div>
-      <p>Usamos almacenamiento local para recordar ajustes del sitio. No usamos analítica ni publicidad. Tú decides si guardamos tu tema preferido.</p>
-      <div className="consent-actions"><button type="button" onClick={()=>choose(true)}>Aceptar</button><button type="button" onClick={()=>choose(false)}>Rechazar</button><button type="button" onClick={openConsent}>Configurar</button></div>
+      <p>Recordamos tus ajustes y, si aceptas, usamos Google Analytics para saber qué páginas se visitan. No enviamos tu nombre, teléfono ni mensajes.</p>
+      <div className="consent-actions"><button type="button" onClick={()=>choose(true,true)}>Aceptar</button><button type="button" onClick={()=>choose(false,false)}>Rechazar</button><button type="button" onClick={openConsent}>Configurar</button></div>
     </section>}
     <dialog ref={dialog} className="consent-dialog" aria-labelledby="privacy-title" aria-describedby="privacy-description" onClose={()=>{if(returnFocus.current?.isConnected)returnFocus.current.focus({preventScroll:true});else document.querySelector('.consent-link')?.focus({preventScroll:true});}}>
       <div className="consent-head"><span className="consent-icon"><CookieIcon/></span><h2 id="privacy-title">Preferencias de privacidad</h2><button type="button" onClick={close} aria-label="Cerrar preferencias">×</button></div>
       <p id="privacy-description">Tu elección se guarda durante seis meses en este navegador.</p>
       <section><h3>Necesarias</h3><strong>Siempre activas</strong><p>Guardan tu decisión de privacidad y ajustes funcionales, como reducir el movimiento y la ayuda de navegación.</p></section>
       <section><label className="consent-option"><input type="checkbox" checked={draft} onChange={e=>setDraft(e.target.checked)}/><strong>Preferencias</strong></label><p>Recordar el tema claro u oscuro entre visitas.</p></section>
-      <section><h3>Analítica y publicidad</h3><p>No utilizadas actualmente</p></section>
+      <section><label className="consent-option"><input type="checkbox" checked={draftAnalytics} onChange={e=>setDraftAnalytics(e.target.checked)}/><strong>Analítica</strong></label><p>Google Analytics mide visitas y clics para mejorar el sitio, con cookies como _ga. No enviamos tu nombre, teléfono, correo ni mensajes.</p></section>
+      <section><h3>Publicidad</h3><p>No utilizada actualmente</p></section>
       <Link className="consent-policy" to="/privacidad" onClick={close}>Privacidad</Link>
-      <div className="consent-actions"><button type="button" onClick={()=>choose(draft)}>Guardar preferencias</button><button type="button" onClick={()=>choose(false)}>Retirar consentimiento</button></div>
+      <div className="consent-actions"><button type="button" onClick={()=>choose(draft,draftAnalytics)}>Guardar preferencias</button><button type="button" onClick={()=>choose(false,false)}>Retirar consentimiento</button></div>
     </dialog>
     {notice&&<p className="consent-notice" role="status">{notice}</p>}
   </>;

@@ -6,7 +6,7 @@ const log = [];
 const open = async (w, { theme = 'light', path = '/', consent = false, reduce = false } = {}) => {
   const ctx = await browser.newContext({ viewport: { width: w, height: w < 800 ? 844 : 900 }, isMobile: w < 800, hasTouch: w < 800, colorScheme: theme, reducedMotion: reduce ? 'reduce' : 'no-preference' });
   const page = await ctx.newPage(); page.on('pageerror', (e) => log.push(`pageerror ${path} ${e.message.slice(0, 100)}`)); page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load/.test(m.text())) log.push(`console ${m.text().slice(0, 100)}`); });
-  if (consent) await page.addInitScript(() => { try { localStorage.setItem('tyt-privacy-v1', JSON.stringify({ version: 1, preferences: false, expires: Date.now() + 1e10 })); } catch {} });
+  if (consent) await page.addInitScript(() => { try { localStorage.setItem('tyt-privacy-v1', JSON.stringify({ version: 2, preferences: false, analytics: false, expires: Date.now() + 1e10 })); } catch {} });
   await page.goto(base + path, { waitUntil: "load" }); await page.waitForTimeout(3000); return [ctx, page];
 };
 // 1 · selector a 320/390/1440 (cerrado y abierto)

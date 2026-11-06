@@ -1,9 +1,8 @@
-import { C as t, _ as whatsapp, c as useLightMotion, h as jsxs, l as useMedia, m as jsx, p as Fragment$1, t as Arrow, v as language } from "./Arrow-CIGPWPkK.js";
-import { A as SoundIcon, D as tourPath, M as SocialIcon, S as textoFase, a as tours, b as CHAPTERS, d as Button, f as Eyebrow, j as Icon, k as PlayIcon, m as Picture, r as nosotros, t as articles, u as Logo, x as inicioTextos, y as GoogleBadgeStatic } from "../entry-server.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-CL2rTD-m.js";
-import { a as tourEntry, c as prepVideo, l as safePlay, n as HeroBlock, o as inicioVideos, s as instagram } from "./Hero-CUcIYVym.js";
-import { t as Reviews } from "./Reviews-BChyAlMu.js";
-import { a as FAQ_HOME, l as Faq } from "./faq-data-CNlnD8uD.js";
+import { D as useLightMotion, H as SoundIcon, J as jsxs, K as Fragment$1, M as CHAPTERS, N as inicioTextos, O as useMedia, P as textoFase, Q as t, U as Icon, V as PlayIcon, W as SocialIcon, X as whatsapp, Z as language, a as tours, b as GoogleBadgeStatic, f as Button, h as Picture, p as Eyebrow, q as jsx, r as nosotros, t as articles, u as Logo, x as Arrow, z as tourPath } from "../entry-server.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-BfOFOpy8.js";
+import { a as tourEntry, c as prepVideo, l as safePlay, n as HeroBlock, o as inicioVideos, s as instagram } from "./Hero-BROvmVXC.js";
+import { t as Reviews } from "./Reviews-C6mpLsK5.js";
+import { a as FAQ_HOME, l as Faq } from "./faq-data-CvY6kltd.js";
 import { a as smooth$1, r as placePhotos } from "./mobile-motion-o2zoinXe.js";
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";

@@ -1,5 +1,4 @@
-import { g as company, h as jsxs, m as jsx, p as Fragment, v as language } from "./Arrow-CIGPWPkK.js";
-import { p as PageTitle } from "../entry-server.js";
+import { J as jsxs, K as Fragment, Y as company, Z as language, m as PageTitle, q as jsx } from "../entry-server.js";
 //#region src/pages/DataPolicy.jsx
 var SECTIONS = [
 	["responsable", "1. Responsable del tratamiento"],
@@ -109,8 +108,9 @@ function DataPolicy() {
 					id: "cookies",
 					children: [
 						/* @__PURE__ */ jsx("h2", { children: "9. Cookies" }),
-						/* @__PURE__ */ jsx("p", { children: "Este sitio no instala cookies de analítica ni publicidad. Usa almacenamiento local para guardar tu decisión de privacidad durante seis meses y ajustes funcionales de accesibilidad; la ayuda de navegación se recuerda solo durante la sesión." }),
+						/* @__PURE__ */ jsx("p", { children: "Este sitio instala cookies de analítica solo si lo aceptas y no usa cookies de publicidad. Usa almacenamiento local para guardar tu decisión de privacidad durante seis meses y ajustes funcionales de accesibilidad; la ayuda de navegación se recuerda solo durante la sesión." }),
 						/* @__PURE__ */ jsx("p", { children: "Inventario de almacenamiento: «tyt-privacy-v1» (tu decisión de privacidad), «tyt-theme» (tema claro u oscuro; opcional, requiere tu aceptación) y «tyt-bienvenida» (sessionStorage; recuerda durante la sesión que ya viste el mensaje de bienvenida; opcional y sujeto a tu consentimiento)." }),
+						/* @__PURE__ */ jsx("p", { children: "Si aceptas la analítica, Google Analytics instala las cookies «_ga» y «_ga_*», que pueden durar hasta dos años. Las eliminamos de este sitio si retiras tu consentimiento." }),
 						/* @__PURE__ */ jsx("p", { children: "Guardar el tema claro u oscuro entre visitas es opcional y requiere tu aceptación. El idioma se determina por la dirección de la página. Puedes configurar o retirar tu consentimiento desde «Cookies y preferencias» en el pie del sitio." })
 					]
 				}),
@@ -118,7 +118,8 @@ function DataPolicy() {
 					id: "medicion",
 					children: [
 						/* @__PURE__ */ jsx("h2", { children: "10. Medición del sitio" }),
-						/* @__PURE__ */ jsx("p", { children: "No usamos Google Analytics, Google Tag Manager ni otras herramientas de medición o publicidad. No enviamos eventos ni datos de los formularios a servicios de analítica." }),
+						/* @__PURE__ */ jsx("p", { children: "Solo si aceptas la categoría «Analítica» usamos Google Tag Manager y Google Analytics, de Google LLC, para saber qué páginas se visitan y cómo se usan el formulario y los botones de WhatsApp. Google puede tratar estos datos fuera de Colombia, y la información de eventos se conserva hasta 14 meses." }),
+						/* @__PURE__ */ jsx("p", { children: "Medimos acciones como ver una experiencia o enviar una cotización, junto con la página de origen y el idioma. No enviamos a estos servicios tu nombre, teléfono, correo, mensajes ni el contenido de los formularios. No usamos herramientas de publicidad. Puedes aceptar o retirar la medición en cualquier momento desde «Cookies y preferencias»." }),
 						/* @__PURE__ */ jsx("p", { children: "El mapa de OpenStreetMap solo se carga cuando pulsas el botón para mostrarlo. Ese clic establece una conexión con el proveedor del mapa. Los enlaces a WhatsApp y otras plataformas se abren cuando tú los eliges." })
 					]
 				})
@@ -233,8 +234,9 @@ function DataPolicyEn() {
 					id: "cookies",
 					children: [
 						/* @__PURE__ */ jsx("h2", { children: "9. Cookies" }),
-						/* @__PURE__ */ jsx("p", { children: "This site does not install analytics or advertising cookies. It uses local storage to remember your privacy choice for six months and functional accessibility settings; navigation guidance is remembered only during the session." }),
+						/* @__PURE__ */ jsx("p", { children: "This site sets analytics cookies only if you accept them and does not use advertising cookies. It uses local storage to remember your privacy choice for six months and functional accessibility settings; navigation guidance is remembered only during the session." }),
 						/* @__PURE__ */ jsx("p", { children: "Storage inventory: “tyt-privacy-v1” (your privacy choice), “tyt-theme” (light or dark theme; optional, requires your acceptance) and “tyt-bienvenida” (sessionStorage; remembers during the session that you have seen the welcome message; optional and subject to your consent)." }),
+						/* @__PURE__ */ jsx("p", { children: "If you accept analytics, Google Analytics sets the “_ga” and “_ga_*” cookies, which can last up to two years. We delete them from this site if you withdraw your consent." }),
 						/* @__PURE__ */ jsx("p", { children: "Saving your light or dark theme between visits is optional and requires your acceptance. The language is determined by the page address. You can configure or withdraw consent through “Cookies and preferences” in the footer." })
 					]
 				}),
@@ -242,7 +244,8 @@ function DataPolicyEn() {
 					id: "measurement",
 					children: [
 						/* @__PURE__ */ jsx("h2", { children: "10. Site measurement" }),
-						/* @__PURE__ */ jsx("p", { children: "We do not use Google Analytics, Google Tag Manager or other measurement or advertising tools. We do not send events or form data to analytics services." }),
+						/* @__PURE__ */ jsx("p", { children: "Only if you accept the “Analytics” category do we use Google Tag Manager and Google Analytics, from Google LLC, to learn which pages are visited and how the form and WhatsApp buttons are used. Google may process this data outside Colombia, and event data is kept for up to 14 months." }),
+						/* @__PURE__ */ jsx("p", { children: "We measure actions such as viewing an experience or sending a quote request, along with the page of origin and the language. We do not send your name, phone number, email, messages or form contents to these services. We do not use advertising tools. You can accept or withdraw measurement at any time through “Cookies and preferences”." }),
 						/* @__PURE__ */ jsx("p", { children: "The OpenStreetMap map loads only when you press the button to show it. That click connects to the map provider. Links to WhatsApp and other platforms open when you choose them." })
 					]
 				})

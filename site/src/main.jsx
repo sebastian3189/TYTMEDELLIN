@@ -5,7 +5,9 @@ import Website, { preloadRoute } from './Website.jsx';
 import { language, prepareLanguage, setLanguage } from './i18n';
 import { languageFromPath, languageInfo } from './languages';
 import { installPageTransitions } from './text-motion';
+import { initAnalytics } from './analytics';
 installPageTransitions();
+initAnalytics();
 await prepareLanguage(language());
 
 // El idioma activo cambia sin recargar (switchLanguage, desde el selector): la app se vuelve a montar con el diccionario y el prefijo nuevos.

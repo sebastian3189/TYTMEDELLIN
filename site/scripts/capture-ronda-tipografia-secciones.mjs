@@ -8,7 +8,7 @@ const log = [];
 for (const lang of env('LANGS', ['es'])) for (const w of env('WIDTHS', [1440]).map(Number)) for (const theme of env('THEMES', ['light', 'dark'])) for (const [name, [p, sels]] of Object.entries(sets).filter(([n]) => env('PAGES', [n]).includes(n))) {
   const ctx = await browser.newContext({ viewport: { width: w, height: w < 800 ? 844 : 900 }, isMobile: w < 800, hasTouch: w < 800, colorScheme: theme });
   const page = await ctx.newPage();
-  await page.addInitScript(() => { try { localStorage.setItem('tyt-privacy-v1', JSON.stringify({ version: 1, preferences: false, expires: Date.now() + 1e10 })); } catch {} });
+  await page.addInitScript(() => { try { localStorage.setItem('tyt-privacy-v1', JSON.stringify({ version: 2, preferences: false, analytics: false, expires: Date.now() + 1e10 })); } catch {} });
   await page.goto(base + (lang === 'pt' ? '/pt-br' : '') + p, { waitUntil: 'load' }); await page.waitForTimeout(1500);
   for (const [i, s] of sels.entries()) {
     const el = page.locator(s).first(); if (!(await el.count())) { log.push(`sin ${s} en ${name}`); continue; }

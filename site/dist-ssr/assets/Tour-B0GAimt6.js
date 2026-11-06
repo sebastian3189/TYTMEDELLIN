@@ -1,11 +1,11 @@
-import { C as t, _ as whatsapp, a as Marquee, c as useLightMotion, d as docTop, f as watchScroll, h as jsxs, l as useMedia, m as jsx, o as Trust, p as Fragment$1, t as Arrow, u as useMounted, v as language } from "./Arrow-CIGPWPkK.js";
-import { E as slugFromPath, O as tourSeo, _ as TourCard, a as tours, f as Eyebrow, g as Rail, h as QuoteSection, j as Icon$1, m as Picture, w as usePageMeta } from "../entry-server.js";
-import NotFound from "./NotFound-BYhCG2zq.js";
-import { n as useGlassPill, t as GlassPill } from "./glass-CL2rTD-m.js";
-import { i as archiveEntry, r as TourHeroVideo } from "./Hero-CUcIYVym.js";
-import { t as FeaturedGallery } from "./FeaturedGallery-DYXqIvMS.js";
-import { t as Reviews } from "./Reviews-BChyAlMu.js";
-import { l as Faq, o as FAQ_TOUR, s as FAQ_TRANSFER, t as DURACIONES } from "./faq-data-CNlnD8uD.js";
+import { A as docTop, B as tourSeo, D as useLightMotion, I as usePageMeta, J as jsxs, K as Fragment$1, O as useMedia, Q as t, R as slugFromPath, T as Trust, U as Icon$1, X as whatsapp, Z as language, _ as Rail, a as tours, g as QuoteSection, h as Picture, j as watchScroll, k as useMounted, p as Eyebrow, q as jsx, v as TourCard, w as Marquee, x as Arrow } from "../entry-server.js";
+import { r as trackView } from "./analytics-DLhjUO0M.js";
+import NotFound from "./NotFound-0y499Wu3.js";
+import { n as useGlassPill, t as GlassPill } from "./glass-BfOFOpy8.js";
+import { i as archiveEntry, r as TourHeroVideo } from "./Hero-BROvmVXC.js";
+import { t as FeaturedGallery } from "./FeaturedGallery-CVK1DbXM.js";
+import { t as Reviews } from "./Reviews-C6mpLsK5.js";
+import { l as Faq, o as FAQ_TOUR, s as FAQ_TRANSFER, t as DURACIONES } from "./faq-data-CvY6kltd.js";
 import { i as smallCaps, n as placeLugar, r as placePhotos, t as clamp } from "./mobile-motion-o2zoinXe.js";
 import { useLocation } from "react-router-dom";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -2544,6 +2544,10 @@ function Tour() {
 	usePageMeta(seo?.title || seo?.h1, seo?.description);
 	const page = useRef(null);
 	useTourReveal(page, slug);
+	useEffect(() => tour ? trackView({
+		tipo: "experiencia",
+		slug
+	}) : void 0, [slug]);
 	if (!tour) return /* @__PURE__ */ jsx(NotFound, {});
 	const faq = [ORGANIZAR, ...slug === "traslados-aeropuerto-jmc" ? FAQ_TRANSFER : FAQ_TOUR], duracion = DURACIONES[slug];
 	return /* @__PURE__ */ jsxs("div", {

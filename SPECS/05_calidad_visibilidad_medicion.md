@@ -42,7 +42,7 @@ Eventos mínimos:
 | `view_item` | Detalle visible | tipo y slug |
 | `select_item` | Selección de card | tipo, slug y posición |
 | `quote_start` | Inicia cotización | origen, tipo y slug |
-| `quote_submit` | Backend confirma | origen y tipo |
+| `quote_submit` | Sin backend: formulario válido y se abre WhatsApp (intención, no recepción) | origen y tipo |
 | `quote_error` | Falla real | tipo de error y origen |
 | `whatsapp_click` | Abre WhatsApp | origen, tipo y slug |
 

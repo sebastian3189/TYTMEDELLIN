@@ -15,7 +15,7 @@ for (const w of widths) for (const lang of ['', '/en', '/pt-br']) for (const r o
   if (only && !only.some((o) => r.includes(o))) continue;
   const ctx = await browser.newContext(eng === 'webkit' ? { ...devices['iPhone 13'], viewport: { width: w, height: 844 } } : { viewport: { width: w, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
   const page = await ctx.newPage();
-  await page.addInitScript(() => { try { localStorage.setItem('tyt-privacy-v1', JSON.stringify({ version: 1, preferences: false, expires: Date.now() + 1e10 })); sessionStorage.setItem('tyt-bienvenida', '1'); } catch {} });
+  await page.addInitScript(() => { try { localStorage.setItem('tyt-privacy-v1', JSON.stringify({ version: 2, preferences: false, analytics: false, expires: Date.now() + 1e10 })); sessionStorage.setItem('tyt-bienvenida', '1'); } catch {} });
   await page.goto(base + (lang + r === '' ? '/' : lang + (r === '/' ? '' : r)), { waitUntil: 'load' }); await page.waitForTimeout(900);
   const res = await page.evaluate(async () => {
     const out = [], H = document.documentElement.scrollHeight;

@@ -1,5 +1,4 @@
-import { C as t, D as languageInfo, h as jsxs, m as jsx, v as language } from "./Arrow-CIGPWPkK.js";
-import { j as Icon } from "../entry-server.js";
+import { $ as languageInfo, J as jsxs, Q as t, U as Icon, Z as language, q as jsx } from "../entry-server.js";
 import { useId } from "react";
 //#region src/Faq.jsx
 var ld = (items) => JSON.stringify({

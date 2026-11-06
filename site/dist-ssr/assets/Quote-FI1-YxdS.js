@@ -1,5 +1,5 @@
-import { C as t, g as company, h as jsxs, m as jsx, n as QuoteCopy, t as Arrow, v as language } from "./Arrow-CIGPWPkK.js";
-import { c as rawTours } from "../entry-server.js";
+import { J as jsxs, Q as t, S as QuoteCopy, Y as company, Z as language, c as rawTours, q as jsx, x as Arrow } from "../entry-server.js";
+import { n as track, t as contextoPagina } from "./analytics-DLhjUO0M.js";
 import { Link } from "react-router-dom";
 import { startTransition, useEffect, useRef, useState } from "react";
 //#region src/indicativos.json
@@ -1137,7 +1137,7 @@ function Quote({ context = "Un recorrido a mi medida", mode = "cotizar" }) {
 		consentimiento: false
 	});
 	const [errors, setErrors] = useState({}), [summary, setSummary] = useState(""), [copied, setCopied] = useState("idle"), [retry, setRetry] = useState(false);
-	const form = useRef(null), opened = useRef(Date.now()), honey = useRef(null), touched = useRef(false);
+	const form = useRef(null), opened = useRef(Date.now()), honey = useRef(null), touched = useRef(false), started = useRef(false);
 	const plan = !withType || v.tipo === "turismo";
 	const set = (key) => (event) => {
 		const value = event.target.type === "checkbox" ? event.target.checked : event.target.value;
@@ -1180,6 +1180,21 @@ function Quote({ context = "Un recorrido a mi medida", mode = "cotizar" }) {
 		className: "error",
 		children: errors[name]
 	});
+	const medicion = () => {
+		const { origen, slug, tipo } = contextoPagina();
+		return {
+			origen,
+			slug,
+			tipo: withType ? "contacto" : tipo === "general" ? "cotizacion" : tipo
+		};
+	};
+	const onFirstInput = () => {
+		touched.current = true;
+		if (!started.current) {
+			started.current = true;
+			track("quote_start", medicion());
+		}
+	};
 	function submit(event) {
 		event.preventDefault();
 		if (honey.current?.value || !touched.current && Date.now() - opened.current < 2e3) {
@@ -1194,12 +1209,23 @@ function Quote({ context = "Un recorrido a mi medida", mode = "cotizar" }) {
 		setCopied("idle");
 		const first = ORDER.find((name) => next[name]);
 		if (first) {
+			track("quote_error", {
+				tipo_error: "validacion",
+				origen: medicion().origen
+			});
 			setSummary("");
 			requestAnimationFrame(() => form.current?.querySelector(`#${first}`)?.focus());
 			return;
 		}
 		const text = buildMessage(v, plan, withType, pais);
 		const url = waUrl(text);
+		{
+			const { origen, tipo } = medicion();
+			track("quote_submit", {
+				origen,
+				tipo
+			});
+		}
 		window.open(url, "_blank", "noopener,noreferrer");
 		startTransition(() => setSummary(text));
 		requestAnimationFrame(() => document.querySelector("#resumen-solicitud")?.focus());
@@ -1221,9 +1247,7 @@ function Quote({ context = "Un recorrido a mi medida", mode = "cotizar" }) {
 			className: "quote-form",
 			noValidate: true,
 			onSubmit: submit,
-			onInputCapture: () => {
-				touched.current = true;
-			},
+			onInputCapture: onFirstInput,
 			onKeyDownCapture: () => {
 				touched.current = true;
 			},
